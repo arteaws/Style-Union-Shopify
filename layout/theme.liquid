@@ -99,7 +99,7 @@
 
     {{ content_for_header }}
 
-    {% include 'pagefly-app-header' %}
+    
 
     <!-- Hotjar Tracking Code for https://styleunion.in/ -->
     <script>
@@ -112,7 +112,7 @@
           a.appendChild(r);
       })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
     </script>
-  </head>
+  {% include 'pagefly-app-header' %}</head>
 
   <body
     class="gridlock template-{{ template | handleize }} {% render 'body-classes' | strip %} js-slideout-toggle-wrapper js-modal-toggle-wrapper"
