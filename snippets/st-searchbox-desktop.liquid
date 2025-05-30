@@ -1,0 +1,264 @@
+<div class="st-search-autocomplete-desktop site-nav__link st-search-bar-container st-desktop-searchbox st-hidden-sm" style="display: none;">
+  <div class="st-search-bar st-for-desktop" id="search-desktop">
+    <span class="close_search st-search-close-icon">
+      <svg
+        height="12px"
+        style="enable-background:new 0 0 512.001 512.001;"
+        viewBox="0 0 512.001 512.001"
+        width="12px"
+        x="0px"
+        xml:space="preserve"
+        y="0px"
+      >
+        <path class="active-path" d="M284.286,256.002L506.143,34.144c7.811-7.811,7.811-20.475,0-28.285c-7.811-7.81-20.475-7.811-28.285,0L256,227.717 L34.143,5.859c-7.811-7.811-20.475-7.811-28.285,0c-7.81,7.811-7.811,20.475,0,28.285l221.857,221.857L5.858,477.859 c-7.811,7.811-7.811,20.475,0,28.285c3.905,3.905,9.024,5.857,14.143,5.857c5.119,0,10.237-1.952,14.143-5.857L256,284.287 l221.857,221.857c3.905,3.905,9.024,5.857,14.143,5.857s10.237-1.952,14.143-5.857c7.811-7.811,7.811-20.475,0-28.285 L284.286,256.002z" data-old_color="#000000" data-original="#000000" fill="#4E3830"></path>
+      </svg>
+    </span>
+    <input
+      type="text"
+      name="st"
+      placeholder=""
+      value=""
+      autocapitalize="off"
+      autocomplete="off"
+      autocorrect="off"
+    >
+    <span class="st-input-close-btn st-cross">Clear</span>
+  </div>
+</div>
+<style>
+  body.searchtap .slideout.slideout__drawer-right.mini-cart{
+    z-index:99 !important;
+  }
+  body.searchtap .header-section{
+    z-index: 11;
+}
+body.st-no-scroll .essential_annoucement_bar_wrapper {
+    display: none !important;
+}
+  .st-header {
+    position: relative;
+  }
+    .st-for-desktop span.close_search {
+      z-index: 1 !important;
+      position: absolute;
+      right: 10px;
+      top: 10px;
+      cursor: pointer;
+    }
+  div#search-mobile {
+    padding: 10px;
+    background: #fff;
+}
+   div#search-mobile.st-search-icon-mobile svg {
+    width: 30px;
+    height: 30px;
+}
+  #search-desktop span svg{
+    margin-top:0px
+  }
+    .st-desktop-searchbox .st-search-bar {
+         position: relative;
+    padding: 0px;
+    height: 100%;
+    border: 1px solid #303030;
+    border-radius: 8px;
+    box-shadow: 1px 2px 3px 0px #0000005e;
+  }
+.st-search-bar-container .st-search-bar input {
+    color: #303030;
+    font-size: 16px;
+    padding: 8px 35px 8px 40px;
+    width: -webkit-fill-available;
+    border: none;
+    margin-bottom: 0;
+    box-shadow: none;
+    /* background-color: #ffffff; */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' x='0px' y='0px' width='30' height='30' viewBox='0 0 30 30' style=' fill:%23undefined;' class='st-searchicon'%3E%3Cpath d='M 13 3 C 7.4889971 3 3 7.4889971 3 13 C 3 18.511003 7.4889971 23 13 23 C 15.396508 23 17.597385 22.148986 19.322266 20.736328 L 25.292969 26.707031 A 1.0001 1.0001 0 1 0 26.707031 25.292969 L 20.736328 19.322266 C 22.148986 17.597385 23 15.396508 23 13 C 23 7.4889971 18.511003 3 13 3 z M 13 5 C 17.430123 5 21 8.5698774 21 13 C 21 17.430123 17.430123 21 13 21 C 8.5698774 21 5 17.430123 5 13 C 5 8.5698774 8.5698774 5 13 5 z'%3E%3C/path%3E%3C/svg%3E");
+    background-position-y: center;
+    background-position-x: 12px;
+    background-repeat: no-repeat;
+    background-size: 20px;
+    height:40px;
+}
+    
+  .st-search-autocomplete-desktop.site-nav__link span.st-input-close-btn {
+    position: absolute;
+    right: 75px !IMPORTANT;
+    top: 50%;
+    cursor: pointer;
+    display: none;
+    transform: translateY(-41%);
+}
+    .st-search-bar span.st-icon-search-2 {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-41%);
+      margin-top: 0px !important;
+      margin-left: 10px;
+  }
+  .st-search-bar span.st-icon-search-2 svg {
+    width: 16px;
+    height: 16px;
+}
+  .st-for-desktop span.close_search svg {
+    width: 16px;
+    height: 12px;
+}
+  .st-for-desktop span.close_search svg path {
+    stroke: #000;
+    stroke-width: 20px;
+    fill: #000;
+}
+    @media (max-width: 760px) {
+      .st-search-box-desktop {
+        display: none !important;
+      }
+    }
+
+    .st-search-box-desktop {
+      position: relative;
+  }
+    .st-search-box-desktop input.st-search-input {
+      width: 100%;
+      /* border: 1px solid #999; */
+      height: 40px;
+      padding: 0 22px;
+      /*     padding-right: 20px;
+      padding-left: 10px; */
+    }
+    .st-search-box-desktop span.st-icon-search-2 {
+      position: absolute;
+      margin-top: 10px;
+      margin-left: 4px;
+    }
+    .st-search-box-desktop span.st-input-close-btn {
+      position: absolute;
+      right: 10px;
+      /*top: 150px;*/
+      cursor: pointer;
+      margin-top: -28px;
+      display: none;
+    }
+    .st-search-box-desktop span.st-input-close-btn svg {
+      width: 10px;
+      height: 10px;
+    }
+
+    .header-layout--left-center .header-item--icons {
+      flex: unset;
+  }
+  .header__primary-nav {
+    position: relative;
+}
+.st-search-autocomplete-desktop.site-nav__link {
+    position: absolute;
+    top: 20px;
+    right: 15%;
+    left: unset;
+    z-index: 9;
+    transform: none;
+    width: 20%;
+    margin: 0 auto;
+}
+    #HeaderSearchForm .site-header__search-input {
+      font-size: 16px !important;
+      font-weight: 100 !important;
+      text-transform: capitalize !important;
+    }
+.st-search-bar input:focus-visible {
+    outline: none;
+}
+   
+    @media (max-width: 1200px) {
+     
+      .st-search-box-desktop input.st-search-input {
+        padding: 0 26px 0 26px;
+        margin-right: 10px;
+      }
+    }
+
+    .st-search-autocomplete span.st-input-close-btn {
+      position: absolute;
+      right: 20px;
+      top: 10px;
+      display: none;
+  }
+    @media (max-width: 991px) {
+      .header-item--logo {
+        flex: 0 0 auto !important;
+      }
+    }
+    
+    @media (min-width:769px) {
+      .st-search-bar.hidden-desktop {
+      display: none !important;
+  }
+    }
+</style>
+<script>
+  window.addEventListener("DOMContentLoaded", () => {
+    
+    let searchInputBoxSelector = document.querySelectorAll(".st-search-bar input");
+
+    searchInputBoxSelector.forEach((searchInputBox) => {
+        if (searchInputBox) {
+            // searchInputBox.setAttribute("placeholder", "");
+            // const placeHolderPhrases = [
+            //     "Search For T-Shirt",
+            //     "Search For Shorts",
+            //     "Search For Bags"
+            // ];
+
+            // let index = 0;
+            // let typingTimer;
+            // const updatePlaceHolder = function () {
+            //     const phrase = placeHolderPhrases[index];
+            //     const length = phrase.length;
+            //     let queryIndex = 0;
+            //     typingTimer = setInterval(function () {
+            //         if (queryIndex === length) {
+            //             setTimeout(erasePlaceHolder, 1000);
+
+            //             clearInterval(typingTimer);
+            //         } else {
+            //             const currentPlaceholderValue =
+            //                 searchInputBox.getAttribute("placeholder");
+
+            //             searchInputBox.setAttribute(
+            //                 "placeholder",
+            //                 currentPlaceholderValue + phrase.charAt(queryIndex)
+            //             );
+
+            //             queryIndex++;
+            //         }
+            //     }, 100);
+            // };
+
+            // const erasePlaceHolder = function () {
+            //     const currentPlaceholderValue =
+            //         searchInputBox.getAttribute("placeholder");
+            //     const length = currentPlaceholderValue.length;
+            //     let queryIndex = length - 1;
+            //     typingTimer = setInterval(function () {
+            //         if (queryIndex === -1) {
+            //             clearInterval(typingTimer);
+            //             index++;
+            //             if (index === placeHolderPhrases.length) {
+            //                 index = 0;
+            //             }
+            //             setTimeout(updatePlaceHolder, 1000);
+            //         } else {
+            //             const newPlaceholderValue = currentPlaceholderValue.slice(
+            //                 0,
+            //                 queryIndex
+            //             );
+            //             searchInputBox.setAttribute("placeholder", newPlaceholderValue);
+            //             queryIndex--;
+            //         }
+            //     }, 50);
+            // };
+            // updatePlaceHolder();
+        }
+    });
+});
+</script>

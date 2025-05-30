@@ -1,0 +1,23 @@
+{% for i in (1..2) %}
+  {% assign video_key = "video_" | append: i | append: "_url" %}
+  {% assign video_title_key = "video_" | append: i | append: "_title" %}
+  {% assign video_caption_key = "video_" | append: i | append: "_caption" %}
+
+  {% assign video_url = product.metafields.custom[video_key] %}
+  {% assign video_title = product.metafields.custom[video_title_key] %}
+  {% assign video_caption = product.metafields.custom[video_caption_key] %}
+
+  {% if video_url %}
+    <div class="new-outer">
+      <div class="top-img">
+        <video src="{{ video_url }}" muted autoplay playsinline loop preload="auto"></video>
+      </div>
+      <div class="multicolumn-card__info">
+        <h3 class="inline-richtext">{{ video_title }}</h3>
+        <div class="rte">
+          <h3>{{ video_caption }}</h3>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+{% endfor %}

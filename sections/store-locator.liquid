@@ -1,0 +1,357 @@
+{%- render 'store-locator' -%}
+
+{% schema %}
+{
+  "name": "Store Locator",
+  "class": "shopify-section--store-locator",
+  "presets": [
+    {
+      "name": "Store Locator",
+      "category": "Navigation"
+    }
+  ]
+}
+{% endschema %}
+
+{% stylesheet %}
+    #showall {
+      display: inline-block;
+      margin: 0 1%;
+      border-radius: 10%;
+    }
+    .cnt {
+    }
+    .targetDiv {
+      display: flex;
+      width: 361px;
+      align-items: center;
+      gap: 12px;
+    }
+
+    #showall p,
+    .store-name-count {
+      margin-top: 5px;
+      text-align: center;
+    }
+    .store_details {
+    }
+    .mobile-sec {
+      /* display: none; */
+    }
+a.showSingle.slick-slide.active img{
+    border-radius: 50%;
+    border: 1px solid #e22d18;
+}
+  p.all-count, .count {
+    display: none;
+}
+   
+/*---------------- store-locator for desktop ------------*/
+ @media screen and (min-width: 1000px) {
+    .Store-title-timing {
+    text-align: center;
+    padding: 40px 40px 30px;
+}
+
+   .store-timing {
+    font-size: 14px;
+     letter-spacing: 0.6px;
+}
+   h3.store-title {
+       margin-bottom: 15px !important;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    letter-spacing: 0.72px;
+    text-transform: uppercase;
+}
+   .menu-store .slick-track .slick-slide {
+    width: 130px !important;
+}
+  .menu-store a img:hover,
+.menu-store a img.active{
+  border-radius: 50%;
+  border: 1px solid #e22d18;
+}
+   .menu-store .slick-track {
+     
+    width: 1150px !important;
+     display: flex;
+    justify-content: center;
+}
+section.cnt {
+       display: flex !important;
+    gap: 16px;
+    padding: 40px 40px 60px;
+    justify-content: center;
+  flex-wrap: wrap;
+}
+   .menu-store img {
+    margin: auto;
+}
+   .menu-store {
+   display: flex;
+    padding: 30px 40px;
+         background: #F6EFEF;
+    /* margin: auto; */
+    justify-content: center;
+}
+/* Style for store names */
+.store_name {
+  font-weight: bold;
+  font-size: 18px;
+  margin: 5px 0;
+}
+
+/* Style for store addresses */
+.store_address {
+  font-size: 14px;
+  text-align: left;
+  margin: 5px 0;
+}
+
+/* Style for store city and review */
+.store_city_review {
+ display: flex;
+    /* flex-direction: column; */
+    align-items: center;
+    margin: 5px 0;
+    justify-content: space-between;
+}
+
+/* Style for store ratings */
+.store_review {
+  font-size: 14px;
+  font-weight: bold;
+  color: green; /* You can adjust the color as needed */
+}
+
+
+
+/* Style for each store details container */
+.targetDiv {
+  gap:0px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: white;
+  flex: 0 0 24%;
+  /* padding: 20px; */
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.targetDiv .bg_img_front-image {
+  width: 100% !important;
+  height: 320px!important;
+  background-size: cover;
+  background-position: center;
+  /* margin-bottom: 10px; */
+}
+
+/* Center-align content in store details */
+.store_details {
+  text-align: left;
+  padding: 15px;
+      font-size: 14px;
+    font-family: lato;
+}
+.store_city {
+    color: #DA0000;
+    font-weight: 500;
+}
+
+ }
+
+
+  
+  
+
+  /*---------------- store-locator for mobile------------*/
+
+    @media screen and (max-width: 768px) {
+       h3.store-title {
+    font-size: 18px;
+    margin-bottom: 10px;
+    font-weight: 700;
+    line-height: normal;
+    letter-spacing: 0.72px;
+    text-transform: uppercase;
+       }
+       .Store-title-timing {
+    text-align: center;
+    padding: 20px 16px;
+}
+a.showSingle{
+  padding:0px 4px; 
+  
+}
+       #showall p,
+    .store-name-count {
+      margin-top: 0px !important;
+      margin-bottom: 0px !important;
+      text-align: center;
+    }
+        div.menu-store {
+          padding: 5% 0px;
+    background: #F6EFEF;
+    }
+      .desktop-sec {
+        display: none !important;
+      }
+      .mobile-sec {
+        display: block;
+      }
+      .menu-store p {
+        font-size: 12px;
+      }
+      .count p {
+        color: #6b7d98;
+      }
+      .store-name-count p {
+        margin: 0px;
+      }
+      .cnt {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+        padding: 5% 16px !important;
+      }
+      .targetDiv {
+        display: flex;
+        width: 355px;
+        align-items: center;
+        gap: 12px;
+      }
+      .targetDiv .bg_img_front-image {
+  width: 150px !important;
+  height: 150px !important;
+  background-size: cover;
+  background-position: center;
+  margin-bottom: 10px;
+}
+      .store_details {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+        flex: 1 0 0;
+        /* align-self: stretch; */
+      }
+      .store_city_review {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+      }
+      .store_city {
+        display: flex;
+        padding: 3px 12px;
+        align-items: flex-start;
+        gap: 10px;
+        border-radius: 80px;
+        background: #ecf0f7;
+        color: #DA0000;
+        font-family: Lato;
+        font-size: 12px;
+        font-style: Normal;
+        font-weight: 400;
+        line-height: normal;
+      }
+      .store_review {
+            color: green;
+    font-family: Lato;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 600;
+        line-height: normal;
+      }
+      .store_name {
+          font-size: 13px;
+          font-weight: 600;
+      }
+      .store_address {
+          color: #707987;
+          font-size: 12px;
+          font-weight: 400;
+          line-height: 15.4px;
+          letter-spacing: 0.24px;
+      }
+    }
+
+
+/*---------------- store-locator for desktop ------------*/
+
+
+
+  
+{% endstylesheet %}
+{% javascript %}
+  
+  
+  
+  
+  
+  
+  
+  $(document).ready(function () {
+    // Function to show the target div and hide the rest
+    function showTargetDiv(target) {
+      $('.targetDiv').fadeOut('fast');
+      $(`.targetDiv[data-target="${target}"]`).fadeIn('fast');
+    }
+
+    // Click event for each link with class "showSingle"
+    $('.showSingle').on('click', function () {
+      var target = $(this).attr('target');
+      showTargetDiv(target);
+
+      // Add active class to the clicked link and remove active class from others
+      $('.showSingle').removeClass('active');
+      $(this).addClass('active');
+    });
+
+    // Click event for the "Show All" link
+    $('#showall').on('click', function () {
+      $('.targetDiv').fadeIn('fast');
+
+      // Add active class to the "Show All" link and remove active class from others
+      $('.showSingle').removeClass('active');
+      $(this).addClass('active');
+    });
+
+    // Get the number of unique data-target values and count for all
+    var uniqueTargets = {};
+    var allCount = 0;
+
+    $('.targetDiv').each(function () {
+      var targetValue = $(this).attr('data-target');
+      if (!uniqueTargets[targetValue]) {
+        uniqueTargets[targetValue] = 1;
+      } else {
+        uniqueTargets[targetValue]++;
+      }
+      allCount++;
+      
+    });
+
+    // Add the count below the menu texts using separate span tags
+    Object.keys(uniqueTargets).forEach(function (target) {
+      var targetCount = uniqueTargets[target];
+      $(`.showSingle[target="${target}"]>.store-name-count`).append(`<p class="count">${targetCount}</p>`);
+    });
+
+    // Add the count for all targetDiv elements
+    $('#showall').append(`<p class="all-count">${allCount}</p>`);
+    console.log(allCount);
+  });
+
+
+
+
+
+
+
+
+
+{% endjavascript %}

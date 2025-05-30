@@ -1,0 +1,88 @@
+<div class="mobile-sec">
+  <div class="Store-title-timing">
+    <h3 class="store-title">Style Union Stores</h3>
+    <div class="store-timing">Open from 11:00 a.m. to 9:30 p.m. on all days</div>
+  </div>
+  {% paginate shop.metaobjects.store_details.values by 150 -%} 
+  <div class="menu-store">
+    <a id="showall">
+      <img src="{{- images['all.png'] | image_url }}" width="100" height="100" loading="lazy">
+      <p>All</p>
+    </a>
+    {% for store_states in shop.metaobjects.store_states.values %}
+      <a class="showSingle" target="{{ store_states.state_name|handleize}}">
+        <img src="{{- store_states.icon | image_url }}" width="100" height="100" loading="lazy">
+        <div class="store-name-count">
+          <p>{{ store_states.state_name }}</p>
+        </div>
+      </a>
+    {% endfor %}
+  </div>
+
+  <section class="cnt">
+
+    {% for store_details in shop.metaobjects.store_details.values %}
+      <div data-target="{{ store_details.state.value.state_name | handleize }}" class="targetDiv" style="cursor:pointer;" onclick="window.open('{{ store_details.google_map_link }}', '_blank')">
+        
+        <div
+          class="bg_img_front-image"
+          style="background-image: url('{{ store_details.front_image.value | image_url }}'); background-size: cover; background-position: center; width: 150px; height: 150px;"
+        ></div>
+        <div class="store_details">
+          <div class="store_name">
+            {{ store_details.store_name }}
+          </div>
+          <div class="store_address">
+            {{ store_details.address }}
+          </div>
+          <div class="store_city_review">
+            <div class="store_city">
+              {{ store_details.city }}
+            </div>
+            <div class="store_review">{{ store_details.ratings }} rating</div>
+          </div>
+          <script>
+            console.log('{{ store_details | json }}');
+          </script>
+        </div>
+        
+      </div>
+    {% endfor %}
+      
+  </section>
+  <div class="paginate">
+       {{- paginate | default_pagination }}
+     </div> 
+{%- endpaginate %} 
+</div>
+<script>
+  $(document).ready(function() {
+      $('.mobile-sec>.menu-store').slick({
+          dots: false,
+          infinite: false,
+          speed: 300,
+          slidesToShow: 3.5,
+          slidesToScroll: 4,
+          adaptiveHeight: true,
+          prevArrow: false,
+          nextArrow: false,
+          cssEase: 'linear'
+      });
+  });
+</script>
+
+<script>
+$(document).ready(function(){
+	$(".slick-slide").click(function(){
+		if($(this).attr('id') == 'showall'){
+			$(".paginate").show();
+		}
+		else{
+			$(".paginate").hide();
+		}
+	})
+})
+</script>
+
+
+
