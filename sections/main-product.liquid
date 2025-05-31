@@ -24,19 +24,7 @@
   endif
 
 -%}
-<style>
-@media only screen and (max-width: 600px) {
 
-.custom-desktop-show{
-  display:none !important;
-}
-.custom-mobile-show{
-  display:block !important;
-}
-
-}
-
-</style>
 <section id="product-{{ product.id }}"
   class="product__section product-template global__section row grid__wrapper"
   data-product-id="{{ product.id }}"
@@ -77,25 +65,7 @@
    }
  {% endcapture %}
 
-  <div class="product__section-images product__section-image--{{ thumbnail_position }} carousel-container js-product-gallery span-6 md-span-12 sm-span-12 auto  {% comment %} custom-desktop-show {% endcomment %}"
-    data-product-gallery data-product-single-media-group
-    data-gallery-config='{{ product_gallery_config }}' data-aos="fade">
-
-    {%- if product.featured_media -%}
-      {% render 'product-image-gallery',
-         thumbnail_position: thumbnail_position,
-         click_to_enlarge: click_to_enlarge,
-         enable_video_looping: enable_video_looping,
-         product_gallery_config: product_gallery_config %}
-    {%- else -%}
-      {% capture current %}{% cycle 1, 2, 3, 4, 5, 6 %}{% endcapture %}
-      <div class="span-12">
-        {{ 'product-' | append: current | placeholder_svg_tag: 'placeholder-svg' }}
-      </div>
-    {%- endif -%}
-  </div>
-  {% comment %}
-<div class="product__section-images product__section-image--{{ thumbnail_position }} carousel-container js-product-gallery span-6 md-span-12 sm-span-12 auto custom-mobile-show"
+  <div class="product__section-images product__section-image--{{ thumbnail_position }} carousel-container js-product-gallery span-6 md-span-12 sm-span-12 auto"
     data-product-gallery data-product-single-media-group
     data-gallery-config='{{ product_gallery_config }}' data-aos="fade">
 
@@ -113,7 +83,6 @@
     {%- endif -%}
   </div>
 
-{% endcomment %}
   <div class="product__section-contentWrapper span-6 md-span-12 sm-span-12 auto" data-aos="fade" data-aos-anchor="#identity">
     <div class="product__section-content">
       <div class="product__section-details">
