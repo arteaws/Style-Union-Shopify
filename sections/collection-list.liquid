@@ -154,6 +154,11 @@ data-section-type="collection-list">
               width: {{ mobile_prod_grid }}%;
               padding: 0 15px;
             }
+            {% unless section.settings.show_mobile_arrows %}
+            .section-{{ section.id }} .flickity-prev-next-button {
+              display: none !important;
+            }
+            {% endunless %}
           }
         {% else %}
           .section-{{ section.id }} .collection__list-collections {
@@ -204,6 +209,12 @@ data-section-type="collection-list">
       "type": "checkbox",
       "label": "Display in carousel",
       "default": false
+    },
+    {
+      "id": "show_mobile_arrows",
+      "type": "checkbox",
+      "label": "Show navigation arrows on mobile",
+      "default": true
     },
     {
       "type": "checkbox",
