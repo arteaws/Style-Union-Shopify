@@ -32,7 +32,7 @@
   {% capture collection_title %}{{ collection.title }}{% endcapture %}
 {% endif %}
 {% capture collection_details %}
-  <div class="collection__item-details{% if bold %} is_bold{% endif %} parent-container">
+  <div class="collection__item-details{% if bold %} is_bold{% endif %} ">
     <a class="inline-block-full" href="{{ collection.url }}" title="{{ collection_title }}">
       <h3 class="prod-title h4">{{ collection.title }}</h3>
       {%- if section.settings.collection_count -%}
@@ -42,7 +42,7 @@
   </div>
 {% endcapture %}
 
-<div class="collection__list-item" 
+<div class="collection__list-item parent-container" 
   data-aos="fade"
   data-aos-delay="{{ forloop.index | minus: 1 | modulo: aos_mod | times: 100 }}"
   data-alpha="{{ collection.title }}">
