@@ -12,16 +12,11 @@
         assign js_class = 'js-thumb-vertical-wrapper'
       endif
 
-      # Mobile-specific classes
-      assign mobile_style = 'horizontal-carousel'
-      assign mobile_width = 'span-12'
-      assign mobile_js_class = 'js-thumb-horizontal-wrapper'
-
     -%}
 
-    <div id="thumbnails" class="thumb-slider thumbnail-slider custom {{ style }} {{ width }} auto mobile-horizontal-carousel mobile-span-12"
+    <div id="thumbnails" class="thumb-slider thumbnail-slider custom {{ style }} {{ width }} auto "
     data-thumbnail-position="{{ thumbnail_position }}">
-      <div class="thumb-slider-wrapper {{ js_class }} js-thumb-wrapper mobile-js-thumb-horizontal-wrapper" id="thumb-slider-wrapper">
+      <div class="thumb-slider-wrapper {{ js_class }} js-thumb-wrapper" id="thumb-slider-wrapper">
         <div class="carousel-nav thumb-slider-slides slides product-single__thumbnails-{{ section.id }} js-thumb-carousel-nav{% if product.media.size <4 %} no_carousel{% endif %}">
           {% for media in product.media %}
             <div class="{{ media.media_type }}-thumbnail product-single__thumbnails-item carousel-cell {% if forloop.first %}is-nav-selected{% endif %} js-thumb-item thumb__{% if forloop.first %}first{% elsif forloop.last %}last{% endif %}" data-slide-index="{{ forloop.index0 }}"
