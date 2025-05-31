@@ -47,9 +47,6 @@ div#custom-smart-wishlist {
 
 
 <div class="prod-container">
-  <div id="custom-smart-wishlist">
-     <span class="smartwishlist" data-product="{{ product.id }}" data-variant="{{ product.variants.first.id }}"></span>
-  </div>
   {% if product.available %}
    {% for col in product.collections %}
      {% if col.handle == 'new' %}
@@ -198,6 +195,7 @@ div#custom-smart-wishlist {
   </a>
 
   {% render 'product-price-listing', product: product %}
+  <span class="smartwishlist" data-product="{{ product.id }}" data-variant="{{ product.variants.first.id }}"></span>
 
   {% assign meta_1 = product.metafields.custom.feature_1 %}
   {% assign meta_2 = product.metafields.custom.feature_2 %}
