@@ -15,7 +15,7 @@
     -%}
 
     <div id="thumbnails" class="thumb-slider thumbnail-slider custom horizontal-carousel span-12 auto"
-    data-thumbnail-position="{{ thumbnail_position }}">
+    data-thumbnail-position="bottom">
       <div class="thumb-slider-wrapper js-thumb-horizontal-wrapper js-thumb-wrapper" id="thumb-slider-wrapper">
         <div class="carousel-nav thumb-slider-slides slides product-single__thumbnails-{{ section.id }} js-thumb-carousel-nav{% if product.media.size <4 %} no_carousel{% endif %}">
           {% for media in product.media %}
