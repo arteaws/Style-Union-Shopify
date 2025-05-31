@@ -109,7 +109,7 @@
       ],
       "settings": {
         "product_background": "",
-        "thumbnail_position": "bottom",
+        "thumbnail_position": "left",
         "click_to_enlarge": true,
         "enable_video_looping": false,
         "show_tax_information": false
