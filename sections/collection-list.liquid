@@ -1,5 +1,6 @@
 {%- liquid
   assign grid = section.settings.grid
+  assign mobile_grid = section.settings.mobile_grid
 
   if section.settings.carousel
     assign is_carousel = true
@@ -41,6 +42,9 @@
     when 6
     assign prod_grid = 16.6667
   endcase
+
+  # Calculate mobile grid percentage
+  assign mobile_prod_grid = 100 | divided_by: mobile_grid
 
   assign floating_text = false
   if section.settings.title_position == 'floating'
@@ -147,7 +151,7 @@ data-section-type="collection-list">
           }
           @media screen and (max-width: 740px) {
             .section-{{ section.id }} .collection__list-collections .collection__list-item {
-              width: 50%;
+              width: {{ mobile_prod_grid }}%;
               padding: 0 15px;
             }
           }
@@ -157,7 +161,7 @@ data-section-type="collection-list">
           }
           @media screen and (max-width: 740px) {
             .section-{{ section.id }} .collection__list-collections {
-              grid-template-columns: repeat(2, 1fr);
+              grid-template-columns: repeat({{ mobile_grid | floor }}, 1fr);
             }
           }
         {% endif %}
@@ -184,6 +188,16 @@ data-section-type="collection-list">
       "label": "Collections per row",
       "info": "Must be more blocks than the collections per row amount.",
       "default": 4
+    },
+    {
+      "type": "range",
+      "id": "mobile_grid",
+      "min": 1,
+      "max": 4,
+      "step": 0.5,
+      "label": "Collections per row on mobile",
+      "info": "Decimal values like 2.5 will show partial slides (e.g., 2.5 shows 2 full slides + half of the 3rd slide)",
+      "default": 2
     },
     {
       "id": "carousel",
