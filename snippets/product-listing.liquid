@@ -34,8 +34,10 @@
 
 -%}
 
-<div class="prod-container sfsdf">
-  <div id="vitals-wishlist"></div>
+<div class="prod-container">
+  <div id="custom-smart-wishlist">
+     <span class="smartwishlist" data-product="{{ product.id }}" data-variant="{{ product.variants.first.id }}"></span>
+  </div>
   {% if product.available %}
    {% for col in product.collections %}
      {% if col.handle == 'new' %}
