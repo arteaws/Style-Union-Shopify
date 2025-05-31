@@ -94,13 +94,12 @@
       </div>
     {%- endif -%}
   </div>
-
-    <div class="product__section-images product__section-image--bottom carousel-container js-product-gallery span-6 md-span-12 sm-span-12 auto  custom-mobile-show"
+<div class="product__section-images product__section-image--{{ thumbnail_position }} carousel-container js-product-gallery span-6 md-span-12 sm-span-12 auto custom-mobile-show"
     data-product-gallery data-product-single-media-group
-    data-gallery-config='{{ product_gallery_config }}' data-aos="fade" style="display:none;">
+    data-gallery-config='{{ product_gallery_config }}' data-aos="fade">
 
     {%- if product.featured_media -%}
-      {% render 'custom-product-mobile-thumbnail',
+      {% render 'product-image-gallery',
          thumbnail_position: thumbnail_position,
          click_to_enlarge: click_to_enlarge,
          enable_video_looping: enable_video_looping,
@@ -112,6 +111,7 @@
       </div>
     {%- endif -%}
   </div>
+
 
   <div class="product__section-contentWrapper span-6 md-span-12 sm-span-12 auto" data-aos="fade" data-aos-anchor="#identity">
     <div class="product__section-content">
