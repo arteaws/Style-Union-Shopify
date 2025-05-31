@@ -88,7 +88,7 @@
     data-gallery-config='{{ product_gallery_config }}' data-aos="fade" style="display:none;">
 
     {%- if product.featured_media -%}
-      {% render 'product-image-gallery',
+      {% render 'custom-product-mobile-thumbnail',
          thumbnail_position: thumbnail_position,
          click_to_enlarge: click_to_enlarge,
          enable_video_looping: enable_video_looping,
