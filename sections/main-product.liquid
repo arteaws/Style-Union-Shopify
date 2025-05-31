@@ -101,6 +101,7 @@
 
     {%- if product.featured_media -%}
       {% render 'custom-product-mobile-thumbnail',
+         thumbnail_position: bottom,
          click_to_enlarge: click_to_enlarge,
          enable_video_looping: enable_video_looping,
          product_gallery_config: product_gallery_config %}
