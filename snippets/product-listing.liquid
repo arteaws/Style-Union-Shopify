@@ -47,11 +47,11 @@ div#custom-smart-wishlist {
 
 
 <div class="prod-container">
-  <div id="custom-smart-wishlist">
-     <span class="smartwishlist" data-product="{{ product.id }}" data-variant="{{ product.variants.first.id }}"></span>
-  </div>
   {% if product.available %}
    {% for col in product.collections %}
+       <div id="custom-smart-wishlist">
+     <span class="smartwishlist" data-product="{{ product.id }}" data-variant="{{ product.variants.first.id }}"></span>
+  </div>
      {% if col.handle == 'new' %}
       <div class="new icn">{{ 'products.general.new' | t }}</div>
      {% endif %}
