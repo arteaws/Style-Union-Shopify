@@ -83,9 +83,9 @@
     {%- endif -%}
   </div>
 
-    <div class="product__section-images product__section-image--{{ thumbnail_position }} carousel-container js-product-gallery span-6 md-span-12 sm-span-12 auto mobile-hide"
+    <div class="product__section-images product__section-image--{{ thumbnail_position }} carousel-container js-product-gallery span-6 md-span-12 sm-span-12 auto "
     data-product-gallery data-product-single-media-group
-    data-gallery-config='{{ product_gallery_config }}' data-aos="fade">
+    data-gallery-config='{{ product_gallery_config }}' data-aos="fade" style="display:none;">
 
     {%- if product.featured_media -%}
       {% render 'product-image-gallery',
