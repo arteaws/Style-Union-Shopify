@@ -1,20 +1,12 @@
 {% capture thumbnails %}
   {% if product.media.size > 1 %}
     {%- liquid
-
-      if thumbnail_position == 'bottom'
-        assign style = 'horizontal-carousel'
-        assign width = 'span-12'
-        assign js_class = 'js-thumb-horizontal-wrapper'
-      else
-        assign style = 'vertical-carousel'
-        assign width = ''
-        assign js_class = 'js-thumb-vertical-wrapper'
-      endif
-
+      assign style = 'horizontal-carousel'
+      assign width = 'span-12'
+      assign js_class = 'js-thumb-horizontal-wrapper'
     -%}
 
-    <div id="thumbnails" class="thumb-slider thumbnail-slider custom horizontal-carousel span-12 auto"
+    <div id="thumbnails" class="thumb-slider thumbnail-slider bottom-thumbnails horizontal-carousel span-12 auto" 
     data-thumbnail-position="bottom">
       <div class="thumb-slider-wrapper js-thumb-horizontal-wrapper js-thumb-wrapper" id="thumb-slider-wrapper">
         <div class="carousel-nav thumb-slider-slides slides product-single__thumbnails-{{ section.id }} js-thumb-carousel-nav{% if product.media.size <4 %} no_carousel{% endif %}">
@@ -23,7 +15,6 @@
             data-image-id="{{ media.id }}" tabindex="0">
               <div class="product-single__thumbnail product-single__thumbnail--{{ section.id }} js-thumb-item-img-wrap" data-thumbnail-id="product-template-{{ media.id }}">
                 {% liquid
-
                   # Reset variables inside loop
                   assign loading = 'lazy'
                   assign fetch_priority = 'auto'
@@ -85,23 +76,16 @@
 
 {% capture slider %}
   {%- liquid
-
-    assign grid_width = ""
-
-    if product.media.size > 1 and thumbnail_position != 'bottom'
-      assign grid_width = "reduced-size"
-    else
-      assign grid_width = "span-12"
-    endif
-
+    assign grid_width = "span-12"
+    
     if product.media.size <= 1
       assign no_slider = 'single-media'
     endif
 
     assign first_image = product.media | where: "media_type", "image" | first
-
   -%}
-  <div id="slider" class=" {{ grid_width }} thumbs_{{ thumbnail_position }} auto {{ no_slider }}">
+  
+  <div id="slider" class="{{ grid_width }} bottom-thumbnails auto {{ no_slider }}">
     <div class="slides product-image-container carousel carousel-main js-carousel-main" data-product-id="{{ product.id }}">
       {% for media in product.media %}
         <div class="{{ media.media_type }}-slide carousel-cell js-main-carousel-cell" data-image-id="{{ media.id }}" data-slide-index="{{ forloop.index0 }}" tabindex="-1">
@@ -115,7 +99,6 @@
             {% case media.media_type %}
               {% when 'image' %}
                 {%- liquid
-
                   assign image_box_ratio = media.height | append: ".0" | times: 1 | divided_by: media.width | times: 100 | append: "%"
                   assign zoom_image = media | image_url: width: 2400
 
@@ -133,7 +116,6 @@
                       assign fetch_priority = 'high'
                     endif
                   endif
-
                 -%}
 
                 {% capture sizes %}
@@ -181,9 +163,7 @@
                   <deferred-media class="deferred-media">
                     <template>
                       {% liquid
-
                         assign video_class = 'js-' | append: media.host
-
                         echo media | external_video_url: autoplay: true, loop: enable_video_looping | external_video_tag: class: video_class, loading: "lazy"
                        %}
                     </template>
@@ -250,17 +230,5 @@
   </div>
 {% endcapture %}
 
-{%- if thumbnail_position == 'left' -%}
-<div class="product__gallery--container">
-  {{ thumbnails }}
-  {{ slider }}
-</div>
-{%- elsif thumbnail_position == 'right' -%}
-<div class="product__gallery--container">
-  {{ slider }}
-  {{ thumbnails }}
-</div>
-{%- elsif thumbnail_position == 'bottom' -%}
-  {{ slider }}
-  {{ thumbnails }}
-{%- endif -%}
+{{ slider }}
+{{ thumbnails }}
