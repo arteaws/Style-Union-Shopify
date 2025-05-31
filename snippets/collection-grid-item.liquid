@@ -32,7 +32,7 @@
   {% capture collection_title %}{{ collection.title }}{% endcapture %}
 {% endif %}
 {% capture collection_details %}
-  <div class="collection__item-details{% if bold %} is_bold{% endif %}">
+  <div class="collection__item-details{% if bold %} is_bold{% endif %} parent-container">
     <a class="inline-block-full" href="{{ collection.url }}" title="{{ collection_title }}">
       <h3 class="prod-title h4">{{ collection.title }}</h3>
       {%- if section.settings.collection_count -%}
