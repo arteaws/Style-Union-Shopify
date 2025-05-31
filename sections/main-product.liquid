@@ -1,3 +1,27 @@
+<style>
+.product__nav {
+    float: right;
+    display: none;
+}
+
+
+.product__section-images .zoom_btn {
+
+left: 10px !important;
+ right:unset; 
+}
+  .custom-pdp-set {
+    width: fit-content;
+    position: absolute;
+    z-index: 99;
+    right: 2%;
+    top: 2%;
+}
+</style>
+
+
+
+
 {%- liquid
 
   assign current_variant = product.selected_or_first_available_variant

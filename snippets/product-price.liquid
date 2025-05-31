@@ -21,20 +21,7 @@
 
   assign money_price = price | money
 -%}
-<style>
-.product__nav {
-    float: right;
-    display: none;
-}
 
-
-.product__section-images .zoom_btn {
-
-left: 10px !important;
- right:unset; 
-}
-  
-</style>
 <div id="product-price" class="price product__price-container
   {% if available == false %} price--sold-out {% endif %}
   {% if compare_at_price > price %} price--on-sale {% endif %}
