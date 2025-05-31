@@ -1,3 +1,31 @@
+<style>
+
+.desktop-gallery {
+  display: block;
+}
+.mobile-gallery {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .desktop-gallery {
+    display: none;
+  }
+  .mobile-gallery {
+    display: block;
+  }
+}
+</style>
+
+
+
+
+
+
+
+
+
+
 {%- liquid
 
   assign current_variant = product.selected_or_first_available_variant
