@@ -47,9 +47,6 @@ div#custom-smart-wishlist {
 
 
 <div class="prod-container">
-   <div id="custom-smart-wishlist">
-  <span class="smartwishlist" data-product="{{ product.id }}" data-variant="{{ product.variants.first.id }}"></span>
-  </div>
   {% if product.available %}
    {% for col in product.collections %}
      {% if col.handle == 'new' %}
@@ -186,7 +183,9 @@ div#custom-smart-wishlist {
         show_sizes: show_sizes,
         show_swatches: show_swatches %}
    {% endif %}
-
+   <div id="custom-smart-wishlist">
+  <span class="smartwishlist" data-product="{{ product.id }}" data-variant="{{ product.variants.first.id }}"></span>
+  </div>
 </div>
 
 <div class="product-info">
