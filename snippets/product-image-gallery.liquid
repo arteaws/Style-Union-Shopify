@@ -12,12 +12,79 @@
         assign js_class = 'js-thumb-vertical-wrapper'
       endif
 
+      # Override js_class for mobile devices
+      assign mobile_js_class = 'js-thumb-horizontal-wrapper'
+
     -%}
 
     <div id="thumbnails" class="thumb-slider thumbnail-slider custom {{ style }} {{ width }} auto "
     data-thumbnail-position="{{ thumbnail_position }}">
-      <div class="thumb-slider-wrapper {{ js_class }} js-thumb-wrapper" id="thumb-slider-wrapper">
-        <div class="carousel-nav thumb-slider-slides slides product-single__thumbnails-{{ section.id }} js-thumb-carousel-nav{% if product.media.size <4 %} no_carousel{% endif %}">
+      <div class="thumb-slider-wrapper js-thumb-wrapper" id="thumb-slider-wrapper">
+        <!-- Desktop class -->
+        <div class="carousel-nav thumb-slider-slides slides product-single__thumbnails-{{ section.id }} js-thumb-carousel-nav{% if product.media.size <4 %} no_carousel{% endif %} {{ js_class }} desktop-only">
+          {% for media in product.media %}
+            <div class="{{ media.media_type }}-thumbnail product-single__thumbnails-item carousel-cell {% if forloop.first %}is-nav-selected{% endif %} js-thumb-item thumb__{% if forloop.first %}first{% elsif forloop.last %}last{% endif %}" data-slide-index="{{ forloop.index0 }}"
+            data-image-id="{{ media.id }}" tabindex="0">
+              <div class="product-single__thumbnail product-single__thumbnail--{{ section.id }} js-thumb-item-img-wrap" data-thumbnail-id="product-template-{{ media.id }}">
+                {% liquid
+
+                  # Reset variables inside loop
+                  assign loading = 'lazy'
+                  assign fetch_priority = 'auto'
+
+                  # If one a product page and the section is under index 3 (near the top) because
+                  # the default template has the section below a "breadcrumb" section.
+                  if template == 'product' and section.index < 3
+                    if forloop.index < 10
+                      assign loading = 'eager'
+                      assign fetch_priority = 'high'
+                    endif
+                  elsif section.index == 1
+                    if forloop.index < 10
+                      assign loading = 'eager'
+                      assign fetch_priority = 'high'
+                    endif
+                  endif
+                 %}
+                {%
+                  render 'basic-responsive-image',
+                  type: media.preview_image,
+                  width: 1200,
+                  img_class: 'js-thumb-item-img',
+                  loading: loading,
+                  fetchpriority: fetch_priority
+                %}
+                {%- if media.media_type == 'video' or media.media_type =='external_video' -%}
+                  <div class="thumbnail-icon">
+                    {% render 'snip-icons',
+                       wrapper: '.thumbnail-icon',
+                       type: 'media-icons',
+                       icon: 'play',
+                       classes: 'thumbnail-icon-video--icon vib-center',
+                       size: '25px',
+                       fill: 'var(--text-color)',
+                       hover: 'var(--text-color)' %}
+                  </div>
+                {%- endif -%}
+                {%- if media.media_type == 'model' -%}
+                  <div class="thumbnail-icon">
+                    {% render 'snip-icons',
+                       wrapper: '.thumbnail-icon',
+                       type: 'media-icons',
+                       icon: '3d-icon',
+                       classes: 'thumbnail-icon-model--icon vib-center',
+                       size: '25px',
+                       fill: 'var(--text-color)',
+                       hover: 'var(--text-color)' %}
+                  </div>
+                {%- endif -%}
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+        
+        <!-- Mobile class -->
+        <div class="carousel-nav thumb-slider-slides slides product-single__thumbnails-{{ section.id }} js-thumb-carousel-nav{% if product.media.size <4 %} no_carousel{% endif %} {{ mobile_js_class }} mobile-only">
           {% for media in product.media %}
             <div class="{{ media.media_type }}-thumbnail product-single__thumbnails-item carousel-cell {% if forloop.first %}is-nav-selected{% endif %} js-thumb-item thumb__{% if forloop.first %}first{% elsif forloop.last %}last{% endif %}" data-slide-index="{{ forloop.index0 }}"
             data-image-id="{{ media.id }}" tabindex="0">
@@ -264,3 +331,28 @@
   {{ slider }}
   {{ thumbnails }}
 {%- endif -%}
+
+<style>
+/* Hide desktop version on mobile */
+@media screen and (max-width: 767px) {
+  .desktop-only {
+    display: none !important;
+  }
+}
+
+/* Hide mobile version on desktop */
+@media screen and (min-width: 768px) {
+  .mobile-only {
+    display: none !important;
+  }
+}
+
+/* Show desktop version by default */
+.mobile-only {
+  display: none;
+}
+
+.desktop-only {
+  display: block;
+}
+</style>
