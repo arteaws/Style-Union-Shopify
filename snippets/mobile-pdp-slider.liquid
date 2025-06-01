@@ -294,10 +294,7 @@
 
 
 
-{% comment %} Custom Size Form Modal End {% endcomment %}
-<div class="grid__item product__media-wrapper tibertaber_media_desktop {% if section.settings.media_position == 'right' %} medium-hide large-up-hide{% endif %}">
-  {% render 'product-media-gallery', variant_images: variant_images %}
-</div>
+
 
 {% comment %}  Mobile PDP Media Start {% endcomment %}
 <div class="mobile_pdp_media_gallery">
@@ -341,10 +338,8 @@
     </div>
 
     <div class="swiper-button-prev">
-      {% render 'arrow-icon-prev', rectColor: 'white', arrowStrokeColor: '#1C42A3' %}
     </div>
     <div class="swiper-button-next">
-      {% render 'arrow-icon-next', rectColor: 'white', arrowStrokeColor: '#1C42A3' %}
     </div>
     <div class="swiper-pagination"></div>
   </div>
@@ -418,10 +413,9 @@
       {% endfor %}
     </div>
     <div class="swiper-button-prev">
-      {% render 'arrow-icon-prev', rectColor: 'white', arrowStrokeColor: '#1C42A3' %}
+      
     </div>
     <div class="swiper-button-next">
-      {% render 'arrow-icon-next', rectColor: 'white', arrowStrokeColor: '#1C42A3' %}
     </div>
     <div class="swiper-pagination"></div>
   </div>
