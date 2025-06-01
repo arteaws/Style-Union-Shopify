@@ -214,53 +214,67 @@
 
 
 
-{% comment %}  Mobile PDP Media Start {% endcomment %}
+{% comment %} Mobile PDP Media Start {% endcomment %}
 <div class="mobile_pdp_media_gallery">
   <!-- Main Product Images Slider -->
   <div class="swiper pdpMobileSwiper">
     <div class="swiper-wrapper">
       {% for media in product.media %}
-        {% if media.media_type == 'image' %}
-          <div class="swiper-slide">
-            <img
-              class="mobile_pdp_swiper_images"
-              srcset="
-                {% if media.preview_image.width >= 375 %}{{ media.preview_image | image_url: width: 375 }} 375w,{% endif %}
-                {% if media.preview_image.width >= 550 %}{{ media.preview_image | image_url: width: 550 }} 550w,{% endif %}
-                {% if media.preview_image.width >= 750 %}{{ media.preview_image | image_url: width: 750 }} 750w,{% endif %}
-                {% if media.preview_image.width >= 1100 %}{{ media.preview_image | image_url: width: 1100 }} 1100w,{% endif %}
-                {% if media.preview_image.width >= 1500 %}{{ media.preview_image | image_url: width: 1500 }} 1500w,{% endif %}
-                {{ media.preview_image | image_url }} {{ media.preview_image.width }}w
-              "
-              sizes="(max-width: 750px) 100vw, 50vw"
-              src="{{ media.preview_image | image_url: width: 750 }}"
-              loading="lazy"
-              data-index="{{ forloop.index0 }}"
-              alt="{{ media.alt | escape }}"
-              width="{{ media.preview_image.width }}"
-              height="{{ media.preview_image.height }}"
-            >
-          </div>
-        {% else %}
-          <div class="swiper-slide">
-            {{
-              media.video
-              | video_tag:
-                image_size: '1100x',
-                loop: section.settings.enable_video_looping,
-                controls: true,
-                muted: false
-            }}
-          </div>
-        {% endif %}
+        {% case media.media_type %}
+          {% when 'image' %}
+            <div class="swiper-slide">
+              <img
+                class="mobile_pdp_swiper_images"
+                srcset="
+                  {% if media.width >= 375 %}{{ media | image_url: width: 375 }} 375w,{% endif %}
+                  {% if media.width >= 550 %}{{ media | image_url: width: 550 }} 550w,{% endif %}
+                  {% if media.width >= 750 %}{{ media | image_url: width: 750 }} 750w,{% endif %}
+                  {% if media.width >= 1100 %}{{ media | image_url: width: 1100 }} 1100w,{% endif %}
+                  {% if media.width >= 1500 %}{{ media | image_url: width: 1500 }} 1500w,{% endif %}
+                  {{ media | image_url }} {{ media.width }}w
+                "
+                sizes="(max-width: 750px) 100vw, 50vw"
+                src="{{ media | image_url: width: 750 }}"
+                loading="lazy"
+                data-index="{{ forloop.index0 }}"
+                alt="{{ media.alt | escape }}"
+                width="{{ media.width }}"
+                height="{{ media.height }}"
+              >
+            </div>
+          
+          {% when 'video' %}
+            <div class="swiper-slide">
+              {{
+                media | video_tag:
+                  image_size: '1100x',
+                  loop: section.settings.enable_video_looping,
+                  controls: true,
+                  muted: false
+              }}
+            </div>
+            
+          {% when 'external_video' %}
+            <div class="swiper-slide">
+              {{ media | external_video_tag }}
+            </div>
+            
+          {% when 'model' %}
+            <div class="swiper-slide">
+              {{ media | model_viewer_tag }}
+            </div>
+            
+          {% else %}
+            <div class="swiper-slide">
+              {{ media | media_tag }}
+            </div>
+        {% endcase %}
       {% endfor %}
     </div>
 
     <!-- Navigation Arrows -->
-    <div class="swiper-button-prev">
-    </div>
-    <div class="swiper-button-next">
-    </div>
+    <div class="swiper-button-prev"></div>
+    <div class="swiper-button-next"></div>
   </div>
 
   <!-- Thumbnails Slider -->
@@ -272,7 +286,7 @@
             <div class="swiper-slide mobile_pdp_thumbnail_slide">
               <img
                 class="mobile_pdp_thumbnail_image"
-                src="{{ media.preview_image | image_url: width: 150 }}"
+                src="{{ media | image_url: width: 150 }}"
                 alt="{{ media.alt | escape }}"
                 data-index="{{ forloop.index0 }}"
                 loading="lazy"
@@ -301,7 +315,6 @@
     </div>
   </div>
 </div>
-{% comment %}  Mobile PDP Media End {% endcomment %}
 
 
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
