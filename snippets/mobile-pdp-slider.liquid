@@ -1,91 +1,58 @@
-
-<link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
-<script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
-
-
-
 <style>
 /* Mobile PDP Media Gallery Styles */
 .mobile_pdp_media_gallery {
   position: relative;
   width: 100%;
   max-width: 100%;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
-/* Main Flickity Carousel */
-.mobile_pdp_media_gallery .main-carousel {
-  background: #f8f9fa;
+/* Main Swiper Container */
+.mobile_pdp_media_gallery .pdpMobileSwiper {
+  width: 100%;
+  position: relative;
+  overflow: hidden;
   border-radius: 12px;
   margin-bottom: 16px;
-  overflow: hidden;
+  background: #f8f9fa;
 }
 
-.mobile_pdp_media_gallery .carousel-cell {
+.mobile_pdp_media_gallery .mobile_pdp_swiper_images {
   width: 100%;
-  height: 400px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  height: auto;
+  max-height: 400px;
+  object-fit: contain;
+  display: block;
   background: white;
 }
 
-.mobile_pdp_media_gallery .mobile_pdp_main_image {
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
-  display: block;
-}
-
-.mobile_pdp_media_gallery .mobile_pdp_main_video {
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
-  background: black;
-  border-radius: 8px;
-}
-
-/* Flickity Navigation Buttons */
-.mobile_pdp_media_gallery .flickity-button {
-  background: rgba(255, 255, 255, 0.95);
-  border: none;
-  border-radius: 50%;
+/* Main Swiper Navigation Buttons */
+.mobile_pdp_media_gallery .swiper-button-prev,
+.mobile_pdp_media_gallery .swiper-button-next {
   width: 44px;
   height: 44px;
+  margin-top: -22px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.95);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   backdrop-filter: blur(8px);
   transition: all 0.3s ease;
   opacity: 0.8;
 }
 
-.mobile_pdp_media_gallery .flickity-button:hover {
+.mobile_pdp_media_gallery .swiper-button-prev:hover,
+.mobile_pdp_media_gallery .swiper-button-next:hover {
   background: rgba(255, 255, 255, 1);
   transform: scale(1.05);
   opacity: 1;
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
 }
 
-.mobile_pdp_media_gallery .flickity-button:disabled {
-  opacity: 0.3;
-  cursor: default;
-  transform: none;
-}
-
-.mobile_pdp_media_gallery .flickity-button-icon {
-  fill: #1C42A3;
-}
-
-.mobile_pdp_media_gallery .flickity-prev-next-button.previous {
+.mobile_pdp_media_gallery .swiper-button-prev {
   left: 16px;
 }
 
-.mobile_pdp_media_gallery .flickity-prev-next-button.next {
+.mobile_pdp_media_gallery .swiper-button-next {
   right: 16px;
-}
-
-/* Remove default page dots */
-.mobile_pdp_media_gallery .flickity-page-dots {
-  display: none;
 }
 
 /* Thumbnails Container */
@@ -95,13 +62,14 @@
   margin-top: 8px;
 }
 
-.mobile_pdp_media_gallery .thumbnail-carousel {
-  background: transparent;
+.mobile_pdp_media_gallery .pdpThumbnailSwiper {
+  width: 100%;
+  overflow: visible;
   padding: 8px 0;
 }
 
-.mobile_pdp_media_gallery .thumbnail-carousel .carousel-cell {
-  width: 70px;
+.mobile_pdp_media_gallery .mobile_pdp_thumbnail_slide {
+  width: 70px !important;
   height: 70px;
   margin-right: 12px;
   cursor: pointer;
@@ -113,13 +81,13 @@
   background: #f8f9fa;
 }
 
-.mobile_pdp_media_gallery .thumbnail-carousel .carousel-cell:hover {
+.mobile_pdp_media_gallery .mobile_pdp_thumbnail_slide:hover {
   transform: translateY(-3px);
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
   border-color: rgba(28, 66, 163, 0.3);
 }
 
-.mobile_pdp_media_gallery .thumbnail-carousel .carousel-cell.is-selected {
+.mobile_pdp_media_gallery .mobile_pdp_thumbnail_slide.active {
   border-color: #1C42A3;
   box-shadow: 0 4px 16px rgba(28, 66, 163, 0.25);
   transform: translateY(-2px);
@@ -133,8 +101,12 @@
   transition: all 0.3s ease;
 }
 
-.mobile_pdp_media_gallery .thumbnail-carousel .carousel-cell:hover .mobile_pdp_thumbnail_image {
+.mobile_pdp_media_gallery .mobile_pdp_thumbnail_slide:hover .mobile_pdp_thumbnail_image {
   transform: scale(1.05);
+}
+
+.mobile_pdp_media_gallery .mobile_pdp_thumbnail_slide.active .mobile_pdp_thumbnail_image {
+  opacity: 1;
 }
 
 /* Video Thumbnail Styles */
@@ -165,19 +137,14 @@
   transform: translate(-50%, -50%) scale(1.1);
 }
 
-.mobile_pdp_media_gallery .thumbnail-carousel .carousel-cell.is-selected .mobile_pdp_video_play_icon {
+.mobile_pdp_media_gallery .mobile_pdp_thumbnail_slide.active .mobile_pdp_video_play_icon {
   background: rgba(28, 66, 163, 0.8);
-}
-
-/* Hide thumbnail navigation buttons */
-.mobile_pdp_media_gallery .thumbnail-carousel .flickity-button {
-  display: none;
 }
 
 /* Responsive Design */
 @media (min-width: 480px) {
-  .mobile_pdp_media_gallery .thumbnail-carousel .carousel-cell {
-    width: 80px;
+  .mobile_pdp_media_gallery .mobile_pdp_thumbnail_slide {
+    width: 80px !important;
     height: 80px;
     margin-right: 16px;
   }
@@ -193,8 +160,8 @@
 }
 
 @media (max-width: 360px) {
-  .mobile_pdp_media_gallery .thumbnail-carousel .carousel-cell {
-    width: 60px;
+  .mobile_pdp_media_gallery .mobile_pdp_thumbnail_slide {
+    width: 60px !important;
     height: 60px;
     margin-right: 8px;
   }
@@ -203,16 +170,18 @@
     padding: 0 8px;
   }
   
-  .mobile_pdp_media_gallery .flickity-button {
+  .mobile_pdp_media_gallery .swiper-button-prev,
+  .mobile_pdp_media_gallery .swiper-button-next {
     width: 36px;
     height: 36px;
+    margin-top: -18px;
   }
   
-  .mobile_pdp_media_gallery .flickity-prev-next-button.previous {
+  .mobile_pdp_media_gallery .swiper-button-prev {
     left: 12px;
   }
   
-  .mobile_pdp_media_gallery .flickity-prev-next-button.next {
+  .mobile_pdp_media_gallery .swiper-button-next {
     right: 12px;
   }
   
@@ -227,11 +196,22 @@
   }
 }
 
-.mobile_pdp_media_gallery .carousel-cell {
-  counter-increment: carousel-cell;
+/* Video element styling for main slider */
+.mobile_pdp_media_gallery .pdpMobileSwiper video {
+  width: 100%;
+  height: auto;
+  max-height: 400px;
+  object-fit: contain;
+  background: black;
+  border-radius: 8px;
 }
+
   
 </style>
+<!-- Add this before your script tag to load Flickity CSS and JS -->
+<link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
+<script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
+
 
 
 
@@ -239,66 +219,60 @@
 
 {% comment %}  Mobile PDP Media Start {% endcomment %}
 <div class="mobile_pdp_media_gallery">
-  <!-- Main Product Images Carousel -->
-  <div class="main-carousel" data-flickity='{ "cellAlign": "center", "contain": true, "prevNextButtons": true, "pageDots": false, "draggable": true, "freeScroll": false, "wrapAround": false }'>
-    
-    {% for media in product.media %}
-      {% if media.media_type == 'image' %}
-        <div class="carousel-cell">
-          <img
-            class="mobile_pdp_main_image"
-            srcset="
-              {% if media.preview_image.width >= 375 %}{{ media.preview_image | image_url: width: 375 }} 375w,{% endif %}
-              {% if media.preview_image.width >= 550 %}{{ media.preview_image | image_url: width: 550 }} 550w,{% endif %}
-              {% if media.preview_image.width >= 750 %}{{ media.preview_image | image_url: width: 750 }} 750w,{% endif %}
-              {% if media.preview_image.width >= 1100 %}{{ media.preview_image | image_url: width: 1100 }} 1100w,{% endif %}
-              {% if media.preview_image.width >= 1500 %}{{ media.preview_image | image_url: width: 1500 }} 1500w,{% endif %}
-              {{ media.preview_image | image_url }} {{ media.preview_image.width }}w
-            "
-            sizes="(max-width: 750px) 100vw, 50vw"
-            src="{{ media.preview_image | image_url: width: 750 }}"
-            loading="lazy"
-            data-index="{{ forloop.index0 }}"
-            alt="{{ media.alt | escape }}"
-            width="{{ media.preview_image.width }}"
-            height="{{ media.preview_image.height }}"
-          >
-        </div>
-      {% else %}
-        <div class="carousel-cell">
-          {{
-            media.video
-            | video_tag:
-              image_size: '1100x',
-              loop: section.settings.enable_video_looping,
-              controls: true,
-              muted: false,
-              class: 'mobile_pdp_main_video'
-          }}
-        </div>
-      {% endif %}
-    {% endfor %}
-    
-  </div>
-
-  <!-- Thumbnails Container -->
-  <div class="mobile_pdp_thumbnails_container">
-    <div class="thumbnail-carousel" data-flickity='{ "cellAlign": "left", "contain": true, "prevNextButtons": false, "pageDots": false, "draggable": true, "freeScroll": true, "asNavFor": ".main-carousel" }'>
-      
+  <!-- Main Product Images Slider -->
+  <div class="swiper pdpMobileSwiper">
+    <div class="swiper-wrapper">
       {% for media in product.media %}
         {% if media.media_type == 'image' %}
-          <div class="carousel-cell">
+          <div class="swiper-slide">
             <img
-              class="mobile_pdp_thumbnail_image"
-              src="{{ media.preview_image | image_url: width: 150 }}"
-              alt="{{ media.alt | escape }}"
-              data-index="{{ forloop.index0 }}"
+              class="mobile_pdp_swiper_images"
+              srcset="
+                {% if media.preview_image.width >= 375 %}{{ media.preview_image | image_url: width: 375 }} 375w,{% endif %}
+                {% if media.preview_image.width >= 550 %}{{ media.preview_image | image_url: width: 550 }} 550w,{% endif %}
+                {% if media.preview_image.width >= 750 %}{{ media.preview_image | image_url: width: 750 }} 750w,{% endif %}
+                {% if media.preview_image.width >= 1100 %}{{ media.preview_image | image_url: width: 1100 }} 1100w,{% endif %}
+                {% if media.preview_image.width >= 1500 %}{{ media.preview_image | image_url: width: 1500 }} 1500w,{% endif %}
+                {{ media.preview_image | image_url }} {{ media.preview_image.width }}w
+              "
+              sizes="(max-width: 750px) 100vw, 50vw"
+              src="{{ media.preview_image | image_url: width: 750 }}"
               loading="lazy"
+              data-index="{{ forloop.index0 }}"
+              alt="{{ media.alt | escape }}"
+              width="{{ media.preview_image.width }}"
+              height="{{ media.preview_image.height }}"
             >
           </div>
         {% else %}
-          <div class="carousel-cell">
-            <div class="mobile_pdp_video_thumbnail">
+          <div class="swiper-slide">
+            {{
+              media.video
+              | video_tag:
+                image_size: '1100x',
+                loop: section.settings.enable_video_looping,
+                controls: true,
+                muted: false
+            }}
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+
+    <!-- Navigation Arrows -->
+    <div class="swiper-button-prev">
+    </div>
+    <div class="swiper-button-next">
+    </div>
+  </div>
+
+  <!-- Thumbnails Slider -->
+  <div class="mobile_pdp_thumbnails_container">
+    <div class="swiper pdpThumbnailSwiper">
+      <div class="swiper-wrapper">
+        {% for media in product.media %}
+          {% if media.media_type == 'image' %}
+            <div class="swiper-slide mobile_pdp_thumbnail_slide">
               <img
                 class="mobile_pdp_thumbnail_image"
                 src="{{ media.preview_image | image_url: width: 150 }}"
@@ -306,253 +280,162 @@
                 data-index="{{ forloop.index0 }}"
                 loading="lazy"
               >
-              <div class="mobile_pdp_video_play_icon">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M8 5v14l11-7z" fill="white"/>
-                </svg>
+            </div>
+          {% else %}
+            <div class="swiper-slide mobile_pdp_thumbnail_slide">
+              <div class="mobile_pdp_video_thumbnail">
+                <img
+                  class="mobile_pdp_thumbnail_image"
+                  src="{{ media.preview_image | image_url: width: 150 }}"
+                  alt="{{ media.alt | escape }}"
+                  data-index="{{ forloop.index0 }}"
+                  loading="lazy"
+                >
+                <div class="mobile_pdp_video_play_icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M8 5v14l11-7z" fill="white"/>
+                  </svg>
+                </div>
               </div>
             </div>
-          </div>
-        {% endif %}
-      {% endfor %}
-      
+          {% endif %}
+        {% endfor %}
+      </div>
     </div>
   </div>
 </div>
 {% comment %}  Mobile PDP Media End {% endcomment %}
 
 
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
-    try {
-        // Check if Flickity is loaded
-        if (typeof Flickity === 'undefined') {
-            console.error('Flickity is not loaded. Please include Flickity CDN.');
-            return;
+document.addEventListener('DOMContentLoaded', () => {
+  try {
+    let pdpMobileProductSwiper = null;
+    let pdpThumbnailSwiper = null;
+
+    // Initialize thumbnail swiper first
+    pdpThumbnailSwiper = new Swiper('.pdpThumbnailSwiper', {
+      slidesPerView: 'auto',
+      spaceBetween: 0,
+      freeMode: true,
+      watchSlidesProgress: true,
+      centeredSlides: false,
+      breakpoints: {
+        320: {
+          slidesPerView: 4.5,
+        },
+        375: {
+          slidesPerView: 5,
+        },
+        414: {
+          slidesPerView: 5.5,
+        },
+        480: {
+          slidesPerView: 6,
         }
+      }
+    });
 
-        // Initialize main carousel
-        var mainCarousel = new Flickity('.mobile_pdp_media_gallery .main-carousel', {
-            cellAlign: 'center',
-            contain: true,
-            prevNextButtons: true,
-            pageDots: false,
-            draggable: true,
-            freeScroll: false,
-            wrapAround: false,
-            adaptiveHeight: false,
-            lazyLoad: 1
-        });
-
-        // Initialize thumbnail carousel
-        var thumbnailCarousel = new Flickity('.mobile_pdp_media_gallery .thumbnail-carousel', {
-            cellAlign: 'left',
-            contain: true,
-            prevNextButtons: false,
-            pageDots: false,
-            draggable: true,
-            freeScroll: true,
-            asNavFor: '.mobile_pdp_media_gallery .main-carousel',
-            lazyLoad: 1
-        });
-
-        // Sync carousels - main to thumbnail
-        mainCarousel.on('select', function() {
-            var selectedIndex = mainCarousel.selectedIndex;
-            thumbnailCarousel.select(selectedIndex, false, true);
-            // Update thumbnail active state
-            updateThumbnailActive(selectedIndex);
-        });
-
-        // Sync carousels - thumbnail to main
-        thumbnailCarousel.on('select', function() {
-            var selectedIndex = thumbnailCarousel.selectedIndex;
-            mainCarousel.select(selectedIndex, false, true);
-        });
-
-        // Function to update active thumbnail styling
-        function updateThumbnailActive(activeIndex) {
-            var thumbnailCells = document.querySelectorAll('.mobile_pdp_media_gallery .thumbnail-carousel .carousel-cell');
-            thumbnailCells.forEach(function(cell, index) {
-                cell.classList.remove('is-selected');
-                if (index === activeIndex) {
-                    cell.classList.add('is-selected');
-                }
-            });
+    // Initialize main product swiper
+    pdpMobileProductSwiper = new Swiper('.pdpMobileSwiper', {
+      slidesPerView: 1,
+      spaceBetween: 0,
+      loop: false,
+      navigation: {
+        prevEl: '.pdpMobileSwiper .swiper-button-prev',
+        nextEl: '.pdpMobileSwiper .swiper-button-next',
+      },
+      on: {
+        slideChange: function() {
+          updateThumbnailActive(this.activeIndex);
         }
+      }
+    });
 
-        // Add click handlers for thumbnails
-        var thumbnailCells = document.querySelectorAll('.mobile_pdp_media_gallery .thumbnail-carousel .carousel-cell');
-        thumbnailCells.forEach(function(cell, index) {
-            cell.addEventListener('click', function(e) {
-                e.preventDefault();
-                mainCarousel.select(index);
-            });
-
-            // Add hover effects
-            cell.addEventListener('mouseenter', function() {
-                if (!this.classList.contains('is-selected')) {
-                    this.style.transform = 'translateY(-3px) scale(1.02)';
-                }
-            });
-
-            cell.addEventListener('mouseleave', function() {
-                if (!this.classList.contains('is-selected')) {
-                    this.style.transform = '';
-                }
-            });
-        });
-
-        // Set initial active thumbnail
-        updateThumbnailActive(0);
-
-        // Keyboard navigation
-        document.addEventListener('keydown', function(e) {
-            // Only handle keyboard events when carousel is in focus or no other input is focused
-            if (document.activeElement.tagName.toLowerCase() === 'input' || 
-                document.activeElement.tagName.toLowerCase() === 'textarea' ||
-                document.activeElement.isContentEditable) {
-                return;
-            }
-
-            switch(e.key) {
-                case 'ArrowLeft':
-                    e.preventDefault();
-                    mainCarousel.previous();
-                    break;
-                case 'ArrowRight':
-                    e.preventDefault();
-                    mainCarousel.next();
-                    break;
-                case 'Home':
-                    e.preventDefault();
-                    mainCarousel.select(0);
-                    break;
-                case 'End':
-                    e.preventDefault();
-                    mainCarousel.select(mainCarousel.cells.length - 1);
-                    break;
-                case 'Escape':
-                    // Remove focus from carousel if needed
-                    document.activeElement.blur();
-                    break;
-            }
-        });
-
-        // Touch/swipe support for better mobile experience
-        var startX = 0;
-        var startY = 0;
-        var minSwipeDistance = 50;
-
-        document.querySelector('.mobile_pdp_media_gallery .main-carousel').addEventListener('touchstart', function(e) {
-            startX = e.touches[0].clientX;
-            startY = e.touches[0].clientY;
-        }, { passive: true });
-
-        document.querySelector('.mobile_pdp_media_gallery .main-carousel').addEventListener('touchend', function(e) {
-            if (!startX || !startY) return;
-
-            var endX = e.changedTouches[0].clientX;
-            var endY = e.changedTouches[0].clientY;
-
-            var diffX = startX - endX;
-            var diffY = startY - endY;
-
-            // Only trigger if horizontal swipe is greater than vertical
-            if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > minSwipeDistance) {
-                if (diffX > 0) {
-                    // Swipe left - next slide
-                    mainCarousel.next();
-                } else {
-                    // Swipe right - previous slide
-                    mainCarousel.previous();
-                }
-            }
-
-            // Reset values
-            startX = 0;
-            startY = 0;
-        }, { passive: true });
-
-        // Resize handler to update carousel on window resize
-        var resizeTimeout;
-        window.addEventListener('resize', function() {
-            clearTimeout(resizeTimeout);
-            resizeTimeout = setTimeout(function() {
-                mainCarousel.resize();
-                thumbnailCarousel.resize();
-            }, 250);
-        });
-
-        // Auto-play functionality (optional - uncomment if needed)
-        /*
-        var autoPlayInterval;
-        var autoPlayDelay = 5000; // 5 seconds
-
-        function startAutoPlay() {
-            autoPlayInterval = setInterval(function() {
-                if (mainCarousel.selectedIndex === mainCarousel.cells.length - 1) {
-                    mainCarousel.select(0);
-                } else {
-                    mainCarousel.next();
-                }
-            }, autoPlayDelay);
+    // Function to update active thumbnail
+    function updateThumbnailActive(activeIndex) {
+      const thumbnails = document.querySelectorAll('.mobile_pdp_thumbnail_slide');
+      
+      thumbnails.forEach((thumb, index) => {
+        thumb.classList.remove('active');
+        if (index === activeIndex) {
+          thumb.classList.add('active');
+          
+          // Center the active thumbnail in view
+          if (pdpThumbnailSwiper) {
+            const slideToIndex = Math.max(0, index - 2); // Show 2 slides before active
+            pdpThumbnailSwiper.slideTo(slideToIndex, 300);
+          }
         }
-
-        function stopAutoPlay() {
-            clearInterval(autoPlayInterval);
-        }
-
-        // Start autoplay
-        startAutoPlay();
-
-        // Pause on hover
-        document.querySelector('.mobile_pdp_media_gallery').addEventListener('mouseenter', stopAutoPlay);
-        document.querySelector('.mobile_pdp_media_gallery').addEventListener('mouseleave', startAutoPlay);
-
-        // Pause on focus (for accessibility)
-        mainCarousel.on('select', stopAutoPlay);
-        */
-
-        // Accessibility improvements
-        function updateAriaLabels() {
-            var currentSlide = mainCarousel.selectedIndex + 1;
-            var totalSlides = mainCarousel.cells.length;
-            
-            // Update main carousel accessibility
-            var mainCarouselEl = document.querySelector('.mobile_pdp_media_gallery .main-carousel');
-            if (mainCarouselEl) {
-                mainCarouselEl.setAttribute('aria-label', `Image ${currentSlide} of ${totalSlides}`);
-            }
-
-            // Update thumbnail accessibility
-            thumbnailCells.forEach(function(cell, index) {
-                cell.setAttribute('role', 'button');
-                cell.setAttribute('aria-label', `View image ${index + 1}`);
-                cell.setAttribute('tabindex', index === mainCarousel.selectedIndex ? '0' : '-1');
-            });
-        }
-
-        // Update aria labels on carousel change
-        mainCarousel.on('select', updateAriaLabels);
-        
-        // Initialize aria labels
-        updateAriaLabels();
-
-        // Error handling for missing elements
-        if (!document.querySelector('.mobile_pdp_media_gallery .main-carousel')) {
-            console.warn('Main carousel element not found');
-        }
-        
-        if (!document.querySelector('.mobile_pdp_media_gallery .thumbnail-carousel')) {
-            console.warn('Thumbnail carousel element not found');
-        }
-
-        console.log('Flickity carousel initialized successfully');
-
-    } catch (error) {
-        console.error('Error initializing Flickity carousel:', error);
+      });
     }
+
+    // Add click handlers to thumbnails
+    const thumbnails = document.querySelectorAll('.mobile_pdp_thumbnail_slide');
+    thumbnails.forEach((thumbnail, index) => {
+      thumbnail.addEventListener('click', (e) => {
+        e.preventDefault();
+        
+        if (pdpMobileProductSwiper) {
+          pdpMobileProductSwiper.slideTo(index, 300);
+        }
+        updateThumbnailActive(index);
+      });
+
+      // Add hover effect for better UX
+      thumbnail.addEventListener('mouseenter', () => {
+        if (!thumbnail.classList.contains('active')) {
+          thumbnail.style.transform = 'translateY(-3px) scale(1.02)';
+        }
+      });
+
+      thumbnail.addEventListener('mouseleave', () => {
+        if (!thumbnail.classList.contains('active')) {
+          thumbnail.style.transform = '';
+        }
+      });
+    });
+
+    // Set initial active thumbnail
+    updateThumbnailActive(0);
+
+    // Handle window resize to update swipers
+    let resizeTimeout;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        if (pdpMobileProductSwiper) {
+          pdpMobileProductSwiper.update();
+        }
+        if (pdpThumbnailSwiper) {
+          pdpThumbnailSwiper.update();
+        }
+      }, 250);
+    });
+
+    // Keyboard navigation support
+    document.addEventListener('keydown', (e) => {
+      if (!pdpMobileProductSwiper) return;
+      
+      switch(e.key) {
+        case 'ArrowLeft':
+          e.preventDefault();
+          pdpMobileProductSwiper.slidePrev();
+          break;
+        case 'ArrowRight':
+          e.preventDefault();
+          pdpMobileProductSwiper.slideNext();
+          break;
+      }
+    });
+
+  } catch (error) {
+    console.error('Product slider initialization error:', error);
+  }
 });
+
+
+  
 </script>
