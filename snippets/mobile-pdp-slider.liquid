@@ -1,5 +1,5 @@
 <style>
-  /* Mobile PDP Media Gallery Styles */
+/* Mobile PDP Media Gallery Styles */
 .mobile_pdp_media_gallery {
   position: relative;
   width: 100%;
@@ -11,89 +11,66 @@
   width: 100%;
   position: relative;
   overflow: hidden;
-  border-radius: 8px;
+  border-radius: 12px;
   margin-bottom: 16px;
+  background: #f8f9fa;
 }
 
 .mobile_pdp_media_gallery .mobile_pdp_swiper_images {
   width: 100%;
   height: auto;
-  object-fit: cover;
+  max-height: 400px;
+  object-fit: contain;
   display: block;
-  cursor: pointer;
-  transition: transform 0.3s ease;
+  background: white;
 }
 
-.mobile_pdp_media_gallery .mobile_pdp_swiper_images:hover {
-  transform: scale(1.02);
-}
-
-/* Swiper Navigation Buttons */
+/* Main Swiper Navigation Buttons */
 .mobile_pdp_media_gallery .swiper-button-prev,
 .mobile_pdp_media_gallery .swiper-button-next {
-  width: 40px;
-  height: 40px;
-  margin-top: -20px;
+  width: 44px;
+  height: 44px;
+  margin-top: -22px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.9);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-  backdrop-filter: blur(4px);
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(8px);
   transition: all 0.3s ease;
+  opacity: 0.8;
 }
 
 .mobile_pdp_media_gallery .swiper-button-prev:hover,
 .mobile_pdp_media_gallery .swiper-button-next:hover {
   background: rgba(255, 255, 255, 1);
-  transform: scale(1.1);
+  transform: scale(1.05);
+  opacity: 1;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
 }
 
 .mobile_pdp_media_gallery .swiper-button-prev {
-  left: 12px;
+  left: 16px;
 }
 
 .mobile_pdp_media_gallery .swiper-button-next {
-  right: 12px;
-}
-
-/* Main Swiper Pagination */
-.mobile_pdp_media_gallery .pdpMobileSwiper .swiper-pagination {
-  bottom: 12px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: auto;
-  position: absolute;
-}
-
-.mobile_pdp_media_gallery .pdpMobileSwiper .swiper-pagination-bullet {
-  width: 8px;
-  height: 8px;
-  background: rgba(255, 255, 255, 0.6);
-  opacity: 1;
-  margin: 0 4px;
-  transition: all 0.3s ease;
-}
-
-.mobile_pdp_media_gallery .pdpMobileSwiper .swiper-pagination-bullet-active {
-  background: #1C42A3;
-  width: 24px;
-  border-radius: 4px;
+  right: 16px;
 }
 
 /* Thumbnails Container */
 .mobile_pdp_media_gallery .mobile_pdp_thumbnails_container {
   width: 100%;
-  padding: 0 16px;
-  margin-top: 12px;
+  padding: 0 12px;
+  margin-top: 8px;
 }
 
 .mobile_pdp_media_gallery .pdpThumbnailSwiper {
   width: 100%;
   overflow: visible;
+  padding: 8px 0;
 }
 
 .mobile_pdp_media_gallery .mobile_pdp_thumbnail_slide {
-  width: 80px !important;
-  height: 80px;
+  width: 70px !important;
+  height: 70px;
   margin-right: 12px;
   cursor: pointer;
   border-radius: 8px;
@@ -101,16 +78,19 @@
   border: 2px solid transparent;
   transition: all 0.3s ease;
   position: relative;
+  background: #f8f9fa;
 }
 
 .mobile_pdp_media_gallery .mobile_pdp_thumbnail_slide:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  border-color: rgba(28, 66, 163, 0.3);
 }
 
 .mobile_pdp_media_gallery .mobile_pdp_thumbnail_slide.active {
   border-color: #1C42A3;
-  box-shadow: 0 0 0 1px rgba(28, 66, 163, 0.2);
+  box-shadow: 0 4px 16px rgba(28, 66, 163, 0.25);
+  transform: translateY(-2px);
 }
 
 .mobile_pdp_media_gallery .mobile_pdp_thumbnail_image {
@@ -118,11 +98,15 @@
   height: 100%;
   object-fit: cover;
   display: block;
-  transition: opacity 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 .mobile_pdp_media_gallery .mobile_pdp_thumbnail_slide:hover .mobile_pdp_thumbnail_image {
-  opacity: 0.9;
+  transform: scale(1.05);
+}
+
+.mobile_pdp_media_gallery .mobile_pdp_thumbnail_slide.active .mobile_pdp_thumbnail_image {
+  opacity: 1;
 }
 
 /* Video Thumbnail Styles */
@@ -144,7 +128,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  backdrop-filter: blur(2px);
+  backdrop-filter: blur(4px);
   transition: all 0.3s ease;
 }
 
@@ -153,108 +137,37 @@
   transform: translate(-50%, -50%) scale(1.1);
 }
 
-/* Zoom Popup Styles */
-.mobile_pdp_media_gallery .mobile-image-zoom-popup {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0, 0, 0, 0.95);
-  z-index: 9999;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  backdrop-filter: blur(4px);
-}
-
-.mobile_pdp_media_gallery .zoom-popup-close {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  font-size: 32px;
-  color: white;
-  cursor: pointer;
-  z-index: 10000;
-  width: 40px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 50%;
-  transition: all 0.3s ease;
-}
-
-.mobile_pdp_media_gallery .zoom-popup-close:hover {
-  background: rgba(255, 255, 255, 0.2);
-  transform: scale(1.1);
-}
-
-.mobile_pdp_media_gallery .zoomPopupSwiper {
-  width: 100%;
-  height: 100%;
-}
-
-.mobile_pdp_media_gallery .zoom-image {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  cursor: grab;
-  user-select: none;
-  transition: transform 0.3s ease;
-}
-
-.mobile_pdp_media_gallery .zoom-image:active {
-  cursor: grabbing;
-}
-
-/* Zoom Popup Navigation */
-.mobile_pdp_media_gallery .zoomPopupSwiper .swiper-button-prev,
-.mobile_pdp_media_gallery .zoomPopupSwiper .swiper-button-next {
-  color: white;
-  background: rgba(255, 255, 255, 0.1);
-  width: 50px;
-  height: 50px;
-  margin-top: -25px;
-  border-radius: 50%;
-  backdrop-filter: blur(4px);
-  transition: all 0.3s ease;
-}
-
-.mobile_pdp_media_gallery .zoomPopupSwiper .swiper-button-prev:hover,
-.mobile_pdp_media_gallery .zoomPopupSwiper .swiper-button-next:hover {
-  background: rgba(255, 255, 255, 0.2);
-  transform: scale(1.1);
-}
-
-.mobile_pdp_media_gallery .zoomPopupSwiper .swiper-pagination {
-  bottom: 30px;
-}
-
-.mobile_pdp_media_gallery .zoomPopupSwiper .swiper-pagination-bullet {
-  background: rgba(255, 255, 255, 0.6);
-  width: 10px;
-  height: 10px;
-  margin: 0 6px;
-}
-
-.mobile_pdp_media_gallery .zoomPopupSwiper .swiper-pagination-bullet-active {
-  background: white;
-  width: 28px;
-  border-radius: 5px;
+.mobile_pdp_media_gallery .mobile_pdp_thumbnail_slide.active .mobile_pdp_video_play_icon {
+  background: rgba(28, 66, 163, 0.8);
 }
 
 /* Responsive Design */
-@media (max-width: 480px) {
+@media (min-width: 480px) {
   .mobile_pdp_media_gallery .mobile_pdp_thumbnail_slide {
-    width: 70px !important;
-    height: 70px;
-    margin-right: 10px;
+    width: 80px !important;
+    height: 80px;
+    margin-right: 16px;
   }
   
   .mobile_pdp_media_gallery .mobile_pdp_thumbnails_container {
-    padding: 0 12px;
+    padding: 0 16px;
+  }
+  
+  .mobile_pdp_media_gallery .mobile_pdp_video_play_icon {
+    width: 28px;
+    height: 28px;
+  }
+}
+
+@media (max-width: 360px) {
+  .mobile_pdp_media_gallery .mobile_pdp_thumbnail_slide {
+    width: 60px !important;
+    height: 60px;
+    margin-right: 8px;
+  }
+  
+  .mobile_pdp_media_gallery .mobile_pdp_thumbnails_container {
+    padding: 0 8px;
   }
   
   .mobile_pdp_media_gallery .swiper-button-prev,
@@ -265,19 +178,11 @@
   }
   
   .mobile_pdp_media_gallery .swiper-button-prev {
-    left: 8px;
+    left: 12px;
   }
   
   .mobile_pdp_media_gallery .swiper-button-next {
-    right: 8px;
-  }
-}
-
-@media (max-width: 360px) {
-  .mobile_pdp_media_gallery .mobile_pdp_thumbnail_slide {
-    width: 65px !important;
-    height: 65px;
-    margin-right: 8px;
+    right: 12px;
   }
   
   .mobile_pdp_media_gallery .mobile_pdp_video_play_icon {
@@ -286,11 +191,24 @@
   }
   
   .mobile_pdp_media_gallery .mobile_pdp_video_play_icon svg {
-    width: 16px;
-    height: 16px;
+    width: 12px;
+    height: 12px;
   }
 }
+
+/* Video element styling for main slider */
+.mobile_pdp_media_gallery .pdpMobileSwiper video {
+  width: 100%;
+  height: auto;
+  max-height: 400px;
+  object-fit: contain;
+  background: black;
+  border-radius: 8px;
+}
+
+  
 </style>
+
 
 
 
@@ -298,6 +216,7 @@
 
 {% comment %}  Mobile PDP Media Start {% endcomment %}
 <div class="mobile_pdp_media_gallery">
+  <!-- Main Product Images Slider -->
   <div class="swiper pdpMobileSwiper">
     <div class="swiper-wrapper">
       {% for media in product.media %}
@@ -337,14 +256,16 @@
       {% endfor %}
     </div>
 
+    <!-- Navigation Arrows -->
     <div class="swiper-button-prev">
+      {% render 'arrow-icon-prev', rectColor: 'white', arrowStrokeColor: '#1C42A3' %}
     </div>
     <div class="swiper-button-next">
+      {% render 'arrow-icon-next', rectColor: 'white', arrowStrokeColor: '#1C42A3' %}
     </div>
-    <div class="swiper-pagination"></div>
   </div>
 
-  <!-- Thumbnails Section -->
+  <!-- Thumbnails Slider -->
   <div class="mobile_pdp_thumbnails_container">
     <div class="swiper pdpThumbnailSwiper">
       <div class="swiper-wrapper">
@@ -370,7 +291,7 @@
                   loading="lazy"
                 >
                 <div class="mobile_pdp_video_play_icon">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M8 5v14l11-7z" fill="white"/>
                   </svg>
                 </div>
@@ -382,50 +303,12 @@
     </div>
   </div>
 </div>
-
-<!-- Image Zoom Popup -->
-<div class="mobile-image-zoom-popup" style="display: none;">
-  <div class="zoom-popup-close">&times;</div>
-  <div class="swiper zoomPopupSwiper">
-    <div class="swiper-wrapper">
-      {% for media in product.media %}
-        {% if media.media_type == 'image' %}
-          <div class="swiper-slide zoom-slide">
-            <img
-              srcset="
-                {% if media.preview_image.width >= 750 %}{{ media.preview_image | image_url: width: 750 }} 750w,{% endif %}
-                {% if media.preview_image.width >= 1100 %}{{ media.preview_image | image_url: width: 1100 }} 1100w,{% endif %}
-                {% if media.preview_image.width >= 1500 %}{{ media.preview_image | image_url: width: 1500 }} 1500w,{% endif %}
-                {% if media.preview_image.width >= 1780 %}{{ media.preview_image | image_url: width: 1780 }} 1780w,{% endif %}
-                {% if media.preview_image.width >= 2000 %}{{ media.preview_image | image_url: width: 2000 }} 2000w,{% endif %}
-                {% if media.preview_image.width >= 3000 %}{{ media.preview_image | image_url: width: 3000 }} 3000w,{% endif %}
-                {{ media.preview_image | image_url }} {{ media.preview_image.width }}w
-              "
-              sizes="100vw"
-              src="{{ media.preview_image | image_url: width: 1500 }}"
-              class="zoom-image"
-              loading="lazy"
-              data-index="{{ forloop.index0 }}"
-              alt="{{ media.alt | escape }}"
-            >
-          </div>
-        {% endif %}
-      {% endfor %}
-    </div>
-    <div class="swiper-button-prev">
-      
-    </div>
-    <div class="swiper-button-next">
-    </div>
-    <div class="swiper-pagination"></div>
-  </div>
-</div>
-
 {% comment %}  Mobile PDP Media End {% endcomment %}
 
 
 
-  <script>
+
+<script>
 document.addEventListener('DOMContentLoaded', () => {
   try {
     let pdpMobileProductSwiper = null;
@@ -437,6 +320,7 @@ document.addEventListener('DOMContentLoaded', () => {
       spaceBetween: 0,
       freeMode: true,
       watchSlidesProgress: true,
+      centeredSlides: false,
       breakpoints: {
         320: {
           slidesPerView: 4.5,
@@ -453,21 +337,18 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
 
-    // Initialize main Swiper with thumbnail sync
+    // Initialize main product swiper
     pdpMobileProductSwiper = new Swiper('.pdpMobileSwiper', {
       slidesPerView: 1,
-      loop: true,
+      spaceBetween: 0,
+      loop: false,
       navigation: {
         prevEl: '.pdpMobileSwiper .swiper-button-prev',
         nextEl: '.pdpMobileSwiper .swiper-button-next',
       },
-      pagination: {
-        el: '.pdpMobileSwiper .swiper-pagination',
-        clickable: true,
-      },
       on: {
         slideChange: function() {
-          updateThumbnailActive(this.realIndex);
+          updateThumbnailActive(this.activeIndex);
         }
       }
     });
@@ -475,13 +356,16 @@ document.addEventListener('DOMContentLoaded', () => {
     // Function to update active thumbnail
     function updateThumbnailActive(activeIndex) {
       const thumbnails = document.querySelectorAll('.mobile_pdp_thumbnail_slide');
+      
       thumbnails.forEach((thumb, index) => {
         thumb.classList.remove('active');
         if (index === activeIndex) {
           thumb.classList.add('active');
-          // Center the active thumbnail
+          
+          // Center the active thumbnail in view
           if (pdpThumbnailSwiper) {
-            pdpThumbnailSwiper.slideTo(index);
+            const slideToIndex = Math.max(0, index - 2); // Show 2 slides before active
+            pdpThumbnailSwiper.slideTo(slideToIndex, 300);
           }
         }
       });
@@ -490,156 +374,33 @@ document.addEventListener('DOMContentLoaded', () => {
     // Add click handlers to thumbnails
     const thumbnails = document.querySelectorAll('.mobile_pdp_thumbnail_slide');
     thumbnails.forEach((thumbnail, index) => {
-      thumbnail.addEventListener('click', () => {
+      thumbnail.addEventListener('click', (e) => {
+        e.preventDefault();
+        
         if (pdpMobileProductSwiper) {
-          pdpMobileProductSwiper.slideToLoop(index);
+          pdpMobileProductSwiper.slideTo(index, 300);
         }
         updateThumbnailActive(index);
+      });
+
+      // Add hover effect for better UX
+      thumbnail.addEventListener('mouseenter', () => {
+        if (!thumbnail.classList.contains('active')) {
+          thumbnail.style.transform = 'translateY(-3px) scale(1.02)';
+        }
+      });
+
+      thumbnail.addEventListener('mouseleave', () => {
+        if (!thumbnail.classList.contains('active')) {
+          thumbnail.style.transform = '';
+        }
       });
     });
 
     // Set initial active thumbnail
     updateThumbnailActive(0);
 
-    // Only on mobile for zoom functionality
-    if (window.innerWidth < 768) {
-      const images = document.querySelectorAll('.mobile_pdp_swiper_images');
-      const popup = document.querySelector('.mobile-image-zoom-popup');
-      const closeBtn = document.querySelector('.zoom-popup-close');
-      let zoomSwiper = null;
-      let touchHandlers = new WeakMap();
-
-      // Open popup with correct image
-      images.forEach((img) => {
-        img.style.cursor = 'pointer';
-        img.addEventListener('click', function() {
-          const clickedIndex = pdpMobileProductSwiper.realIndex;
-          openPopup(clickedIndex);
-        });
-      });
-
-      // Close popup handlers
-      if (closeBtn) {
-        closeBtn.addEventListener('click', closePopup);
-      }
-      
-      if (popup) {
-        popup.addEventListener('click', (e) => {
-          if (e.target === popup) {
-            closePopup();
-          }
-        });
-      }
-
-      function openPopup(startIndex) {
-        if (!popup) return;
-        
-        popup.style.display = 'flex';
-        document.body.style.overflow = 'hidden';
-
-        if (!zoomSwiper) {
-          zoomSwiper = new Swiper('.zoomPopupSwiper', {
-            loop: false,
-            slidesPerView: 1,
-            initialSlide: startIndex,
-            navigation: {
-              prevEl: '.zoomPopupSwiper .swiper-button-prev',
-              nextEl: '.zoomPopupSwiper .swiper-button-next',
-            },
-            pagination: {
-              el: '.zoomPopupSwiper .swiper-pagination',
-              clickable: true,
-            },
-          });
-        } else {
-          zoomSwiper.slideTo(startIndex, 0);
-        }
-
-        const zoomImages = document.querySelectorAll('.zoom-image');
-        
-        zoomImages.forEach(img => {
-          // Reset zoom state
-          img.style.transform = 'scale(1)';
-          img.dataset.currentScale = '1';
-          
-          // Only add handlers if not already added
-          if (!touchHandlers.has(img)) {
-            const handlers = {
-              touchstart: handleTouchStart.bind(img),
-              touchmove: handleTouchMove.bind(img),
-              touchend: handleTouchEnd.bind(img)
-            };
-            
-            img.addEventListener('touchstart', handlers.touchstart, { passive: false });
-            img.addEventListener('touchmove', handlers.touchmove, { passive: false });
-            img.addEventListener('touchend', handlers.touchend, { passive: false });
-            
-            // Double tap handler
-            let lastTap = 0;
-            const handleDoubleTap = function(e) {
-              const currentTime = new Date().getTime();
-              const tapLength = currentTime - lastTap;
-              if (tapLength < 300 && tapLength > 0) {
-                e.preventDefault();
-                let currentScale = parseFloat(this.dataset.currentScale || '1');
-                currentScale = currentScale === 1 ? 1.5 : 1;
-                this.style.transform = `scale(${currentScale})`;
-                this.dataset.currentScale = currentScale;
-              }
-              lastTap = currentTime;
-            }.bind(img);
-            
-            img.addEventListener('touchend', handleDoubleTap, { passive: false });
-            handlers.touchendDouble = handleDoubleTap;
-            
-            touchHandlers.set(img, handlers);
-          }
-        });
-
-        function handleTouchStart(e) {
-          if (e.touches.length === 2) {
-            e.preventDefault();
-            this.startDistance = getDistance(e.touches[0], e.touches[1]);
-            this.startScale = parseFloat(this.dataset.currentScale || '1');
-          }
-        }
-
-        function handleTouchMove(e) {
-          if (e.touches.length === 2) {
-            e.preventDefault();
-            const currentDistance = getDistance(e.touches[0], e.touches[1]);
-            let newScale = (currentDistance / this.startDistance) * this.startScale;
-            
-            newScale = Math.max(1, Math.min(newScale, 2));
-            this.style.transform = `scale(${newScale})`;
-            this.dataset.currentScale = newScale;
-          }
-        }
-
-        function handleTouchEnd() {
-          const scale = parseFloat(this.dataset.currentScale || '1');
-          const finalScale = scale < 1 ? 1 : scale;
-          this.style.transform = `scale(${finalScale})`;
-          this.dataset.currentScale = finalScale;
-        }
-
-        function getDistance(touch1, touch2) {
-          return Math.hypot(
-            touch2.pageX - touch1.pageX,
-            touch2.pageY - touch1.pageY
-          );
-        }
-      }
-
-      function closePopup() {
-        if (popup) {
-          popup.style.display = 'none';
-          document.body.style.overflow = '';
-        }
-      }
-    }
-
-    // Handle window resize
+    // Handle window resize to update swipers
     let resizeTimeout;
     window.addEventListener('resize', () => {
       clearTimeout(resizeTimeout);
@@ -653,10 +414,27 @@ document.addEventListener('DOMContentLoaded', () => {
       }, 250);
     });
 
+    // Keyboard navigation support
+    document.addEventListener('keydown', (e) => {
+      if (!pdpMobileProductSwiper) return;
+      
+      switch(e.key) {
+        case 'ArrowLeft':
+          e.preventDefault();
+          pdpMobileProductSwiper.slidePrev();
+          break;
+        case 'ArrowRight':
+          e.preventDefault();
+          pdpMobileProductSwiper.slideNext();
+          break;
+      }
+    });
+
   } catch (error) {
-    console.error('Swiper initialization error:', error);
+    console.error('Product slider initialization error:', error);
   }
 });
 
-    
-  </script>
+
+  
+</script>
