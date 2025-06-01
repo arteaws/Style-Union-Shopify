@@ -9,6 +9,7 @@
 /* Main Swiper Container */
 .mobile_pdp_media_gallery .pdpMobileSwiper {
   width: 100%;
+  height: 400px; /* Fixed height */
   position: relative;
   overflow: hidden;
   border-radius: 12px;
@@ -16,10 +17,18 @@
   background: #f8f9fa;
 }
 
+.mobile_pdp_media_gallery .swiper-wrapper {
+  height: 100%;
+}
+
+.mobile_pdp_media_gallery .swiper-slide {
+  width: 100% !important;
+  height: 100%;
+}
+
 .mobile_pdp_media_gallery .mobile_pdp_swiper_images {
   width: 100%;
-  height: auto;
-  max-height: 400px;
+  height: 100%;
   object-fit: contain;
   display: block;
   background: white;
@@ -199,22 +208,14 @@
 /* Video element styling for main slider */
 .mobile_pdp_media_gallery .pdpMobileSwiper video {
   width: 100%;
-  height: auto;
-  max-height: 400px;
+  height: 100%;
   object-fit: contain;
   background: black;
   border-radius: 8px;
 }
-
-  
 </style>
- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 
-
-
-
-
-{% comment %} Mobile PDP Media Start {% endcomment %}
 <div class="mobile_pdp_media_gallery">
   <!-- Main Product Images Slider -->
   <div class="swiper pdpMobileSwiper">
@@ -316,7 +317,6 @@
   </div>
 </div>
 
-
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
 <script>
@@ -325,7 +325,24 @@ document.addEventListener('DOMContentLoaded', () => {
     let pdpMobileProductSwiper = null;
     let pdpThumbnailSwiper = null;
 
-    // Initialize thumbnail swiper first
+    // Initialize main product swiper first
+    pdpMobileProductSwiper = new Swiper('.pdpMobileSwiper', {
+      slidesPerView: 1,
+      spaceBetween: 0,
+      loop: false,
+      autoHeight: false,
+      navigation: {
+        prevEl: '.pdpMobileSwiper .swiper-button-prev',
+        nextEl: '.pdpMobileSwiper .swiper-button-next',
+      },
+      on: {
+        slideChange: function() {
+          updateThumbnailActive(this.activeIndex);
+        }
+      }
+    });
+
+    // Initialize thumbnail swiper
     pdpThumbnailSwiper = new Swiper('.pdpThumbnailSwiper', {
       slidesPerView: 'auto',
       spaceBetween: 0,
@@ -344,22 +361,6 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         480: {
           slidesPerView: 6,
-        }
-      }
-    });
-
-    // Initialize main product swiper
-    pdpMobileProductSwiper = new Swiper('.pdpMobileSwiper', {
-      slidesPerView: 1,
-      spaceBetween: 0,
-      loop: false,
-      navigation: {
-        prevEl: '.pdpMobileSwiper .swiper-button-prev',
-        nextEl: '.pdpMobileSwiper .swiper-button-next',
-      },
-      on: {
-        slideChange: function() {
-          updateThumbnailActive(this.activeIndex);
         }
       }
     });
@@ -445,7 +446,4 @@ document.addEventListener('DOMContentLoaded', () => {
     console.error('Product slider initialization error:', error);
   }
 });
-
-
-  
 </script>
