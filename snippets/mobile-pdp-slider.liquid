@@ -1,5 +1,5 @@
 <style>
-/* Mobile PDP Media Gallery Styles */
+/* Mobile PDP Media Gallery Styles - FIXED */
 .mobile-pdp-slider {
     margin: 0 !important;
     float: unset !important;
@@ -9,54 +9,79 @@
   position: relative;
   width: 100%;
   max-width: 100%;
+  overflow: hidden; /* Prevent any overflow */
 }
 
-/* Main Swiper Container - Fixed */
+/* Main Swiper Container - FIXED */
 .mobile_pdp_media_gallery .pdpMobileSwiper {
   width: 100%;
-  height: auto; /* Changed from fixed height to auto */
-  aspect-ratio: 1/1; /* Ensures square ratio, adjust as needed */
+  height: 100vw; /* Square aspect ratio for mobile */
+  max-height: 400px; /* Prevent too large on bigger screens */
   position: relative;
   overflow: hidden;
-  border-radius: 12px;
+  border-radius: 8px;
   margin-bottom: 16px;
   background: #f8f9fa;
 }
 
 .mobile_pdp_media_gallery .swiper-wrapper {
   height: 100%;
+  width: 100%;
 }
 
 .mobile_pdp_media_gallery .swiper-slide {
   width: 100% !important;
-  height: 100%;
+  height: 100% !important;
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden; /* Prevent content overflow */
+  position: relative;
 }
 
+/* FIXED - Main slider images */
 .mobile_pdp_media_gallery .mobile_pdp_swiper_images {
-  width: auto;
-  height: auto;
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* Ensure full image is visible */
+  object-position: center;
   display: block;
   background: white;
+  max-width: 100%;
+  max-height: 100%;
+}
+
+/* Video styling - FIXED */
+.mobile_pdp_media_gallery .pdpMobileSwiper video {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: black;
+  border-radius: 4px;
+  max-width: 100%;
+  max-height: 100%;
 }
 
 /* Main Swiper Navigation Buttons */
 .mobile_pdp_media_gallery .swiper-button-prev,
 .mobile_pdp_media_gallery .swiper-button-next {
-  width: 44px;
-  height: 44px;
-  margin-top: -22px;
+  width: 36px;
+  height: 36px;
+  margin-top: -18px;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.95);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   backdrop-filter: blur(8px);
   transition: all 0.3s ease;
-  opacity: 0.8;
+  opacity: 0.9;
+  z-index: 10;
+}
+
+.mobile_pdp_media_gallery .swiper-button-prev::after,
+.mobile_pdp_media_gallery .swiper-button-next::after {
+  font-size: 14px;
+  font-weight: bold;
+  color: #333;
 }
 
 .mobile_pdp_media_gallery .swiper-button-prev:hover,
@@ -68,11 +93,11 @@
 }
 
 .mobile_pdp_media_gallery .swiper-button-prev {
-  left: 16px;
+  left: 12px;
 }
 
 .mobile_pdp_media_gallery .swiper-button-next {
-  right: 16px;
+  right: 12px;
 }
 
 /* Thumbnails Container */
@@ -80,6 +105,7 @@
   width: 100%;
   padding: 0 12px;
   margin-top: 8px;
+  overflow: hidden;
 }
 
 .mobile_pdp_media_gallery .pdpThumbnailSwiper {
@@ -89,21 +115,22 @@
 }
 
 .mobile_pdp_media_gallery .mobile_pdp_thumbnail_slide {
-  width: 70px !important;
-  height: 70px;
-  margin-right: 12px;
+  width: 60px !important;
+  height: 60px;
+  margin-right: 8px;
   cursor: pointer;
-  border-radius: 8px;
+  border-radius: 6px;
   overflow: hidden;
   border: 2px solid transparent;
   transition: all 0.3s ease;
   position: relative;
   background: #f8f9fa;
+  flex-shrink: 0;
 }
 
 .mobile_pdp_media_gallery .mobile_pdp_thumbnail_slide:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   border-color: rgba(28, 66, 163, 0.3);
 }
 
@@ -141,8 +168,8 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 24px;
-  height: 24px;
+  width: 20px;
+  height: 20px;
   background: rgba(0, 0, 0, 0.7);
   border-radius: 50%;
   display: flex;
@@ -150,6 +177,11 @@
   justify-content: center;
   backdrop-filter: blur(4px);
   transition: all 0.3s ease;
+}
+
+.mobile_pdp_media_gallery .mobile_pdp_video_play_icon svg {
+  width: 10px;
+  height: 10px;
 }
 
 .mobile_pdp_media_gallery .mobile_pdp_video_thumbnail:hover .mobile_pdp_video_play_icon {
@@ -161,25 +193,45 @@
   background: rgba(28, 66, 163, 0.8);
 }
 
-/* Video element styling for main slider */
-.mobile_pdp_media_gallery .pdpMobileSwiper video {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  background: black;
-  border-radius: 8px;
+/* Responsive Design - IMPROVED */
+@media (min-width: 375px) {
+  .mobile_pdp_media_gallery .mobile_pdp_thumbnail_slide {
+    width: 65px !important;
+    height: 65px;
+    margin-right: 10px;
+  }
 }
 
-/* Responsive Design */
+@media (min-width: 414px) {
+  .mobile_pdp_media_gallery .mobile_pdp_thumbnail_slide {
+    width: 70px !important;
+    height: 70px;
+    margin-right: 12px;
+  }
+  
+  .mobile_pdp_media_gallery .swiper-button-prev,
+  .mobile_pdp_media_gallery .swiper-button-next {
+    width: 40px;
+    height: 40px;
+    margin-top: -20px;
+  }
+  
+  .mobile_pdp_media_gallery .swiper-button-prev::after,
+  .mobile_pdp_media_gallery .swiper-button-next::after {
+    font-size: 16px;
+  }
+}
+
 @media (min-width: 480px) {
   .mobile_pdp_media_gallery .pdpMobileSwiper {
-    aspect-ratio: 4/3; /* Adjust ratio for larger screens */
+    height: 400px; /* Fixed height for larger screens */
+    max-height: 400px;
   }
   
   .mobile_pdp_media_gallery .mobile_pdp_thumbnail_slide {
-    width: 80px !important;
-    height: 80px;
-    margin-right: 16px;
+    width: 75px !important;
+    height: 75px;
+    margin-right: 14px;
   }
   
   .mobile_pdp_media_gallery .mobile_pdp_thumbnails_container {
@@ -187,16 +239,37 @@
   }
   
   .mobile_pdp_media_gallery .mobile_pdp_video_play_icon {
-    width: 28px;
-    height: 28px;
+    width: 24px;
+    height: 24px;
+  }
+  
+  .mobile_pdp_media_gallery .mobile_pdp_video_play_icon svg {
+    width: 12px;
+    height: 12px;
+  }
+  
+  .mobile_pdp_media_gallery .swiper-button-prev,
+  .mobile_pdp_media_gallery .swiper-button-next {
+    width: 44px;
+    height: 44px;
+    margin-top: -22px;
+  }
+  
+  .mobile_pdp_media_gallery .swiper-button-prev {
+    left: 16px;
+  }
+  
+  .mobile_pdp_media_gallery .swiper-button-next {
+    right: 16px;
   }
 }
 
-@media (max-width: 360px) {
+/* Extra small screens */
+@media (max-width: 320px) {
   .mobile_pdp_media_gallery .mobile_pdp_thumbnail_slide {
-    width: 60px !important;
-    height: 60px;
-    margin-right: 8px;
+    width: 55px !important;
+    height: 55px;
+    margin-right: 6px;
   }
   
   .mobile_pdp_media_gallery .mobile_pdp_thumbnails_container {
@@ -205,30 +278,41 @@
   
   .mobile_pdp_media_gallery .swiper-button-prev,
   .mobile_pdp_media_gallery .swiper-button-next {
-    width: 36px;
-    height: 36px;
-    margin-top: -18px;
+    width: 32px;
+    height: 32px;
+    margin-top: -16px;
+  }
+  
+  .mobile_pdp_media_gallery .swiper-button-prev::after,
+  .mobile_pdp_media_gallery .swiper-button-next::after {
+    font-size: 12px;
   }
   
   .mobile_pdp_media_gallery .swiper-button-prev {
-    left: 12px;
+    left: 8px;
   }
   
   .mobile_pdp_media_gallery .swiper-button-next {
-    right: 12px;
+    right: 8px;
   }
   
   .mobile_pdp_media_gallery .mobile_pdp_video_play_icon {
-    width: 20px;
-    height: 20px;
+    width: 18px;
+    height: 18px;
   }
   
   .mobile_pdp_media_gallery .mobile_pdp_video_play_icon svg {
-    width: 12px;
-    height: 12px;
+    width: 9px;
+    height: 9px;
   }
 }
+
+/* Ensure no horizontal overflow */
+.mobile_pdp_media_gallery * {
+  box-sizing: border-box;
+}
 </style>
+
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 
 <div class="mobile_pdp_media_gallery">
@@ -346,6 +430,7 @@ document.addEventListener('DOMContentLoaded', () => {
       spaceBetween: 0,
       loop: false,
       autoHeight: false,
+      centeredSlides: true,
       navigation: {
         prevEl: '.pdpMobileSwiper .swiper-button-prev',
         nextEl: '.pdpMobileSwiper .swiper-button-next',
@@ -413,7 +498,7 @@ document.addEventListener('DOMContentLoaded', () => {
       // Add hover effect for better UX
       thumbnail.addEventListener('mouseenter', () => {
         if (!thumbnail.classList.contains('active')) {
-          thumbnail.style.transform = 'translateY(-3px) scale(1.02)';
+          thumbnail.style.transform = 'translateY(-2px) scale(1.02)';
         }
       });
 
