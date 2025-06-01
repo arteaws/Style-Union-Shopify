@@ -6,7 +6,6 @@
 
 
 .product__section-images .zoom_btn {
-
 left: 10px !important;
  right:unset; 
 }
@@ -89,7 +88,7 @@ left: 10px !important;
    }
  {% endcapture %}
 
-  <div class="product__section-images product__section-image--{{ thumbnail_position }} carousel-container js-product-gallery span-6 md-span-12 sm-span-12 auto"
+  <div class="product__section-images product__section-image--{{ thumbnail_position }} carousel-container js-product-gallery span-6 md-span-12 sm-span-12 auto desktop-gallerr-cs"
     data-product-gallery data-product-single-media-group
     data-gallery-config='{{ product_gallery_config }}' data-aos="fade">
 
@@ -105,6 +104,11 @@ left: 10px !important;
         {{ 'product-' | append: current | placeholder_svg_tag: 'placeholder-svg' }}
       </div>
     {%- endif -%}
+  </div>
+
+
+  <div class="mobile-pdp-slider">
+{% render 'mobile-pdp-slider' %}
   </div>
 
   <div class="product__section-contentWrapper span-6 md-span-12 sm-span-12 auto" data-aos="fade" data-aos-anchor="#identity">
