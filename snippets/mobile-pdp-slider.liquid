@@ -11,10 +11,11 @@
   max-width: 100%;
 }
 
-/* Main Swiper Container */
+/* Main Swiper Container - Fixed */
 .mobile_pdp_media_gallery .pdpMobileSwiper {
   width: 100%;
-  height: 400px; /* Fixed height */
+  height: auto; /* Changed from fixed height to auto */
+  aspect-ratio: 1/1; /* Ensures square ratio, adjust as needed */
   position: relative;
   overflow: hidden;
   border-radius: 12px;
@@ -29,11 +30,16 @@
 .mobile_pdp_media_gallery .swiper-slide {
   width: 100% !important;
   height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .mobile_pdp_media_gallery .mobile_pdp_swiper_images {
-  width: 100%;
-  height: 100%;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
   object-fit: contain;
   display: block;
   background: white;
@@ -155,8 +161,21 @@
   background: rgba(28, 66, 163, 0.8);
 }
 
+/* Video element styling for main slider */
+.mobile_pdp_media_gallery .pdpMobileSwiper video {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: black;
+  border-radius: 8px;
+}
+
 /* Responsive Design */
 @media (min-width: 480px) {
+  .mobile_pdp_media_gallery .pdpMobileSwiper {
+    aspect-ratio: 4/3; /* Adjust ratio for larger screens */
+  }
+  
   .mobile_pdp_media_gallery .mobile_pdp_thumbnail_slide {
     width: 80px !important;
     height: 80px;
@@ -208,15 +227,6 @@
     width: 12px;
     height: 12px;
   }
-}
-
-/* Video element styling for main slider */
-.mobile_pdp_media_gallery .pdpMobileSwiper video {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  background: black;
-  border-radius: 8px;
 }
 </style>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
