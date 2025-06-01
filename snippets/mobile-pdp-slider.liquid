@@ -1,0 +1,668 @@
+<style>
+  /* Mobile PDP Media Gallery Styles */
+.mobile_pdp_media_gallery {
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+}
+
+/* Main Swiper Container */
+.mobile_pdp_media_gallery .pdpMobileSwiper {
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+
+.mobile_pdp_media_gallery .mobile_pdp_swiper_images {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  display: block;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.mobile_pdp_media_gallery .mobile_pdp_swiper_images:hover {
+  transform: scale(1.02);
+}
+
+/* Swiper Navigation Buttons */
+.mobile_pdp_media_gallery .swiper-button-prev,
+.mobile_pdp_media_gallery .swiper-button-next {
+  width: 40px;
+  height: 40px;
+  margin-top: -20px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(4px);
+  transition: all 0.3s ease;
+}
+
+.mobile_pdp_media_gallery .swiper-button-prev:hover,
+.mobile_pdp_media_gallery .swiper-button-next:hover {
+  background: rgba(255, 255, 255, 1);
+  transform: scale(1.1);
+}
+
+.mobile_pdp_media_gallery .swiper-button-prev {
+  left: 12px;
+}
+
+.mobile_pdp_media_gallery .swiper-button-next {
+  right: 12px;
+}
+
+/* Main Swiper Pagination */
+.mobile_pdp_media_gallery .pdpMobileSwiper .swiper-pagination {
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: auto;
+  position: absolute;
+}
+
+.mobile_pdp_media_gallery .pdpMobileSwiper .swiper-pagination-bullet {
+  width: 8px;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.6);
+  opacity: 1;
+  margin: 0 4px;
+  transition: all 0.3s ease;
+}
+
+.mobile_pdp_media_gallery .pdpMobileSwiper .swiper-pagination-bullet-active {
+  background: #1C42A3;
+  width: 24px;
+  border-radius: 4px;
+}
+
+/* Thumbnails Container */
+.mobile_pdp_media_gallery .mobile_pdp_thumbnails_container {
+  width: 100%;
+  padding: 0 16px;
+  margin-top: 12px;
+}
+
+.mobile_pdp_media_gallery .pdpThumbnailSwiper {
+  width: 100%;
+  overflow: visible;
+}
+
+.mobile_pdp_media_gallery .mobile_pdp_thumbnail_slide {
+  width: 80px !important;
+  height: 80px;
+  margin-right: 12px;
+  cursor: pointer;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.mobile_pdp_media_gallery .mobile_pdp_thumbnail_slide:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.mobile_pdp_media_gallery .mobile_pdp_thumbnail_slide.active {
+  border-color: #1C42A3;
+  box-shadow: 0 0 0 1px rgba(28, 66, 163, 0.2);
+}
+
+.mobile_pdp_media_gallery .mobile_pdp_thumbnail_image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: opacity 0.3s ease;
+}
+
+.mobile_pdp_media_gallery .mobile_pdp_thumbnail_slide:hover .mobile_pdp_thumbnail_image {
+  opacity: 0.9;
+}
+
+/* Video Thumbnail Styles */
+.mobile_pdp_media_gallery .mobile_pdp_video_thumbnail {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.mobile_pdp_media_gallery .mobile_pdp_video_play_icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 24px;
+  height: 24px;
+  background: rgba(0, 0, 0, 0.7);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(2px);
+  transition: all 0.3s ease;
+}
+
+.mobile_pdp_media_gallery .mobile_pdp_video_thumbnail:hover .mobile_pdp_video_play_icon {
+  background: rgba(28, 66, 163, 0.9);
+  transform: translate(-50%, -50%) scale(1.1);
+}
+
+/* Zoom Popup Styles */
+.mobile_pdp_media_gallery .mobile-image-zoom-popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.95);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(4px);
+}
+
+.mobile_pdp_media_gallery .zoom-popup-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  font-size: 32px;
+  color: white;
+  cursor: pointer;
+  z-index: 10000;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.mobile_pdp_media_gallery .zoom-popup-close:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.1);
+}
+
+.mobile_pdp_media_gallery .zoomPopupSwiper {
+  width: 100%;
+  height: 100%;
+}
+
+.mobile_pdp_media_gallery .zoom-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  cursor: grab;
+  user-select: none;
+  transition: transform 0.3s ease;
+}
+
+.mobile_pdp_media_gallery .zoom-image:active {
+  cursor: grabbing;
+}
+
+/* Zoom Popup Navigation */
+.mobile_pdp_media_gallery .zoomPopupSwiper .swiper-button-prev,
+.mobile_pdp_media_gallery .zoomPopupSwiper .swiper-button-next {
+  color: white;
+  background: rgba(255, 255, 255, 0.1);
+  width: 50px;
+  height: 50px;
+  margin-top: -25px;
+  border-radius: 50%;
+  backdrop-filter: blur(4px);
+  transition: all 0.3s ease;
+}
+
+.mobile_pdp_media_gallery .zoomPopupSwiper .swiper-button-prev:hover,
+.mobile_pdp_media_gallery .zoomPopupSwiper .swiper-button-next:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.1);
+}
+
+.mobile_pdp_media_gallery .zoomPopupSwiper .swiper-pagination {
+  bottom: 30px;
+}
+
+.mobile_pdp_media_gallery .zoomPopupSwiper .swiper-pagination-bullet {
+  background: rgba(255, 255, 255, 0.6);
+  width: 10px;
+  height: 10px;
+  margin: 0 6px;
+}
+
+.mobile_pdp_media_gallery .zoomPopupSwiper .swiper-pagination-bullet-active {
+  background: white;
+  width: 28px;
+  border-radius: 5px;
+}
+
+/* Responsive Design */
+@media (max-width: 480px) {
+  .mobile_pdp_media_gallery .mobile_pdp_thumbnail_slide {
+    width: 70px !important;
+    height: 70px;
+    margin-right: 10px;
+  }
+  
+  .mobile_pdp_media_gallery .mobile_pdp_thumbnails_container {
+    padding: 0 12px;
+  }
+  
+  .mobile_pdp_media_gallery .swiper-button-prev,
+  .mobile_pdp_media_gallery .swiper-button-next {
+    width: 36px;
+    height: 36px;
+    margin-top: -18px;
+  }
+  
+  .mobile_pdp_media_gallery .swiper-button-prev {
+    left: 8px;
+  }
+  
+  .mobile_pdp_media_gallery .swiper-button-next {
+    right: 8px;
+  }
+}
+
+@media (max-width: 360px) {
+  .mobile_pdp_media_gallery .mobile_pdp_thumbnail_slide {
+    width: 65px !important;
+    height: 65px;
+    margin-right: 8px;
+  }
+  
+  .mobile_pdp_media_gallery .mobile_pdp_video_play_icon {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .mobile_pdp_media_gallery .mobile_pdp_video_play_icon svg {
+    width: 16px;
+    height: 16px;
+  }
+}
+</style>
+
+
+
+{% comment %} Custom Size Form Modal End {% endcomment %}
+<div class="grid__item product__media-wrapper tibertaber_media_desktop {% if section.settings.media_position == 'right' %} medium-hide large-up-hide{% endif %}">
+  {% render 'product-media-gallery', variant_images: variant_images %}
+</div>
+
+{% comment %}  Mobile PDP Media Start {% endcomment %}
+<div class="mobile_pdp_media_gallery">
+  <div class="swiper pdpMobileSwiper">
+    <div class="swiper-wrapper">
+      {% for media in product.media %}
+        {% if media.media_type == 'image' %}
+          <div class="swiper-slide">
+            <img
+              class="mobile_pdp_swiper_images"
+              srcset="
+                {% if media.preview_image.width >= 375 %}{{ media.preview_image | image_url: width: 375 }} 375w,{% endif %}
+                {% if media.preview_image.width >= 550 %}{{ media.preview_image | image_url: width: 550 }} 550w,{% endif %}
+                {% if media.preview_image.width >= 750 %}{{ media.preview_image | image_url: width: 750 }} 750w,{% endif %}
+                {% if media.preview_image.width >= 1100 %}{{ media.preview_image | image_url: width: 1100 }} 1100w,{% endif %}
+                {% if media.preview_image.width >= 1500 %}{{ media.preview_image | image_url: width: 1500 }} 1500w,{% endif %}
+                {{ media.preview_image | image_url }} {{ media.preview_image.width }}w
+              "
+              sizes="(max-width: 750px) 100vw, 50vw"
+              src="{{ media.preview_image | image_url: width: 750 }}"
+              loading="lazy"
+              data-index="{{ forloop.index0 }}"
+              alt="{{ media.alt | escape }}"
+              width="{{ media.preview_image.width }}"
+              height="{{ media.preview_image.height }}"
+            >
+          </div>
+        {% else %}
+          <div class="swiper-slide">
+            {{
+              media.video
+              | video_tag:
+                image_size: '1100x',
+                loop: section.settings.enable_video_looping,
+                controls: true,
+                muted: false
+            }}
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+
+    <div class="swiper-button-prev">
+      {% render 'arrow-icon-prev', rectColor: 'white', arrowStrokeColor: '#1C42A3' %}
+    </div>
+    <div class="swiper-button-next">
+      {% render 'arrow-icon-next', rectColor: 'white', arrowStrokeColor: '#1C42A3' %}
+    </div>
+    <div class="swiper-pagination"></div>
+  </div>
+
+  <!-- Thumbnails Section -->
+  <div class="mobile_pdp_thumbnails_container">
+    <div class="swiper pdpThumbnailSwiper">
+      <div class="swiper-wrapper">
+        {% for media in product.media %}
+          {% if media.media_type == 'image' %}
+            <div class="swiper-slide mobile_pdp_thumbnail_slide">
+              <img
+                class="mobile_pdp_thumbnail_image"
+                src="{{ media.preview_image | image_url: width: 150 }}"
+                alt="{{ media.alt | escape }}"
+                data-index="{{ forloop.index0 }}"
+                loading="lazy"
+              >
+            </div>
+          {% else %}
+            <div class="swiper-slide mobile_pdp_thumbnail_slide">
+              <div class="mobile_pdp_video_thumbnail">
+                <img
+                  class="mobile_pdp_thumbnail_image"
+                  src="{{ media.preview_image | image_url: width: 150 }}"
+                  alt="{{ media.alt | escape }}"
+                  data-index="{{ forloop.index0 }}"
+                  loading="lazy"
+                >
+                <div class="mobile_pdp_video_play_icon">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M8 5v14l11-7z" fill="white"/>
+                  </svg>
+                </div>
+              </div>
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Image Zoom Popup -->
+<div class="mobile-image-zoom-popup" style="display: none;">
+  <div class="zoom-popup-close">&times;</div>
+  <div class="swiper zoomPopupSwiper">
+    <div class="swiper-wrapper">
+      {% for media in product.media %}
+        {% if media.media_type == 'image' %}
+          <div class="swiper-slide zoom-slide">
+            <img
+              srcset="
+                {% if media.preview_image.width >= 750 %}{{ media.preview_image | image_url: width: 750 }} 750w,{% endif %}
+                {% if media.preview_image.width >= 1100 %}{{ media.preview_image | image_url: width: 1100 }} 1100w,{% endif %}
+                {% if media.preview_image.width >= 1500 %}{{ media.preview_image | image_url: width: 1500 }} 1500w,{% endif %}
+                {% if media.preview_image.width >= 1780 %}{{ media.preview_image | image_url: width: 1780 }} 1780w,{% endif %}
+                {% if media.preview_image.width >= 2000 %}{{ media.preview_image | image_url: width: 2000 }} 2000w,{% endif %}
+                {% if media.preview_image.width >= 3000 %}{{ media.preview_image | image_url: width: 3000 }} 3000w,{% endif %}
+                {{ media.preview_image | image_url }} {{ media.preview_image.width }}w
+              "
+              sizes="100vw"
+              src="{{ media.preview_image | image_url: width: 1500 }}"
+              class="zoom-image"
+              loading="lazy"
+              data-index="{{ forloop.index0 }}"
+              alt="{{ media.alt | escape }}"
+            >
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+    <div class="swiper-button-prev">
+      {% render 'arrow-icon-prev', rectColor: 'white', arrowStrokeColor: '#1C42A3' %}
+    </div>
+    <div class="swiper-button-next">
+      {% render 'arrow-icon-next', rectColor: 'white', arrowStrokeColor: '#1C42A3' %}
+    </div>
+    <div class="swiper-pagination"></div>
+  </div>
+</div>
+
+{% comment %}  Mobile PDP Media End {% endcomment %}
+
+
+
+  <script>
+document.addEventListener('DOMContentLoaded', () => {
+  try {
+    let pdpMobileProductSwiper = null;
+    let pdpThumbnailSwiper = null;
+
+    // Initialize thumbnail swiper first
+    pdpThumbnailSwiper = new Swiper('.pdpThumbnailSwiper', {
+      slidesPerView: 'auto',
+      spaceBetween: 0,
+      freeMode: true,
+      watchSlidesProgress: true,
+      breakpoints: {
+        320: {
+          slidesPerView: 4.5,
+        },
+        375: {
+          slidesPerView: 5,
+        },
+        414: {
+          slidesPerView: 5.5,
+        },
+        480: {
+          slidesPerView: 6,
+        }
+      }
+    });
+
+    // Initialize main Swiper with thumbnail sync
+    pdpMobileProductSwiper = new Swiper('.pdpMobileSwiper', {
+      slidesPerView: 1,
+      loop: true,
+      navigation: {
+        prevEl: '.pdpMobileSwiper .swiper-button-prev',
+        nextEl: '.pdpMobileSwiper .swiper-button-next',
+      },
+      pagination: {
+        el: '.pdpMobileSwiper .swiper-pagination',
+        clickable: true,
+      },
+      on: {
+        slideChange: function() {
+          updateThumbnailActive(this.realIndex);
+        }
+      }
+    });
+
+    // Function to update active thumbnail
+    function updateThumbnailActive(activeIndex) {
+      const thumbnails = document.querySelectorAll('.mobile_pdp_thumbnail_slide');
+      thumbnails.forEach((thumb, index) => {
+        thumb.classList.remove('active');
+        if (index === activeIndex) {
+          thumb.classList.add('active');
+          // Center the active thumbnail
+          if (pdpThumbnailSwiper) {
+            pdpThumbnailSwiper.slideTo(index);
+          }
+        }
+      });
+    }
+
+    // Add click handlers to thumbnails
+    const thumbnails = document.querySelectorAll('.mobile_pdp_thumbnail_slide');
+    thumbnails.forEach((thumbnail, index) => {
+      thumbnail.addEventListener('click', () => {
+        if (pdpMobileProductSwiper) {
+          pdpMobileProductSwiper.slideToLoop(index);
+        }
+        updateThumbnailActive(index);
+      });
+    });
+
+    // Set initial active thumbnail
+    updateThumbnailActive(0);
+
+    // Only on mobile for zoom functionality
+    if (window.innerWidth < 768) {
+      const images = document.querySelectorAll('.mobile_pdp_swiper_images');
+      const popup = document.querySelector('.mobile-image-zoom-popup');
+      const closeBtn = document.querySelector('.zoom-popup-close');
+      let zoomSwiper = null;
+      let touchHandlers = new WeakMap();
+
+      // Open popup with correct image
+      images.forEach((img) => {
+        img.style.cursor = 'pointer';
+        img.addEventListener('click', function() {
+          const clickedIndex = pdpMobileProductSwiper.realIndex;
+          openPopup(clickedIndex);
+        });
+      });
+
+      // Close popup handlers
+      if (closeBtn) {
+        closeBtn.addEventListener('click', closePopup);
+      }
+      
+      if (popup) {
+        popup.addEventListener('click', (e) => {
+          if (e.target === popup) {
+            closePopup();
+          }
+        });
+      }
+
+      function openPopup(startIndex) {
+        if (!popup) return;
+        
+        popup.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+
+        if (!zoomSwiper) {
+          zoomSwiper = new Swiper('.zoomPopupSwiper', {
+            loop: false,
+            slidesPerView: 1,
+            initialSlide: startIndex,
+            navigation: {
+              prevEl: '.zoomPopupSwiper .swiper-button-prev',
+              nextEl: '.zoomPopupSwiper .swiper-button-next',
+            },
+            pagination: {
+              el: '.zoomPopupSwiper .swiper-pagination',
+              clickable: true,
+            },
+          });
+        } else {
+          zoomSwiper.slideTo(startIndex, 0);
+        }
+
+        const zoomImages = document.querySelectorAll('.zoom-image');
+        
+        zoomImages.forEach(img => {
+          // Reset zoom state
+          img.style.transform = 'scale(1)';
+          img.dataset.currentScale = '1';
+          
+          // Only add handlers if not already added
+          if (!touchHandlers.has(img)) {
+            const handlers = {
+              touchstart: handleTouchStart.bind(img),
+              touchmove: handleTouchMove.bind(img),
+              touchend: handleTouchEnd.bind(img)
+            };
+            
+            img.addEventListener('touchstart', handlers.touchstart, { passive: false });
+            img.addEventListener('touchmove', handlers.touchmove, { passive: false });
+            img.addEventListener('touchend', handlers.touchend, { passive: false });
+            
+            // Double tap handler
+            let lastTap = 0;
+            const handleDoubleTap = function(e) {
+              const currentTime = new Date().getTime();
+              const tapLength = currentTime - lastTap;
+              if (tapLength < 300 && tapLength > 0) {
+                e.preventDefault();
+                let currentScale = parseFloat(this.dataset.currentScale || '1');
+                currentScale = currentScale === 1 ? 1.5 : 1;
+                this.style.transform = `scale(${currentScale})`;
+                this.dataset.currentScale = currentScale;
+              }
+              lastTap = currentTime;
+            }.bind(img);
+            
+            img.addEventListener('touchend', handleDoubleTap, { passive: false });
+            handlers.touchendDouble = handleDoubleTap;
+            
+            touchHandlers.set(img, handlers);
+          }
+        });
+
+        function handleTouchStart(e) {
+          if (e.touches.length === 2) {
+            e.preventDefault();
+            this.startDistance = getDistance(e.touches[0], e.touches[1]);
+            this.startScale = parseFloat(this.dataset.currentScale || '1');
+          }
+        }
+
+        function handleTouchMove(e) {
+          if (e.touches.length === 2) {
+            e.preventDefault();
+            const currentDistance = getDistance(e.touches[0], e.touches[1]);
+            let newScale = (currentDistance / this.startDistance) * this.startScale;
+            
+            newScale = Math.max(1, Math.min(newScale, 2));
+            this.style.transform = `scale(${newScale})`;
+            this.dataset.currentScale = newScale;
+          }
+        }
+
+        function handleTouchEnd() {
+          const scale = parseFloat(this.dataset.currentScale || '1');
+          const finalScale = scale < 1 ? 1 : scale;
+          this.style.transform = `scale(${finalScale})`;
+          this.dataset.currentScale = finalScale;
+        }
+
+        function getDistance(touch1, touch2) {
+          return Math.hypot(
+            touch2.pageX - touch1.pageX,
+            touch2.pageY - touch1.pageY
+          );
+        }
+      }
+
+      function closePopup() {
+        if (popup) {
+          popup.style.display = 'none';
+          document.body.style.overflow = '';
+        }
+      }
+    }
+
+    // Handle window resize
+    let resizeTimeout;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        if (pdpMobileProductSwiper) {
+          pdpMobileProductSwiper.update();
+        }
+        if (pdpThumbnailSwiper) {
+          pdpThumbnailSwiper.update();
+        }
+      }, 250);
+    });
+
+  } catch (error) {
+    console.error('Swiper initialization error:', error);
+  }
+});
+
+    
+  </script>
