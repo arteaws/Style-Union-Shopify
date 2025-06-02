@@ -71,7 +71,9 @@ left: 10px !important;
   data-section-type="product__section"
   data-sale-format="{{ settings.sale_items }}"
   data-initial-variant="{{ current_variant.featured_media.id }}">
-
+        <div class="custom-pdp-set">
+    <div id="smartwishlist" data-product="{{ product.id }}" data-variant="{{ product.variants.first.id }}"></div>
+   </div>
   {% render 'product-json',
     product: product %}
 
