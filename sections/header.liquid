@@ -565,7 +565,20 @@ a.header-whislist > .topbadge {
   </style>
 </div>
 </theme-header>
-
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const div = document.getElementById('all');
+    if (div) {
+        div.classList.add('gridlock', 'row');
+        
+        // Alternatively, if you want to add them as a single class:
+        // div.classList.add('gridlock row');
+        // Note: Some browsers might treat this as a single class "gridlock row"
+        // rather than two separate classes
+    }
+});
+  
+</script>
 {% schema %}
 {
   "name": "Header",
