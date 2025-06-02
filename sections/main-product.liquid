@@ -78,9 +78,6 @@ left: 10px !important;
   data-section-type="product__section"
   data-sale-format="{{ settings.sale_items }}"
   data-initial-variant="{{ current_variant.featured_media.id }}">
-        <div class="custom-pdp-set">
-    <div id="smartwishlist" data-product="{{ product.id }}" data-variant="{{ product.variants.first.id }}"></div>
-   </div>
   {% render 'product-json',
     product: product %}
 
@@ -111,7 +108,10 @@ left: 10px !important;
      "swatches": {{ settings.product_variants | json }}
    }
  {% endcapture %}
-
+<div class="merge-div-desk-mobile">
+          <div class="custom-pdp-set">
+    <div id="smartwishlist" data-product="{{ product.id }}" data-variant="{{ product.variants.first.id }}"></div>
+   </div>
   <div class="product__section-images product__section-image--{{ thumbnail_position }} carousel-container js-product-gallery span-6 md-span-12 sm-span-12 auto desktop-gallerr-cs"
     data-product-gallery data-product-single-media-group
     data-gallery-config='{{ product_gallery_config }}' data-aos="fade">
@@ -132,7 +132,7 @@ left: 10px !important;
   <div class="product__section-images carousel-container js-product-gallery span-6 md-span-12 sm-span-12 auto  mobile-pdp-slider">
 {% render 'mobile-pdp-slider' %}
   </div>
-
+</div>
   <div class="product__section-contentWrapper span-6 md-span-12 sm-span-12 auto" data-aos="fade" data-aos-anchor="#identity">
     <div class="product__section-content">
       <div class="product__section-details">
