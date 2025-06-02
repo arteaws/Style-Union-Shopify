@@ -115,9 +115,10 @@
 }
 
 .mobile_pdp_media_gallery .mobile_pdp_thumbnail_slide {
-  width: 60px !important;
-  height: 60px;
-  margin-right: 8px;
+  aspect-ratio: 1/1; /* Ensure square aspect ratio */
+  width: auto !important;
+  height: 100% !important;
+  min-width: 0;
   cursor: pointer;
   border-radius: 6px;
   overflow: hidden;
@@ -195,18 +196,14 @@
 
 /* Responsive Design - IMPROVED */
 @media (min-width: 375px) {
-  .mobile_pdp_media_gallery .mobile_pdp_thumbnail_slide {
-    width: 65px !important;
+  .mobile_pdp_media_gallery .pdpThumbnailSwiper {
     height: 65px;
-    margin-right: 10px;
   }
 }
 
 @media (min-width: 414px) {
-  .mobile_pdp_media_gallery .mobile_pdp_thumbnail_slide {
-    width: 70px !important;
+  .mobile_pdp_media_gallery .pdpThumbnailSwiper {
     height: 70px;
-    margin-right: 12px;
   }
   
   .mobile_pdp_media_gallery .swiper-button-prev,
@@ -228,10 +225,8 @@
     max-height: 400px;
   }
   
-  .mobile_pdp_media_gallery .mobile_pdp_thumbnail_slide {
-    width: 75px !important;
+  .mobile_pdp_media_gallery .pdpThumbnailSwiper {
     height: 75px;
-    margin-right: 14px;
   }
   
   .mobile_pdp_media_gallery .mobile_pdp_thumbnails_container {
@@ -266,10 +261,8 @@
 
 /* Extra small screens */
 @media (max-width: 320px) {
-  .mobile_pdp_media_gallery .mobile_pdp_thumbnail_slide {
-    width: 55px !important;
+  .mobile_pdp_media_gallery .pdpThumbnailSwiper {
     height: 55px;
-    margin-right: 6px;
   }
   
   .mobile_pdp_media_gallery .mobile_pdp_thumbnails_container {
@@ -445,22 +438,16 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initialize thumbnail swiper
     pdpThumbnailSwiper = new Swiper('.pdpThumbnailSwiper', {
       slidesPerView: 'auto',
-      spaceBetween: 0,
+      spaceBetween: 8,
       freeMode: true,
-      watchSlidesProgress: true,
+      watchSlidesProgress: false, // Disable this to prevent auto movement
+      watchSlidesVisibility: false, // Disable this too
       centeredSlides: false,
+      slideToClickedSlide: false,
       breakpoints: {
         320: {
-          slidesPerView: 4.5,
-        },
-        375: {
-          slidesPerView: 5,
-        },
-        414: {
-          slidesPerView: 5.5,
-        },
-        480: {
-          slidesPerView: 6,
+          slidesPerView: 'auto',
+          spaceBetween: 8
         }
       }
     });
@@ -473,12 +460,6 @@ document.addEventListener('DOMContentLoaded', () => {
         thumb.classList.remove('active');
         if (index === activeIndex) {
           thumb.classList.add('active');
-          
-          // Center the active thumbnail in view
-          if (pdpThumbnailSwiper) {
-            const slideToIndex = Math.max(0, index - 2); // Show 2 slides before active
-            pdpThumbnailSwiper.slideTo(slideToIndex, 300);
-          }
         }
       });
     }
