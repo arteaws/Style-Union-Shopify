@@ -30,6 +30,9 @@ a.header-whislist > .topbadge {
 </style>
 {% if request.path == '/a/wishlist' %}
 <style>
+.gridlock .row {
+  width: 100%  !important;
+ }  
 .product > .image > a > img {
     height: auto !important;
     width: 90%;
@@ -39,9 +42,11 @@ a.header-whislist > .topbadge {
     margin-right: 0 !important;
 }
 .wishlistpage {
-    width: 100% !important;
+    width: 94% !important;
     margin-left: auto !important;
     margin-right: auto !important;
+    padding: 0 1.04166667%;
+    grid-gap: 30px;
 }
 </style>
 {% endif %}
