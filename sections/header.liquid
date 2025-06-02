@@ -28,13 +28,18 @@ a.header-whislist > .topbadge {
 }
 
   
-</style>
+{% if request.path == '/a/wishlist' %}
 <style>
 img.img-responsive.image1 {
         height: auto !important;
 }
-
+.gridlock .row .row {
+    width: 100% !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
 </style>
+{% endif %}
   
   
   {%
