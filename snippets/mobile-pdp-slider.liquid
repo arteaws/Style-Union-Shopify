@@ -466,7 +466,7 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
 
-    // NEW FUNCTION: Auto-scroll thumbnail slider to show active thumbnail
+    // Enhanced function to auto-scroll thumbnail slider
     function scrollThumbnailToActive(activeIndex) {
       if (!pdpThumbnailSwiper) return;
       
@@ -483,35 +483,24 @@ document.addEventListener('DOMContentLoaded', () => {
       const containerRect = thumbnailContainer.getBoundingClientRect();
       const thumbnailRect = activeThumbnail.getBoundingClientRect();
       
-      // Calculate if thumbnail is visible in the container
-      const isVisible = (
-        thumbnailRect.left >= containerRect.left && 
-        thumbnailRect.right <= containerRect.right
-      );
+      // Calculate scroll position to make thumbnail visible
+      const thumbnailOffsetLeft = activeThumbnail.offsetLeft;
+      const thumbnailWidth = activeThumbnail.offsetWidth;
+      const containerWidth = containerRect.width;
       
-      // If thumbnail is not fully visible, scroll to it
-      if (!isVisible) {
-        // Calculate the offset needed to center the thumbnail
-        const containerCenter = containerRect.width / 2;
-        const thumbnailCenter = thumbnailRect.width / 2;
-        
-        // Get current translate value
-        const currentTransform = pdpThumbnailSwiper.translate;
-        
-        // Calculate new position to center the active thumbnail
-        const thumbnailOffsetLeft = activeThumbnail.offsetLeft;
-        const newTranslate = -(thumbnailOffsetLeft - containerCenter + thumbnailCenter);
-        
-        // Ensure we don't scroll beyond boundaries
-        const maxTranslate = 0;
-        const minTranslate = -(pdpThumbnailSwiper.wrapperEl.offsetWidth - containerRect.width);
-        
-        const finalTranslate = Math.max(minTranslate, Math.min(maxTranslate, newTranslate));
-        
-        // Animate to the new position
-        pdpThumbnailSwiper.setTranslate(finalTranslate);
-        pdpThumbnailSwiper.updateProgress();
-      }
+      // Calculate the scroll position needed to center the active thumbnail
+      let scrollPosition = thumbnailOffsetLeft - (containerWidth / 2) + (thumbnailWidth / 2);
+      
+      // Ensure we don't scroll beyond boundaries
+      const maxScroll = 0;
+      const minScroll = -(pdpThumbnailSwiper.wrapperEl.offsetWidth - containerWidth);
+      
+      scrollPosition = Math.max(minScroll, Math.min(maxScroll, -scrollPosition));
+      
+      // Animate to the new position
+      pdpThumbnailSwiper.setTransition(300);
+      pdpThumbnailSwiper.setTranslate(scrollPosition);
+      pdpThumbnailSwiper.updateProgress();
     }
 
     // Add click handlers to thumbnails
@@ -524,6 +513,7 @@ document.addEventListener('DOMContentLoaded', () => {
           pdpMobileProductSwiper.slideTo(index, 300);
         }
         updateThumbnailActive(index);
+        scrollThumbnailToActive(index);
       });
 
       // Add hover effect for better UX
@@ -542,6 +532,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Set initial active thumbnail
     updateThumbnailActive(0);
+    scrollThumbnailToActive(0);
 
     // Handle window resize to update swipers
     let resizeTimeout;
@@ -553,6 +544,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         if (pdpThumbnailSwiper) {
           pdpThumbnailSwiper.update();
+        }
+        // Re-center the active thumbnail after resize
+        if (pdpMobileProductSwiper) {
+          scrollThumbnailToActive(pdpMobileProductSwiper.activeIndex);
         }
       }, 250);
     });
