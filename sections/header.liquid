@@ -27,8 +27,8 @@ a.header-whislist > .topbadge {
   
 }
 
-  
-
+</style>
+{% if request.path == '/a/wishlist' %}
 <style>
 .product > .image > a > img {
     height: auto !important;
@@ -39,7 +39,7 @@ a.header-whislist > .topbadge {
     margin-right: auto !important;
 }
 </style>
-
+{% endif %}
 
   
   {%
