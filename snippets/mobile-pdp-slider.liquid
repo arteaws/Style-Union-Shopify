@@ -431,6 +431,8 @@ document.addEventListener('DOMContentLoaded', () => {
       on: {
         slideChange: function() {
           updateThumbnailActive(this.activeIndex);
+          // Auto-scroll thumbnail to show active thumbnail
+          scrollThumbnailToActive(this.activeIndex);
         }
       }
     });
@@ -440,8 +442,8 @@ document.addEventListener('DOMContentLoaded', () => {
       slidesPerView: 'auto',
       spaceBetween: 8,
       freeMode: true,
-      watchSlidesProgress: false, // Disable this to prevent auto movement
-      watchSlidesVisibility: false, // Disable this too
+      watchSlidesProgress: false,
+      watchSlidesVisibility: false,
       centeredSlides: false,
       slideToClickedSlide: false,
       breakpoints: {
@@ -462,6 +464,54 @@ document.addEventListener('DOMContentLoaded', () => {
           thumb.classList.add('active');
         }
       });
+    }
+
+    // NEW FUNCTION: Auto-scroll thumbnail slider to show active thumbnail
+    function scrollThumbnailToActive(activeIndex) {
+      if (!pdpThumbnailSwiper) return;
+      
+      const thumbnails = document.querySelectorAll('.mobile_pdp_thumbnail_slide');
+      if (!thumbnails[activeIndex]) return;
+      
+      // Get the active thumbnail element
+      const activeThumbnail = thumbnails[activeIndex];
+      const thumbnailContainer = document.querySelector('.pdpThumbnailSwiper');
+      
+      if (!thumbnailContainer) return;
+      
+      // Get container and thumbnail dimensions
+      const containerRect = thumbnailContainer.getBoundingClientRect();
+      const thumbnailRect = activeThumbnail.getBoundingClientRect();
+      
+      // Calculate if thumbnail is visible in the container
+      const isVisible = (
+        thumbnailRect.left >= containerRect.left && 
+        thumbnailRect.right <= containerRect.right
+      );
+      
+      // If thumbnail is not fully visible, scroll to it
+      if (!isVisible) {
+        // Calculate the offset needed to center the thumbnail
+        const containerCenter = containerRect.width / 2;
+        const thumbnailCenter = thumbnailRect.width / 2;
+        
+        // Get current translate value
+        const currentTransform = pdpThumbnailSwiper.translate;
+        
+        // Calculate new position to center the active thumbnail
+        const thumbnailOffsetLeft = activeThumbnail.offsetLeft;
+        const newTranslate = -(thumbnailOffsetLeft - containerCenter + thumbnailCenter);
+        
+        // Ensure we don't scroll beyond boundaries
+        const maxTranslate = 0;
+        const minTranslate = -(pdpThumbnailSwiper.wrapperEl.offsetWidth - containerRect.width);
+        
+        const finalTranslate = Math.max(minTranslate, Math.min(maxTranslate, newTranslate));
+        
+        // Animate to the new position
+        pdpThumbnailSwiper.setTranslate(finalTranslate);
+        pdpThumbnailSwiper.updateProgress();
+      }
     }
 
     // Add click handlers to thumbnails
