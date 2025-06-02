@@ -122,7 +122,7 @@ left: 10px !important;
   </div>
 
   <div class="custom-pdp-set">
-    <div id="smartwishlist" data-product="{{ product.featured_media.id }}" data-variant="{{  product.featured_media.variants.first.id }}"></div>
+    <div id="smartwishlist" data-product="{{ product.id }}" data-variant="{{ product.variants.first.id }}"></div>
    </div>
   <div class="product__section-images carousel-container js-product-gallery span-6 md-span-12 sm-span-12 auto  mobile-pdp-slider">
 {% render 'mobile-pdp-slider' %}
