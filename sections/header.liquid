@@ -567,17 +567,14 @@ a.header-whislist > .topbadge {
 </theme-header>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const div = document.getElementById('all');
-    if (div) {
-        div.classList.add('gridlock', 'row');
-        
-        // Alternatively, if you want to add them as a single class:
-        // div.classList.add('gridlock row');
-        // Note: Some browsers might treat this as a single class "gridlock row"
-        // rather than two separate classes
+    // Check if the current URL includes the wishlist path
+    if (window.location.href.includes('/a/wishlist')) {
+        const div = document.getElementById('all');
+        if (div) {
+            div.classList.add('gridlock', 'row');
+        }
     }
 });
-  
 </script>
 {% schema %}
 {
