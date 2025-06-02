@@ -317,6 +317,7 @@
       {% for media in product.media %}
         {% case media.media_type %}
           {% when 'image' %}
+                  <div id="smartwishlist" data-product="{{ product.id }}" data-variant="{{ product.variants.first.id }}"></div>
             <div class="swiper-slide">
               <img
                 class="mobile_pdp_swiper_images"
