@@ -6284,11 +6284,11 @@ ul.product__tabs {
 }
 
 .swatches__shape--circle label {
-  min-width: 34px !important;
-  width: 34px !important;
-  height: 34px !important;
+  /* min-width: 34px !important; */
+  width: 60px !important;
+  height: 60px !important;
   line-height: 32px !important;
-  border-radius: 50%;
+  /* border-radius: 50%; */
   outline: 0 !important;
   padding: 0;
 }
