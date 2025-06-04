@@ -129,6 +129,12 @@
   flex-shrink: 0;
 }
 
+/* Hidden slides for variant filtering */
+.mobile_pdp_media_gallery .swiper-slide.variant-hidden,
+.mobile_pdp_media_gallery .mobile_pdp_thumbnail_slide.variant-hidden {
+  display: none !important;
+}
+
 .mobile_pdp_media_gallery .mobile_pdp_thumbnail_slide:hover {
   /* transform: translateY(-2px); */
   /* box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); */
@@ -315,7 +321,10 @@
       {% for media in product.media %}
         {% case media.media_type %}
           {% when 'image' %}
-            <div class="swiper-slide">
+            <div class="swiper-slide" 
+                 data-variant-ids="{% if media.attached_to_variant %}{% for variant in media.attached_to_variant %}{{ variant.id }}{% unless forloop.last %},{% endunless %}{% endfor %}{% endif %}"
+                 data-media-id="{{ media.id }}"
+                 data-media-index="{{ forloop.index0 }}">
               <img
                 class="mobile_pdp_swiper_images"
                 srcset="
@@ -337,7 +346,10 @@
             </div>
           
           {% when 'video' %}
-            <div class="swiper-slide">
+            <div class="swiper-slide"
+                 data-variant-ids="{% if media.attached_to_variant %}{% for variant in media.attached_to_variant %}{{ variant.id }}{% unless forloop.last %},{% endunless %}{% endfor %}{% endif %}"
+                 data-media-id="{{ media.id }}"
+                 data-media-index="{{ forloop.index0 }}">
               {{
                 media | video_tag:
                   image_size: '1100x',
@@ -348,17 +360,26 @@
             </div>
             
           {% when 'external_video' %}
-            <div class="swiper-slide">
+            <div class="swiper-slide"
+                 data-variant-ids="{% if media.attached_to_variant %}{% for variant in media.attached_to_variant %}{{ variant.id }}{% unless forloop.last %},{% endunless %}{% endfor %}{% endif %}"
+                 data-media-id="{{ media.id }}"
+                 data-media-index="{{ forloop.index0 }}">
               {{ media | external_video_tag }}
             </div>
             
           {% when 'model' %}
-            <div class="swiper-slide">
+            <div class="swiper-slide"
+                 data-variant-ids="{% if media.attached_to_variant %}{% for variant in media.attached_to_variant %}{{ variant.id }}{% unless forloop.last %},{% endunless %}{% endfor %}{% endif %}"
+                 data-media-id="{{ media.id }}"
+                 data-media-index="{{ forloop.index0 }}">
               {{ media | model_viewer_tag }}
             </div>
             
           {% else %}
-            <div class="swiper-slide">
+            <div class="swiper-slide"
+                 data-variant-ids="{% if media.attached_to_variant %}{% for variant in media.attached_to_variant %}{{ variant.id }}{% unless forloop.last %},{% endunless %}{% endfor %}{% endif %}"
+                 data-media-id="{{ media.id }}"
+                 data-media-index="{{ forloop.index0 }}">
               {{ media | media_tag }}
             </div>
         {% endcase %}
@@ -376,7 +397,10 @@
       <div class="swiper-wrapper">
         {% for media in product.media %}
           {% if media.media_type == 'image' %}
-            <div class="swiper-slide mobile_pdp_thumbnail_slide">
+            <div class="swiper-slide mobile_pdp_thumbnail_slide"
+                 data-variant-ids="{% if media.attached_to_variant %}{% for variant in media.attached_to_variant %}{{ variant.id }}{% unless forloop.last %},{% endunless %}{% endfor %}{% endif %}"
+                 data-media-id="{{ media.id }}"
+                 data-media-index="{{ forloop.index0 }}">
               <img
                 class="mobile_pdp_thumbnail_image"
                 src="{{ media | image_url: width: 150 }}"
@@ -386,7 +410,10 @@
               >
             </div>
           {% else %}
-            <div class="swiper-slide mobile_pdp_thumbnail_slide">
+            <div class="swiper-slide mobile_pdp_thumbnail_slide"
+                 data-variant-ids="{% if media.attached_to_variant %}{% for variant in media.attached_to_variant %}{{ variant.id }}{% unless forloop.last %},{% endunless %}{% endfor %}{% endif %}"
+                 data-media-id="{{ media.id }}"
+                 data-media-index="{{ forloop.index0 }}">
               <div class="mobile_pdp_video_thumbnail">
                 <img
                   class="mobile_pdp_thumbnail_image"
@@ -416,6 +443,99 @@ document.addEventListener('DOMContentLoaded', () => {
   try {
     let pdpMobileProductSwiper = null;
     let pdpThumbnailSwiper = null;
+    let currentVariantId = null;
+    let allMediaData = [];
+
+    // Collect all media data for variant filtering
+    function collectMediaData() {
+      const mainSlides = document.querySelectorAll('.pdpMobileSwiper .swiper-slide');
+      const thumbnailSlides = document.querySelectorAll('.mobile_pdp_thumbnail_slide');
+      
+      allMediaData = Array.from(mainSlides).map((slide, index) => {
+        const variantIds = slide.dataset.variantIds ? slide.dataset.variantIds.split(',') : [];
+        const mediaId = slide.dataset.mediaId;
+        const mediaIndex = parseInt(slide.dataset.mediaIndex);
+        
+        return {
+          mainSlide: slide,
+          thumbnailSlide: thumbnailSlides[index],
+          variantIds: variantIds,
+          mediaId: mediaId,
+          originalIndex: mediaIndex,
+          currentIndex: index
+        };
+      });
+    }
+
+    // Function to filter media based on variant
+    function filterMediaByVariant(variantId) {
+      if (!variantId) {
+        // Show all media if no variant selected
+        showAllMedia();
+        return;
+      }
+
+      const filteredMedia = allMediaData.filter(media => {
+        // Show media that is either:
+        // 1. Attached to the selected variant
+        // 2. Not attached to any variant (general product media)
+        return media.variantIds.length === 0 || media.variantIds.includes(variantId.toString());
+      });
+
+      // Hide all media first
+      allMediaData.forEach(media => {
+        if (media.mainSlide) {
+          media.mainSlide.classList.add('variant-hidden');
+        }
+        if (media.thumbnailSlide) {
+          media.thumbnailSlide.classList.add('variant-hidden');
+        }
+      });
+
+      // Show filtered media
+      filteredMedia.forEach(media => {
+        if (media.mainSlide) {
+          media.mainSlide.classList.remove('variant-hidden');
+        }
+        if (media.thumbnailSlide) {
+          media.thumbnailSlide.classList.remove('variant-hidden');
+        }
+      });
+
+      // Update swipers after filtering
+      setTimeout(() => {
+        if (pdpMobileProductSwiper) {
+          pdpMobileProductSwiper.update();
+          pdpMobileProductSwiper.slideTo(0, 0); // Go to first visible slide
+        }
+        if (pdpThumbnailSwiper) {
+          pdpThumbnailSwiper.update();
+        }
+        updateThumbnailActive(0);
+      }, 100);
+    }
+
+    // Function to show all media
+    function showAllMedia() {
+      allMediaData.forEach(media => {
+        if (media.mainSlide) {
+          media.mainSlide.classList.remove('variant-hidden');
+        }
+        if (media.thumbnailSlide) {
+          media.thumbnailSlide.classList.remove('variant-hidden');
+        }
+      });
+
+      // Update swipers
+      setTimeout(() => {
+        if (pdpMobileProductSwiper) {
+          pdpMobileProductSwiper.update();
+        }
+        if (pdpThumbnailSwiper) {
+          pdpThumbnailSwiper.update();
+        }
+      }, 100);
+    }
 
     // Initialize main product swiper first
     pdpMobileProductSwiper = new Swiper('.pdpMobileSwiper', {
@@ -456,9 +576,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Function to update active thumbnail
     function updateThumbnailActive(activeIndex) {
-      const thumbnails = document.querySelectorAll('.mobile_pdp_thumbnail_slide');
+      const visibleThumbnails = document.querySelectorAll('.mobile_pdp_thumbnail_slide:not(.variant-hidden)');
       
-      thumbnails.forEach((thumb, index) => {
+      visibleThumbnails.forEach((thumb, index) => {
         thumb.classList.remove('active');
         if (index === activeIndex) {
           thumb.classList.add('active');
@@ -466,11 +586,28 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
 
+    // Function to get visible slide index from original index
+    function getVisibleSlideIndex(originalIndex) {
+      const visibleSlides = document.querySelectorAll('.pdpMobileSwiper .swiper-slide:not(.variant-hidden)');
+      const allSlides = document.querySelectorAll('.pdpMobileSwiper .swiper-slide');
+      
+      let visibleIndex = 0;
+      for (let i = 0; i <= originalIndex && i < allSlides.length; i++) {
+        if (!allSlides[i].classList.contains('variant-hidden')) {
+          if (i === originalIndex) {
+            return visibleIndex;
+          }
+          visibleIndex++;
+        }
+      }
+      return 0;
+    }
+
     // NEW FUNCTION: Auto-scroll thumbnail slider to show active thumbnail
     function scrollThumbnailToActive(activeIndex) {
       if (!pdpThumbnailSwiper) return;
       
-      const thumbnails = document.querySelectorAll('.mobile_pdp_thumbnail_slide');
+      const thumbnails = document.querySelectorAll('.mobile_pdp_thumbnail_slide:not(.variant-hidden)');
       if (!thumbnails[activeIndex]) return;
       
       // Get the active thumbnail element
@@ -515,31 +652,87 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Add click handlers to thumbnails
-    const thumbnails = document.querySelectorAll('.mobile_pdp_thumbnail_slide');
-    thumbnails.forEach((thumbnail, index) => {
-      thumbnail.addEventListener('click', (e) => {
-        e.preventDefault();
-        
-        if (pdpMobileProductSwiper) {
-          pdpMobileProductSwiper.slideTo(index, 300);
-        }
-        updateThumbnailActive(index);
-      });
+    function setupThumbnailClickHandlers() {
+      const thumbnails = document.querySelectorAll('.mobile_pdp_thumbnail_slide');
+      thumbnails.forEach((thumbnail, index) => {
+        thumbnail.addEventListener('click', (e) => {
+          e.preventDefault();
+          
+          // Find the corresponding main slide index among visible slides
+          const originalIndex = parseInt(thumbnail.dataset.mediaIndex);
+          const visibleIndex = getVisibleSlideIndex(originalIndex);
+          
+          if (pdpMobileProductSwiper) {
+            pdpMobileProductSwiper.slideTo(visibleIndex, 300);
+          }
+          updateThumbnailActive(visibleIndex);
+        });
 
-      // Add hover effect for better UX
-      thumbnail.addEventListener('mouseenter', () => {
-        if (!thumbnail.classList.contains('active')) {
-          thumbnail.style.transform = 'translateY(-2px) scale(1.02)';
-        }
-      });
+        // Add hover effect for better UX
+        thumbnail.addEventListener('mouseenter', () => {
+          if (!thumbnail.classList.contains('active')) {
+            thumbnail.style.transform = 'translateY(-2px) scale(1.02)';
+          }
+        });
 
-      thumbnail.addEventListener('mouseleave', () => {
-        if (!thumbnail.classList.contains('active')) {
-          thumbnail.style.transform = '';
-        }
+        thumbnail.addEventListener('mouseleave', () => {
+          if (!thumbnail.classList.contains('active')) {
+            thumbnail.style.transform = '';
+          }
+        });
       });
+    }
+
+    // Function to handle variant change
+    function handleVariantChange(variantId) {
+      currentVariantId = variantId;
+      filterMediaByVariant(variantId);
+    }
+
+    // Listen for variant change events
+    // This assumes you have a variant selector that dispatches a custom event
+    document.addEventListener('variantChanged', (e) => {
+      const variantId = e.detail.variantId;
+      handleVariantChange(variantId);
     });
 
+    // Alternative: Listen for changes in variant selector inputs
+    function setupVariantChangeListeners() {
+      // Listen for radio button changes (common variant selector)
+      const variantInputs = document.querySelectorAll('input[name*="variant"], input[name*="id"]');
+      variantInputs.forEach(input => {
+        input.addEventListener('change', (e) => {
+          const variantId = e.target.value;
+          handleVariantChange(variantId);
+        });
+      });
+
+      // Listen for select dropdown changes
+      const variantSelects = document.querySelectorAll('select[name*="variant"], select[name*="id"]');
+      variantSelects.forEach(select => {
+        select.addEventListener('change', (e) => {
+          const variantId = e.target.value;
+          handleVariantChange(variantId);
+        });
+      });
+
+      // Listen for option button clicks (Shopify's common pattern)
+      const optionButtons = document.querySelectorAll('[data-variant-id]');
+      optionButtons.forEach(button => {
+        button.addEventListener('click', (e) => {
+          const variantId = e.target.dataset.variantId;
+          if (variantId) {
+            handleVariantChange(variantId);
+          }
+        });
+      });
+    }
+
+    // Initialize everything
+    collectMediaData();
+    setupThumbnailClickHandlers();
+    setupVariantChangeListeners();
+    
     // Set initial active thumbnail
     updateThumbnailActive(0);
 
@@ -573,8 +766,18 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
 
+    // Expose function globally for manual variant changes
+    window.updateProductGalleryVariant = handleVariantChange;
+
   } catch (error) {
     console.error('Product slider initialization error:', error);
   }
 });
+
+// Alternative global function for triggering variant change
+function changeProductVariant(variantId) {
+  if (window.updateProductGalleryVariant) {
+    window.updateProductGalleryVariant(variantId);
+  }
+}
 </script>
