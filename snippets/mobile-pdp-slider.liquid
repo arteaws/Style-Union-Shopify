@@ -322,7 +322,7 @@
         {% case media.media_type %}
           {% when 'image' %}
             <div class="swiper-slide" 
-                 data-variant-ids="{% if media.attached_to_variant %}{% for variant in media.attached_to_variant %}{{ variant.id }}{% unless forloop.last %},{% endunless %}{% endfor %}{% endif %}"
+                 data-variant-ids="{% if media.attached_to_variant %}{% for variant in media.variants %}{{ variant.id }}{% unless forloop.last %},{% endunless %}{% endfor %}{% endif %}"
                  data-media-id="{{ media.id }}"
                  data-media-index="{{ forloop.index0 }}">
               <img
@@ -347,7 +347,7 @@
           
           {% when 'video' %}
             <div class="swiper-slide"
-                 data-variant-ids="{% if media.attached_to_variant %}{% for variant in media.attached_to_variant %}{{ variant.id }}{% unless forloop.last %},{% endunless %}{% endfor %}{% endif %}"
+                 data-variant-ids="{% if media.attached_to_variant %}{% for variant in media.variants %}{{ variant.id }}{% unless forloop.last %},{% endunless %}{% endfor %}{% endif %}"
                  data-media-id="{{ media.id }}"
                  data-media-index="{{ forloop.index0 }}">
               {{
@@ -361,7 +361,7 @@
             
           {% when 'external_video' %}
             <div class="swiper-slide"
-                 data-variant-ids="{% if media.attached_to_variant %}{% for variant in media.attached_to_variant %}{{ variant.id }}{% unless forloop.last %},{% endunless %}{% endfor %}{% endif %}"
+                 data-variant-ids="{% if media.attached_to_variant %}{% for variant in media.variants %}{{ variant.id }}{% unless forloop.last %},{% endunless %}{% endfor %}{% endif %}"
                  data-media-id="{{ media.id }}"
                  data-media-index="{{ forloop.index0 }}">
               {{ media | external_video_tag }}
@@ -369,7 +369,7 @@
             
           {% when 'model' %}
             <div class="swiper-slide"
-                 data-variant-ids="{% if media.attached_to_variant %}{% for variant in media.attached_to_variant %}{{ variant.id }}{% unless forloop.last %},{% endunless %}{% endfor %}{% endif %}"
+                 data-variant-ids="{% if media.attached_to_variant %}{% for variant in media.variants %}{{ variant.id }}{% unless forloop.last %},{% endunless %}{% endfor %}{% endif %}"
                  data-media-id="{{ media.id }}"
                  data-media-index="{{ forloop.index0 }}">
               {{ media | model_viewer_tag }}
@@ -377,7 +377,7 @@
             
           {% else %}
             <div class="swiper-slide"
-                 data-variant-ids="{% if media.attached_to_variant %}{% for variant in media.attached_to_variant %}{{ variant.id }}{% unless forloop.last %},{% endunless %}{% endfor %}{% endif %}"
+                 data-variant-ids="{% if media.attached_to_variant %}{% for variant in media.variants %}{{ variant.id }}{% unless forloop.last %},{% endunless %}{% endfor %}{% endif %}"
                  data-media-id="{{ media.id }}"
                  data-media-index="{{ forloop.index0 }}">
               {{ media | media_tag }}
@@ -398,7 +398,7 @@
         {% for media in product.media %}
           {% if media.media_type == 'image' %}
             <div class="swiper-slide mobile_pdp_thumbnail_slide"
-                 data-variant-ids="{% if media.attached_to_variant %}{% for variant in media.attached_to_variant %}{{ variant.id }}{% unless forloop.last %},{% endunless %}{% endfor %}{% endif %}"
+                 data-variant-ids="{% if media.attached_to_variant %}{% for variant in media.variants %}{{ variant.id }}{% unless forloop.last %},{% endunless %}{% endfor %}{% endif %}"
                  data-media-id="{{ media.id }}"
                  data-media-index="{{ forloop.index0 }}">
               <img
@@ -411,7 +411,7 @@
             </div>
           {% else %}
             <div class="swiper-slide mobile_pdp_thumbnail_slide"
-                 data-variant-ids="{% if media.attached_to_variant %}{% for variant in media.attached_to_variant %}{{ variant.id }}{% unless forloop.last %},{% endunless %}{% endfor %}{% endif %}"
+                 data-variant-ids="{% if media.attached_to_variant %}{% for variant in media.variants %}{{ variant.id }}{% unless forloop.last %},{% endunless %}{% endfor %}{% endif %}"
                  data-media-id="{{ media.id }}"
                  data-media-index="{{ forloop.index0 }}">
               <div class="mobile_pdp_video_thumbnail">
@@ -452,7 +452,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const thumbnailSlides = document.querySelectorAll('.mobile_pdp_thumbnail_slide');
       
       allMediaData = Array.from(mainSlides).map((slide, index) => {
-        const variantIds = slide.dataset.variantIds ? slide.dataset.variantIds.split(',') : [];
+        const variantIds = slide.dataset.variantIds ? slide.dataset.variantIds.split(',').map(id => id.trim()) : [];
         const mediaId = slide.dataset.mediaId;
         const mediaIndex = parseInt(slide.dataset.mediaIndex);
         
@@ -475,6 +475,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
+      // First, collect all media that should be visible
       const filteredMedia = allMediaData.filter(media => {
         // Show media that is either:
         // 1. Attached to the selected variant
@@ -506,12 +507,16 @@ document.addEventListener('DOMContentLoaded', () => {
       setTimeout(() => {
         if (pdpMobileProductSwiper) {
           pdpMobileProductSwiper.update();
-          pdpMobileProductSwiper.slideTo(0, 0); // Go to first visible slide
+          // Reset to first slide if current slide is hidden
+          const activeSlide = pdpMobileProductSwiper.slides[pdpMobileProductSwiper.activeIndex];
+          if (activeSlide.classList.contains('variant-hidden')) {
+            pdpMobileProductSwiper.slideTo(0, 0);
+          }
         }
         if (pdpThumbnailSwiper) {
           pdpThumbnailSwiper.update();
         }
-        updateThumbnailActive(0);
+        updateThumbnailActive(pdpMobileProductSwiper ? pdpMobileProductSwiper.activeIndex : 0);
       }, 100);
     }
 
@@ -534,6 +539,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (pdpThumbnailSwiper) {
           pdpThumbnailSwiper.update();
         }
+        updateThumbnailActive(pdpMobileProductSwiper ? pdpMobileProductSwiper.activeIndex : 0);
       }, 100);
     }
 
@@ -578,42 +584,61 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateThumbnailActive(activeIndex) {
       const visibleThumbnails = document.querySelectorAll('.mobile_pdp_thumbnail_slide:not(.variant-hidden)');
       
-      visibleThumbnails.forEach((thumb, index) => {
+      // First remove active class from all thumbnails
+      document.querySelectorAll('.mobile_pdp_thumbnail_slide').forEach(thumb => {
         thumb.classList.remove('active');
-        if (index === activeIndex) {
-          thumb.classList.add('active');
-        }
       });
+      
+      // Then add active class to the correct thumbnail
+      if (visibleThumbnails[activeIndex]) {
+        visibleThumbnails[activeIndex].classList.add('active');
+      }
     }
 
     // Function to get visible slide index from original index
     function getVisibleSlideIndex(originalIndex) {
-      const visibleSlides = document.querySelectorAll('.pdpMobileSwiper .swiper-slide:not(.variant-hidden)');
       const allSlides = document.querySelectorAll('.pdpMobileSwiper .swiper-slide');
+      let visibleIndex = -1;
       
-      let visibleIndex = 0;
-      for (let i = 0; i <= originalIndex && i < allSlides.length; i++) {
+      for (let i = 0; i < allSlides.length; i++) {
         if (!allSlides[i].classList.contains('variant-hidden')) {
+          visibleIndex++;
           if (i === originalIndex) {
             return visibleIndex;
           }
-          visibleIndex++;
         }
       }
       return 0;
     }
 
-    // NEW FUNCTION: Auto-scroll thumbnail slider to show active thumbnail
+    // Function to get original index from visible index
+    function getOriginalIndex(visibleIndex) {
+      const allSlides = document.querySelectorAll('.pdpMobileSwiper .swiper-slide');
+      let currentVisibleIndex = -1;
+      
+      for (let i = 0; i < allSlides.length; i++) {
+        if (!allSlides[i].classList.contains('variant-hidden')) {
+          currentVisibleIndex++;
+          if (currentVisibleIndex === visibleIndex) {
+            return i;
+          }
+        }
+      }
+      return 0;
+    }
+
+    // Auto-scroll thumbnail slider to show active thumbnail
     function scrollThumbnailToActive(activeIndex) {
       if (!pdpThumbnailSwiper) return;
       
-      const thumbnails = document.querySelectorAll('.mobile_pdp_thumbnail_slide:not(.variant-hidden)');
-      if (!thumbnails[activeIndex]) return;
+      // Get the original index from the visible index
+      const originalIndex = getOriginalIndex(activeIndex);
+      const thumbnails = document.querySelectorAll('.mobile_pdp_thumbnail_slide');
+      const activeThumbnail = thumbnails[originalIndex];
       
-      // Get the active thumbnail element
-      const activeThumbnail = thumbnails[activeIndex];
+      if (!activeThumbnail) return;
+      
       const thumbnailContainer = document.querySelector('.pdpThumbnailSwiper');
-      
       if (!thumbnailContainer) return;
       
       // Get container and thumbnail dimensions
@@ -667,19 +692,6 @@ document.addEventListener('DOMContentLoaded', () => {
           }
           updateThumbnailActive(visibleIndex);
         });
-
-        // Add hover effect for better UX
-        thumbnail.addEventListener('mouseenter', () => {
-          if (!thumbnail.classList.contains('active')) {
-            thumbnail.style.transform = 'translateY(-2px) scale(1.02)';
-          }
-        });
-
-        thumbnail.addEventListener('mouseleave', () => {
-          if (!thumbnail.classList.contains('active')) {
-            thumbnail.style.transform = '';
-          }
-        });
       });
     }
 
@@ -690,25 +702,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Listen for variant change events
-    // This assumes you have a variant selector that dispatches a custom event
     document.addEventListener('variantChanged', (e) => {
       const variantId = e.detail.variantId;
       handleVariantChange(variantId);
     });
 
-    // Alternative: Listen for changes in variant selector inputs
+    // Setup variant change listeners for different types of variant selectors
     function setupVariantChangeListeners() {
-      // Listen for radio button changes (common variant selector)
-      const variantInputs = document.querySelectorAll('input[name*="variant"], input[name*="id"]');
-      variantInputs.forEach(input => {
-        input.addEventListener('change', (e) => {
-          const variantId = e.target.value;
-          handleVariantChange(variantId);
-        });
-      });
-
-      // Listen for select dropdown changes
-      const variantSelects = document.querySelectorAll('select[name*="variant"], select[name*="id"]');
+      // Standard Shopify variant select dropdown
+      const variantSelects = document.querySelectorAll('select[name="id"]');
       variantSelects.forEach(select => {
         select.addEventListener('change', (e) => {
           const variantId = e.target.value;
@@ -716,15 +718,30 @@ document.addEventListener('DOMContentLoaded', () => {
         });
       });
 
-      // Listen for option button clicks (Shopify's common pattern)
-      const optionButtons = document.querySelectorAll('[data-variant-id]');
-      optionButtons.forEach(button => {
-        button.addEventListener('click', (e) => {
-          const variantId = e.target.dataset.variantId;
-          if (variantId) {
-            handleVariantChange(variantId);
+      // Radio button variant selectors
+      const variantRadios = document.querySelectorAll('input[type="radio"][name*="option"]');
+      variantRadios.forEach(radio => {
+        radio.addEventListener('change', () => {
+          // In Shopify, the variant is usually selected via the id select
+          // So we'll look for the selected variant in the dropdown
+          const variantSelect = document.querySelector('select[name="id"]');
+          if (variantSelect && variantSelect.value) {
+            handleVariantChange(variantSelect.value);
           }
         });
+      });
+
+      // If using a custom variant picker that updates a hidden input
+      const hiddenVariantInputs = document.querySelectorAll('input[name="id"][type="hidden"]');
+      hiddenVariantInputs.forEach(input => {
+        const observer = new MutationObserver(mutations => {
+          mutations.forEach(mutation => {
+            if (mutation.type === 'attributes' && mutation.attributeName === 'value') {
+              handleVariantChange(input.value);
+            }
+          });
+        });
+        observer.observe(input, { attributes: true });
       });
     }
 
@@ -750,24 +767,14 @@ document.addEventListener('DOMContentLoaded', () => {
       }, 250);
     });
 
-    // Keyboard navigation support
-    document.addEventListener('keydown', (e) => {
-      if (!pdpMobileProductSwiper) return;
-      
-      switch(e.key) {
-        case 'ArrowLeft':
-          e.preventDefault();
-          pdpMobileProductSwiper.slidePrev();
-          break;
-        case 'ArrowRight':
-          e.preventDefault();
-          pdpMobileProductSwiper.slideNext();
-          break;
-      }
-    });
-
     // Expose function globally for manual variant changes
     window.updateProductGalleryVariant = handleVariantChange;
+
+    // If we have a variant selected on page load, filter the gallery
+    const initialVariantSelect = document.querySelector('select[name="id"]');
+    if (initialVariantSelect && initialVariantSelect.value) {
+      handleVariantChange(initialVariantSelect.value);
+    }
 
   } catch (error) {
     console.error('Product slider initialization error:', error);
