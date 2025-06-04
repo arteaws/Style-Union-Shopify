@@ -19,13 +19,14 @@
             {%- liquid
               assign media_available_for_variant = false
               assign media_alt_downcase = media.alt | downcase
+              assign product_title_downcase = product.title | downcase
               assign current_variant_color = product.selected_or_first_available_variant.option1 | downcase
               
               if media_alt_downcase contains current_variant_color
                 assign media_available_for_variant = true
               elsif media_alt_downcase == 'all'
                 assign media_available_for_variant = true
-              elsif media_alt_downcase == product.title | downcase
+              elsif media_alt_downcase == product_title_downcase
                 assign media_available_for_variant = true
               elsif media.alt == blank
                 assign media_available_for_variant = true
@@ -119,13 +120,14 @@
         {%- liquid
           assign media_available_for_variant = false
           assign media_alt_downcase = media.alt | downcase
+          assign product_title_downcase = product.title | downcase
           assign current_variant_color = product.selected_or_first_available_variant.option1 | downcase
           
           if media_alt_downcase contains current_variant_color
             assign media_available_for_variant = true
           elsif media_alt_downcase == 'all'
             assign media_available_for_variant = true
-          elsif media_alt_downcase == product.title | downcase
+          elsif media_alt_downcase == product_title_downcase
             assign media_available_for_variant = true
           elsif media.alt == blank
             assign media_available_for_variant = true
