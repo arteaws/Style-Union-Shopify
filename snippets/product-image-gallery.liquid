@@ -12,16 +12,22 @@
       endif
     -%}
 
-    <div id="thumbnails" class="thumb-slider thumbnail-slider custom {{ style }} {{ width }} auto"
-    data-thumbnail-position="{{ thumbnail_position }}">
+    <div id="thumbnails" class="thumb-slider thumbnail-slider custom {{ style }} {{ width }} auto" data-thumbnail-position="{{ thumbnail_position }}">
       <div class="thumb-slider-wrapper {{ js_class }} js-thumb-wrapper" id="thumb-slider-wrapper">
-        <div class="carousel-nav thumb-slider-slides slides product-single__thumbnails-{{ section.id }} js-thumb-carousel-nav{% if product.media.size <4 %} no_carousel{% endif %}" 
-        data-thumbnail-carousel>
+        <div class="carousel-nav thumb-slider-slides slides product-single__thumbnails-{{ section.id }} js-thumb-carousel-nav{% if product.media.size <4 %} no_carousel{% endif %}" data-thumbnail-carousel>
           {% for media in product.media %}
             {%- liquid
-              # Check if media is associated with the current variant
               assign media_available_for_variant = false
-              if media.alt == product.selected_or_first_available_variant.title or media.alt == 'all' or media.alt == product.title or media.alt == ''
+              assign media_alt_downcase = media.alt | downcase
+              assign current_variant_color = product.selected_or_first_available_variant.option1 | downcase
+              
+              if media_alt_downcase contains current_variant_color
+                assign media_available_for_variant = true
+              elsif media_alt_downcase == 'all'
+                assign media_available_for_variant = true
+              elsif media_alt_downcase == product.title | downcase
+                assign media_available_for_variant = true
+              elsif media.alt == blank
                 assign media_available_for_variant = true
               endif
             -%}
@@ -29,11 +35,11 @@
             <div class="{{ media.media_type }}-thumbnail product-single__thumbnails-item carousel-cell {% if forloop.first %}is-nav-selected{% endif %} js-thumb-item thumb__{% if forloop.first %}first{% elsif forloop.last %}last{% endif %} {% unless media_available_for_variant %}hidden{% endunless %}" 
               data-slide-index="{{ forloop.index0 }}"
               data-image-id="{{ media.id }}" 
-              data-media-alt="{{ media.alt | escape }}"
+              data-media-alt="{{ media.alt | downcase | escape }}"
+              data-media-color="{{ media.alt | split: ' ' | first | downcase }}"
               tabindex="0">
               <div class="product-single__thumbnail product-single__thumbnail--{{ section.id }} js-thumb-item-img-wrap" data-thumbnail-id="product-template-{{ media.id }}">
                 {% liquid
-                  # Reset variables inside loop
                   assign loading = 'lazy'
                   assign fetch_priority = 'auto'
 
@@ -111,9 +117,17 @@
     <div class="slides product-image-container carousel carousel-main js-carousel-main" data-product-id="{{ product.id }}" data-main-carousel>
       {% for media in product.media %}
         {%- liquid
-          # Check if media is associated with the current variant
           assign media_available_for_variant = false
-          if media.alt == product.selected_or_first_available_variant.title or media.alt == 'all' or media.alt == product.title or media.alt == ''
+          assign media_alt_downcase = media.alt | downcase
+          assign current_variant_color = product.selected_or_first_available_variant.option1 | downcase
+          
+          if media_alt_downcase contains current_variant_color
+            assign media_available_for_variant = true
+          elsif media_alt_downcase == 'all'
+            assign media_available_for_variant = true
+          elsif media_alt_downcase == product.title | downcase
+            assign media_available_for_variant = true
+          elsif media.alt == blank
             assign media_available_for_variant = true
           endif
         -%}
@@ -121,15 +135,16 @@
         <div class="{{ media.media_type }}-slide carousel-cell js-main-carousel-cell {% unless media_available_for_variant %}hidden{% endunless %}" 
           data-image-id="{{ media.id }}" 
           data-slide-index="{{ forloop.index0 }}" 
-          data-media-alt="{{ media.alt | escape }}"
+          data-media-alt="{{ media.alt | downcase | escape }}"
+          data-media-color="{{ media.alt | split: ' ' | first | downcase }}"
           tabindex="-1">
           <div class="product-media-container product-media--{{ media.id }} {{ media.media_type }}"
-          data-product-single-media-wrapper
-          {% if media.media_type == 'video' %} data-product-media-type-video data-enable-video-looping="{{ enable_video_looping }}"{% endif %}
-          {% if media.media_type == 'external_video' %} data-product-media-type-video data-enable-video-looping="{{ enable_video_looping }}" data-video-id="{{ media.external_id }}"{% endif %}
-          {% if media.media_type == 'model' %} data-product-media-type-model{% endif %}
-          data-thumbnail-id="product-template-{{ media.id }}"
-          data-media-id="product-template-{{ media.id }}">
+            data-product-single-media-wrapper
+            {% if media.media_type == 'video' %} data-product-media-type-video data-enable-video-looping="{{ enable_video_looping }}"{% endif %}
+            {% if media.media_type == 'external_video' %} data-product-media-type-video data-enable-video-looping="{{ enable_video_looping }}" data-video-id="{{ media.external_id }}"{% endif %}
+            {% if media.media_type == 'model' %} data-product-media-type-model{% endif %}
+            data-thumbnail-id="product-template-{{ media.id }}"
+            data-media-id="product-template-{{ media.id }}">
             {% case media.media_type %}
               {% when 'image' %}
                 {%- liquid
@@ -152,17 +167,11 @@
                   endif
                 -%}
 
-                {% capture sizes %}
-                  (min-width: 1601px) {{ lg_render | default: '2000px' }},
-                  (min-width: 768px) and (max-width: 1600px) {{ md_render | default: '1200px' }},
-                  (max-width: 767px) {{ sm_render | default: '100vw' }}, 900px
-                {% endcapture %}
-
                 <div class="box-ratio" style="padding-bottom: {{ image_box_ratio }};">
                   {{ media | image_url: width: 1200 | image_tag:
                     loading: loading,
                     fetchpriority: fetch_priority,
-                    sizes: sizes,
+                    sizes: "(min-width: 1601px) 2000px, (min-width: 768px) and (max-width: 1600px) 1200px, (max-width: 767px) 100vw, 900px",
                     widths: '200, 300, 400, 500, 600, 700, 800, 1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000',
                     id: media.id,
                     data-zoom-src: zoom_image,
@@ -175,31 +184,31 @@
                 <noscript>{{ media | image_url: width: 1200 | image_tag }}</noscript>
                 {% if click_to_enlarge and template != 'product.quick' %}
                   <a class="zoom_btn"
-                     href="{{ media | image_url: width: 2400 }}"
-                     itemprop="contentUrl"
-                     tabindex="-1"
-                     title="Click to zoom"
-                     data-index="{{ forloop.index0 }}"
-                     data-ps-slide-index="{% increment my_counter %}"
-                     data-count="{{ forloop.length }}">
-                     {% render 'snip-icons',
-                        wrapper: '.zoom_btn',
-                        type: 'apollo',
-                        icon: 'search',
-                        classes: 'zoom_btn--icon vib-center',
-                        size: '16px',
-                        fill: 'var(--directional-color)',
-                        hover: 'var(--directional-hover-color)' %}
+                    href="{{ media | image_url: width: 2400 }}"
+                    itemprop="contentUrl"
+                    tabindex="-1"
+                    title="Click to zoom"
+                    data-index="{{ forloop.index0 }}"
+                    data-ps-slide-index="{% increment my_counter %}"
+                    data-count="{{ forloop.length }}">
+                    {% render 'snip-icons',
+                      wrapper: '.zoom_btn',
+                      type: 'apollo',
+                      icon: 'search',
+                      classes: 'zoom_btn--icon vib-center',
+                      size: '16px',
+                      fill: 'var(--directional-color)',
+                      hover: 'var(--directional-hover-color)' %}
                   </a>
                 {% endif %}
               {% when 'external_video' %}
                 <div class="product-video videoWrapper product-single__media">
                   <deferred-media class="deferred-media">
                     <template>
-                      {% liquid
+                      {%- liquid
                         assign video_class = 'js-' | append: media.host
                         echo media | external_video_url: autoplay: true, loop: enable_video_looping | external_video_tag: class: video_class, loading: "lazy"
-                       %}
+                      -%}
                     </template>
                   </deferred-media>
                 </div>
@@ -251,29 +260,29 @@
         data-shopify-title="{{ product.title | escape }}"
         data-shopify-xr-hidden>
         {% render 'snip-icons',
-         wrapper: '.product-single__view-in-space',
-         type: 'media-icons',
-         icon: '3d-icon',
-         classes: 'product-single__view-in-space--icon vib-center',
-         size: '25px',
-         fill: 'var(--text-color)',
-         hover: 'var(--text-color)' %}
-         <span class='product-single__view-in-space-text vib-center'>{{ 'products.product.view_in_space' | t }}</span>
+          wrapper: '.product-single__view-in-space',
+          type: 'media-icons',
+          icon: '3d-icon',
+          classes: 'product-single__view-in-space--icon vib-center',
+          size: '25px',
+          fill: 'var(--text-color)',
+          hover: 'var(--text-color)' %}
+        <span class='product-single__view-in-space-text vib-center'>{{ 'products.product.view_in_space' | t }}</span>
       </button>
     {%- endif -%}
   </div>
 {% endcapture %}
 
 {%- if thumbnail_position == 'left' -%}
-<div class="product__gallery--container">
-  {{ thumbnails }}
-  {{ slider }}
-</div>
+  <div class="product__gallery--container">
+    {{ thumbnails }}
+    {{ slider }}
+  </div>
 {%- elsif thumbnail_position == 'right' -%}
-<div class="product__gallery--container">
-  {{ slider }}
-  {{ thumbnails }}
-</div>
+  <div class="product__gallery--container">
+    {{ slider }}
+    {{ thumbnails }}
+  </div>
 {%- elsif thumbnail_position == 'bottom' -%}
   {{ slider }}
   {{ thumbnails }}
@@ -281,44 +290,80 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-  // Function to update media based on selected variant
-  function updateMediaForVariant(variant) {
-    const variantTitle = variant ? variant.title : '';
-    const allMedia = document.querySelectorAll('[data-media-alt]');
+  function updateMediaForVariantColor(variant) {
+    if (!variant) return;
     
-    // Show/hide media based on variant
+    const variantColor = variant.option1 ? variant.option1.toLowerCase() : '';
+    const allMedia = document.querySelectorAll('[data-media-color], [data-media-alt]');
+    
+    let hasVisibleMedia = false;
     allMedia.forEach(media => {
+      const mediaColor = media.getAttribute('data-media-color');
       const mediaAlt = media.getAttribute('data-media-alt');
-      if (mediaAlt === variantTitle || mediaAlt === 'all' || mediaAlt === '{{ product.title }}' || mediaAlt === '') {
+      
+      const shouldShow = (
+        (mediaColor && variantColor && mediaColor.includes(variantColor)) || 
+        (mediaAlt && mediaAlt.includes('all')) || 
+        (mediaAlt && mediaAlt === '{{ product.title | downcase }}') || 
+        (mediaAlt === '')
+      );
+      
+      if (shouldShow) {
         media.classList.remove('hidden');
+        hasVisibleMedia = true;
       } else {
         media.classList.add('hidden');
       }
     });
     
-    // Reinitialize carousels after media change
+    if (!hasVisibleMedia) {
+      allMedia.forEach(media => {
+        media.classList.remove('hidden');
+      });
+    }
+    
     if (typeof Flickity !== 'undefined') {
-      const mainCarousel = document.querySelector('[data-main-carousel]');
-      if (mainCarousel && mainCarousel.flickity) {
-        mainCarousel.flickity.reloadCells();
-        mainCarousel.flickity.select(0, false, true);
-      }
-      
-      const thumbCarousel = document.querySelector('[data-thumbnail-carousel]');
-      if (thumbCarousel && thumbCarousel.flickity) {
-        thumbCarousel.flickity.reloadCells();
-        thumbCarousel.flickity.select(0, false, true);
-      }
+      setTimeout(() => {
+        const mainCarousel = document.querySelector('[data-main-carousel]');
+        if (mainCarousel && mainCarousel.flickity) {
+          mainCarousel.flickity.reloadCells();
+          const firstVisible = mainCarousel.querySelector('.carousel-cell:not(.hidden)');
+          if (firstVisible) {
+            const index = parseInt(firstVisible.getAttribute('data-slide-index'));
+            mainCarousel.flickity.select(index, false, true);
+          }
+        }
+        
+        const thumbCarousel = document.querySelector('[data-thumbnail-carousel]');
+        if (thumbCarousel && thumbCarousel.flickity) {
+          thumbCarousel.flickity.reloadCells();
+          const firstVisibleThumb = thumbCarousel.querySelector('.carousel-cell:not(.hidden)');
+          if (firstVisibleThumb) {
+            const thumbIndex = parseInt(firstVisibleThumb.getAttribute('data-slide-index'));
+            thumbCarousel.flickity.select(thumbIndex, false, true);
+          }
+        }
+      }, 50);
     }
   }
   
-  // Listen for variant changes
   document.addEventListener('variant:changed', function(event) {
-    updateMediaForVariant(event.detail.variant);
+    updateMediaForVariantColor(event.detail.variant);
   });
   
-  // Initialize with current variant
+  const variantSelects = document.querySelectorAll('select[name="Color"], select[name="color"], input[name="Color"], input[name="color"]');
+  variantSelects.forEach(select => {
+    select.addEventListener('change', function() {
+      setTimeout(() => {
+        if (window.variantFromForm) {
+          const variant = window.variantFromForm();
+          updateMediaForVariantColor(variant);
+        }
+      }, 100);
+    });
+  });
+  
   const initialVariant = {{ product.selected_or_first_available_variant | json }};
-  updateMediaForVariant(initialVariant);
+  updateMediaForVariantColor(initialVariant);
 });
 </script>
