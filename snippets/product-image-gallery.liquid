@@ -1,7 +1,6 @@
 {% capture thumbnails %}
   {% if product.media.size > 1 %}
     {%- liquid
-
       if thumbnail_position == 'bottom'
         assign style = 'horizontal-carousel'
         assign width = 'span-12'
@@ -11,25 +10,33 @@
         assign width = ''
         assign js_class = 'js-thumb-vertical-wrapper'
       endif
-
     -%}
 
     <div id="thumbnails" class="thumb-slider thumbnail-slider custom {{ style }} {{ width }} auto"
     data-thumbnail-position="{{ thumbnail_position }}">
       <div class="thumb-slider-wrapper {{ js_class }} js-thumb-wrapper" id="thumb-slider-wrapper">
-        <div class="carousel-nav thumb-slider-slides slides product-single__thumbnails-{{ section.id }} js-thumb-carousel-nav{% if product.media.size <4 %} no_carousel{% endif %}">
+        <div class="carousel-nav thumb-slider-slides slides product-single__thumbnails-{{ section.id }} js-thumb-carousel-nav{% if product.media.size <4 %} no_carousel{% endif %}" 
+        data-thumbnail-carousel>
           {% for media in product.media %}
-            <div class="{{ media.media_type }}-thumbnail product-single__thumbnails-item carousel-cell {% if forloop.first %}is-nav-selected{% endif %} js-thumb-item thumb__{% if forloop.first %}first{% elsif forloop.last %}last{% endif %}" data-slide-index="{{ forloop.index0 }}"
-            data-image-id="{{ media.id }}" tabindex="0">
+            {%- liquid
+              # Check if media is associated with the current variant
+              assign media_available_for_variant = false
+              if media.alt == product.selected_or_first_available_variant.title or media.alt == 'all' or media.alt == product.title or media.alt == ''
+                assign media_available_for_variant = true
+              endif
+            -%}
+            
+            <div class="{{ media.media_type }}-thumbnail product-single__thumbnails-item carousel-cell {% if forloop.first %}is-nav-selected{% endif %} js-thumb-item thumb__{% if forloop.first %}first{% elsif forloop.last %}last{% endif %} {% unless media_available_for_variant %}hidden{% endunless %}" 
+              data-slide-index="{{ forloop.index0 }}"
+              data-image-id="{{ media.id }}" 
+              data-media-alt="{{ media.alt | escape }}"
+              tabindex="0">
               <div class="product-single__thumbnail product-single__thumbnail--{{ section.id }} js-thumb-item-img-wrap" data-thumbnail-id="product-template-{{ media.id }}">
                 {% liquid
-
                   # Reset variables inside loop
                   assign loading = 'lazy'
                   assign fetch_priority = 'auto'
 
-                  # If one a product page and the section is under index 3 (near the top) because
-                  # the default template has the section below a "breadcrumb" section.
                   if template == 'product' and section.index < 3
                     if forloop.index < 10
                       assign loading = 'eager'
@@ -41,7 +48,7 @@
                       assign fetch_priority = 'high'
                     endif
                   endif
-                 %}
+                %}
                 {%
                   render 'basic-responsive-image',
                   type: media.preview_image,
@@ -85,7 +92,6 @@
 
 {% capture slider %}
   {%- liquid
-
     assign grid_width = ""
 
     if product.media.size > 1 and thumbnail_position != 'bottom'
@@ -99,13 +105,24 @@
     endif
 
     assign first_image = product.media | where: "media_type", "image" | first
-
   -%}
-  <div id="slider" class=" {{ grid_width }} thumbs_{{ thumbnail_position }} auto {{ no_slider }}">
-    <!-- <div id="smartwishlist" data-product="{{ product.id }}" data-variant="{{ product.variants.first.id }}"></div> -->
-    <div class="slides product-image-container carousel carousel-main js-carousel-main" data-product-id="{{ product.id }}">
+  
+  <div id="slider" class="{{ grid_width }} thumbs_{{ thumbnail_position }} auto {{ no_slider }}">
+    <div class="slides product-image-container carousel carousel-main js-carousel-main" data-product-id="{{ product.id }}" data-main-carousel>
       {% for media in product.media %}
-        <div class="{{ media.media_type }}-slide carousel-cell js-main-carousel-cell" data-image-id="{{ media.id }}" data-slide-index="{{ forloop.index0 }}" tabindex="-1">
+        {%- liquid
+          # Check if media is associated with the current variant
+          assign media_available_for_variant = false
+          if media.alt == product.selected_or_first_available_variant.title or media.alt == 'all' or media.alt == product.title or media.alt == ''
+            assign media_available_for_variant = true
+          endif
+        -%}
+        
+        <div class="{{ media.media_type }}-slide carousel-cell js-main-carousel-cell {% unless media_available_for_variant %}hidden{% endunless %}" 
+          data-image-id="{{ media.id }}" 
+          data-slide-index="{{ forloop.index0 }}" 
+          data-media-alt="{{ media.alt | escape }}"
+          tabindex="-1">
           <div class="product-media-container product-media--{{ media.id }} {{ media.media_type }}"
           data-product-single-media-wrapper
           {% if media.media_type == 'video' %} data-product-media-type-video data-enable-video-looping="{{ enable_video_looping }}"{% endif %}
@@ -116,7 +133,6 @@
             {% case media.media_type %}
               {% when 'image' %}
                 {%- liquid
-
                   assign image_box_ratio = media.height | append: ".0" | times: 1 | divided_by: media.width | times: 100 | append: "%"
                   assign zoom_image = media | image_url: width: 2400
 
@@ -134,7 +150,6 @@
                       assign fetch_priority = 'high'
                     endif
                   endif
-
                 -%}
 
                 {% capture sizes %}
@@ -182,9 +197,7 @@
                   <deferred-media class="deferred-media">
                     <template>
                       {% liquid
-
                         assign video_class = 'js-' | append: media.host
-
                         echo media | external_video_url: autoplay: true, loop: enable_video_looping | external_video_tag: class: video_class, loading: "lazy"
                        %}
                     </template>
@@ -265,3 +278,47 @@
   {{ slider }}
   {{ thumbnails }}
 {%- endif -%}
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Function to update media based on selected variant
+  function updateMediaForVariant(variant) {
+    const variantTitle = variant ? variant.title : '';
+    const allMedia = document.querySelectorAll('[data-media-alt]');
+    
+    // Show/hide media based on variant
+    allMedia.forEach(media => {
+      const mediaAlt = media.getAttribute('data-media-alt');
+      if (mediaAlt === variantTitle || mediaAlt === 'all' || mediaAlt === '{{ product.title }}' || mediaAlt === '') {
+        media.classList.remove('hidden');
+      } else {
+        media.classList.add('hidden');
+      }
+    });
+    
+    // Reinitialize carousels after media change
+    if (typeof Flickity !== 'undefined') {
+      const mainCarousel = document.querySelector('[data-main-carousel]');
+      if (mainCarousel && mainCarousel.flickity) {
+        mainCarousel.flickity.reloadCells();
+        mainCarousel.flickity.select(0, false, true);
+      }
+      
+      const thumbCarousel = document.querySelector('[data-thumbnail-carousel]');
+      if (thumbCarousel && thumbCarousel.flickity) {
+        thumbCarousel.flickity.reloadCells();
+        thumbCarousel.flickity.select(0, false, true);
+      }
+    }
+  }
+  
+  // Listen for variant changes
+  document.addEventListener('variant:changed', function(event) {
+    updateMediaForVariant(event.detail.variant);
+  });
+  
+  // Initialize with current variant
+  const initialVariant = {{ product.selected_or_first_available_variant | json }};
+  updateMediaForVariant(initialVariant);
+});
+</script>
