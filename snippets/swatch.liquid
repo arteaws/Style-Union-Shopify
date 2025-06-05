@@ -1,3 +1,17 @@
+<style>
+.color_dflex {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.swatches__color-name{
+  font-size: 12px;
+}
+</style>
+
+
+
+
 {%- liquid
   assign option_name = option.name | downcase
   assign color_swatch_options = settings.swatch_option_names | replace: ' ,', ',' | replace: ', ', ',' | split: ',' | downcase
@@ -130,31 +144,35 @@
       </div>
     {% endcapture %}
 
-    {% capture color_swatch %}
-      <div class="swatches__swatch--color swatch-element color swatches__shape--{{ color_swatch_shape }} {% unless available %}soldout{% endunless %} js-swatch-element">
-        {{ radio_button }}
-        {% if variant_image_url %}
-          <!-- Show variant image if available -->
-          <label class="swatches__form--label"
-            for="{{ section.id }}-{{ option.name }}-{{ forloop.index0 }}"
-            tabindex="0"
-            style="background-image: url({{ variant_image_url }}); background-position: center center; background-size: cover;">
-            {{ sold_out_image }}
-          </label>
-        {% else %}
-          <!-- Fallback to color swatch if no variant image -->
-          <label class="swatches__form--label"
-            for="{{ section.id }}-{{ option.name }}-{{ forloop.index0 }}"
-            tabindex="0"
-            style="background-color: {{ css_color }};
-            {% unless color_swatch_style == 'default-color' %}
-              background-image: url({% if color_swatch_style == 'custom-image' %}{{ image_url }}{% elsif color_swatch_style == 'variant-image' %}{{ variant_image_url }}{% elsif color_swatch_style == 'swatch' %}{{ swatch_image_url }}{% endif %}); background-position: center center; background-size: 50px;
-            {% endunless %}">
-            {{ sold_out_image }}
-          </label>
-        {% endif %}
-      </div>
-    {% endcapture %}
+  {% capture color_swatch %}
+  <div class="swatches__swatch--color swatch-element color swatches__shape--{{ color_swatch_shape }} {% unless available %}soldout{% endunless %} js-swatch-element parent-dflex">
+    {{ radio_button }}
+    {% if variant_image_url %}
+      <!-- Show variant image if available -->
+    <div class="color_dflex">
+      <label class="swatches__form--label"
+        for="{{ section.id }}-{{ option.name }}-{{ forloop.index0 }}"
+        tabindex="0"
+        style="background-image: url({{ variant_image_url }}); background-position: center center; background-size: cover;">
+        {{ sold_out_image }}
+      </label>
+      <span class="swatches__color-name">{{ value | truncatewords:1 }}</span>
+    </div>
+    {% else %}
+      <!-- Fallback to color swatch if no variant image -->
+      <label class="swatches__form--label"
+        for="{{ section.id }}-{{ option.name }}-{{ forloop.index0 }}"
+        tabindex="0"
+        style="background-color: {{ css_color }};
+        {% unless color_swatch_style == 'default-color' %}
+          background-image: url({% if color_swatch_style == 'custom-image' %}{{ image_url }}{% elsif color_swatch_style == 'variant-image' %}{{ variant_image_url }}{% elsif color_swatch_style == 'swatch' %}{{ swatch_image_url }}{% endif %}); background-position: center center; background-size: 50px;
+        {% endunless %}">
+        {{ sold_out_image }}
+      </label>
+      <span class="swatches__color-name">{{ value }}</span>
+    {% endif %}
+  </div>
+{% endcapture %}
 
     {% if show_color_swatches and color_swatch_options contains option_name %}
       {{ color_swatch }}
