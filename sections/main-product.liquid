@@ -9,16 +9,16 @@
 left: 10px !important;
  right:unset; 
 }
-.mobile-pdp-slider{
+/* .mobile-pdp-slider{
   display:none;
-}
+} */
 .indiviual-merged-div{
   position:relative;
 }
  .custom-pdp-set {
     position: absolute;
     z-index: 999;
-    right: 6px;
+    right: 18px;
     top: 10px;
 } 
 
@@ -122,9 +122,8 @@ left: 10px !important;
    }
  {% endcapture %}
 <div class=" span-6 md-span-12 sm-span-12 auto indiviual-merged-div">
-          <div class="custom-pdp-set">
-    <div id="smartwishlist" data-product="{{ product.id }}" data-variant="{{ product.variants.first.id }}"></div>
-   </div>
+
+ {% comment %} 
   <div class="product__section-images product__section-image--{{ thumbnail_position }} carousel-container js-product-gallery span-6 md-span-12 sm-span-12 auto desktop-gallerr-cs"
     data-product-gallery data-product-single-media-group
     data-gallery-config='{{ product_gallery_config }}' data-aos="fade">
@@ -142,6 +141,7 @@ left: 10px !important;
       </div>
     {%- endif -%}
   </div>
+  {% endcomment %}
   <div class="product__section-images carousel-container js-product-gallery span-6 md-span-12 sm-span-12 auto  mobile-pdp-slider">
 {% render 'mobile-pdp-slider' %}
   </div>
