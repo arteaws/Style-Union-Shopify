@@ -1,790 +1,188 @@
 <style>
-/* Mobile PDP Media Gallery Styles - FIXED */
-.mobile-pdp-slider {
-    margin: 0 !important;
-    float: unset !important;
-}
-  
-.mobile_pdp_media_gallery {
-  position: relative;
-  width: 100%;
-  max-width: 100%;
-  overflow: hidden; /* Prevent any overflow */
+    .product-image-slider-container {
+      position: relative;
+      max-width: 100%;
+      display: flex;
+      flex-direction: row-reverse; /* Thumbnails on left */
+      gap: 20px;
+    }
+
+    .product-image-slider-container {
+      position: relative;
+      max-width: 100%;
+      display: flex;
+      flex-direction: row-reverse; /* Thumbnails on left */
+      gap: 20px;
+    }
+
+    .product-image-slider {
+      width: 80%;
+      height: 500px; /* Set fixed height for desktop */
+    }
+
+    .product-image-thumbs {
+      width: 15%;
+      height: 500px; /* Match slider height */
+      margin: 0;
+    }
+
+   .swiper-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top;
 }
 
-/* Main Swiper Container - FIXED */
-.mobile_pdp_media_gallery .pdpMobileSwiper {
-  width: 100%;
-  height: 100vw; /* Square aspect ratio for mobile */
-  max-height: 400px; /* Prevent too large on bigger screens */
-  position: relative;
-  overflow: hidden;
-  border-radius: 8px;
-  /* margin-bottom: 16px; */
-  background: #f8f9fa;
-}
+    .product-image-thumbs .swiper-slide {
+      cursor: pointer;
+      height: auto !important; /* Allow natural height */
+    }
 
-.mobile_pdp_media_gallery .swiper-wrapper {
-  height: 100%;
-  width: 100%;
-}
+    .product-image-thumbs .swiper-slide-thumb-active {
+      opacity: 1;
+    }
 
-.mobile_pdp_media_gallery .swiper-slide {
-  width: 100% !important;
-  height: 100% !important;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden; /* Prevent content overflow */
-  position: relative;
-}
+    .img-custom-container {
+      line-height: 0;
+      height: 100%;
+    }
 
-/* FIXED - Main slider images */
-.mobile_pdp_media_gallery .mobile_pdp_swiper_images {
-  width: 100%;
-  height: 100%;
-  object-fit: contain; /* Ensure full image is visible */
-  object-position: center;
-  display: block;
-  background: white;
-  max-width: 100%;
-  max-height: 100%;
-}
+    .product-image-thumbs .swiper-slide-thumb-active .img-custom-container {
+      border: 1px solid #000000;
+    }
 
-/* Video styling - FIXED */
-.mobile_pdp_media_gallery .pdpMobileSwiper video {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  background: black;
-  border-radius: 4px;
-  max-width: 100%;
-  max-height: 100%;
-}
+    .product-image-slider-container .swiper-button-next,
+    .product-image-slider-container .swiper-button-prev {
+      width: 40px;
+      height: 40px;
+      background: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
 
-/* Main Swiper Navigation Buttons */
-.mobile_pdp_media_gallery .swiper-button-prev,
-.mobile_pdp_media_gallery .swiper-button-next {
-  width: 36px;
-  height: 36px;
-  margin-top: -18px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.95);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  backdrop-filter: blur(8px);
-  transition: all 0.3s ease;
-  opacity: 0.9;
-  z-index: 10;
-}
+    .product-image-slider-container .swiper-button-next::after,
+    .product-image-slider-container .swiper-button-prev::after {
+      font-size: 14px;
+      color: #000; /* Arrow color */
+      font-weight: bold;
+    }
 
-.mobile_pdp_media_gallery .swiper-button-prev::after,
-.mobile_pdp_media_gallery .swiper-button-next::after {
-  font-size: 14px;
-  font-weight: bold;
-  color: #333;
-}
+    /* Optional: Add a subtle shadow for better visibility */
+    .product-image-slider-container .swiper-button-next,
+    .product-image-slider-container .swiper-button-prev {
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
 
-.mobile_pdp_media_gallery .swiper-button-prev:hover,
-.mobile_pdp_media_gallery .swiper-button-next:hover {
-  background: rgba(255, 255, 255, 1);
-  transform: scale(1.05);
-  opacity: 1;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
-}
+    @media (max-width: 767px) {
+      .product-image-slider-container {
+        flex-direction: column;
+      }
 
-.mobile_pdp_media_gallery .swiper-button-prev {
-  left: 12px;
-}
+      .product-image-slider {
+        width: 100%;
+        height: auto; /* Reset height for mobile */
+      }
 
-.mobile_pdp_media_gallery .swiper-button-next {
-  right: 12px;
-}
+      .product-image-thumbs {
+        width: 100%;
+        height: 100px; /* Keep thumbnails row on mobile */
+      }
 
-/* Thumbnails Container */
-.mobile_pdp_media_gallery .mobile_pdp_thumbnails_container {
-  width: 100%;
-  /* padding: 0 12px; */
-  /* margin-top: 8px; */
-  overflow: hidden;
-}
-
-.mobile_pdp_media_gallery .pdpThumbnailSwiper {
-  width: 100%;
-  overflow: visible;
-  padding: 8px 0;
-}
-
-.mobile_pdp_media_gallery .mobile_pdp_thumbnail_slide {
-  aspect-ratio: 1/1; /* Ensure square aspect ratio */
-  width: auto !important;
-  height: 100% !important;
-  min-width: 0;
-  cursor: pointer;
-  border-radius: 6px;
-  overflow: hidden;
-  border: 1px solid transparent;
-  transition: all 0.3s ease;
-  position: relative;
-  background: #f8f9fa;
-  flex-shrink: 0;
-}
-
-/* Hidden slides for variant filtering */
-.mobile_pdp_media_gallery .swiper-slide.variant-hidden,
-.mobile_pdp_media_gallery .mobile_pdp_thumbnail_slide.variant-hidden {
-  display: none !important;
-}
-
-.mobile_pdp_media_gallery .mobile_pdp_thumbnail_slide:hover {
-  /* transform: translateY(-2px); */
-  /* box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); */
-  border-color: rgba(28, 66, 163, 0.3);
-}
-
-.mobile_pdp_media_gallery .mobile_pdp_thumbnail_slide.active {
-  border-color: #000;
-  /* box-shadow: 0 4px 16px rgba(28, 66, 163, 0.25); */
-  /* transform: translateY(-2px); */
-}
-
-.mobile_pdp_media_gallery .mobile_pdp_thumbnail_image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-  transition: all 0.3s ease;
-}
-
-.mobile_pdp_media_gallery .mobile_pdp_thumbnail_slide:hover .mobile_pdp_thumbnail_image {
-  transform: scale(1.05);
-}
-
-.mobile_pdp_media_gallery .mobile_pdp_thumbnail_slide.active .mobile_pdp_thumbnail_image {
-  opacity: 1;
-}
-
-/* Video Thumbnail Styles */
-.mobile_pdp_media_gallery .mobile_pdp_video_thumbnail {
-  position: relative;
-  width: 100%;
-  height: 100%;
-}
-
-.mobile_pdp_media_gallery .mobile_pdp_video_play_icon {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 20px;
-  height: 20px;
-  background: rgba(0, 0, 0, 0.7);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  backdrop-filter: blur(4px);
-  transition: all 0.3s ease;
-}
-
-.mobile_pdp_media_gallery .mobile_pdp_video_play_icon svg {
-  width: 10px;
-  height: 10px;
-}
-
-.mobile_pdp_media_gallery .mobile_pdp_video_thumbnail:hover .mobile_pdp_video_play_icon {
-  background: rgba(28, 66, 163, 0.9);
-  transform: translate(-50%, -50%) scale(1.1);
-}
-
-.mobile_pdp_media_gallery .mobile_pdp_thumbnail_slide.active .mobile_pdp_video_play_icon {
-  background: rgba(28, 66, 163, 0.8);
-}
-
-/* Responsive Design - IMPROVED */
-@media (min-width: 280px) {
-  .mobile_pdp_media_gallery .pdpThumbnailSwiper {
-    height: 90px;
-  }
-}
-
-@media (min-width: 414px) {
-  .mobile_pdp_media_gallery .pdpThumbnailSwiper {
-    height: 80px;
-  }
-  
-  .mobile_pdp_media_gallery .swiper-button-prev,
-  .mobile_pdp_media_gallery .swiper-button-next {
-    width: 40px;
-    height: 40px;
-    margin-top: -20px;
-  }
-  
-  .mobile_pdp_media_gallery .swiper-button-prev::after,
-  .mobile_pdp_media_gallery .swiper-button-next::after {
-    font-size: 16px;
-  }
-}
-
-@media (min-width: 480px) {
-  .mobile_pdp_media_gallery .pdpMobileSwiper {
-    height: 400px; /* Fixed height for larger screens */
-    max-height: 400px;
-  }
-  
-  .mobile_pdp_media_gallery .pdpThumbnailSwiper {
-    height: 75px;
-  }
-  
-  .mobile_pdp_media_gallery .mobile_pdp_thumbnails_container {
-    /* padding: 0 16px; */
-  }
-  
-  .mobile_pdp_media_gallery .mobile_pdp_video_play_icon {
-    width: 24px;
-    height: 24px;
-  }
-  
-  .mobile_pdp_media_gallery .mobile_pdp_video_play_icon svg {
-    width: 12px;
-    height: 12px;
-  }
-  
-  .mobile_pdp_media_gallery .swiper-button-prev,
-  .mobile_pdp_media_gallery .swiper-button-next {
-    width: 44px;
-    height: 44px;
-    margin-top: -22px;
-  }
-  
-  .mobile_pdp_media_gallery .swiper-button-prev {
-    left: 16px;
-  }
-  
-  .mobile_pdp_media_gallery .swiper-button-next {
-    right: 16px;
-  }
-}
-
-/* Extra small screens */
-@media (max-width: 320px) {
-  .mobile_pdp_media_gallery .pdpThumbnailSwiper {
-    height: 55px;
-  }
-  
-  .mobile_pdp_media_gallery .mobile_pdp_thumbnails_container {
-    /* padding: 0 8px; */
-  }
-  
-  .mobile_pdp_media_gallery .swiper-button-prev,
-  .mobile_pdp_media_gallery .swiper-button-next {
-    width: 32px;
-    height: 32px;
-    margin-top: -16px;
-  }
-  
-  .mobile_pdp_media_gallery .swiper-button-prev::after,
-  .mobile_pdp_media_gallery .swiper-button-next::after {
-    font-size: 12px;
-  }
-  
-  .mobile_pdp_media_gallery .swiper-button-prev {
-    left: 8px;
-  }
-  
-  .mobile_pdp_media_gallery .swiper-button-next {
-    right: 8px;
-  }
-  
-  .mobile_pdp_media_gallery .mobile_pdp_video_play_icon {
-    width: 18px;
-    height: 18px;
-  }
-  
-  .mobile_pdp_media_gallery .mobile_pdp_video_play_icon svg {
-    width: 9px;
-    height: 9px;
-  }
-}
-
-/* Ensure no horizontal overflow */
-.mobile_pdp_media_gallery * {
-  box-sizing: border-box;
-}
+      .product-image-thumbs .swiper-slide {
+        width: 25% !important; /* Force 4 thumbnails per row */
+        height: 100% !important;
+      }
+    }
 </style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-
-<div class="mobile_pdp_media_gallery">
-  <!-- Main Product Images Slider -->
-  <div class="swiper pdpMobileSwiper">
+<div class="product-image-slider-container parent-custom-container">
+  <div class="custom-pdp-set">
+    <div id="smartwishlist" data-product="{{ product.id }}" data-variant="{{ product.variants.first.id }}"></div>
+  </div>
+  <div class="swiper product-image-slider">
     <div class="swiper-wrapper">
       {% for media in product.media %}
-        {% case media.media_type %}
-          {% when 'image' %}
-            <div class="swiper-slide" 
-                 data-variant-ids="{% if media.attached_to_variant %}{% for variant in media.variants %}{{ variant.id }}{% unless forloop.last %},{% endunless %}{% endfor %}{% endif %}"
-                 data-media-id="{{ media.id }}"
-                 data-media-index="{{ forloop.index0 }}">
-              <img
-                class="mobile_pdp_swiper_images"
-                srcset="
-                  {% if media.width >= 375 %}{{ media | image_url: width: 375 }} 375w,{% endif %}
-                  {% if media.width >= 550 %}{{ media | image_url: width: 550 }} 550w,{% endif %}
-                  {% if media.width >= 750 %}{{ media | image_url: width: 750 }} 750w,{% endif %}
-                  {% if media.width >= 1100 %}{{ media | image_url: width: 1100 }} 1100w,{% endif %}
-                  {% if media.width >= 1500 %}{{ media | image_url: width: 1500 }} 1500w,{% endif %}
-                  {{ media | image_url }} {{ media.width }}w
-                "
-                sizes="(max-width: 750px) 100vw, 50vw"
-                src="{{ media | image_url: width: 750 }}"
-                loading="lazy"
-                data-index="{{ forloop.index0 }}"
-                alt="{{ media.alt | escape }}"
-                width="{{ media.width }}"
-                height="{{ media.height }}"
-              >
-            </div>
-          
-          {% when 'video' %}
-            <div class="swiper-slide"
-                 data-variant-ids="{% if media.attached_to_variant %}{% for variant in media.variants %}{{ variant.id }}{% unless forloop.last %},{% endunless %}{% endfor %}{% endif %}"
-                 data-media-id="{{ media.id }}"
-                 data-media-index="{{ forloop.index0 }}">
-              {{
-                media | video_tag:
-                  image_size: '1100x',
-                  loop: section.settings.enable_video_looping,
-                  controls: true,
-                  muted: false
-              }}
-            </div>
-            
-          {% when 'external_video' %}
-            <div class="swiper-slide"
-                 data-variant-ids="{% if media.attached_to_variant %}{% for variant in media.variants %}{{ variant.id }}{% unless forloop.last %},{% endunless %}{% endfor %}{% endif %}"
-                 data-media-id="{{ media.id }}"
-                 data-media-index="{{ forloop.index0 }}">
-              {{ media | external_video_tag }}
-            </div>
-            
-          {% when 'model' %}
-            <div class="swiper-slide"
-                 data-variant-ids="{% if media.attached_to_variant %}{% for variant in media.variants %}{{ variant.id }}{% unless forloop.last %},{% endunless %}{% endfor %}{% endif %}"
-                 data-media-id="{{ media.id }}"
-                 data-media-index="{{ forloop.index0 }}">
-              {{ media | model_viewer_tag }}
-            </div>
-            
-          {% else %}
-            <div class="swiper-slide"
-                 data-variant-ids="{% if media.attached_to_variant %}{% for variant in media.variants %}{{ variant.id }}{% unless forloop.last %},{% endunless %}{% endfor %}{% endif %}"
-                 data-media-id="{{ media.id }}"
-                 data-media-index="{{ forloop.index0 }}">
-              {{ media | media_tag }}
-            </div>
-        {% endcase %}
+        <div class="swiper-slide">
+          {% case media.media_type %}
+            {% when 'image' %}
+              <img src="{{ media | img_url: '800x' }}" alt="{{ media.alt }}" loading="lazy" width="800" height="800">
+            {% when 'external_video' %}
+              <div class="product-single__media">
+                {{ media | external_video_tag }}
+              </div>
+            {% when 'video' %}
+              <div class="product-single__media">
+                {{ media | video_tag: controls: true }}
+              </div>
+            {% when 'model' %}
+              <div class="product-single__media">
+                {{ media | model_viewer_tag }}
+              </div>
+            {% else %}
+              <div class="product-single__media">
+                {{ media | media_tag }}
+              </div>
+          {% endcase %}
+        </div>
       {% endfor %}
     </div>
-
-    <!-- Navigation Arrows -->
-    <div class="swiper-button-prev"></div>
     <div class="swiper-button-next"></div>
+    <div class="swiper-button-prev"></div>
   </div>
 
-  <!-- Thumbnails Slider -->
-  <div class="mobile_pdp_thumbnails_container">
-    <div class="swiper pdpThumbnailSwiper">
-      <div class="swiper-wrapper">
-        {% for media in product.media %}
-          {% if media.media_type == 'image' %}
-            <div class="swiper-slide mobile_pdp_thumbnail_slide"
-                 data-variant-ids="{% if media.attached_to_variant %}{% for variant in media.variants %}{{ variant.id }}{% unless forloop.last %},{% endunless %}{% endfor %}{% endif %}"
-                 data-media-id="{{ media.id }}"
-                 data-media-index="{{ forloop.index0 }}">
-              <img
-                class="mobile_pdp_thumbnail_image"
-                src="{{ media | image_url: width: 150 }}"
-                alt="{{ media.alt | escape }}"
-                data-index="{{ forloop.index0 }}"
-                loading="lazy"
-              >
-            </div>
-          {% else %}
-            <div class="swiper-slide mobile_pdp_thumbnail_slide"
-                 data-variant-ids="{% if media.attached_to_variant %}{% for variant in media.variants %}{{ variant.id }}{% unless forloop.last %},{% endunless %}{% endfor %}{% endif %}"
-                 data-media-id="{{ media.id }}"
-                 data-media-index="{{ forloop.index0 }}">
-              <div class="mobile_pdp_video_thumbnail">
-                <img
-                  class="mobile_pdp_thumbnail_image"
-                  src="{{ media.preview_image | image_url: width: 150 }}"
-                  alt="{{ media.alt | escape }}"
-                  data-index="{{ forloop.index0 }}"
-                  loading="lazy"
-                >
-                <div class="mobile_pdp_video_play_icon">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M8 5v14l11-7z" fill="white"/>
-                  </svg>
-                </div>
-              </div>
-            </div>
-          {% endif %}
-        {% endfor %}
-      </div>
+  <!-- Thumbnails -->
+  <div class="swiper product-image-thumbs">
+    <div class="swiper-wrapper">
+      {% for media in product.media %}
+        <div class="swiper-slide">
+          <div class="img-custom-container">
+            <img src="{{ media | img_url: '150x' }}" alt="{{ media.alt }}" loading="lazy" width="150" height="150">
+          </div>
+        </div>
+      {% endfor %}
     </div>
   </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-
 <script>
-document.addEventListener('DOMContentLoaded', () => {
-  try {
-    let pdpMobileProductSwiper = null;
-    let pdpThumbnailSwiper = null;
-    let currentVariantId = null;
-    let allMediaData = [];
-
-    // Collect all media data for variant filtering
-    function collectMediaData() {
-      const mainSlides = document.querySelectorAll('.pdpMobileSwiper .swiper-slide');
-      const thumbnailSlides = document.querySelectorAll('.mobile_pdp_thumbnail_slide');
-      
-      allMediaData = Array.from(mainSlides).map((slide, index) => {
-        const variantIds = slide.dataset.variantIds ? slide.dataset.variantIds.split(',').map(id => id.trim()) : [];
-        const mediaId = slide.dataset.mediaId;
-        const mediaIndex = parseInt(slide.dataset.mediaIndex);
-        
-        return {
-          mainSlide: slide,
-          thumbnailSlide: thumbnailSlides[index],
-          variantIds: variantIds,
-          mediaId: mediaId,
-          originalIndex: mediaIndex,
-          currentIndex: index
-        };
-      });
-    }
-
-    // Function to filter media based on variant
-    function filterMediaByVariant(variantId) {
-      if (!variantId) {
-        // Show all media if no variant selected
-        showAllMedia();
-        return;
-      }
-
-      // First, collect all media that should be visible
-      const filteredMedia = allMediaData.filter(media => {
-        // Show media that is either:
-        // 1. Attached to the selected variant
-        // 2. Not attached to any variant (general product media)
-        return media.variantIds.length === 0 || media.variantIds.includes(variantId.toString());
-      });
-
-      // Hide all media first
-      allMediaData.forEach(media => {
-        if (media.mainSlide) {
-          media.mainSlide.classList.add('variant-hidden');
-        }
-        if (media.thumbnailSlide) {
-          media.thumbnailSlide.classList.add('variant-hidden');
-        }
-      });
-
-      // Show filtered media
-      filteredMedia.forEach(media => {
-        if (media.mainSlide) {
-          media.mainSlide.classList.remove('variant-hidden');
-        }
-        if (media.thumbnailSlide) {
-          media.thumbnailSlide.classList.remove('variant-hidden');
-        }
-      });
-
-      // Update swipers after filtering
-      setTimeout(() => {
-        if (pdpMobileProductSwiper) {
-          pdpMobileProductSwiper.update();
-          // Reset to first slide if current slide is hidden
-          const activeSlide = pdpMobileProductSwiper.slides[pdpMobileProductSwiper.activeIndex];
-          if (activeSlide.classList.contains('variant-hidden')) {
-            pdpMobileProductSwiper.slideTo(0, 0);
-          }
-        }
-        if (pdpThumbnailSwiper) {
-          pdpThumbnailSwiper.update();
-        }
-        updateThumbnailActive(pdpMobileProductSwiper ? pdpMobileProductSwiper.activeIndex : 0);
-      }, 100);
-    }
-
-    // Function to show all media
-    function showAllMedia() {
-      allMediaData.forEach(media => {
-        if (media.mainSlide) {
-          media.mainSlide.classList.remove('variant-hidden');
-        }
-        if (media.thumbnailSlide) {
-          media.thumbnailSlide.classList.remove('variant-hidden');
-        }
-      });
-
-      // Update swipers
-      setTimeout(() => {
-        if (pdpMobileProductSwiper) {
-          pdpMobileProductSwiper.update();
-        }
-        if (pdpThumbnailSwiper) {
-          pdpThumbnailSwiper.update();
-        }
-        updateThumbnailActive(pdpMobileProductSwiper ? pdpMobileProductSwiper.activeIndex : 0);
-      }, 100);
-    }
-
-    // Initialize main product swiper first
-    pdpMobileProductSwiper = new Swiper('.pdpMobileSwiper', {
-      slidesPerView: 1,
-      spaceBetween: 0,
-      loop: false,
-      autoHeight: false,
-      centeredSlides: true,
-      navigation: {
-        prevEl: '.pdpMobileSwiper .swiper-button-prev',
-        nextEl: '.pdpMobileSwiper .swiper-button-next',
-      },
-      on: {
-        slideChange: function() {
-          updateThumbnailActive(this.activeIndex);
-          // Auto-scroll thumbnail to show active thumbnail
-          scrollThumbnailToActive(this.activeIndex);
-        }
-      }
-    });
-
-    // Initialize thumbnail swiper
-    pdpThumbnailSwiper = new Swiper('.pdpThumbnailSwiper', {
-      slidesPerView: 'auto',
-      spaceBetween: 8,
+  document.addEventListener('DOMContentLoaded', function() {
+    // Initialize thumbnails slider - show all thumbnails vertically
+    const thumbsSlider = new Swiper('.product-image-thumbs', {
+      spaceBetween: 10,
+      slidesPerView: 7,
       freeMode: true,
-      watchSlidesProgress: false,
-      watchSlidesVisibility: false,
-      centeredSlides: false,
-      slideToClickedSlide: false,
+      watchSlidesProgress: true,
+      direction: 'vertical',
       breakpoints: {
-        320: {
-          slidesPerView: 'auto',
-          spaceBetween: 8
+        320: { // Mobile
+          direction: 'horizontal',
+          slidesPerView: 4,
+          freeMode: false
+        },
+        768: { // Desktop
+          direction: 'vertical',
+          slidesPerView: 7,
+          freeMode: true
         }
       }
     });
 
-    // Function to update active thumbnail
-    function updateThumbnailActive(activeIndex) {
-      const visibleThumbnails = document.querySelectorAll('.mobile_pdp_thumbnail_slide:not(.variant-hidden)');
-      
-      // First remove active class from all thumbnails
-      document.querySelectorAll('.mobile_pdp_thumbnail_slide').forEach(thumb => {
-        thumb.classList.remove('active');
-      });
-      
-      // Then add active class to the correct thumbnail
-      if (visibleThumbnails[activeIndex]) {
-        visibleThumbnails[activeIndex].classList.add('active');
-      }
-    }
-
-    // Function to get visible slide index from original index
-    function getVisibleSlideIndex(originalIndex) {
-      const allSlides = document.querySelectorAll('.pdpMobileSwiper .swiper-slide');
-      let visibleIndex = -1;
-      
-      for (let i = 0; i < allSlides.length; i++) {
-        if (!allSlides[i].classList.contains('variant-hidden')) {
-          visibleIndex++;
-          if (i === originalIndex) {
-            return visibleIndex;
-          }
-        }
-      }
-      return 0;
-    }
-
-    // Function to get original index from visible index
-    function getOriginalIndex(visibleIndex) {
-      const allSlides = document.querySelectorAll('.pdpMobileSwiper .swiper-slide');
-      let currentVisibleIndex = -1;
-      
-      for (let i = 0; i < allSlides.length; i++) {
-        if (!allSlides[i].classList.contains('variant-hidden')) {
-          currentVisibleIndex++;
-          if (currentVisibleIndex === visibleIndex) {
-            return i;
-          }
-        }
-      }
-      return 0;
-    }
-
-    // Auto-scroll thumbnail slider to show active thumbnail
-    function scrollThumbnailToActive(activeIndex) {
-      if (!pdpThumbnailSwiper) return;
-      
-      // Get the original index from the visible index
-      const originalIndex = getOriginalIndex(activeIndex);
-      const thumbnails = document.querySelectorAll('.mobile_pdp_thumbnail_slide');
-      const activeThumbnail = thumbnails[originalIndex];
-      
-      if (!activeThumbnail) return;
-      
-      const thumbnailContainer = document.querySelector('.pdpThumbnailSwiper');
-      if (!thumbnailContainer) return;
-      
-      // Get container and thumbnail dimensions
-      const containerRect = thumbnailContainer.getBoundingClientRect();
-      const thumbnailRect = activeThumbnail.getBoundingClientRect();
-      
-      // Calculate if thumbnail is visible in the container
-      const isVisible = (
-        thumbnailRect.left >= containerRect.left && 
-        thumbnailRect.right <= containerRect.right
-      );
-      
-      // If thumbnail is not fully visible, scroll to it
-      if (!isVisible) {
-        // Calculate the offset needed to center the thumbnail
-        const containerCenter = containerRect.width / 2;
-        const thumbnailCenter = thumbnailRect.width / 2;
-        
-        // Get current translate value
-        const currentTransform = pdpThumbnailSwiper.translate;
-        
-        // Calculate new position to center the active thumbnail
-        const thumbnailOffsetLeft = activeThumbnail.offsetLeft;
-        const newTranslate = -(thumbnailOffsetLeft - containerCenter + thumbnailCenter);
-        
-        // Ensure we don't scroll beyond boundaries
-        const maxTranslate = 0;
-        const minTranslate = -(pdpThumbnailSwiper.wrapperEl.offsetWidth - containerRect.width);
-        
-        const finalTranslate = Math.max(minTranslate, Math.min(maxTranslate, newTranslate));
-        
-        // Animate to the new position
-        pdpThumbnailSwiper.setTranslate(finalTranslate);
-        pdpThumbnailSwiper.updateProgress();
-      }
-    }
-
-    // Add click handlers to thumbnails
-    function setupThumbnailClickHandlers() {
-      const thumbnails = document.querySelectorAll('.mobile_pdp_thumbnail_slide');
-      thumbnails.forEach((thumbnail, index) => {
-        thumbnail.addEventListener('click', (e) => {
-          e.preventDefault();
-          
-          // Find the corresponding main slide index among visible slides
-          const originalIndex = parseInt(thumbnail.dataset.mediaIndex);
-          const visibleIndex = getVisibleSlideIndex(originalIndex);
-          
-          if (pdpMobileProductSwiper) {
-            pdpMobileProductSwiper.slideTo(visibleIndex, 300);
-          }
-          updateThumbnailActive(visibleIndex);
-        });
-      });
-    }
-
-    // Function to handle variant change
-    function handleVariantChange(variantId) {
-      currentVariantId = variantId;
-      filterMediaByVariant(variantId);
-    }
-
-    // Listen for variant change events
-    document.addEventListener('variantChanged', (e) => {
-      const variantId = e.detail.variantId;
-      handleVariantChange(variantId);
+    // Initialize main slider
+    const productSlider = new Swiper('.product-image-slider', {
+      spaceBetween: 10,
+      slidesPerView: 1,
+      loop: false,
+      navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+      },
+      thumbs: {
+        swiper: thumbsSlider,
+      },
     });
-
-    // Setup variant change listeners for different types of variant selectors
-    function setupVariantChangeListeners() {
-      // Standard Shopify variant select dropdown
-      const variantSelects = document.querySelectorAll('select[name="id"]');
-      variantSelects.forEach(select => {
-        select.addEventListener('change', (e) => {
-          const variantId = e.target.value;
-          handleVariantChange(variantId);
-        });
-      });
-
-      // Radio button variant selectors
-      const variantRadios = document.querySelectorAll('input[type="radio"][name*="option"]');
-      variantRadios.forEach(radio => {
-        radio.addEventListener('change', () => {
-          // In Shopify, the variant is usually selected via the id select
-          // So we'll look for the selected variant in the dropdown
-          const variantSelect = document.querySelector('select[name="id"]');
-          if (variantSelect && variantSelect.value) {
-            handleVariantChange(variantSelect.value);
-          }
-        });
-      });
-
-      // If using a custom variant picker that updates a hidden input
-      const hiddenVariantInputs = document.querySelectorAll('input[name="id"][type="hidden"]');
-      hiddenVariantInputs.forEach(input => {
-        const observer = new MutationObserver(mutations => {
-          mutations.forEach(mutation => {
-            if (mutation.type === 'attributes' && mutation.attributeName === 'value') {
-              handleVariantChange(input.value);
-            }
-          });
-        });
-        observer.observe(input, { attributes: true });
-      });
-    }
-
-    // Initialize everything
-    collectMediaData();
-    setupThumbnailClickHandlers();
-    setupVariantChangeListeners();
-    
-    // Set initial active thumbnail
-    updateThumbnailActive(0);
-
-    // Handle window resize to update swipers
-    let resizeTimeout;
-    window.addEventListener('resize', () => {
-      clearTimeout(resizeTimeout);
-      resizeTimeout = setTimeout(() => {
-        if (pdpMobileProductSwiper) {
-          pdpMobileProductSwiper.update();
-        }
-        if (pdpThumbnailSwiper) {
-          pdpThumbnailSwiper.update();
-        }
-      }, 250);
-    });
-
-    // Expose function globally for manual variant changes
-    window.updateProductGalleryVariant = handleVariantChange;
-
-    // If we have a variant selected on page load, filter the gallery
-    const initialVariantSelect = document.querySelector('select[name="id"]');
-    if (initialVariantSelect && initialVariantSelect.value) {
-      handleVariantChange(initialVariantSelect.value);
-    }
-
-  } catch (error) {
-    console.error('Product slider initialization error:', error);
-  }
-});
-
-// Alternative global function for triggering variant change
-function changeProductVariant(variantId) {
-  if (window.updateProductGalleryVariant) {
-    window.updateProductGalleryVariant(variantId);
-  }
-}
+  });
 </script>
