@@ -7,14 +7,6 @@
       gap: 20px;
     }
 
-    .product-image-slider-container {
-      position: relative;
-      max-width: 100%;
-      display: flex;
-      flex-direction: row-reverse; /* Thumbnails on left */
-      gap: 20px;
-    }
-
     .product-image-slider {
       width: 80%;
       height: 500px; /* Set fixed height for desktop */
@@ -75,6 +67,11 @@
       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
 
+    /* Hide slides that don't match current variant */
+    .swiper-slide.slide-hidden {
+      display: none !important;
+    }
+
     @media (max-width: 767px) {
       .product-image-slider-container {
         flex-direction: column;
@@ -96,16 +93,18 @@
       }
     }
 </style>
+
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
 
 <div class="product-image-slider-container parent-custom-container">
   <div class="custom-pdp-set">
-    <div id="smartwishlist" data-product="{{ product.id }}" data-variant="{{ product.variants.first.id }}"></div>
+    <div id="smartwishlist" data-product="{{ product.id }}" data-variant="{{ product.selected_or_first_available_variant.id }}"></div>
   </div>
+  
   <div class="swiper product-image-slider">
-    <div class="swiper-wrapper">
+    <div class="swiper-wrapper" id="main-slider-wrapper">
       {% for media in product.media %}
-        <div class="swiper-slide">
+        <div class="swiper-slide" data-media-id="{{ media.id }}" data-variant-ids="{% for variant_id in media.variant_ids %}{{ variant_id }}{% unless forloop.last %},{% endunless %}{% endfor %}">
           {% case media.media_type %}
             {% when 'image' %}
               <img src="{{ media | img_url: '800x' }}" alt="{{ media.alt }}" loading="lazy" width="800" height="800">
@@ -135,9 +134,12 @@
 
   <!-- Thumbnails -->
   <div class="swiper product-image-thumbs">
-    <div class="swiper-wrapper">
+    <div class="swiper-wrapper" id="thumbs-slider-wrapper">
       {% for media in product.media %}
-        <div class="swiper-slide">
+        <div class="swiper-slide" 
+             data-media-id="{{ media.id }}" 
+             data-variant-ids="{% for variant_id in media.variant_ids %}{{ variant_id }}{% unless forloop.last %},{% endunless %}{% endfor %}"
+             data-color="{% for variant_id in media.variant_ids %}{% assign variant = product.variants | where: 'id', variant_id | first %}{% if variant.option1 contains 'Color' or variant.option1 contains 'color' or variant.option1 contains 'Colour' or variant.option1 contains 'colour' %}{{ variant.option1 | downcase }}{% elsif variant.option2 contains 'Color' or variant.option2 contains 'color' or variant.option2 contains 'Colour' or variant.option2 contains 'colour' %}{{ variant.option2 | downcase }}{% elsif variant.option3 contains 'Color' or variant.option3 contains 'color' or variant.option3 contains 'Colour' or variant.option3 contains 'colour' %}{{ variant.option3 | downcase }}{% endif %}{% unless forloop.last %},{% endunless %}{% endfor %}">
           <div class="img-custom-container">
             <img src="{{ media | img_url: '150x' }}" alt="{{ media.alt }}" loading="lazy" width="150" height="150">
           </div>
@@ -147,42 +149,230 @@
   </div>
 </div>
 
+<!-- Store variant featured media mapping -->
+<script>
+  window.variantFeaturedMedia = {
+    {% for variant in product.variants %}
+      "{{ variant.id }}": {% if variant.featured_media %}"{{ variant.featured_media.id }}"{% else %}null{% endif %}{% unless forloop.last %},{% endunless %}
+    {% endfor %}
+  };
+</script>
+
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script>
   document.addEventListener('DOMContentLoaded', function() {
-    // Initialize thumbnails slider - show all thumbnails vertically
-    const thumbsSlider = new Swiper('.product-image-thumbs', {
-      spaceBetween: 10,
-      slidesPerView: 7,
-      freeMode: true,
-      watchSlidesProgress: true,
-      direction: 'vertical',
-      breakpoints: {
-        320: { // Mobile
-          direction: 'horizontal',
-          slidesPerView: 4,
-          freeMode: false
-        },
-        768: { // Desktop
-          direction: 'vertical',
-          slidesPerView: 7,
-          freeMode: true
+    let productSlider, thumbsSlider;
+    let isInitialized = false;
+    let eventListenersAttached = false;
+    
+    function initializeSliders() {
+      if (isInitialized) return;
+      
+      // Initialize thumbnails slider
+      thumbsSlider = new Swiper('.product-image-thumbs', {
+        spaceBetween: 10,
+        slidesPerView: 7,
+        freeMode: true,
+        watchSlidesProgress: true,
+        direction: 'vertical',
+        breakpoints: {
+          320: {
+            direction: 'horizontal',
+            slidesPerView: 4,
+            freeMode: false
+          },
+          768: {
+            direction: 'vertical',
+            slidesPerView: 7,
+            freeMode: true
+          }
         }
-      }
-    });
+      });
 
-    // Initialize main slider
-    const productSlider = new Swiper('.product-image-slider', {
-      spaceBetween: 10,
-      slidesPerView: 1,
-      loop: false,
-      navigation: {
-        nextEl: '.swiper-button-next',
-        prevEl: '.swiper-button-prev',
-      },
-      thumbs: {
-        swiper: thumbsSlider,
-      },
-    });
+      // Initialize main slider
+      productSlider = new Swiper('.product-image-slider', {
+        spaceBetween: 10,
+        slidesPerView: 1,
+        loop: false,
+        navigation: {
+          nextEl: '.swiper-button-next',
+          prevEl: '.swiper-button-prev',
+        },
+        thumbs: {
+          swiper: thumbsSlider,
+        },
+      });
+      
+      isInitialized = true;
+    }
+
+    function updateSliderForVariant(variantId) {
+      console.log('Updating slider for variant:', variantId);
+      
+      const allMainSlides = document.querySelectorAll('#main-slider-wrapper .swiper-slide');
+      const allThumbSlides = document.querySelectorAll('#thumbs-slider-wrapper .swiper-slide');
+      
+      let hasVariantSpecificMedia = false;
+      let variantFeaturedMediaId = window.variantFeaturedMedia[variantId];
+      let visibleSlideIndex = 0;
+      
+      // First, check if this variant has specific media
+      allMainSlides.forEach(function(slide) {
+        const variantIds = slide.getAttribute('data-variant-ids');
+        if (variantIds && variantIds.includes(variantId)) {
+          hasVariantSpecificMedia = true;
+        }
+      });
+      
+      // Show/hide slides based on variant
+      allMainSlides.forEach(function(slide, index) {
+        const variantIds = slide.getAttribute('data-variant-ids');
+        const mediaId = slide.getAttribute('data-media-id');
+        const thumbSlide = allThumbSlides[index];
+        
+        let shouldShow = false;
+        
+        if (hasVariantSpecificMedia) {
+          // If variant has specific media, show only those
+          shouldShow = variantIds && variantIds.includes(variantId);
+        } else {
+          // If no specific media, show all
+          shouldShow = true;
+        }
+        
+        if (shouldShow) {
+          slide.classList.remove('slide-hidden');
+          if (thumbSlide) thumbSlide.classList.remove('slide-hidden');
+        } else {
+          slide.classList.add('slide-hidden');
+          if (thumbSlide) thumbSlide.classList.add('slide-hidden');
+        }
+      });
+      
+      // Update sliders without destroying them
+      if (productSlider && thumbsSlider) {
+        productSlider.updateSlides();
+        productSlider.updateProgress();
+        productSlider.updateSlidesClasses();
+        
+        thumbsSlider.updateSlides();
+        thumbsSlider.updateProgress();
+        thumbsSlider.updateSlidesClasses();
+        
+        // Find the index of the featured media or first visible slide
+        let targetSlideIndex = 0;
+        let targetThumbIndex = 0;
+        
+        if (variantFeaturedMediaId) {
+          const visibleMainSlides = document.querySelectorAll('#main-slider-wrapper .swiper-slide:not(.slide-hidden)');
+          const visibleThumbSlides = document.querySelectorAll('#thumbs-slider-wrapper .swiper-slide:not(.slide-hidden)');
+          
+          visibleMainSlides.forEach(function(slide, index) {
+            if (slide.getAttribute('data-media-id') === variantFeaturedMediaId) {
+              targetSlideIndex = index;
+            }
+          });
+          
+          visibleThumbSlides.forEach(function(slide, index) {
+            if (slide.getAttribute('data-media-id') === variantFeaturedMediaId) {
+              targetThumbIndex = index;
+            }
+          });
+        }
+        
+        // Go to the target slide in main slider
+        productSlider.slideTo(targetSlideIndex, 300);
+        
+        // Position the selected thumbnail at the top of the scroll area
+        // For vertical thumbnails (desktop)
+        if (window.innerWidth >= 768) {
+          thumbsSlider.slideTo(targetThumbIndex, 300);
+        } else {
+          // For horizontal thumbnails (mobile)
+          thumbsSlider.slideTo(targetThumbIndex, 300);
+        }
+        
+        // Additional scroll positioning to ensure thumbnail is at top
+        setTimeout(function() {
+          const activeThumb = document.querySelector('#thumbs-slider-wrapper .swiper-slide-thumb-active');
+          if (activeThumb) {
+            const thumbsContainer = document.querySelector('.product-image-thumbs');
+            if (thumbsContainer && window.innerWidth >= 768) {
+              // For vertical scroll, scroll to position the active thumb at top
+              const thumbRect = activeThumb.getBoundingClientRect();
+              const containerRect = thumbsContainer.getBoundingClientRect();
+              const scrollOffset = thumbRect.top - containerRect.top;
+              
+              if (thumbsSlider.wrapperEl) {
+                const currentTranslate = thumbsSlider.getTranslate();
+                thumbsSlider.setTranslate(currentTranslate - scrollOffset);
+              }
+            }
+          }
+        }, 350); // Small delay to ensure slide transition completes
+      }
+      
+      // Update wishlist
+      const wishlist = document.getElementById('smartwishlist');
+      if (wishlist) {
+        wishlist.setAttribute('data-variant', variantId);
+      }
+    }
+
+    function attachEventListeners() {
+      if (eventListenersAttached) return;
+      
+      // Method 1: Listen for form changes
+      document.addEventListener('change', function(e) {
+        if (e.target.name === 'id' || e.target.classList.contains('variant-input')) {
+          const variantId = e.target.value;
+          if (variantId) {
+            console.log('Variant changed via form:', variantId);
+            updateSliderForVariant(variantId);
+          }
+        }
+      });
+      
+      // Method 2: Listen for clicks on variant selectors
+      document.addEventListener('click', function(e) {
+        if (e.target.hasAttribute('data-variant-id')) {
+          const variantId = e.target.getAttribute('data-variant-id');
+          if (variantId) {
+            console.log('Variant changed via click:', variantId);
+            updateSliderForVariant(variantId);
+          }
+        }
+      });
+      
+      // Method 3: Custom variant change event
+      document.addEventListener('variant:change', function(event) {
+        if (event.detail && event.detail.variant && event.detail.variant.id) {
+          console.log('Variant changed via custom event:', event.detail.variant.id);
+          updateSliderForVariant(event.detail.variant.id);
+        }
+      });
+      
+      eventListenersAttached = true;
+    }
+
+    // Initialize everything
+    initializeSliders();
+    attachEventListeners();
+    
+    // Handle URL variant parameter
+    if (window.URLSearchParams) {
+      const urlParams = new URLSearchParams(window.location.search);
+      const variantParam = urlParams.get('variant');
+      if (variantParam) {
+        console.log('Variant from URL:', variantParam);
+        updateSliderForVariant(variantParam);
+      }
+    }
+    
+    // Debug: Log all variant selectors found
+    setTimeout(function() {
+      const selectors = document.querySelectorAll('select[name="id"], input[name="id"], .variant-input, [data-variant-id]');
+      console.log('Found variant selectors:', selectors);
+    }, 1000);
   });
 </script>
