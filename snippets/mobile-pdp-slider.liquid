@@ -72,7 +72,84 @@
       display: none !important;
     }
 
+    /* Popup Navigation Controls */
+    .popup-nav-controls {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 30px;
+      background: rgba(0, 0, 0, 0.7);
+      padding: 15px 25px;
+      border-radius: 50px;
+      z-index: 1000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .popup-nav-controls.show {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .popup-nav-btn {
+      width: 45px;
+      height: 45px;
+      background: rgba(255, 255, 255, 0.9);
+      border: none;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    .popup-nav-btn:hover {
+      background: white;
+      transform: scale(1.1);
+    }
+
+    .popup-nav-btn svg {
+      width: 20px;
+      height: 20px;
+      fill: #333;
+    }
+
+    .popup-close-btn {
+      width: 50px;
+      height: 50px;
+      background: rgba(255, 255, 255, 0.9);
+      border: none;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    .popup-close-btn:hover {
+      background: white;
+      transform: scale(1.1);
+    }
+
+    .popup-close-btn svg {
+      width: 24px;
+      height: 24px;
+      fill: #333;
+    }
+
     @media (max-width: 767px) {
+    div#zoomClose > svg {
+    fill: white;
+      }
       .product-image-slider-container {
         flex-direction: column;
       }
@@ -90,6 +167,32 @@
       .product-image-thumbs .swiper-slide {
         width: 25% !important; /* Force 4 thumbnails per row */
         height: 100% !important;
+      }
+
+      .popup-nav-controls {
+        bottom: 15px;
+        gap: 20px;
+        padding: 10px 20px;
+      }
+
+      .popup-nav-btn {
+        width: 40px;
+        height: 40px;
+      }
+
+      .popup-close-btn {
+        width: 45px;
+        height: 45px;
+      }
+
+      .popup-nav-btn svg {
+        width: 18px;
+        height: 18px;
+      }
+
+      .popup-close-btn svg {
+        width: 20px;
+        height: 20px;
       }
     }
 </style>
@@ -130,6 +233,27 @@
     </div>
     <div class="swiper-button-next"></div>
     <div class="swiper-button-prev"></div>
+    
+    <!-- Popup Navigation Controls -->
+    <div class="popup-nav-controls" id="popup-nav-controls">
+      <button class="popup-nav-btn" id="popup-prev-btn" type="button">
+        <svg viewBox="0 0 24 24">
+          <path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z"/>
+        </svg>
+      </button>
+      
+      <button class="popup-close-btn" id="popup-close-btn" type="button">
+        <svg viewBox="0 0 24 24">
+          <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+        </svg>
+      </button>
+      
+      <button class="popup-nav-btn" id="popup-next-btn" type="button">
+        <svg viewBox="0 0 24 24">
+          <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/>
+        </svg>
+      </button>
+    </div>
   </div>
 
   <!-- Thumbnails -->
@@ -164,6 +288,7 @@
     let productSlider, thumbsSlider;
     let isInitialized = false;
     let eventListenersAttached = false;
+    let isPopupMode = false;
     
     function initializeSliders() {
       if (isInitialized) return;
@@ -204,6 +329,61 @@
       });
       
       isInitialized = true;
+      initializePopupControls();
+    }
+
+    function initializePopupControls() {
+      const popupControls = document.getElementById('popup-nav-controls');
+      const popupPrevBtn = document.getElementById('popup-prev-btn');
+      const popupNextBtn = document.getElementById('popup-next-btn');
+      const popupCloseBtn = document.getElementById('popup-close-btn');
+      
+      // Show popup controls on hover or when in popup mode
+      const sliderContainer = document.querySelector('.product-image-slider');
+      
+      sliderContainer.addEventListener('mouseenter', function() {
+        if (isPopupMode) {
+          popupControls.classList.add('show');
+        }
+      });
+      
+      sliderContainer.addEventListener('mouseleave', function() {
+        if (!isPopupMode) {
+          popupControls.classList.remove('show');
+        }
+      });
+      
+      // Navigation button events
+      popupPrevBtn.addEventListener('click', function() {
+        if (productSlider) {
+          productSlider.slidePrev();
+        }
+      });
+      
+      popupNextBtn.addEventListener('click', function() {
+        if (productSlider) {
+          productSlider.slideNext();
+        }
+      });
+      
+      // Close button event (you can customize this based on your popup logic)
+      popupCloseBtn.addEventListener('click', function() {
+        // Add your popup close logic here
+        console.log('Popup close clicked');
+        togglePopupMode(false);
+        // Example: if you have a popup overlay, you can close it here
+        // document.querySelector('.popup-overlay').style.display = 'none';
+      });
+      
+      // Example function to toggle popup mode (you can call this when opening/closing popup)
+      window.togglePopupMode = function(enable) {
+        isPopupMode = enable;
+        if (enable) {
+          popupControls.classList.add('show');
+        } else {
+          popupControls.classList.remove('show');
+        }
+      };
     }
 
     function updateSliderForVariant(variantId) {
