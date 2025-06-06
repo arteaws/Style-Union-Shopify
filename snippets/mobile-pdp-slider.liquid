@@ -146,6 +146,16 @@
       fill: #333;
     }
 
+    /* Custom liquid div control */
+    .custom-liquid {
+      display: block;
+      transition: opacity 0.3s ease;
+    }
+
+    .custom-liquid.popup-hidden {
+      display: none !important;
+    }
+
     @media (max-width: 767px) {
     div#zoomClose > svg {
     fill: white;
@@ -366,22 +376,37 @@
         }
       });
       
-      // Close button event (you can customize this based on your popup logic)
+      // Close button event
       popupCloseBtn.addEventListener('click', function() {
-        // Add your popup close logic here
         console.log('Popup close clicked');
         togglePopupMode(false);
-        // Example: if you have a popup overlay, you can close it here
-        // document.querySelector('.popup-overlay').style.display = 'none';
+        // Show the custom-liquid div when closing popup
+        toggleCustomLiquidVisibility(true);
       });
       
-      // Example function to toggle popup mode (you can call this when opening/closing popup)
+      // Function to toggle custom-liquid div visibility
+      window.toggleCustomLiquidVisibility = function(show) {
+        const customLiquidDivs = document.querySelectorAll('.custom-liquid');
+        customLiquidDivs.forEach(function(div) {
+          if (show) {
+            div.classList.remove('popup-hidden');
+          } else {
+            div.classList.add('popup-hidden');
+          }
+        });
+      };
+      
+      // Function to toggle popup mode
       window.togglePopupMode = function(enable) {
         isPopupMode = enable;
         if (enable) {
           popupControls.classList.add('show');
+          // Hide custom-liquid div when popup opens
+          toggleCustomLiquidVisibility(false);
         } else {
           popupControls.classList.remove('show');
+          // Show custom-liquid div when popup closes
+          toggleCustomLiquidVisibility(true);
         }
       };
     }
