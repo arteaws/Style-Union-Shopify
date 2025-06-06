@@ -146,10 +146,11 @@
 
   {% capture color_swatch %}
   <div class="swatches__swatch--color swatch-element color swatches__shape--{{ color_swatch_shape }} {% unless available %}soldout{% endunless %} js-swatch-element parent-dflex">
+    <div class="color_dflex">
     {{ radio_button }}
     {% if variant_image_url %}
       <!-- Show variant image if available -->
-    <div class="color_dflex">
+
       <label class="swatches__form--label"
         for="{{ section.id }}-{{ option.name }}-{{ forloop.index0 }}"
         tabindex="0"
@@ -157,8 +158,9 @@
         {{ sold_out_image }}
       </label>
       <span class="swatches__color-name">{{ value | truncatewords:1 }}</span>
-    </div>
+
     {% else %}
+
       <!-- Fallback to color swatch if no variant image -->
       <label class="swatches__form--label"
         for="{{ section.id }}-{{ option.name }}-{{ forloop.index0 }}"
@@ -171,6 +173,7 @@
       </label>
       <span class="swatches__color-name">{{ value }}</span>
     {% endif %}
+      </div>
   </div>
 {% endcapture %}
 
