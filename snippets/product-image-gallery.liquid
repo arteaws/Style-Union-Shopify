@@ -626,37 +626,53 @@
 
 
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
+
+document.addEventListener('DOMContentLoaded', function() {
   if (window.innerWidth <= 768) {
     const thumbnails = document.querySelectorAll('.product-single__thumbnails-item');
     const thumbnailContainer = document.querySelector('.thumb-slider-slides');
     
     thumbnails.forEach(thumb => {
       thumb.addEventListener('click', function(e) {
-        // Prevent the default behavior that causes the scroll reset
-        e.preventDefault();
+        // Store the current scroll position before the click
+        const currentScrollLeft = thumbnailContainer.scrollLeft;
         
-        // Get the clicked thumbnail's position
-        const thumbRect = thumb.getBoundingClientRect();
-        const containerRect = thumbnailContainer.getBoundingClientRect();
-        const scrollLeft = thumbnailContainer.scrollLeft;
-        const relativeLeft = thumbRect.left - containerRect.left;
+        // Allow the default click behavior to execute
+        // (this will trigger the main image change)
         
-        // Calculate the center position
-        const centerScroll = scrollLeft + relativeLeft - (containerRect.width / 2) + (thumbRect.width / 2);
+        // Use setTimeout to restore scroll position after other handlers execute
+        setTimeout(() => {
+          thumbnailContainer.scrollLeft = currentScrollLeft;
+        }, 10);
         
-        // Smooth scroll to center the clicked thumbnail
-        thumbnailContainer.scrollTo({
-          left: centerScroll,
-          behavior: 'smooth'
-        });
-        
-        // You may need to trigger your existing thumbnail click handler here
-        // For example, if you're using a slider like Flickity:
-        // const index = Array.from(thumbnails).indexOf(thumb);
-        // yourMainSlider.select(index);
+        // Optional: Add active state styling
+        thumbnails.forEach(t => t.classList.remove('is-nav-selected'));
+        thumb.classList.add('is-nav-selected');
       });
     });
+    
+    // Alternative approach: Override the carousel's scroll behavior
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.type === 'attributes' && mutation.attributeName === 'style') {
+          const target = mutation.target;
+          if (target.classList.contains('thumb-slider-slides')) {
+            // Prevent automatic transform/scroll changes
+            const transform = target.style.transform;
+            if (transform && transform.includes('translateX')) {
+              target.style.transform = 'none';
+            }
+          }
+        }
+      });
+    });
+    
+    if (thumbnailContainer) {
+      observer.observe(thumbnailContainer, { 
+        attributes: true, 
+        attributeFilter: ['style'] 
+      });
+    }
   }
 });
 </script>
