@@ -332,6 +332,19 @@
   .js-thumb-item {
     display: block !important;
   }
+  .thumb-slider-slides {
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+  }
+  
+  .product-single__thumbnails-item {
+    scroll-snap-align: start;
+  }
+
+  /* Optional: Style for active thumbnail */
+  .product-single__thumbnails-item.is-nav-selected {
+    border: 2px solid #000; /* Visual indicator for selected thumbnail */
+  }
 }
 
   
