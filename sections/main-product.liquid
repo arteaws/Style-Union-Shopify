@@ -58,7 +58,17 @@ left: 10px !important;
 
 
 {% endcomment %}
-
+<style>
+.pdp-wishlist-set-cs {
+    position: absolute;
+    z-index: 99;
+    right: 20px;
+    top: 14px;
+}
+ .product-media-container .product__section-images .zoom_btn {
+    top: 40px;
+    left: 10px;
+</style>
 {%- liquid
 
   assign current_variant = product.selected_or_first_available_variant
