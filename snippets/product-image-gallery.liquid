@@ -612,3 +612,38 @@
 
 
 
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+  if (window.innerWidth <= 768) {
+    const thumbnails = document.querySelectorAll('.product-single__thumbnails-item');
+    const thumbnailContainer = document.querySelector('.thumb-slider-slides');
+    
+    thumbnails.forEach(thumb => {
+      thumb.addEventListener('click', function(e) {
+        // Prevent the default behavior that causes the scroll reset
+        e.preventDefault();
+        
+        // Get the clicked thumbnail's position
+        const thumbRect = thumb.getBoundingClientRect();
+        const containerRect = thumbnailContainer.getBoundingClientRect();
+        const scrollLeft = thumbnailContainer.scrollLeft;
+        const relativeLeft = thumbRect.left - containerRect.left;
+        
+        // Calculate the center position
+        const centerScroll = scrollLeft + relativeLeft - (containerRect.width / 2) + (thumbRect.width / 2);
+        
+        // Smooth scroll to center the clicked thumbnail
+        thumbnailContainer.scrollTo({
+          left: centerScroll,
+          behavior: 'smooth'
+        });
+        
+        // You may need to trigger your existing thumbnail click handler here
+        // For example, if you're using a slider like Flickity:
+        // const index = Array.from(thumbnails).indexOf(thumb);
+        // yourMainSlider.select(index);
+      });
+    });
+  }
+});
+</script>
