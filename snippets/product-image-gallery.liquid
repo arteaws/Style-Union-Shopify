@@ -465,9 +465,6 @@
   <div id="slider" class=" {{ grid_width }} thumbs_{{ thumbnail_position }} auto {{ no_slider }}">
     <div class="slides product-image-container carousel carousel-main js-carousel-main" data-product-id="{{ product.id }}">
       {% for media in product.media %}
-               <div class="pdp-wishlist-set-cs">
-    <div id="smartwishlist" data-product="{{ product.id }}" data-variant="{{ product.variants.first.id }}"></div>
-     </div>
         <div class="{{ media.media_type }}-slide carousel-cell js-main-carousel-cell" data-image-id="{{ media.id }}" data-slide-index="{{ forloop.index0 }}" tabindex="-1">
           <div class="product-media-container product-media--{{ media.id }} {{ media.media_type }}"
           data-product-single-media-wrapper
