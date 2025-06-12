@@ -307,6 +307,8 @@
     transform: none !important;
     padding: 5px 0;
     -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
   }
   
   /* Individual thumbnail items */
@@ -317,6 +319,7 @@
     margin-right: 10px !important;
     margin-bottom: 0 !important;
     display: block !important;
+    scroll-snap-align: start;
   }
   
   /* Main slider adjustments */
@@ -335,33 +338,33 @@
   .js-thumb-item {
     display: block !important;
   }
-  .thumb-slider-slides {
-    scroll-snap-type: x mandatory;
-    scroll-behavior: smooth;
+
+  /* Active thumbnail style */
+  .product-single__thumbnails-item.is-nav-selected {
+    border: 1px solid #000 !important;
+    order: -1 !important; /* This will move it to the start */
   }
   
-  .product-single__thumbnails-item {
-    scroll-snap-align: start;
-  }
-
-  /* Optional: Style for active thumbnail */
-  .product-single__thumbnails-item.is-nav-selected {
-    border: 2px solid #000; /* Visual indicator for selected thumbnail */
-  }
   .product__section-images.product__section-image--left.carousel-container.js-product-gallery.span-6.md-span-12.sm-span-12.auto.desktop-gallerr-cs.aos-init.aos-animate {
     margin-left: 0 !important;
     margin-right: 0 !important;
     float: 0 !important;
-}
+  }
 }
 
+/* Desktop styles for active thumbnail */
+@media (min-width: 769px) {
+  .product-single__thumbnails-item.is-nav-selected {
+    border: 1px solid #000 !important;
+  }
   
+  /* For left/right thumbnails - move active to top */
+  .thumb-slider.vertical-carousel .product-single__thumbnails-item.is-nav-selected {
+    order: -1 !important;
+    margin-bottom: 10px !important;
+  }
+}
 </style>
-
-
-
-
-
 
 
 {% capture thumbnails %}
@@ -631,56 +634,100 @@
   {{ thumbnails }}
 {%- endif -%}
 
-
-
 <script>
-
 document.addEventListener('DOMContentLoaded', function() {
-  if (window.innerWidth <= 768) {
-    const thumbnails = document.querySelectorAll('.product-single__thumbnails-item');
+  // Function to reorder thumbnails with active first while maintaining sequence
+  function reorderThumbnails(activeIndex) {
     const thumbnailContainer = document.querySelector('.thumb-slider-slides');
+    if (!thumbnailContainer) return;
     
-    thumbnails.forEach(thumb => {
-      thumb.addEventListener('click', function(e) {
-        // Store the current scroll position before the click
-        const currentScrollLeft = thumbnailContainer.scrollLeft;
-        
-        // Allow the default click behavior to execute
-        // (this will trigger the main image change)
-        
-        // Use setTimeout to restore scroll position after other handlers execute
-        setTimeout(() => {
-          thumbnailContainer.scrollLeft = currentScrollLeft;
-        }, 10);
-        
-        // Optional: Add active state styling
-        thumbnails.forEach(t => t.classList.remove('is-nav-selected'));
-        thumb.classList.add('is-nav-selected');
-      });
+    const thumbnails = Array.from(thumbnailContainer.children);
+    if (thumbnails.length <= 1) return;
+    
+    // Create new order: active thumbnail first, then the ones after it, then the ones before
+    const reorderedThumbnails = [
+      thumbnails[activeIndex],
+      ...thumbnails.slice(activeIndex + 1),
+      ...thumbnails.slice(0, activeIndex)
+    ];
+    
+    // Remove all thumbnails
+    while (thumbnailContainer.firstChild) {
+      thumbnailContainer.removeChild(thumbnailContainer.firstChild);
+    }
+    
+    // Add them back in new order
+    reorderedThumbnails.forEach(thumb => {
+      thumbnailContainer.appendChild(thumb);
     });
     
-    // Alternative approach: Override the carousel's scroll behavior
-    const observer = new MutationObserver((mutations) => {
-      mutations.forEach((mutation) => {
-        if (mutation.type === 'attributes' && mutation.attributeName === 'style') {
-          const target = mutation.target;
-          if (target.classList.contains('thumb-slider-slides')) {
-            // Prevent automatic transform/scroll changes
-            const transform = target.style.transform;
-            if (transform && transform.includes('translateX')) {
-              target.style.transform = 'none';
-            }
-          }
-        }
-      });
-    });
-    
-    if (thumbnailContainer) {
-      observer.observe(thumbnailContainer, { 
-        attributes: true, 
-        attributeFilter: ['style'] 
-      });
+    // Scroll to show the active thumbnail (for mobile)
+    if (window.innerWidth <= 768) {
+      thumbnailContainer.scrollLeft = 0;
     }
   }
+
+  // Function to handle variant changes
+  function handleVariantChange() {
+    const activeThumb = document.querySelector('.product-single__thumbnails-item.is-nav-selected');
+    if (!activeThumb) return;
+    
+    // Remove all selected classes first
+    document.querySelectorAll('.product-single__thumbnails-item').forEach(thumb => {
+      thumb.classList.remove('is-nav-selected');
+    });
+    
+    // Add selected class to active thumb
+    activeThumb.classList.add('is-nav-selected');
+    
+    // Get the index of the active thumbnail in the original order
+    const thumbnails = Array.from(document.querySelectorAll('.product-single__thumbnails-item'));
+    const activeIndex = thumbnails.findIndex(thumb => thumb === activeThumb);
+    
+    // Reorder thumbnails
+    reorderThumbnails(activeIndex);
+  }
+  
+  // Listen for variant changes
+  const variantSelects = document.querySelectorAll('input[name="id"], select[name="id"]');
+  variantSelects.forEach(select => {
+    select.addEventListener('change', function() {
+      // Wait a moment for the gallery to update
+      setTimeout(handleVariantChange, 100);
+    });
+  });
+  
+  // Also handle thumbnail clicks
+  document.querySelectorAll('.product-single__thumbnails-item').forEach(thumb => {
+    thumb.addEventListener('click', function() {
+      // Remove all selected classes first
+      document.querySelectorAll('.product-single__thumbnails-item').forEach(t => {
+        t.classList.remove('is-nav-selected');
+      });
+      
+      // Add selected class to clicked thumb
+      thumb.classList.add('is-nav-selected');
+      
+      // Get the index of the clicked thumbnail in the original order
+      const thumbnails = Array.from(document.querySelectorAll('.product-single__thumbnails-item'));
+      const activeIndex = thumbnails.findIndex(t => t === thumb);
+      
+      // Reorder thumbnails
+      reorderThumbnails(activeIndex);
+    });
+  });
+  
+  // Handle initial load
+  handleVariantChange();
+  
+  // Handle window resize
+  window.addEventListener('resize', function() {
+    const activeThumb = document.querySelector('.product-single__thumbnails-item.is-nav-selected');
+    if (activeThumb) {
+      const thumbnails = Array.from(document.querySelectorAll('.product-single__thumbnails-item'));
+      const activeIndex = thumbnails.findIndex(thumb => thumb === activeThumb);
+      reorderThumbnails(activeIndex);
+    }
+  });
 });
 </script>
