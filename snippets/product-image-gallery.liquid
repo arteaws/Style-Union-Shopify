@@ -273,7 +273,45 @@
 <style>
 .product__section-details div#smartwishlist {
     display: none;
-}  
+}
+
+/* Fade effect styles */
+.thumbnail-fade-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.8);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    z-index: 10;
+}
+
+.thumbnail-fade-overlay.active {
+    opacity: 1;
+}
+
+.thumb-slider-slides {
+    transition: transform 0.5s ease;
+}
+
+.product-single__thumbnails-item {
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+/* Black border only for manually clicked thumbnails */
+.product-single__thumbnails-item.manually-selected {
+    border: 2px solid #000 !important;
+}
+
+/* Remove default active styling for variant changes */
+.product-single__thumbnails-item.is-nav-selected {
+    border: none !important;
+}
+
 @media (max-width: 768px) {
   .product__gallery--container {
     display: flex;
@@ -338,12 +376,6 @@
   .js-thumb-item {
     display: block !important;
   }
-
-  /* Active thumbnail style */
-  .product-single__thumbnails-item.is-nav-selected {
-    border: 1px solid #000 !important;
-    order: -1 !important; /* This will move it to the start */
-  }
   
   .product__section-images.product__section-image--left.carousel-container.js-product-gallery.span-6.md-span-12.sm-span-12.auto.desktop-gallerr-cs.aos-init.aos-animate {
     margin-left: 0 !important;
@@ -352,20 +384,15 @@
   }
 }
 
-/* Desktop styles for active thumbnail */
+/* Desktop styles */
 @media (min-width: 769px) {
-  .product-single__thumbnails-item.is-nav-selected {
-    border: 1px solid #000 !important;
-  }
-  
-  /* For left/right thumbnails - move active to top */
+  /* For left/right thumbnails - move active to top with fade */
   .thumb-slider.vertical-carousel .product-single__thumbnails-item.is-nav-selected {
     order: -1 !important;
     margin-bottom: 10px !important;
   }
 }
 </style>
-
 
 {% capture thumbnails %}
   {% if product.media.size > 1 %}
@@ -390,6 +417,7 @@
           {% for media in product.media %}
             <div class="{{ media.media_type }}-thumbnail product-single__thumbnails-item carousel-cell {% if forloop.first %}is-nav-selected{% endif %} js-thumb-item thumb__{% if forloop.first %}first{% elsif forloop.last %}last{% endif %}" data-slide-index="{{ forloop.index0 }}"
             data-image-id="{{ media.id }}" tabindex="0">
+              <div class="thumbnail-fade-overlay"></div>
               <div class="product-single__thumbnail product-single__thumbnail--{{ section.id }} js-thumb-item-img-wrap" data-thumbnail-id="product-template-{{ media.id }}">
                 {% liquid
 
@@ -636,56 +664,98 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-  // Function to reorder thumbnails with active first while maintaining sequence
-  function reorderThumbnails(activeIndex) {
+  let isVariantChange = false;
+  
+  // Function to add fade overlay to thumbnails
+  function addFadeEffect() {
+    const thumbnails = document.querySelectorAll('.product-single__thumbnails-item');
+    thumbnails.forEach(thumb => {
+      const overlay = thumb.querySelector('.thumbnail-fade-overlay');
+      if (overlay) {
+        overlay.classList.add('active');
+      }
+    });
+  }
+
+  // Function to remove fade overlay
+  function removeFadeEffect() {
+    const thumbnails = document.querySelectorAll('.product-single__thumbnails-item');
+    thumbnails.forEach(thumb => {
+      const overlay = thumb.querySelector('.thumbnail-fade-overlay');
+      if (overlay) {
+        overlay.classList.remove('active');
+      }
+    });
+  }
+
+  // Function to reorder thumbnails with fade effect (only for variant changes)
+  function reorderThumbnailsWithFade(activeIndex) {
     const thumbnailContainer = document.querySelector('.thumb-slider-slides');
     if (!thumbnailContainer) return;
     
     const thumbnails = Array.from(thumbnailContainer.children);
     if (thumbnails.length <= 1) return;
     
-    // Create new order: active thumbnail first, then the ones after it, then the ones before
-    const reorderedThumbnails = [
-      thumbnails[activeIndex],
-      ...thumbnails.slice(activeIndex + 1),
-      ...thumbnails.slice(0, activeIndex)
-    ];
+    // Add fade effect
+    addFadeEffect();
     
-    // Remove all thumbnails
-    while (thumbnailContainer.firstChild) {
-      thumbnailContainer.removeChild(thumbnailContainer.firstChild);
-    }
-    
-    // Add them back in new order
-    reorderedThumbnails.forEach(thumb => {
-      thumbnailContainer.appendChild(thumb);
-    });
-    
-    // Scroll to show the active thumbnail (for mobile)
-    if (window.innerWidth <= 768) {
-      thumbnailContainer.scrollLeft = 0;
-    }
+    // Wait for fade effect, then reorder
+    setTimeout(() => {
+      // Create new order: active thumbnail first, then the ones after it, then the ones before
+      const reorderedThumbnails = [
+        thumbnails[activeIndex],
+        ...thumbnails.slice(activeIndex + 1),
+        ...thumbnails.slice(0, activeIndex)
+      ];
+      
+      // Remove all thumbnails
+      while (thumbnailContainer.firstChild) {
+        thumbnailContainer.removeChild(thumbnailContainer.firstChild);
+      }
+      
+      // Add them back in new order
+      reorderedThumbnails.forEach(thumb => {
+        thumbnailContainer.appendChild(thumb);
+      });
+      
+      // Scroll to start position (show active thumbnail first)
+      if (window.innerWidth <= 768) {
+        thumbnailContainer.scrollLeft = 0;
+      }
+      
+      // Remove fade effect after reordering
+      setTimeout(() => {
+        removeFadeEffect();
+      }, 150);
+      
+    }, 300); // Wait for fade effect duration
   }
 
   // Function to handle variant changes
   function handleVariantChange() {
+    isVariantChange = true;
+    
     const activeThumb = document.querySelector('.product-single__thumbnails-item.is-nav-selected');
     if (!activeThumb) return;
     
-    // Remove all selected classes first
+    // Remove all selection classes
     document.querySelectorAll('.product-single__thumbnails-item').forEach(thumb => {
-      thumb.classList.remove('is-nav-selected');
+      thumb.classList.remove('is-nav-selected', 'manually-selected');
     });
     
-    // Add selected class to active thumb
+    // Add selected class to active thumb (no border for variant changes)
     activeThumb.classList.add('is-nav-selected');
     
-    // Get the index of the active thumbnail in the original order
+    // Get the index of the active thumbnail in the current order
     const thumbnails = Array.from(document.querySelectorAll('.product-single__thumbnails-item'));
     const activeIndex = thumbnails.findIndex(thumb => thumb === activeThumb);
     
-    // Reorder thumbnails
-    reorderThumbnails(activeIndex);
+    // Reorder thumbnails with fade effect
+    reorderThumbnailsWithFade(activeIndex);
+    
+    setTimeout(() => {
+      isVariantChange = false;
+    }, 1000);
   }
   
   // Listen for variant changes
@@ -697,37 +767,38 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
   
-  // Also handle thumbnail clicks
-  document.querySelectorAll('.product-single__thumbnails-item').forEach(thumb => {
-    thumb.addEventListener('click', function() {
-      // Remove all selected classes first
-      document.querySelectorAll('.product-single__thumbnails-item').forEach(t => {
-        t.classList.remove('is-nav-selected');
-      });
-      
-      // Add selected class to clicked thumb
-      thumb.classList.add('is-nav-selected');
-      
-      // Get the index of the clicked thumbnail in the original order
-      const thumbnails = Array.from(document.querySelectorAll('.product-single__thumbnails-item'));
-      const activeIndex = thumbnails.findIndex(t => t === thumb);
-      
-      // Reorder thumbnails
-      reorderThumbnails(activeIndex);
+  // Handle thumbnail clicks - NO reordering, NO scrolling, only border for manual clicks
+  document.addEventListener('click', function(e) {
+    const clickedThumb = e.target.closest('.product-single__thumbnails-item');
+    if (!clickedThumb || isVariantChange) return;
+    
+    // Remove all selection classes
+    document.querySelectorAll('.product-single__thumbnails-item').forEach(thumb => {
+      thumb.classList.remove('is-nav-selected', 'manually-selected');
     });
+    
+    // Add manual selection class (this will show the black border)
+    clickedThumb.classList.add('manually-selected');
+    
+    // Don't scroll or reorder - keep current position
+    // Prevent any default thumbnail click behavior that might cause scrolling
+    e.preventDefault();
   });
   
   // Handle initial load
-  handleVariantChange();
-  
-  // Handle window resize
-  window.addEventListener('resize', function() {
-    const activeThumb = document.querySelector('.product-single__thumbnails-item.is-nav-selected');
-    if (activeThumb) {
-      const thumbnails = Array.from(document.querySelectorAll('.product-single__thumbnails-item'));
-      const activeIndex = thumbnails.findIndex(thumb => thumb === activeThumb);
-      reorderThumbnails(activeIndex);
+  const initialActiveThumb = document.querySelector('.product-single__thumbnails-item.is-nav-selected');
+  if (initialActiveThumb) {
+    const thumbnails = Array.from(document.querySelectorAll('.product-single__thumbnails-item'));
+    const activeIndex = thumbnails.findIndex(thumb => thumb === initialActiveThumb);
+    // Only reorder on initial load if it's not the first thumbnail
+    if (activeIndex > 0) {
+      reorderThumbnailsWithFade(activeIndex);
     }
+  }
+  
+  // Prevent automatic scrolling on window resize
+  window.addEventListener('resize', function() {
+    // Maintain current scroll position - don't auto-scroll
   });
 });
-</script>
+  </script>
