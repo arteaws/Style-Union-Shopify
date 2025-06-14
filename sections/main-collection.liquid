@@ -1,4 +1,5 @@
 {%- liquid
+
   assign collection_link = ''
   if collection.handle
     assign collection_link = '/collections/' | append: collection.handle
@@ -55,6 +56,7 @@
   endif
 
   assign aos_mod = section.settings.grid | plus: 0
+
 -%}
 
 <section class="collection__page row grid__wrapper section-{{ section.id }} global__section"
@@ -62,240 +64,133 @@ data-section-id="{{ section.id }}"
 data-section-type="collection-section"
 data-collection-link="{{ collection_link }}">
 
-  <div id="CollectionProductGrid" class="span-12 auto grid__wrapper grid__wrapper-nest gr0">
+  {% paginate collection.products by product_limit %}
+    <div id="CollectionProductGrid" class="span-12 auto grid__wrapper grid__wrapper-nest gr0">
 
-    {%- if section.settings.description_position == 'top' -%}
-      <div class="collection__page-description {{ desc_width }} sm-span-12 auto">
-        <div class="rte">
-          {{ collection.description | remove: "[banner]" }}
-        </div>
-      </div>
-      {%- if collection_image -%}
-        <div class="collection__page-image span-3 sm-span-12 auto">
-          {%
-            render 'basic-responsive-image',
-            type: collection.image,
-            width: 350,
-            loading: 'eager',
-            fetchpriority: 'high'
-          %}
-        </div>
-      {%- endif -%}
-    {%- endif -%}
-
-    {%- if horizontal_filtering_enabled or horizontal_sort -%}
-      <form id="CollectionFiltersForm" class="span-12 md-span-12 auto" data-collection-filters>
-        {% render 'collection-horizontal-toolbar',
-          collection: collection,
-          horizontal_filtering_enabled: horizontal_filtering_enabled,
-          horizontal_sort: horizontal_sort %}
-      </form>
-    {%- endif -%}
-
-    {% if show_sidebar %}
-      <form id="CollectionSidebarFiltersForm" class="span-3 md-span-12 sm-span-12 auto" data-collection-sidebar-filters>
-        {% render 'collection-sidebar',
-          collection: collection, block: block %}
-      </form>
-    {% endif %}
-
-    {% if show_sidebar %}<div class="collection__page--productContent span-9 md-span-12 sm-span-12 auto">{% endif %}
-
-      {% if filter_count > 0 %}
-        <div class="filtering__results span-12 auto js-filters-reset">
-          <ul class="current_tags">
-            {%- for filter in collection.filters -%}
-              {%- for value in filter.active_values -%}
-                <li class="current_filters--filter current_tag">
-                  <a class="js-current-filter" href="{{ value.url_to_remove }}">
-                    {{ value.label | escape }}
-                  </a>
-                </li>
-              {%- endfor -%}
-              {% if filter.type == "price_range" %}
-                {%- if filter.min_value.value != nil or filter.max_value.value != nil -%}
-                  <li class="current_filters--filter current_tag">
-                    <a class="js-current-filter" href="{{ filter.url_to_remove }}">
-                      {%- if filter.min_value.value -%}{{ filter.min_value.value | money }}{%- else -%}{{ 0 | money }}{%- endif -%}-{%- if filter.max_value.value -%}{{ filter.max_value.value | money }}{%- else -%}{{ filter.range_max | money }}{%- endif -%}
-                    </a>
-                  </li>
-                {%- endif -%}
-              {% endif %}
-            {%- endfor -%}
-            <li><a class="current_filters--clear js-current-filter clear-tags" href="{{ collection.url }}">{{ 'collections.filters.clear_all' | t }}</a></li>
-          </ul>
-        </div>
-      {% endif %}
-
-      {%- if collection.products.size >= 1 -%}
-        <div id="main-collection-product-grid"
-        class="product-loop collection__page-products grid-align-{{ settings.details_align }} span-12 auto"
-        data-aos="fade"
-        data-id="{{ section.id }}">
-          {% for product in collection.products %}
-            {% unless product.tags contains 'gift-with-purchase' %}
-              <div id="product-listing-{{ product.id }}" 
-                class="item product-index collection__page-product js-product-listing"
-                data-alpha="{{ product.title }}" 
-                data-product-id="{{ product.id }}" 
-                data-price="{{ product.price }}"
-                data-aos="fade"
-                data-aos-delay="{{ forloop.index | minus: 1 | modulo: aos_mod | times: 100 }}">
-                {% liquid
-                  assign loading = 'lazy'
-                  assign fetch_priority = 'auto'
-                  if forloop.index <= grid
-                    assign loading = 'eager'
-                    assign fetch_priority = 'high'
-                  endif
-                %}
-                {% render 'product-listing',
-                  product: product,
-                  collection: collection,
-                  loading: loading,
-                  fetchpriority: fetch_priority %}
-              </div>
-            {% endunless %}
-          {% endfor %}
-
-          <style>
-            .collection__page-products {
-              grid-template-columns: repeat({{ grid }}, 1fr);
-            }
-          </style>
-        </div>
-        
-        {% comment %} Infinite scroll loader {% endcomment %}
-        <div id="infinite-scroll-loader" class="span-12 auto" style="display: none; text-align: center; padding: 20px 0;">
-          <div class="loading-spinner" style="opacity: 0; transition: opacity 0.3s ease;">
-            {{ 'collections.pagination.loading' | t }}
+      {%- if section.settings.description_position == 'top' -%}
+        <div class="collection__page-description {{ desc_width }} sm-span-12 auto">
+          <div class="rte">
+            {{ collection.description | remove: "[banner]" }}
           </div>
         </div>
-        
-        {% comment %} No more products message {% endcomment %}
-        <div id="no-more-products" class="span-12 auto" style="display: none; text-align: center; padding: 20px 0;">
-          {{ 'collections.pagination.no_more_products' | t }}
-        </div>
-        
-      {%- else -%}
-        <div id="main-collection-product-grid"
-        class="collection collection--empty span-12 auto"
-        data-id="{{ section.id }}">
-          <span class="rte">{{ 'collections.filters.use_fewer_filters_html' | t: link: collection.url, class: "underline" }}</span>
+        {%- if collection_image -%}
+          <div class="collection__page-image span-3 sm-span-12 auto">
+            {%
+              render 'basic-responsive-image',
+              type: collection.image,
+              width: 350,
+              loading: 'eager',
+              fetchpriority: 'high'
+            %}
+          </div>
+        {%- endif -%}
+      {%- endif -%}
+
+      {%- if horizontal_filtering_enabled or horizontal_sort -%}
+        <form id="CollectionFiltersForm" class="span-12 md-span-12 auto" data-collection-filters>
+          {% render 'collection-horizontal-toolbar',
+            collection: collection,
+            horizontal_filtering_enabled: horizontal_filtering_enabled,
+            horizontal_sort: horizontal_sort %}
+        </form>
+      {%- endif -%}
+
+      {% if show_sidebar %}
+        <form id="CollectionSidebarFiltersForm" class="span-3 md-span-12 sm-span-12 auto" data-collection-sidebar-filters>
+          {% render 'collection-sidebar',
+            collection: collection, block: block %}
+        </form>
+      {% endif %}
+
+      {% if show_sidebar %}<div class="collection__page--productContent span-9 md-span-12 sm-span-12 auto">{% endif %}
+
+        {% if filter_count > 0 %}
+          <div class="filtering__results span-12 auto js-filters-reset">
+            <ul class="current_tags">
+              {%- for filter in collection.filters -%}
+                {%- for value in filter.active_values -%}
+                  <li class="current_filters--filter current_tag">
+                    <a class="js-current-filter" href="{{ value.url_to_remove }}">
+                      {{ value.label | escape }}
+                    </a>
+                  </li>
+                {%- endfor -%}
+                {% if filter.type == "price_range" %}
+                  {%- if filter.min_value.value != nil or filter.max_value.value != nil -%}
+                    <li class="current_filters--filter current_tag">
+                      <a class="js-current-filter" href="{{ filter.url_to_remove }}">
+                        {%- if filter.min_value.value -%}{{ filter.min_value.value | money }}{%- else -%}{{ 0 | money }}{%- endif -%}-{%- if filter.max_value.value -%}{{ filter.max_value.value | money }}{%- else -%}{{ filter.range_max | money }}{%- endif -%}
+                      </a>
+                    </li>
+                  {%- endif -%}
+                {% endif %}
+              {%- endfor -%}
+              <li><a class="current_filters--clear js-current-filter clear-tags" href="{{ collection.url }}">{{ 'collections.filters.clear_all' | t }}</a></li>
+            </ul>
+          </div>
+        {% endif %}
+
+        {%- if collection.products.size >= 1 -%}
+          <div id="main-collection-product-grid"
+          class="product-loop collection__page-products grid-align-{{ settings.details_align }} span-12 auto"
+          data-aos="fade"
+          data-id="{{ section.id }}">
+            {% for product in collection.products %}
+              {% unless product.tags contains 'gift-with-purchase' %}
+                <div id="product-listing-{{ product.id }}" 
+                  class="item product-index collection__page-product js-product-listing"
+                  data-alpha="{{ product.title }}" 
+                  data-product-id="{{ product.id }}" 
+                  data-price="{{ product.price }}"
+                  data-aos="fade"
+                  data-aos-delay="{{ forloop.index | minus: 1 | modulo: aos_mod | times: 100 }}">
+                  {% liquid
+                    assign loading = 'lazy'
+                    assign fetch_priority = 'auto'
+                    if forloop.index <= grid
+                      assign loading = 'eager'
+                      assign fetch_priority = 'high'
+                    endif
+                  %}
+                  {% render 'product-listing',
+                    product: product,
+                    collection: collection,
+                    loading: loading,
+                    fetchpriority: fetch_priority %}
+                </div>
+              {% endunless %}
+            {% endfor %}
+
+            <style>
+              .collection__page-products {
+                grid-template-columns: repeat({{ grid }}, 1fr);
+              }
+            </style>
+          </div>
+        {%- else -%}
+          <div id="main-collection-product-grid"
+          class="collection collection--empty span-12 auto"
+          data-id="{{ section.id }}">
+            <span class="rte">{{ 'collections.filters.use_fewer_filters_html' | t: link: collection.url, class: "underline" }}</span>
+          </div>
+        {%- endif -%}
+
+      {% if show_sidebar %}</div>{% endif %}
+
+      {%- if section.settings.description_position == 'bottom' -%}
+        <div class="collection__page-description span-12 auto">
+          <div class="rte">
+            {{ collection.description | remove: "[banner]" }}
+          </div>
         </div>
       {%- endif -%}
 
-    {% if show_sidebar %}</div>{% endif %}
-
-    {%- if section.settings.description_position == 'bottom' -%}
-      <div class="collection__page-description span-12 auto">
-        <div class="rte">
-          {{ collection.description | remove: "[banner]" }}
-        </div>
-      </div>
-    {%- endif -%}
-  </div>
+      {% unless collection.products_count <= product_limit %}
+        {% render 'pagination', paginate: paginate %}
+      {% endunless %}
+    </div>
+  {% endpaginate %}
 </section>
-
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-  // Initialize variables for infinite scroll
-  let isLoading = false;
-  let hasMoreProducts = true;
-  let currentPage = 1;
-  const productGrid = document.getElementById('main-collection-product-grid');
-  const loader = document.getElementById('infinite-scroll-loader');
-  const loadingSpinner = loader.querySelector('.loading-spinner');
-  const noMoreProducts = document.getElementById('no-more-products');
-  
-  // Check if we're on a collection page with products
-  if (productGrid && productGrid.querySelector('.collection__page-product')) {
-    // Set up the intersection observer for infinite scroll
-    const observer = new IntersectionObserver(function(entries) {
-      if (entries[0].isIntersecting && !isLoading && hasMoreProducts) {
-        loadMoreProducts();
-      }
-    }, { threshold: 0.1 });
-    
-    // Observe the loader element
-    observer.observe(loader);
-    
-    // Function to load more products
-    function loadMoreProducts() {
-      isLoading = true;
-      hasMoreProducts = true;
-      
-      // Show loader with fade effect
-      loader.style.display = 'block';
-      setTimeout(() => {
-        loadingSpinner.style.opacity = '1';
-      }, 10);
-      
-      currentPage++;
-      const url = new URL(window.location.href);
-      url.searchParams.set('page', currentPage);
-      
-      fetch(url)
-        .then(response => response.text())
-        .then(text => {
-          const parser = new DOMParser();
-          const html = parser.parseFromString(text, 'text/html');
-          const newProducts = html.getElementById('main-collection-product-grid');
-          
-          if (newProducts) {
-            const productElements = newProducts.querySelectorAll('.collection__page-product');
-            
-            if (productElements.length > 0) {
-              // Add new products with fade-in effect
-              productElements.forEach((product, index) => {
-                product.style.opacity = '0';
-                productGrid.appendChild(product);
-                
-                // Animate each product with a slight delay
-                setTimeout(() => {
-                  product.style.transition = 'opacity 0.5s ease';
-                  product.style.opacity = '1';
-                }, index * 100);
-              });
-            } else {
-              // No more products to load
-              hasMoreProducts = false;
-              noMoreProducts.style.display = 'block';
-            }
-          } else {
-            // No more products to load
-            hasMoreProducts = false;
-            noMoreProducts.style.display = 'block';
-          }
-        })
-        .catch(error => {
-          console.error('Error loading more products:', error);
-          hasMoreProducts = false;
-          noMoreProducts.style.display = 'block';
-        })
-        .finally(() => {
-          isLoading = false;
-          // Hide loader with fade effect
-          loadingSpinner.style.opacity = '0';
-          setTimeout(() => {
-            loader.style.display = 'none';
-          }, 300);
-        });
-    }
-  }
-});
-</script>
-
-<style>
-  /* Add some smooth transitions for the infinite scroll */
-  #infinite-scroll-loader {
-    transition: all 0.3s ease;
-  }
-  
-  .collection__page-product {
-    transition: opacity 0.3s ease;
-  }
-</style>
 
 {% schema %}
 {
