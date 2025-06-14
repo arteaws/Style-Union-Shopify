@@ -498,24 +498,24 @@
 
   -%}
   <div id="slider" class=" {{ grid_width }} thumbs_{{ thumbnail_position }} auto {{ no_slider }}">
-  <div class="custom-badges">
-   {% if product.metafields.custom.custom_badges %}
-  {% assign badge_value = product.metafields.custom.custom_badges | downcase | strip %}
-  
-  {% case badge_value %}
-    {% when 'bestsellers' %}
-      <span class="product-badge">Most loved</span>
-    {% when 'new in 2' %}
-      <span class="product-badge">New In</span>
-    {% when 'last few' %}
-      <span class="product-badge">Few Left</span>
-    {% when 'must have' %}
-      <span class="product-badge">Must Have</span>
-    {% when 'selling fast' %}
-      <span class="product-badge">Selling Fast</span>
-  {% endcase %}
-{% endif %}
-    </div>
+<div class="custom-badges">
+  {% if product.metafields.custom.custom_badges %}
+    {% assign badge_value = product.metafields.custom.custom_badges | downcase | strip | replace: " ", "" %}
+    
+    {% case badge_value %}
+      {% when 'bestsellers' %}
+        <span class="product-badge">Most loved</span>
+      {% when 'newin2' %}
+        <span class="product-badge">New In</span>
+      {% when 'lastfew' %}
+        <span class="product-badge">Few Left</span>
+      {% when 'musthave' %}
+        <span class="product-badge">Must Have</span>
+      {% when 'sellingfast' %}
+        <span class="product-badge">Selling Fast</span>
+    {% endcase %}
+  {% endif %}
+</div>
     <div class="slides product-image-container carousel carousel-main js-carousel-main" data-product-id="{{ product.id }}">
       {% for media in product.media %}
         <div class="{{ media.media_type }}-slide carousel-cell js-main-carousel-cell" data-image-id="{{ media.id }}" data-slide-index="{{ forloop.index0 }}" tabindex="-1">
