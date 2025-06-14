@@ -544,11 +544,6 @@
           "greeting_message": ""
         }
       },
-      "7278732907249339192": {
-        "type": "shopify://apps/rimix-product-badges/blocks/rimix-helper/46f9dcab-fec8-4959-8563-b2334479cd94",
-        "disabled": false,
-        "settings": {}
-      },
       "14418474333536001498": {
         "type": "shopify://apps/cooee/blocks/app-embed-main/2f17a8e7-57ed-4fda-b07d-26521d722e6f",
         "disabled": false,
@@ -572,6 +567,11 @@
       "5134484470793087125": {
         "type": "shopify://apps/vitals/blocks/app-embed/aeb48102-2a5a-4f39-bdbd-d8d49f4e20b8",
         "disabled": false,
+        "settings": {}
+      },
+      "7278732907249339192": {
+        "type": "shopify://apps/rimix-product-badges/blocks/rimix-helper/46f9dcab-fec8-4959-8563-b2334479cd94",
+        "disabled": true,
         "settings": {}
       }
     }
