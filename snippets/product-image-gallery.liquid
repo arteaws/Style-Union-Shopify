@@ -500,7 +500,7 @@
   <div id="slider" class=" {{ grid_width }} thumbs_{{ thumbnail_position }} auto {{ no_slider }}">
   <div class="custom-badges">
    {% if product.metafields.custom.custom_badges %}
-  {% assign badge_value = product.metafields.custom.custom_badges | downcase %}
+  {% assign badge_value = product.metafields.custom.custom_badges | downcase | strip %}
   
   {% case badge_value %}
     {% when 'bestsellers' %}
