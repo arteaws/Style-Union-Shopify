@@ -499,7 +499,22 @@
   -%}
   <div id="slider" class=" {{ grid_width }} thumbs_{{ thumbnail_position }} auto {{ no_slider }}">
   <div class="custom-badges">
-      Most Loved
+   {% if product.metafields.custom.custom_badges %}
+  {% assign badge_value = product.metafields.custom.custom_badges | downcase %}
+  
+  {% case badge_value %}
+    {% when 'bestsellers' %}
+      <span class="product-badge">Most loved</span>
+    {% when 'new in 2' %}
+      <span class="product-badge">New In</span>
+    {% when 'last few' %}
+      <span class="product-badge">Few Left</span>
+    {% when 'must have' %}
+      <span class="product-badge">Must Have</span>
+    {% when 'selling fast' %}
+      <span class="product-badge">Selling Fast</span>
+  {% endcase %}
+{% endif %}
     </div>
     <div class="slides product-image-container carousel carousel-main js-carousel-main" data-product-id="{{ product.id }}">
       {% for media in product.media %}
