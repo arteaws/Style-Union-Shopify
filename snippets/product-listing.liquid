@@ -41,12 +41,42 @@ div#custom-smart-wishlist {
     right: 12px;
     top: 6px;
 }
-  
+.custom-badges-collection-card {
+    color: #151414;
+    width: fit-content;
+    position: absolute;
+    z-index: 9;
+    top: 6px;
+    left: 6px;
+    background: #fff;
+    padding: 0px 10px;
+    font-size: 8px;
+    font-weight: 900;
+    text-transform: uppercase;
+} 
 </style>
 
 
 
 <div class="prod-container">
+  <div class="custom-badges-collection-card">
+  {% if product.metafields.custom.custom_badges %}
+    {% assign badge_value = product.metafields.custom.custom_badges | downcase | strip | replace: " ", "" %}
+    
+    {% case badge_value %}
+      {% when 'bestsellers' %}
+        <span class="product-badge">Most loved</span>
+      {% when 'newin2' %}
+        <span class="product-badge">New In</span>
+      {% when 'lastfew' %}
+        <span class="product-badge">Few Left</span>
+      {% when 'musthave' %}
+        <span class="product-badge">Must Have</span>
+      {% when 'sellingfast' %}
+        <span class="product-badge">Selling Fast</span>
+    {% endcase %}
+  {% endif %}
+</div>
   {% if product.available %}
    {% for col in product.collections %}
      {% if col.handle == 'new' %}
