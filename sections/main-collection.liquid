@@ -1,7 +1,4 @@
 
-{{ 'ajaxinate-min.min.js' | asset_url | script_tag }}
-
-
 {%- liquid
 
   assign collection_link = ''
@@ -195,12 +192,7 @@ data-collection-link="{{ collection_link }}">
     </div>
   {% endpaginate %}
 </section>
-<script>
-const endlessCollection = new Ajaxinate({
-container: '#CollectionProductGrid',
-pagination: '.infinite_next',
-});
-</script>
+
 {% schema %}
 {
   "name": "Collection page",
