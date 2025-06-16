@@ -500,6 +500,10 @@
   <div id="slider" class=" {{ grid_width }} thumbs_{{ thumbnail_position }} auto {{ no_slider }}">
 <div class="custom-badges">
   {% assign collection_handles = product.collections | map: 'handle' | join: ',' %}
+  {% assign product_created_at = product.created_at | date: '%s' %}
+  {% assign now = 'now' | date: '%s' %}
+  {% assign thirty_days_in_seconds = 30 | times: 24 | times: 60 | times: 60 %}
+  {% assign time_difference = now | minus: product_created_at %}
   
   {% if collection_handles contains 'bestseller-new' %}
     <span class="product-badge">Most loved</span>
@@ -509,7 +513,7 @@
     <span class="product-badge">Few Left</span>
   {% elsif collection_handles contains 'store-bestseller' %}
     <span class="product-badge">Selling Fast</span>
-  {% elsif collection_handles contains 'must-haves-essentials' %}
+  {% elsif (collection_handles contains 'must-haves-essentials' or collection_handles contains 'New In') and time_difference < thirty_days_in_seconds %}
     <span class="product-badge">New In</span>
   {% endif %}
 </div>
