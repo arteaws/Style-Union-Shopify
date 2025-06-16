@@ -6585,10 +6585,6 @@ theme.CollectionFilters = {
     WAU.ProductGridVideo.init();
 	},
 	renderSectionFromFetch: function renderSectionFromFetch(url, section) {
-const endlessCollection = new Ajaxinate({
-container: '#product-grid',
-pagination: '.infinite_next',
-});
       
 		fetch(url)
 			.then(response => response.text())
@@ -6600,6 +6596,10 @@ pagination: '.infinite_next',
 			});
 	},
 	renderSectionFromCache: function renderSectionFromCache(filterDataUrl, section) {
+      const endlessCollection = new Ajaxinate({
+container: '#product-grid',
+pagination: '.infinite_next',
+});
 		const html = this.filterData.find(filterDataUrl).html;
 		theme.CollectionFilters.renderProductGrid(html);
 		theme.CollectionFilters.renderFilters();
