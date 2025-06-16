@@ -499,17 +499,17 @@
   -%}
   <div id="slider" class=" {{ grid_width }} thumbs_{{ thumbnail_position }} auto {{ no_slider }}">
 <div class="custom-badges">
-  {% assign product_tags = product.tags | join: ',' | downcase %}
+  {% assign collection_handles = product.collections | map: 'handle' | join: ',' %}
   
-  {% if product_tags contains 'bestseller new' %}
+  {% if collection_handles contains 'bestseller-new' %}
     <span class="product-badge">Most loved</span>
-  {% elsif product_tags contains 'must haves' %}
+  {% elsif collection_handles contains 'must-haves' %}
     <span class="product-badge">Must Have</span>
-  {% elsif product_tags contains 'last few' %}
+  {% elsif collection_handles contains 'last-few' %}
     <span class="product-badge">Few Left</span>
-  {% elsif product_tags contains 'store bestseller' %}
+  {% elsif collection_handles contains 'store-bestseller' %}
     <span class="product-badge">Selling Fast</span>
-  {% elsif product_tags contains 'must haves - essentials' %}
+  {% elsif collection_handles contains 'must-haves-essentials' %}
     <span class="product-badge">New In</span>
   {% endif %}
 </div>
