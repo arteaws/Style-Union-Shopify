@@ -513,7 +513,9 @@
     <span class="product-badge">Few Left</span>
   {% elsif collection_handles contains 'store-bestseller' %}
     <span class="product-badge">Selling Fast</span>
-  {% elsif (collection_handles contains 'must-haves-essentials' or collection_handles contains 'New In') and time_difference < thirty_days_in_seconds %}
+  {% elsif collection_handles contains 'must-haves-essentials' and time_difference < thirty_days_in_seconds %}
+    <span class="product-badge">New In</span>
+  {% elsif collection_handles contains 'New In' and time_difference < thirty_days_in_seconds %}
     <span class="product-badge">New In</span>
   {% endif %}
 </div>
