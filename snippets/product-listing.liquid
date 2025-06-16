@@ -73,7 +73,7 @@ div#custom-smart-wishlist {
     <span class="product-badge">Few Left</span>
   {% elsif collection_handles contains 'store-bestseller' %}
     <span class="product-badge">Selling Fast</span>
-  {% elsif collection_handles contains 'must-haves-essentials' %}
+  {% elsif collection_handles contains 'must-haves-essentials' or  collection_handles contains 'New In' %}
     <span class="product-badge">New In</span>
   {% endif %}
 </div>
