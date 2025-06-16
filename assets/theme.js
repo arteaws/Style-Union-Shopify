@@ -6596,10 +6596,6 @@ theme.CollectionFilters = {
 			});
 	},
 	renderSectionFromCache: function renderSectionFromCache(filterDataUrl, section) {
-      const endlessCollection = new Ajaxinate({
-container: '#CollectionProductGrid',
-pagination: '.infinite_next',
-});
 		const html = this.filterData.find(filterDataUrl).html;
 		theme.CollectionFilters.renderProductGrid(html);
 		theme.CollectionFilters.renderFilters();
