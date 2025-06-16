@@ -503,21 +503,12 @@
   
   {% if product_tags contains 'bestseller new' %}
     <span class="product-badge">Most loved</span>
-  {% elsif product_tags contains 'store bestseller' or product_tags contains 'bestseller new' %}
-    {% comment %} This condition is already covered by the first one, so we'll adjust the logic {% endcomment %}
-    {% unless product_tags contains 'bestseller new' %}
-      {% if product_tags contains 'store bestseller' %}
-        <span class="product-badge">Selling Fast</span>
-      {% endif %}
-    {% endunless %}
   {% elsif product_tags contains 'must haves' %}
     <span class="product-badge">Must Have</span>
-  {% elsif product_tags contains 'last few' or product_tags contains 'store bestseller' %}
-    {% if product_tags contains 'last few' %}
-      <span class="product-badge">Few Left</span>
-    {% elsif product_tags contains 'store bestseller' %}
-      <span class="product-badge">Selling Fast</span>
-    {% endif %}
+  {% elsif product_tags contains 'last few' %}
+    <span class="product-badge">Few Left</span>
+  {% elsif product_tags contains 'store bestseller' %}
+    <span class="product-badge">Selling Fast</span>
   {% elsif product_tags contains 'must haves - essentials' %}
     <span class="product-badge">New In</span>
   {% endif %}
