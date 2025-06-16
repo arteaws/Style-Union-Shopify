@@ -63,21 +63,20 @@ div#custom-smart-wishlist {
 
 <div class="prod-container">
   <div class="custom-badges-collection-card">
-  {% if product.metafields.custom.custom_badges %}
-    {% assign badge_value = product.metafields.custom.custom_badges | downcase | strip | replace: " ", "" %}
-    
-    {% case badge_value %}
-      {% when 'bestsellers' %}
-        <span class="product-badge">Most loved</span>
-      {% when 'newin2' %}
-        <span class="product-badge">New In</span>
-      {% when 'lastfew' %}
-        <span class="product-badge">Few Left</span>
-      {% when 'musthave' %}
-        <span class="product-badge">Must Have</span>
-      {% when 'sellingfast' %}
-        <span class="product-badge">Selling Fast</span>
-    {% endcase %}
+  {% assign collection_names = product.collections | map: 'title' | join: ',' %}
+  
+  {% if collection_names contains 'Bestseller New' %}
+    <span class="product-badge">Most loved</span>
+  {% elsif collection_names contains 'Must Haves' %}
+    <span class="product-badge">Must Have</span>
+  {% elsif collection_names contains 'Last Few' %}
+    <span class="product-badge">Few Left</span>
+  {% elsif collection_names contains 'Store Bestseller' %}
+    <span class="product-badge">Selling Fast</span>
+  {% elsif collection_names contains 'Must Haves Essentials' %}
+    <span class="product-badge">New In</span>
+  {% elsif collection_names contains 'New In' %}
+    <span class="product-badge">New In</span>
   {% endif %}
 </div>
   {% if product.available %}
