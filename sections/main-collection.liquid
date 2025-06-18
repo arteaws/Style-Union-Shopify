@@ -190,13 +190,11 @@ data-collection-link="{{ collection_link }}">
         {% render 'pagination', paginate: paginate %}
       {% endunless %}
     </div>
-  <div class="flex-in-end">
   {% render 'infinite-scroll',
       next_page: paginate.next.url,
       page_size: paginate.pages,
       end_text: "You reached the end..."
     %}
-  </div>
   {% endpaginate %}
 </section>
 
