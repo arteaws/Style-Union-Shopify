@@ -79,7 +79,7 @@
           "type": "text_popup",
           "settings": {
             "popup_trigger": "Popup label",
-            "text": "<p>Add additional text content</p>",
+            "text": "",
             "show_inline": false
           }
         },
