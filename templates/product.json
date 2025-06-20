@@ -15,8 +15,8 @@
         "text_popup_yzhKgY": {
           "type": "text_popup",
           "settings": {
-            "popup_trigger": "Popup label",
-            "text": "<p>gfdgsdfgsdgsd</p>",
+            "popup_trigger": "Custom-Size-Chart",
+            "text": "",
             "show_inline": true
           }
         },
