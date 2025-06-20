@@ -994,32 +994,37 @@
         }
       ]
     },
+{
+  "name": "Text popup",
+  "type": "text_popup",
+  "settings": [
     {
-      "name":"Text popup",
-      "type": "text_popup",
-      "settings":
-      [
-        {
-          "label": "Popup modal label",
-          "id": "popup_trigger",
-          "type": "text",
-          "default": "Popup label"
-        },
-        {
-          "label": "Text",
-          "id": "text",
-          "type": "richtext",
-          "default": "<p>Add additional text content</p>"
-        },
-        {
-          "label": "Show popup label inline",
-          "id": "show_inline",
-          "type": "checkbox",
-          "default": false,
-          "info": "Show inline with other popup links where selected"
-        }
-      ]
+      "label": "Popup modal label",
+      "id": "popup_trigger",
+      "type": "text",
+      "default": "Popup label"
     },
+    {
+      "label": "Text",
+      "id": "text",
+      "type": "richtext",
+      "default": "<p>Add additional text content</p>"
+    },
+    {
+      "label": "Page content",
+      "id": "page_content",
+      "type": "page",
+      "info": "Select a page to use its content in the popup"
+    },
+    {
+      "label": "Show popup label inline",
+      "id": "show_inline",
+      "type": "checkbox",
+      "default": false,
+      "info": "Show inline with other popup links where selected"
+    }
+  ]
+},
     {
       "type": "text_with_icon",
       "name": "Text with icon",
