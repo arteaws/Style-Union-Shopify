@@ -404,6 +404,34 @@
     </div>
   {% endif %}
     {% render 'size-chart-custom' %}
+                  <script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Get all tab elements
+    const tabs = document.querySelectorAll('.tab');
+    
+    // Add click event listener to each tab
+    tabs.forEach(tab => {
+      tab.addEventListener('click', function() {
+        // Get the tab ID from data attribute
+        const tabId = this.getAttribute('data-tab');
+        
+        // Hide all tab contents
+        document.querySelectorAll('.tab-content').forEach(el => {
+          el.classList.remove('active');
+        });
+        
+        // Remove active class from all tabs
+        tabs.forEach(el => {
+          el.classList.remove('active');
+        });
+        
+        // Show the selected tab content and mark tab as active
+        document.getElementById(tabId).classList.add('active');
+        this.classList.add('active');
+      });
+    });
+  });
+</script>
           {%- when 'text_with_icon' -%}
             {% liquid
               assign icon = block.settings.icon
