@@ -605,17 +605,6 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script> -->
 
-<script>
-  function showTab(tabId) {
-    // Hide all tab contents
-    document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-    // Remove active class from all tabs
-    document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
-    // Show the selected tab and highlight it
-    document.getElementById(tabId).classList.add('active');
-    event.target.classList.add('active');
-  }
-</script>
 
 
 {% schema %}
