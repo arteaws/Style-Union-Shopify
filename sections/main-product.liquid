@@ -1,63 +1,3 @@
-{% comment %}
-
-
-<style>
-.product__nav {
-    float: right;
-    display: none;
-}
-
-
-.product__section-images .zoom_btn {
-left: 10px !important;
- right:unset; 
-}
-/* .mobile-pdp-slider{
-  display:none;
-} */
-.indiviual-merged-div{
-  position:relative;
-}
- .custom-pdp-set {
-    position: absolute;
-    z-index: 999;
-    right: 18px;
-    top: 10px;
-} 
-
-  
-@media only screen and (max-width: 600px) {
-.product__section.product-template.global__section{
-  margin-top:0 !important;
-}
-.product__section-container {
-    padding-top: 0 !important;
-}  
-.custom-pdp-set {
-    right: 14px !important;
-    top: 25px !important;
-}
-.mobile-pdp-slider{
-  display:block;
-}
-.desktop-gallerr-cs{
-    display:none;
-}
-/* .custom-pdp-set {
-        width: fit-content;
-        position: absolute;
-        z-index: 99;
-        left: unset !important;
-        right: 16px !important;
-        top: 28px !important;
-    } */
-  
-}
-  
-</style>
-
-
-{% endcomment %}
 <style>
 .pdp-wishlist-set-cs {
     position: absolute;
@@ -448,11 +388,12 @@ left: 10px !important;
             {% endif %}
 
           {%- when 'text_popup' -%}
-            {% if block.settings.text != blank and block.settings.popup_trigger != blank %}
+            {% if block.settings.popup_trigger != blank %}
               <div class="product__section--popup product__section--element{% if block.settings.show_inline %} inline{% endif %}" {{ block.shopify_attributes }}>
                 <button class="product__contact-trigger button-as-link js-modal-open js-contact-trigger" type="button" name="button" data-wau-modal-target="popup-content--{{ block.id }}" >{{ block.settings.popup_trigger }}</button>
                 <div data-wau-modal-content="popup-content--{{ block.id }}" style="display: none">
                   {{ block.settings.text }}
+                  {{ block.settings.page_cs-content }}
                 </div>
               </div>
             {% endif %}
