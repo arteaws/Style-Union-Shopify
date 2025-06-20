@@ -17,6 +17,7 @@
           "settings": {
             "popup_trigger": "Custom-Size-Chart",
             "text": "<p><br/>Custom-Size-Chart<br/><br/></p>",
+            "page_content": "womens-leggings",
             "show_inline": true
           }
         },
