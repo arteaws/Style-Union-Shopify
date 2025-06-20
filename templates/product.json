@@ -16,7 +16,7 @@
           "type": "text_popup",
           "settings": {
             "popup_trigger": "Custom-Size-Chart",
-            "text": "",
+            "text": "<p><br/>Custom-Size-Chart<br/><br/></p>",
             "show_inline": true
           }
         },
