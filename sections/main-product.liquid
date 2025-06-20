@@ -49,7 +49,6 @@
   endif
 
 -%}
-    {% render 'size-chart-custom' %}
 <section id="product-{{ product.id }}"
   class="product__section product-template global__section row grid__wrapper"
   data-product-id="{{ product.id }}"
@@ -404,7 +403,7 @@
       </div>
     </div>
   {% endif %}
-
+    {% render 'size-chart-custom' %}
           {%- when 'text_with_icon' -%}
             {% liquid
               assign icon = block.settings.icon
