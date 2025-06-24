@@ -729,19 +729,26 @@
     const popup = document.querySelector('.cs-custom-size__popup');
     const overlay = document.querySelector('.cs-custom-size__overlay');
     const closeBtn = document.querySelector('.cs-custom-size__close');
+    const body = document.body;
     
     if (trigger && popup) {
+      // Open popup and disable body scroll
       trigger.addEventListener('click', function(e) {
         e.preventDefault();
         popup.style.display = 'flex';
+        body.classList.add('cs-overflow');
       });
       
+      // Close popup and enable body scroll (click on overlay)
       overlay.addEventListener('click', function() {
         popup.style.display = 'none';
+        body.classList.remove('cs-overflow');
       });
       
+      // Close popup and enable body scroll (click on close button)
       closeBtn.addEventListener('click', function() {
         popup.style.display = 'none';
+        body.classList.remove('cs-overflow');
       });
     }
   });
