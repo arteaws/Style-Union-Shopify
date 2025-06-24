@@ -1,0 +1,85 @@
+<style>
+    .tab-container {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    .tab {
+      padding: 2px 20px;
+      cursor: pointer;
+      color: #999;
+      line-height: 1;
+    }
+   .tab:nth-child(1){
+     border-right:1px solid black;
+   }
+    .tab.active {
+      color:#107be9;
+    }
+    .tab-content {
+      display: none;
+    }
+    .tab-content.active {
+      display: block;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: center;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 8px;
+    }
+    thead {
+      background-color: #f5f5f5;
+    }
+  </style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+ <script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Get all tab elements
+    const tabs = document.querySelectorAll('.tab');
+    
+    // Add click event listener to each tab
+    tabs.forEach(tab => {
+      tab.addEventListener('click', function() {
+        // Get the tab ID from data attribute
+        const tabId = this.getAttribute('data-tab');
+        
+        // Hide all tab contents
+        document.querySelectorAll('.tab-content').forEach(el => {
+          el.classList.remove('active');
+        });
+        
+        // Remove active class from all tabs
+        tabs.forEach(el => {
+          el.classList.remove('active');
+        });
+        
+        // Show the selected tab content and mark tab as active
+        document.getElementById(tabId).classList.add('active');
+        this.classList.add('active');
+      });
+    });
+  });
+</script>
