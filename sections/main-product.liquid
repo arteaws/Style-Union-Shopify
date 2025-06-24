@@ -71,6 +71,15 @@
   }
 </style>
 
+<div class="cs-custom-size">
+  <div class="cs-custom-size__popup">
+    <div class="cs-custom-size__overlay"></div>
+    <div class="cs-custom-size__content">
+      <span>Size Chart is available</span>
+      <button class="cs-custom-size__close">&times;</button>
+    </div>
+  </div>
+</div>
 
 
 {%- liquid
@@ -404,7 +413,7 @@
               style="visibility:hidden; min-height: 120px;" data-store-availability-container {{ block.shopify_attributes }}>
             </div>
               {% endunless %}
-
+<a href="#" class="cs-custom-size__trigger">Size Chart</a>
           {%- when 'product_quantity' -%}
             {% unless product.tags contains 'gift-with-purchase' %}
             {% unless product.gift_card? %}
