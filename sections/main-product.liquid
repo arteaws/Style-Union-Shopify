@@ -1,55 +1,4 @@
 <style>
-  .cs-custom-size__trigger {
-    cursor: pointer;
-    text-decoration: underline;
-    color: inherit;
-  }
-  
-  .cs-custom-size__popup {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 9999;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  .cs-custom-size__overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-  }
-  
-  .cs-custom-size__content {
-    position: relative;
-    background: white;
-    padding: 20px;
-    border-radius: 4px;
-    max-width: 300px;
-    text-align: center;
-    z-index: 1;
-  }
-  
-  .cs-custom-size__close {
-    position: absolute;
-    top: 5px;
-    right: 5px;
-    background: none;
-    border: none;
-    font-size: 18px;
-    cursor: pointer;
-  }
-</style>
-
-
-
-<style>
 .pdp-wishlist-set-cs {
     position: absolute;
     z-index: 99;
@@ -396,18 +345,6 @@
               <input class="formVariantId" name="" type="hidden" value="{{ product.selected_or_first_available_variant.id }}">
             {% endform %}
 
-            <div class="cs-custom-size">
-              <a href="#" class="cs-custom-size__trigger">Size Chart</a>
-              
-              <div class="cs-custom-size__popup">
-                <div class="cs-custom-size__overlay"></div>
-                <div class="cs-custom-size__content">
-                  <span>Size Chart is available</span>
-                  <button class="cs-custom-size__close">&times;</button>
-                </div>
-              </div>
-            </div>
-           
           {%- when 'product_availability' -%}
             {% unless product.tags contains 'gift-with-purchase' %}
             <div class="product-single__store-availability-container product__section--element"
@@ -728,29 +665,7 @@
 <script type="application/json" id="ModelJson-{{ section.id }}">
   {{ product.media | where: 'media_type', 'model' | json }}
 </script>
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    const trigger = document.querySelector('.cs-custom-size__trigger');
-    const popup = document.querySelector('.cs-custom-size__popup');
-    const overlay = document.querySelector('.cs-custom-size__overlay');
-    const closeBtn = document.querySelector('.cs-custom-size__close');
-    
-    if (trigger && popup) {
-      trigger.addEventListener('click', function(e) {
-        e.preventDefault();
-        popup.style.display = 'flex';
-      });
-      
-      overlay.addEventListener('click', function() {
-        popup.style.display = 'none';
-      });
-      
-      closeBtn.addEventListener('click', function() {
-        popup.style.display = 'none';
-      });
-    }
-  });
-</script>
+
 {% schema %}
 {
   "name": "Product page",
