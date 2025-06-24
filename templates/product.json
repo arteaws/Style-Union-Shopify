@@ -12,13 +12,18 @@
     "main": {
       "type": "main-product",
       "blocks": {
-        "custom_size_chart_eVbb7V": {
-          "type": "custom-size-chart",
-          "settings": {}
-        },
         "product_sku_KLVbQq": {
           "type": "product_sku",
           "settings": {}
+        },
+        "text_popup_g6zzCc": {
+          "type": "text_popup",
+          "settings": {
+            "popup_trigger": "Size-Chart",
+            "text": "<p>Add additional text content</p>",
+            "page_content": "",
+            "show_inline": false
+          }
         },
         "judge_me_reviews_preview_badge_VFKhjp": {
           "type": "shopify://apps/judge-me-reviews/blocks/preview_badge/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
@@ -94,8 +99,8 @@
         }
       },
       "block_order": [
-        "custom_size_chart_eVbb7V",
         "product_sku_KLVbQq",
+        "text_popup_g6zzCc",
         "judge_me_reviews_preview_badge_VFKhjp",
         "kiwi_size_chart_recommender_kiwi_sizing_rbN9rH",
         "896887d5-6a65-431c-9081-550cbc1a6676",
