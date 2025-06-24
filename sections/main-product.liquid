@@ -29,18 +29,18 @@
     color: inherit;
   }
   
-  .cs-custom-size__popup {
+.cs-custom-size__popup {
     display: none;
     position: fixed;
     top: 0;
+    overflow: scroll;
     left: 0;
-    height:100vh;
     width: 100%;
-    height: 100%;
-    z-index: 9999;
+    height: 90vh;
+    z-index: 99999;
     align-items: center;
     justify-content: center;
-  }
+}
   .cs-overflow{
     overflow:hidden;
   }
@@ -56,7 +56,7 @@
   .cs-custom-size__content {
     position: relative;
     background: white;
-    height:100vh;
+    height:65%;
     padding: 20px;
     border-radius: 4px;
     width:60%;
