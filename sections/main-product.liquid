@@ -22,7 +22,57 @@
     font-weight: 900;
     text-transform: uppercase;
 } 
+
+  .cs-custom-size__trigger {
+    cursor: pointer;
+    text-decoration: underline;
+    color: inherit;
+  }
+  
+  .cs-custom-size__popup {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .cs-custom-size__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+  
+  .cs-custom-size__content {
+    position: relative;
+    background: white;
+    padding: 20px;
+    border-radius: 4px;
+    max-width: 300px;
+    text-align: center;
+    z-index: 1;
+  }
+  
+  .cs-custom-size__close {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: none;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+  }
 </style>
+
+
+
 {%- liquid
 
   assign current_variant = product.selected_or_first_available_variant
