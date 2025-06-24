@@ -16,19 +16,6 @@
           "type": "product_sku",
           "settings": {}
         },
-        "text_popup_g6zzCc": {
-          "type": "text_popup",
-          "settings": {
-            "popup_trigger": "Size-Chart",
-            "text": "<p>Add additional text content</p>",
-            "page_content": "womens-leggings",
-            "show_inline": false
-          }
-        },
-        "judge_me_reviews_preview_badge_VFKhjp": {
-          "type": "shopify://apps/judge-me-reviews/blocks/preview_badge/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
-          "settings": {}
-        },
         "kiwi_size_chart_recommender_kiwi_sizing_rbN9rH": {
           "type": "shopify://apps/kiwi-size-chart-recommender/blocks/kiwiSizing/b7369922-bf15-44ce-a121-a22a8fcbc4b0",
           "disabled": true,
@@ -100,8 +87,6 @@
       },
       "block_order": [
         "product_sku_KLVbQq",
-        "text_popup_g6zzCc",
-        "judge_me_reviews_preview_badge_VFKhjp",
         "kiwi_size_chart_recommender_kiwi_sizing_rbN9rH",
         "896887d5-6a65-431c-9081-550cbc1a6676",
         "d9681722-e21d-42cb-b517-5a22bc70b2e5",
