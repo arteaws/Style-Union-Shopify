@@ -724,7 +724,29 @@
 <script type="application/json" id="ModelJson-{{ section.id }}">
   {{ product.media | where: 'media_type', 'model' | json }}
 </script>
-
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const trigger = document.querySelector('.cs-custom-size__trigger');
+    const popup = document.querySelector('.cs-custom-size__popup');
+    const overlay = document.querySelector('.cs-custom-size__overlay');
+    const closeBtn = document.querySelector('.cs-custom-size__close');
+    
+    if (trigger && popup) {
+      trigger.addEventListener('click', function(e) {
+        e.preventDefault();
+        popup.style.display = 'flex';
+      });
+      
+      overlay.addEventListener('click', function() {
+        popup.style.display = 'none';
+      });
+      
+      closeBtn.addEventListener('click', function() {
+        popup.style.display = 'none';
+      });
+    }
+  });
+</script>
 {% schema %}
 {
   "name": "Product page",
