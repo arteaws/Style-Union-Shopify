@@ -413,7 +413,6 @@
               style="visibility:hidden; min-height: 120px;" data-store-availability-container {{ block.shopify_attributes }}>
             </div>
               {% endunless %}
-<a href="#" class="cs-custom-size__trigger">Size Chart</a>
           {%- when 'product_quantity' -%}
             {% unless product.tags contains 'gift-with-purchase' %}
             {% unless product.gift_card? %}
@@ -437,7 +436,7 @@
               <label for="variantSku">{{ 'customer.order.details.sku' | t }}:</label>
               <span id="variantSku" class="variant_sku">{{ current_variant.sku }}</span>
             </div>
-
+              <a href="#" class="cs-custom-size__trigger">Size Chart</a>
           {%- when 'text_content' -%}
             {% if block.settings.text != blank %}
               <div class="product__section--text product__section--element rte" {{ block.shopify_attributes }}>
