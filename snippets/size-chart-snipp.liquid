@@ -62,13 +62,15 @@
 <p class="cs-title-pop">{{ product.title }}</p>
  <p class="size-chart-txt">Size Charts</p> 
 </center>
-  {{ product.tags }}
-{% if product.type == "Women Leggings" and 
-      product.tags contains "Women Sleepwear Leggings" or 
-      product.tags contains "Womens Ethnic Leggings" or 
-      product.tags contains "Women ankle leggings" or 
-      product.tags contains "Sports Leggings" or 
-      product.tags contains "Womens Sports Leggings" %}  
+{% assign product_type = product.type | downcase %}
+{% assign product_tags = product.tags | join: ',' | downcase %}
+
+{% if product_type == "women leggings" and 
+      product_tags contains 'women sleepwear leggings' or 
+      product_tags contains 'womens ethnic leggings' or 
+      product_tags contains 'women ankle leggings' or 
+      product_tags contains 'sports leggings' or 
+      product_tags contains 'womens sports leggings' %}  
 <div class="leggings-page-content">
   {% assign leggings_page = pages['womens-leggings'] %}
   {{ leggings_page.content }}
