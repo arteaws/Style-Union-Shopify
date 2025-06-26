@@ -172,6 +172,12 @@
   {{ mens-t-shirt-and-short-sleepwear-set.content }}
 </div>
 {% endif %}
+  {% if product.type == "Women's Kurta" or product.type == " Women's Kurtas" or  product.tags contains "Womens Kurta"  or  product.tags contains "Womens Kurtas"  or  product.tags contains "Women's Kurtas" or  product.tags contains "Womens Kurta Jackets"   or  product.tags contains " Womens Short Kurtas" %}  
+<div class="womens-kurta-content 18">
+  {% assign womens-kurta = pages['womens-kurta'] %}
+  {{ womens-kurta.content }}
+</div>
+{% endif %}
 </div>
 
 <script>
