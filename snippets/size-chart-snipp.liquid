@@ -148,40 +148,46 @@ document.addEventListener('DOMContentLoaded', function() {
     // Get tabs within this container only
     const tabs = container.querySelectorAll('.tab');
     
+    // Get all tab content sections related to this container
+    const tabContents = container.parentElement.querySelectorAll('.tab-content');
+    
     // Add click event listener to each tab in this container
     tabs.forEach(tab => {
       tab.addEventListener('click', function() {
         // Get the tab ID from data attribute
         const tabId = this.getAttribute('data-tab');
+        if (!tabId) return;
         
-        // Get the parent container of this tab
-        const parentContainer = this.closest('.tab-container');
-        
-        // Hide all tab contents within this container's scope
-        const allContents = parentContainer.parentNode.querySelectorAll('.tab-content');
-        allContents.forEach(el => {
+        // Remove active class from all tabs in this container
+        tabs.forEach(el => {
           el.classList.remove('active');
         });
         
-        // Remove active class from all tabs in this container
-        const allTabs = parentContainer.querySelectorAll('.tab');
-        allTabs.forEach(el => {
+        // Hide all tab contents related to this container
+        tabContents.forEach(el => {
           el.classList.remove('active');
         });
         
         // Show the selected tab content and mark tab as active
-        document.getElementById(tabId).classList.add('active');
-        this.classList.add('active');
+        const targetContent = document.getElementById(tabId);
+        if (targetContent) {
+          targetContent.classList.add('active');
+          this.classList.add('active');
+        }
       });
     });
     
     // Activate the first tab in each container by default
-    const firstTab = container.querySelector('.tab');
-    if (firstTab) {
-      firstTab.classList.add('active');
+    if (tabs.length > 0) {
+      const firstTab = tabs[0];
       const firstTabId = firstTab.getAttribute('data-tab');
+      
       if (firstTabId) {
-        document.getElementById(firstTabId).classList.add('active');
+        const firstContent = document.getElementById(firstTabId);
+        if (firstContent) {
+          firstTab.classList.add('active');
+          firstContent.classList.add('active');
+        }
       }
     }
   });
