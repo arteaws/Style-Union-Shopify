@@ -96,10 +96,10 @@
   {{ Girls-T-shirt-and-Shorts-Sleepwear-set.content }}
 </div>
 {% endif %}
-{% if  product.tags contains "Girls T-shirt and Shorts Sleepwear set"  %}  
-<div class="Girls-T-shirt-and-Shorts-Sleepwear-set-page-content">
-  {% assign Girls-T-shirt-and-Shorts-Sleepwear-set = pages['Girls-T-shirt-and-Shorts-Sleepwear-set'] %}
-  {{ Girls-T-shirt-and-Shorts-Sleepwear-set.content }}
+{% if product.type == "Girl's Shorts" or  product.tags contains "Girls Shorts"  %}  
+<div class="girls-shorts-1-y-to-12-y-page-content">
+  {% assign girls-shorts-1-y-to-12-y = pages['girls-shorts-1-y-to-12-y'] %}
+  {{ girls-shorts-1-y-to-12-y.content }}
 </div>
 {% endif %}
 
