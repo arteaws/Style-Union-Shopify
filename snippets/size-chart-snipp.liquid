@@ -73,12 +73,7 @@
   {{ leggings_page.content }}
 </div>
 {% endif %}
-{% if product.type == "Women's Leggings" or
-      product.tags contains "Women Sleepwear Leggings" or 
-      product.tags contains "Womens Ethnic Leggings" or 
-      product.tags contains "Women ankle leggings" or 
-      product.tags contains "Sports Leggings" or 
-      product.tags contains "Womens Sports" %}  
+{% if  product.tags contains "Women Top with Pant & with Shrug Set"  %}  
 <div class="women-top-with-pant-with-shrug-set-page-content">
   {% assign women-top-with-pant-with-shrug-set = pages['women-top-with-pant-with-shrug-set'] %}
   {{ women-top-with-pant-with-shrug-set.content }}
