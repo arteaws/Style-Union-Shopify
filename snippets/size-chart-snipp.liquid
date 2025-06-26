@@ -143,9 +143,15 @@
 </div>
 {% endif %}
  {% if product.type == " Men's Polo T-shirts" or product.type == "Men's Sports Polo T-shirts" or product.type == "Men's Cargo Pant" or  product.tags contains "Mens Essential Tees"  or  product.tags contains "Mens Regular Fit T-Shirt"  %} 
-<div class="mens-t-shirt-content 12">
+<div class="mens-t-shirt-content 13">
   {% assign mens-t-shirt = pages['mens-t-shirt'] %}
   {{ mens-t-shirt.content }}
+</div>
+{% endif %}
+ {% if  product.tags contains "Mens Sweat Tees"  or  product.tags contains "Mens Sweat Tees"  %} 
+<div class="mens-sweat-tees-content 13">
+  {% assign mens-sweat-tees = pages['mens-sweat-tees'] %}
+  {{ mens-sweat-tees.content }}
 </div>
 {% endif %}
 
