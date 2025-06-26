@@ -109,12 +109,17 @@
 </div>
 {% endif %}
 {% if  product.tags contains "Women Long dress"  %}  
-<div class="womens-long-dress-page-content 6">
+<div class="womens-long-dress-page-content 7">
   {% assign womens-long-dress = pages['womens-long-dress'] %}
   {{ womens-long-dress.content }}
 </div>
 {% endif %}
-  
+  {% if  product.tags contains "Women Long dress"  %}  
+<div class="womens-long-dress-page-content 7">
+  {% assign womens-long-dress = pages['womens-long-dress'] %}
+  {{ womens-long-dress.content }}
+</div>
+{% endif %}
 </div>
 
 
