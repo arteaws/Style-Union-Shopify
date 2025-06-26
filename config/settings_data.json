@@ -427,6 +427,7 @@
     "color_swatch_style": "custom-image",
     "sale_items": "amount",
     "show_payment_button": true,
+    "cart_type": "page_only",
     "cart_featured_collection": "bestsellers",
     "show_cart_giftwrap": false,
     "show_shipping_note": false,
