@@ -114,10 +114,10 @@
   {{ womens-long-dress.content }}
 </div>
 {% endif %}
-  {% if  product.tags contains "Women Long dress"  %}  
-<div class="womens-long-dress-page-content 7">
-  {% assign womens-long-dress = pages['womens-long-dress'] %}
-  {{ womens-long-dress.content }}
+  {% if product.type == "Girl's Sleepwear Sets" or  product.tags contains "Girls Sleepwear Sets"   or  product.tags contains "Girls Sleepwear"  or  product.tags contains "Girls T-Shirt with Track Pant Sleepwear Set" %}  
+<div class="girls-t-shirt-with-track-pant-sleepwear-set-content 8">
+  {% assign girls-t-shirt-with-track-pant-sleepwear-set = pages['girls-t-shirt-with-track-pant-sleepwear-set'] %}
+  {{ girls-t-shirt-with-track-pant-sleepwear-set.content }}
 </div>
 {% endif %}
 </div>
