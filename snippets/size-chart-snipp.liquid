@@ -120,6 +120,12 @@
   {{ girls-t-shirt-with-track-pant-sleepwear-set.content }}
 </div>
 {% endif %}
+  {% if product.type == "Men's Shorts" or product.type == "Men's Sports Shorts"  or product.type == "Men's Short" or  product.tags contains "MENS Shorts"   or  product.tags contains "Mens Sleepwear Shorts" %}  
+<div class="mens-shorts-content 8">
+  {% assign mens-shorts = pages['mens-shorts'] %}
+  {{ mens-shorts.content }}
+</div>
+{% endif %}
 </div>
 
 
