@@ -140,36 +140,65 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+  // Generate unique chart counter
+  let chartCounter = 0;
+  
   // Find all tab containers in the popup
   const tabContainers = document.querySelectorAll('.tab-container');
   
   // Initialize each tab container independently
   tabContainers.forEach(container => {
+    chartCounter++;
+    const chartId = 'chart-' + chartCounter;
+    
+    // Set unique identifier for this chart
+    container.setAttribute('data-chart-id', chartId);
+    
     // Get tabs within this container only
     const tabs = container.querySelectorAll('.tab');
     
-    // Get all tab content sections related to this container
-    const tabContents = container.parentElement.querySelectorAll('.tab-content');
+    // Find the parent section that contains both tabs and content
+    let parentSection = container.parentElement;
+    while (parentSection && !parentSection.classList.contains('main-conatiner') && parentSection.parentElement) {
+      parentSection = parentSection.parentElement;
+    }
+    if (!parentSection) parentSection = container.parentElement;
+    
+    // Get all tab content sections within this parent section
+    const tabContents = parentSection.querySelectorAll('.tab-content');
+    
+    // Assign unique identifiers to tab contents
+    tabContents.forEach((content, index) => {
+      content.setAttribute('data-chart-id', chartId);
+      if (content.id === 'inches' || content.classList.contains('active') || index === 0) {
+        content.setAttribute('data-tab-type', 'inches');
+      } else {
+        content.setAttribute('data-tab-type', 'cm');
+      }
+    });
     
     // Add click event listener to each tab in this container
     tabs.forEach(tab => {
       tab.addEventListener('click', function() {
-        // Get the tab ID from data attribute
-        const tabId = this.getAttribute('data-tab');
-        if (!tabId) return;
+        // Get the tab type from data attribute
+        const tabType = this.getAttribute('data-tab');
+        if (!tabType) return;
         
         // Remove active class from all tabs in this container
         tabs.forEach(el => {
           el.classList.remove('active');
         });
         
-        // Hide all tab contents related to this container
-        tabContents.forEach(el => {
-          el.classList.remove('active');
+        // Hide all tab contents for this specific chart
+        const chartContents = parentSection.querySelectorAll(`[data-chart-id="${chartId}"]`);
+        chartContents.forEach(el => {
+          if (el.classList.contains('tab-content')) {
+            el.classList.remove('active');
+          }
         });
         
         // Show the selected tab content and mark tab as active
-        const targetContent = document.getElementById(tabId);
+        const targetContent = parentSection.querySelector(`[data-chart-id="${chartId}"][data-tab-type="${tabType}"]`);
         if (targetContent) {
           targetContent.classList.add('active');
           this.classList.add('active');
@@ -177,17 +206,18 @@ document.addEventListener('DOMContentLoaded', function() {
       });
     });
     
-    // Activate the first tab in each container by default
+    // Ensure first tab is active by default
     if (tabs.length > 0) {
       const firstTab = tabs[0];
-      const firstTabId = firstTab.getAttribute('data-tab');
+      const firstTabType = firstTab.getAttribute('data-tab') || 'inches';
       
-      if (firstTabId) {
-        const firstContent = document.getElementById(firstTabId);
-        if (firstContent) {
-          firstTab.classList.add('active');
-          firstContent.classList.add('active');
-        }
+      // Make sure first tab is marked as active
+      firstTab.classList.add('active');
+      
+      // Make sure corresponding content is active
+      const firstContent = parentSection.querySelector(`[data-chart-id="${chartId}"][data-tab-type="${firstTabType}"]`);
+      if (firstContent) {
+        firstContent.classList.add('active');
       }
     }
   });
