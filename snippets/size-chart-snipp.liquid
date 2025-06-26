@@ -102,7 +102,12 @@
   {{ girls-shorts-1-y-to-12-y.content }}
 </div>
 {% endif %}
-
+{% if product.type == "Girl's Graphic Frocks" or  product.tags contains "Girls Frock"  %}  
+<div class="Girls-Frock-page-content 6">
+  {% assign Girls-Frock = pages['Girls-Frock'] %}
+  {{ Girls-Frock.content }}
+</div>
+{% endif %}
 </div>
 
 
