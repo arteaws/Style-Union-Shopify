@@ -62,12 +62,12 @@
 <p class="cs-title-pop">{{ product.title }}</p>
  <p class="size-chart-txt">Size Charts</p> 
 </center>
-{% if product.type == "Women's Leggings" and 
+{% if product.type == "Women Leggings" and 
       product.tags contains "Women Sleepwear Leggings" or 
       product.tags contains "Womens Ethnic Leggings" or 
       product.tags contains "Women ankle leggings" or 
       product.tags contains "Sports Leggings" or 
-      product.tags contains "Womens Sports Leggings" %}  
+      product.tags contains "Womens Sports" %}  
 <div class="leggings-page-content">
   {% assign leggings_page = pages['womens-leggings'] %}
   {{ leggings_page.content }}
