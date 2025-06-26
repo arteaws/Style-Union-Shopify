@@ -154,7 +154,12 @@
   {{ mens-sweat-tees.content }}
 </div>
 {% endif %}
-
+ {% if  product.tags contains "Men Fluid-X Denim"  %} 
+<div class="men-fluid-x-denim-content 14">
+  {% assign men-fluid-x-denim = pages['men-fluid-x-denim'] %}
+  {{ men-fluid-x-denim.content }}
+</div>
+{% endif %}
 </div>
 
 <script>
