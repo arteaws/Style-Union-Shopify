@@ -196,6 +196,12 @@
   {{ women-cape-set.content }}
 </div>
 {% endif %}
+  {% if  product.tags contains "Men's Winter Jackets" or product.tags contains "Men's Windcheaters" or product.tags contains "Mens Windcheaters" %}  
+<div class="men-knit-air-dry-jacket-content 22">
+  {% assign men-knit-air-dry-jacket = pages['men-knit-air-dry-jacket'] %}
+  {{ men-knit-air-dry-jacket.content }}
+</div>
+{% endif %}
 </div>
 
 <script>
