@@ -179,15 +179,21 @@
 </div>
 {% endif %}
   {% if  product.tags contains "Mens Long Kurtas" or product.tags contains "Mens Long Kurta" %}  
-<div class="mens-long-kurta 19">
+<div class="mens-long-kurta-content 19">
   {% assign mens-long-kurta = pages['mens-long-kurta'] %}
   {{ mens-long-kurta.content }}
 </div>
 {% endif %}
   {% if  product.tags contains "Mens Sweaters" or product.tags contains "Men Sweaters"  or product.tags contains "Men's Sweaters" %}  
-<div class="mens-sweaters 20">
+<div class="mens-sweaters-content 20">
   {% assign mens-sweaters = pages['mens-sweaters'] %}
   {{ mens-sweaters.content }}
+</div>
+{% endif %}
+  {% if  product.tags contains "Cape" or product.tags contains "Women Cape Set"  %}  
+<div class="women-cape-set-content 21">
+  {% assign women-cape-set = pages['women-cape-set'] %}
+  {{ women-cape-set.content }}
 </div>
 {% endif %}
 </div>
