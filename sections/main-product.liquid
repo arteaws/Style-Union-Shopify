@@ -81,7 +81,7 @@
     background: transparent;
     color: black;
 }
- .custom-size-cs-chart{
+ .custom-size-cs-chart-new{
   display:flex;
   align-items:center;
 } 
@@ -465,9 +465,11 @@
               <span id="variantSku" class="variant_sku">{{ current_variant.sku }}</span>
             </div>
             {%- when 'custom-size-chart' -%}
-            <div class="custom-size-cs-chart">
+            <div class="custom-size-cs-chart-new">
            <div class="scale-svg-cs"><img src="https://cdn.shopify.com/s/files/1/0623/4754/2777/files/1_-_1_-_Ruler.jpg?v=1750992022" alt="Ruler image"></div>
+            <div>
               <a href="#" class="cs-custom-size__trigger">Size Chart</a>
+            </div>
             </div>
           {%- when 'text_content' -%}
             {% if block.settings.text != blank %}
