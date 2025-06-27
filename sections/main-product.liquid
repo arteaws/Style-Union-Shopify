@@ -468,6 +468,7 @@
               <label for="variantSku">{{ 'customer.order.details.sku' | t }}:</label>
               <span id="variantSku" class="variant_sku">{{ current_variant.sku }}</span>
             </div>
+            {%- when 'custom-size-chart' -%}
             <div class="custom-size-cs-chart">
            {% comment %}   <div class="scale-svg-cs">{% render 'scale-svg' %}</div> {% endcomment %}
               <a href="#" class="cs-custom-size__trigger">Size Chart</a>
@@ -1017,6 +1018,12 @@
     {
       "type": "product_sku",
       "name": "Sku",
+      "limit": 1,
+      "settings": []
+    },
+    {
+      "type": "custom-size-chart",
+      "name": "custom-size-chart",
       "limit": 1,
       "settings": []
     },
