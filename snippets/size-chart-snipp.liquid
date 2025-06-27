@@ -184,6 +184,12 @@
   {{ mens-long-kurta.content }}
 </div>
 {% endif %}
+  {% if  product.tags contains "Mens Sweaters" or product.tags contains "Men Sweaters"  or product.tags contains "Men's Sweaters" %}  
+<div class="mens-sweaters 19">
+  {% assign mens-sweaters = pages['mens-sweaters'] %}
+  {{ mens-sweaters.content }}
+</div>
+{% endif %}
 </div>
 
 <script>
