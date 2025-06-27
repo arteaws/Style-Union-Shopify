@@ -202,6 +202,24 @@
   {{ men-knit-air-dry-jacket.content }}
 </div>
 {% endif %}
+  {% if  product.tags contains "Men's Winter Jackets" or product.tags contains "Men's Windcheaters" or product.tags contains "Mens Windcheaters" %}  
+<div class="men-knit-air-dry-jacket-content 23">
+  {% assign men-knit-air-dry-jacket = pages['men-knit-air-dry-jacket'] %}
+  {{ men-knit-air-dry-jacket.content }}
+</div>
+{% endif %}
+  {% if  product.type == "Men's Sweatshirt" or product.type == "Men's Sweatshirts" or product.type == "Men's Hoodie Sweatshirts"  or  product.tags contains "Men's Sports Sweatshirts"  or  product.tags contains "Men's Sports Sweatshirts" %}  
+<div class="mens-sweatshirt-content 24">
+  {% assign mens-sweatshirt = pages['mens-sweatshirt'] %}
+  {{ mens-sweatshirt.content }}
+</div>
+{% endif %}
+  {% if  product.type == " Women's Kurta Set" or  product.tags contains "Womens Kurta Sets"  or  product.tags contains "Womens Kurta and Pant sets"  or  product.tags contains " Women's Kurta Sets" %}  
+<div class="womens-kurta-set-content 25">
+  {% assign womens-kurta-set = pages['womens-kurta-set'] %}
+  {{ womens-kurta-set.content }}
+</div>
+{% endif %}
 </div>
 
 <script>
