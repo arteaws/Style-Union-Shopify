@@ -787,6 +787,25 @@
     }
   });
 </script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Get the elements
+    const innerMainTab = document.querySelector('.inner-main-tab-cs');
+    const customSizeChart = document.querySelector('.custom-size-cs-chart-new');
+    
+    // Check if the innerMainTab exists and is empty
+    if (innerMainTab && customSizeChart) {
+        if (innerMainTab.innerHTML.trim() === '') {
+            // Hide the custom size chart if inner main tab is empty
+            customSizeChart.style.display = 'none';
+        }
+    }
+});
+
+</script>
+
+                
 {% schema %}
 {
   "name": "Product page",
