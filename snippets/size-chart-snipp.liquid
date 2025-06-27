@@ -65,6 +65,7 @@
 <p class="cs-title-pop">{{ product.title }}</p>
  <p class="size-chart-txt">Size Charts</p> 
 </center>
+<div class="inner-main-tab-cs">  
 {% if product.type == "Women's Leggings" or
       product.tags contains "Women Sleepwear Leggings" or 
       product.tags contains "Womens Ethnic Leggings" or 
@@ -227,7 +228,7 @@
 </div>
 {% endif %}
 </div>
-
+</div>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
   // Generate unique chart counter
