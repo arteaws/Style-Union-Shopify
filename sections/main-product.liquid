@@ -469,7 +469,7 @@
               <span id="variantSku" class="variant_sku">{{ current_variant.sku }}</span>
             </div>
             <div class="custom-size-cs-chart">
-              <div class="scale-svg-cs">{% render 'scale-svg' %}</div>
+           {% comment %}   <div class="scale-svg-cs">{% render 'scale-svg' %}</div> {% endcomment %}
               <a href="#" class="cs-custom-size__trigger">Size Chart</a>
             </div>
           {%- when 'text_content' -%}
