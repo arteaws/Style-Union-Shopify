@@ -16,6 +16,10 @@
           "type": "product_sku",
           "settings": {}
         },
+        "custom_size_chart_GYpYMM": {
+          "type": "custom-size-chart",
+          "settings": {}
+        },
         "kiwi_size_chart_recommender_kiwi_sizing_rbN9rH": {
           "type": "shopify://apps/kiwi-size-chart-recommender/blocks/kiwiSizing/b7369922-bf15-44ce-a121-a22a8fcbc4b0",
           "disabled": true,
@@ -87,6 +91,7 @@
       },
       "block_order": [
         "product_sku_KLVbQq",
+        "custom_size_chart_GYpYMM",
         "kiwi_size_chart_recommender_kiwi_sizing_rbN9rH",
         "896887d5-6a65-431c-9081-550cbc1a6676",
         "d9681722-e21d-42cb-b517-5a22bc70b2e5",
