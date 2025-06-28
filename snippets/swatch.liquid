@@ -234,15 +234,31 @@ document.addEventListener('DOMContentLoaded', function() {
     // If no size is selected, show all colors
     if (!selectedSize) return;
     
-    // Get available colors for the selected size
+    // Get all colors for the selected size (regardless of availability)
     const availableColors = new Set();
+    const soldOutColors = new Set();
+    
     variants.forEach(function(variant) {
-      if (variant.available && 
-          (variant.option1 === selectedSize || variant.option2 === selectedSize || variant.option3 === selectedSize)) {
+      if (variant.option1 === selectedSize || variant.option2 === selectedSize || variant.option3 === selectedSize) {
         // Add all option values for this variant to available colors
-        if (variant.option1 && variant.option1 !== selectedSize) availableColors.add(variant.option1);
-        if (variant.option2 && variant.option2 !== selectedSize) availableColors.add(variant.option2);
-        if (variant.option3 && variant.option3 !== selectedSize) availableColors.add(variant.option3);
+        if (variant.option1 && variant.option1 !== selectedSize) {
+          availableColors.add(variant.option1);
+          if (!variant.available) {
+            soldOutColors.add(variant.option1);
+          }
+        }
+        if (variant.option2 && variant.option2 !== selectedSize) {
+          availableColors.add(variant.option2);
+          if (!variant.available) {
+            soldOutColors.add(variant.option2);
+          }
+        }
+        if (variant.option3 && variant.option3 !== selectedSize) {
+          availableColors.add(variant.option3);
+          if (!variant.available) {
+            soldOutColors.add(variant.option3);
+          }
+        }
       }
     });
     
@@ -259,6 +275,13 @@ document.addEventListener('DOMContentLoaded', function() {
           
           if (availableColors.has(optionValue)) {
             swatch.classList.remove('swatch-hidden');
+            
+            // Update sold out status
+            if (soldOutColors.has(optionValue)) {
+              swatch.classList.add('soldout');
+            } else {
+              swatch.classList.remove('soldout');
+            }
           } else {
             swatch.classList.add('swatch-hidden');
             // Uncheck hidden color options
