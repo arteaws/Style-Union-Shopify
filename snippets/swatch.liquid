@@ -7,10 +7,10 @@
 .swatches__color-name{
   font-size: 12px;
 }
-.swatch-hidden {
-    display: none !important;
-}
 </style>
+
+
+
 
 {%- liquid
   assign option_name = option.name | downcase
@@ -62,36 +62,28 @@
       endif
     -%}
 
-    <!-- Build variant combinations for this option value -->
+    <!-- Checking Availability -->
     {%- liquid
-      assign variant_combinations = ""
       assign available = false
 
       for variant in product.variants
+        unless variant.available
+          continue
+        endunless
+
         unless variant[current_option] == value
           continue
         endunless
 
-        if variant.available
-          assign available = true
-        endif
+        unless variant[other_options[0]] == current_variant[other_options[0]]
+          continue
+        endunless
 
-        assign combination = ""
-        if variant.option1
-          assign combination = combination | append: variant.option1
-        endif
-        if variant.option2
-          assign combination = combination | append: "|" | append: variant.option2
-        endif
-        if variant.option3
-          assign combination = combination | append: "|" | append: variant.option3
-        endif
-        
-        if variant_combinations == ""
-          assign variant_combinations = combination
-        else
-          assign variant_combinations = variant_combinations | append: "," | append: combination
-        endif
+        unless variant[other_options[1]] == current_variant[other_options[1]]
+          continue
+        endunless
+
+        assign available = true
       endfor
     -%}
 
@@ -135,7 +127,6 @@
           value="{{ value | escape }}"
           form="product-form-{{ section.id }}"
           data-position="{{ option.position }}"
-          data-combinations="{{ variant_combinations }}"
           {{ checked }}>
     {% endcapture %}
 
@@ -144,7 +135,7 @@
     {% endcapture %}
 
     {% capture regular_swatch %}
-      <div class="swatches__swatch--regular swatch-element {% unless available %}soldout{% endunless %} js-swatch-element" data-option-value="{{ value | escape }}" data-option-position="{{ option.position }}">
+      <div class="swatches__swatch--regular swatch-element {% unless available %}soldout{% endunless %} js-swatch-element">
         {{ radio_button }}
         <label class="swatches__form--label" for="{{ section.id }}-{{ option.name }}-{{ forloop.index0 }}" tabindex="0">
           {{ value }}
@@ -153,36 +144,38 @@
       </div>
     {% endcapture %}
 
-    {% capture color_swatch %}
-      <div class="swatches__swatch--color swatch-element color swatches__shape--{{ color_swatch_shape }} {% unless available %}soldout{% endunless %} js-swatch-element parent-dflex" data-option-value="{{ value | escape }}" data-option-position="{{ option.position }}">
-        <div class="color_dflex">
-        {{ radio_button }}
-        {% if variant_image_url %}
-          <!-- Show variant image if available -->
-          <label class="swatches__form--label"
-            for="{{ section.id }}-{{ option.name }}-{{ forloop.index0 }}"
-            tabindex="0"
-            style="background-image: url({{ variant_image_url }}); background-position: center center; background-size: cover;">
-            {{ sold_out_image }}
-          </label>
-          <span class="swatches__color-name">{{ value | truncatewords:1 }}</span>
+  {% capture color_swatch %}
+  <div class="swatches__swatch--color swatch-element color swatches__shape--{{ color_swatch_shape }} {% unless available %}soldout{% endunless %} js-swatch-element parent-dflex">
+    <div class="color_dflex">
+    {{ radio_button }}
+    {% if variant_image_url %}
+      <!-- Show variant image if available -->
 
-        {% else %}
-          <!-- Fallback to color swatch if no variant image -->
-          <label class="swatches__form--label"
-            for="{{ section.id }}-{{ option.name }}-{{ forloop.index0 }}"
-            tabindex="0"
-            style="background-color: {{ css_color }};
-            {% unless color_swatch_style == 'default-color' %}
-              background-image: url({% if color_swatch_style == 'custom-image' %}{{ image_url }}{% elsif color_swatch_style == 'variant-image' %}{{ variant_image_url }}{% elsif color_swatch_style == 'swatch' %}{{ swatch_image_url }}{% endif %}); background-position: center center; background-size: 50px;
-            {% endunless %}">
-            {{ sold_out_image }}
-          </label>
-          <span class="swatches__color-name">{{ value }}</span>
-        {% endif %}
-          </div>
+      <label class="swatches__form--label"
+        for="{{ section.id }}-{{ option.name }}-{{ forloop.index0 }}"
+        tabindex="0"
+        style="background-image: url({{ variant_image_url }}); background-position: center center; background-size: cover;">
+        {{ sold_out_image }}
+      </label>
+      <span class="swatches__color-name">{{ value | truncatewords:1 }}</span>
+
+    {% else %}
+
+      <!-- Fallback to color swatch if no variant image -->
+      <label class="swatches__form--label"
+        for="{{ section.id }}-{{ option.name }}-{{ forloop.index0 }}"
+        tabindex="0"
+        style="background-color: {{ css_color }};
+        {% unless color_swatch_style == 'default-color' %}
+          background-image: url({% if color_swatch_style == 'custom-image' %}{{ image_url }}{% elsif color_swatch_style == 'variant-image' %}{{ variant_image_url }}{% elsif color_swatch_style == 'swatch' %}{{ swatch_image_url }}{% endif %}); background-position: center center; background-size: 50px;
+        {% endunless %}">
+        {{ sold_out_image }}
+      </label>
+      <span class="swatches__color-name">{{ value }}</span>
+    {% endif %}
       </div>
-    {% endcapture %}
+  </div>
+{% endcapture %}
 
     {% if show_color_swatches and color_swatch_options contains option_name %}
       {{ color_swatch }}
@@ -191,96 +184,3 @@
     {% endif %}
   {% endfor %}
 </div>
-
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-  const variantSelectors = document.querySelectorAll('.js-variant-selector');
-  
-  variantSelectors.forEach(function(container) {
-    const swatchInputs = container.querySelectorAll('.swatches__form--input');
-    const currentOptionIndex = container.getAttribute('data-option-index');
-    
-    // Function to filter swatches based on current selection
-    function filterSwatches() {
-      // Get currently selected values for all options
-      const selectedValues = {};
-      
-      // Get all variant selector containers
-      const allContainers = document.querySelectorAll('.js-variant-selector');
-      allContainers.forEach(function(otherContainer) {
-        const checkedInput = otherContainer.querySelector('.swatches__form--input:checked');
-        if (checkedInput) {
-          const position = checkedInput.getAttribute('data-position');
-          selectedValues[position] = checkedInput.value;
-        }
-      });
-      
-      // Filter swatches in other containers
-      allContainers.forEach(function(otherContainer) {
-        const otherOptionIndex = otherContainer.getAttribute('data-option-index');
-        if (otherOptionIndex === currentOptionIndex) return; // Skip current container
-        
-        const otherSwatches = otherContainer.querySelectorAll('.js-swatch-element');
-        
-        otherSwatches.forEach(function(swatch) {
-          const input = swatch.querySelector('.swatches__form--input');
-          const combinations = input.getAttribute('data-combinations');
-          const optionValue = swatch.getAttribute('data-option-value');
-          const optionPosition = swatch.getAttribute('data-option-position');
-          
-          let shouldShow = false;
-          
-          if (combinations) {
-            const combinationArray = combinations.split(',');
-            
-            combinationArray.forEach(function(combination) {
-              const options = combination.split('|');
-              let matches = true;
-              
-              // Check if this combination matches current selections
-              Object.keys(selectedValues).forEach(function(position) {
-                const selectedValue = selectedValues[position];
-                const optionIndex = parseInt(position) - 1;
-                
-                if (options[optionIndex] && options[optionIndex] !== selectedValue) {
-                  matches = false;
-                }
-              });
-              
-              if (matches) {
-                shouldShow = true;
-              }
-            });
-          } else {
-            shouldShow = true; // Show if no combinations data
-          }
-          
-          if (shouldShow) {
-            swatch.classList.remove('swatch-hidden');
-          } else {
-            swatch.classList.add('swatch-hidden');
-          }
-        });
-      });
-    }
-    
-    // Add event listeners to all swatch inputs
-    swatchInputs.forEach(function(input) {
-      input.addEventListener('change', function() {
-        // Update selected option display
-        const optionPosition = this.getAttribute('data-position');
-        const selectedSpan = document.getElementById('selected-option-' + optionPosition);
-        if (selectedSpan) {
-          selectedSpan.textContent = this.value;
-        }
-        
-        // Filter other swatches
-        setTimeout(filterSwatches, 10); // Small delay to ensure DOM is updated
-      });
-    });
-    
-    // Initial filter on page load
-    filterSwatches();
-  });
-});
-</script>
