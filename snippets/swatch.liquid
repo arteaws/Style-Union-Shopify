@@ -9,15 +9,29 @@
 }
 </style>
 
-
-
-
 {%- liquid
   assign option_name = option.name | downcase
   assign color_swatch_options = settings.swatch_option_names | replace: ' ,', ',' | replace: ', ', ',' | split: ',' | downcase
   assign current_option = "option" | append: option.position
   assign other_options = "option1 option2 option3" | remove: current_option | strip | split: " "
   assign size_swatches = "size, sizes" | split: ", "
+  
+  comment
+    Get currently selected values for other options
+  endcomment
+  assign selected_option1 = ""
+  assign selected_option2 = ""
+  assign selected_option3 = ""
+  
+  if current_variant.option1
+    assign selected_option1 = current_variant.option1
+  endif
+  if current_variant.option2
+    assign selected_option2 = current_variant.option2
+  endif
+  if current_variant.option3
+    assign selected_option3 = current_variant.option3
+  endif
 -%}
 
 <div class="swatches__container js-variant-selector product__section--element" data-option-index="{{ option.position }}" data-other-options='{{ other_options | json }}'>
@@ -53,6 +67,7 @@
       assign available = false
       assign swatch_image_url = nil
       assign variant_image_url = nil
+      assign should_show_swatch = false
       
       if value.swatch.image
         assign swatch_image_url = value.swatch.image | image_url: width: 50
@@ -62,125 +77,181 @@
       endif
     -%}
 
-    <!-- Checking Availability -->
+    <!-- Enhanced Availability and Visibility Checking -->
     {%- liquid
       assign available = false
+      assign should_show_swatch = false
 
       for variant in product.variants
-        unless variant.available
-          continue
-        endunless
-
+        comment
+          Check if this variant matches the current option value we're checking
+        endcomment
         unless variant[current_option] == value
           continue
         endunless
 
-        unless variant[other_options[0]] == current_variant[other_options[0]]
-          continue
-        endunless
+        comment
+          Check if this variant matches the currently selected values for other options
+        endcomment
+        assign variant_matches_selection = true
+        
+        if option.position == 1
+          comment Current option is option1, check option2 and option3
+          endcomment
+          if selected_option2 != "" and variant.option2 != selected_option2
+            assign variant_matches_selection = false
+          endif
+          if selected_option3 != "" and variant.option3 != selected_option3
+            assign variant_matches_selection = false
+          endif
+        elsif option.position == 2
+          comment Current option is option2, check option1 and option3
+          endcomment
+          if selected_option1 != "" and variant.option1 != selected_option1
+            assign variant_matches_selection = false
+          endif
+          if selected_option3 != "" and variant.option3 != selected_option3
+            assign variant_matches_selection = false
+          endif
+        elsif option.position == 3
+          comment Current option is option3, check option1 and option2
+          endcomment
+          if selected_option1 != "" and variant.option1 != selected_option1
+            assign variant_matches_selection = false
+          endif
+          if selected_option2 != "" and variant.option2 != selected_option2
+            assign variant_matches_selection = false
+          endif
+        endif
 
-        unless variant[other_options[1]] == current_variant[other_options[1]]
-          continue
-        endunless
-
-        assign available = true
-      endfor
-    -%}
-
-    <!-- Building Variant Image -->
-    {%- liquid
-      for variant in product.variants
-        unless variant[current_option] == value
-          continue
-        endunless
-
-        unless variant[other_options[0]] == current_variant[other_options[0]]
-          continue
-        endunless
-
-        unless variant[other_options[1]] == current_variant[other_options[1]]
-          continue
-        endunless
-
-        if variant.image
-          assign variant_image_url = variant.image | image_url: width: 100, height: 100, crop: 'center'
+        comment
+          Only show this swatch if a variant exists with the current selection
+        endcomment
+        if variant_matches_selection
+          assign should_show_swatch = true
+          if variant.available
+            assign available = true
+          endif
         endif
       endfor
-
-      assign checked = ""
-      if current_variant[current_option] == value
-        assign checked = 'checked="checked"'
-      endif
-
-      assign swatch_img = null
-      assign swatch_color_name = value | handle | append: '.png'
-
-      if images[swatch_color_name] != blank
-        assign swatch_img = swatch_color_name | file_url
-      endif
     -%}
 
-    {% capture radio_button %}
-      <input type="radio" id="{{ section.id }}-{{ option.name }}-{{ forloop.index0 }}"
-          class="swatches__form--input"
-          name="{{ option_name }}"
-          value="{{ value | escape }}"
-          form="product-form-{{ section.id }}"
-          data-position="{{ option.position }}"
-          {{ checked }}>
-    {% endcapture %}
+    <!-- Only render swatch if it should be shown -->
+    {% if should_show_swatch %}
+      <!-- Building Variant Image -->
+      {%- liquid
+        for variant in product.variants
+          unless variant[current_option] == value
+            continue
+          endunless
 
-    {% capture sold_out_image %}
-      <img class="swatches__sold-out--image crossed-out" src="{{ 'soldout.png' | asset_url }}" alt="Sold out image" />
-    {% endcapture %}
+          comment
+            Check if variant matches current selection
+          endcomment
+          assign variant_matches_current = true
+          
+          if option.position == 1
+            if selected_option2 != "" and variant.option2 != selected_option2
+              assign variant_matches_current = false
+            endif
+            if selected_option3 != "" and variant.option3 != selected_option3
+              assign variant_matches_current = false
+            endif
+          elsif option.position == 2
+            if selected_option1 != "" and variant.option1 != selected_option1
+              assign variant_matches_current = false
+            endif
+            if selected_option3 != "" and variant.option3 != selected_option3
+              assign variant_matches_current = false
+            endif
+          elsif option.position == 3
+            if selected_option1 != "" and variant.option1 != selected_option1
+              assign variant_matches_current = false
+            endif
+            if selected_option2 != "" and variant.option2 != selected_option2
+              assign variant_matches_current = false
+            endif
+          endif
 
-    {% capture regular_swatch %}
-      <div class="swatches__swatch--regular swatch-element {% unless available %}soldout{% endunless %} js-swatch-element">
-        {{ radio_button }}
-        <label class="swatches__form--label" for="{{ section.id }}-{{ option.name }}-{{ forloop.index0 }}" tabindex="0">
-          {{ value }}
-          {{ sold_out_image }}
-        </label>
-      </div>
-    {% endcapture %}
+          if variant_matches_current and variant.image
+            assign variant_image_url = variant.image | image_url: width: 100, height: 100, crop: 'center'
+            break
+          endif
+        endfor
 
-  {% capture color_swatch %}
-  <div class="swatches__swatch--color swatch-element color swatches__shape--{{ color_swatch_shape }} {% unless available %}soldout{% endunless %} js-swatch-element parent-dflex">
-    <div class="color_dflex">
-    {{ radio_button }}
-    {% if variant_image_url %}
-      <!-- Show variant image if available -->
+        assign checked = ""
+        if current_variant[current_option] == value
+          assign checked = 'checked="checked"'
+        endif
 
-      <label class="swatches__form--label"
-        for="{{ section.id }}-{{ option.name }}-{{ forloop.index0 }}"
-        tabindex="0"
-        style="background-image: url({{ variant_image_url }}); background-position: center center; background-size: cover;">
-        {{ sold_out_image }}
-      </label>
-      <span class="swatches__color-name">{{ value | truncatewords:1 }}</span>
+        assign swatch_img = null
+        assign swatch_color_name = value | handle | append: '.png'
 
-    {% else %}
+        if images[swatch_color_name] != blank
+          assign swatch_img = swatch_color_name | file_url
+        endif
+      -%}
 
-      <!-- Fallback to color swatch if no variant image -->
-      <label class="swatches__form--label"
-        for="{{ section.id }}-{{ option.name }}-{{ forloop.index0 }}"
-        tabindex="0"
-        style="background-color: {{ css_color }};
-        {% unless color_swatch_style == 'default-color' %}
-          background-image: url({% if color_swatch_style == 'custom-image' %}{{ image_url }}{% elsif color_swatch_style == 'variant-image' %}{{ variant_image_url }}{% elsif color_swatch_style == 'swatch' %}{{ swatch_image_url }}{% endif %}); background-position: center center; background-size: 50px;
-        {% endunless %}">
-        {{ sold_out_image }}
-      </label>
-      <span class="swatches__color-name">{{ value }}</span>
-    {% endif %}
-      </div>
-  </div>
-{% endcapture %}
+      {% capture radio_button %}
+        <input type="radio" id="{{ section.id }}-{{ option.name }}-{{ forloop.index0 }}"
+            class="swatches__form--input"
+            name="{{ option_name }}"
+            value="{{ value | escape }}"
+            form="product-form-{{ section.id }}"
+            data-position="{{ option.position }}"
+            {{ checked }}>
+      {% endcapture %}
 
-    {% if show_color_swatches and color_swatch_options contains option_name %}
-      {{ color_swatch }}
-    {% else %}
-      {{ regular_swatch }}
+      {% capture sold_out_image %}
+        <img class="swatches__sold-out--image crossed-out" src="{{ 'soldout.png' | asset_url }}" alt="Sold out image" />
+      {% endcapture %}
+
+      {% capture regular_swatch %}
+        <div class="swatches__swatch--regular swatch-element {% unless available %}soldout{% endunless %} js-swatch-element">
+          {{ radio_button }}
+          <label class="swatches__form--label" for="{{ section.id }}-{{ option.name }}-{{ forloop.index0 }}" tabindex="0">
+            {{ value }}
+            {{ sold_out_image }}
+          </label>
+        </div>
+      {% endcapture %}
+
+      {% capture color_swatch %}
+        <div class="swatches__swatch--color swatch-element color swatches__shape--{{ color_swatch_shape }} {% unless available %}soldout{% endunless %} js-swatch-element parent-dflex">
+          <div class="color_dflex">
+          {{ radio_button }}
+          {% if variant_image_url %}
+            <!-- Show variant image if available -->
+            <label class="swatches__form--label"
+              for="{{ section.id }}-{{ option.name }}-{{ forloop.index0 }}"
+              tabindex="0"
+              style="background-image: url({{ variant_image_url }}); background-position: center center; background-size: cover;">
+              {{ sold_out_image }}
+            </label>
+            <span class="swatches__color-name">{{ value | truncatewords:1 }}</span>
+
+          {% else %}
+            <!-- Fallback to color swatch if no variant image -->
+            <label class="swatches__form--label"
+              for="{{ section.id }}-{{ option.name }}-{{ forloop.index0 }}"
+              tabindex="0"
+              style="background-color: {{ css_color }};
+              {% unless color_swatch_style == 'default-color' %}
+                background-image: url({% if color_swatch_style == 'custom-image' %}{{ image_url }}{% elsif color_swatch_style == 'variant-image' %}{{ variant_image_url }}{% elsif color_swatch_style == 'swatch' %}{{ swatch_image_url }}{% endif %}); background-position: center center; background-size: 50px;
+              {% endunless %}">
+              {{ sold_out_image }}
+            </label>
+            <span class="swatches__color-name">{{ value }}</span>
+          {% endif %}
+            </div>
+        </div>
+      {% endcapture %}
+
+      {% if show_color_swatches and color_swatch_options contains option_name %}
+        {{ color_swatch }}
+      {% else %}
+        {{ regular_swatch }}
+      {% endif %}
     {% endif %}
   {% endfor %}
 </div>
