@@ -628,7 +628,15 @@
                   <b class="note__heading">{{ 'cart.general.cart_error' | t }}</b>&nbsp;&nbsp;&nbsp;<span class="note__body">{{ 'cart.general.update_qty_error' | t }}</span>
                 </div>
 
-                <input id="addToCart" type="submit" name="button" class="add clearfix AddtoCart js-ajax-submit {% if settings.show_payment_button and product.selling_plan_groups.size == 0 %} secondary-button{% endif %}" value="{{ call_to_action }}" {% unless current_variant.available %}disabled{% endunless %} />
+             {% comment %}   <input id="addToCart" type="submit" name="button" class="add clearfix AddtoCart js-ajax-submit {% if settings.show_payment_button and product.selling_plan_groups.size == 0 %} secondary-button{% endif %}" value="{{ call_to_action }}" {% unless current_variant.available %}disabled{% endunless %} /> {% endcomment %}
+                <input 
+  id="addToCart" 
+  type="submit" 
+  name="button" 
+  class="add clearfix AddtoCart js-ajax-submit secondary-button 
+  {% unless product.selected_or_first_available_variant.available %}soldcs{% else %}available-cs{% endunless %}" 
+  value="{% if product.selected_or_first_available_variant.available %}Add to Cart{% else %}Sold Out{% endif %}" 
+  {% unless product.selected_or_first_available_variant.available %}disabled{% endunless %}>
 
                 {% if settings.show_payment_button %}
                  <!-- {{ form | payment_button }} -->
