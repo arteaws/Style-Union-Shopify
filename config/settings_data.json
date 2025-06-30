@@ -432,6 +432,7 @@
     "show_cart_giftwrap": false,
     "show_shipping_note": false,
     "show_cart_notes": false,
+    "shipping_calculator_default_country": "India",
     "show_shipping_countdown": true,
     "free_shipping_threshold": "1699",
     "free_shipping_bg": "#313131",
