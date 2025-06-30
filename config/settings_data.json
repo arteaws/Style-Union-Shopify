@@ -427,7 +427,7 @@
     "color_swatch_style": "custom-image",
     "sale_items": "amount",
     "show_payment_button": true,
-    "cart_type": "page_only",
+    "cart_type": "drawer",
     "cart_featured_collection": "bestsellers",
     "show_cart_giftwrap": false,
     "show_shipping_note": false,
@@ -547,11 +547,6 @@
       },
       "7278732907249339192": {
         "type": "shopify://apps/rimix-product-badges/blocks/rimix-helper/46f9dcab-fec8-4959-8563-b2334479cd94",
-        "disabled": false,
-        "settings": {}
-      },
-      "14418474333536001498": {
-        "type": "shopify://apps/cooee/blocks/app-embed-main/2f17a8e7-57ed-4fda-b07d-26521d722e6f",
         "disabled": false,
         "settings": {}
       },
