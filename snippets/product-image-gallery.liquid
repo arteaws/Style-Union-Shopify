@@ -503,11 +503,12 @@
   
   {% for badge in shop.metaobjects.custom_badges.values %}
     {% assign show_badge = false %}
-    {% assign collection_names = badge.custom_badges.collection_names | downcase | split: ',' %}
+    {% assign collection_names = badge.custom_badges.collection_names | downcase | split: ',' | map: 'strip' %}
     
     {% comment %} Check if product is in any of the badge's collections {% endcomment %}
     {% for collection in product.collections %}
-      {% if collection_names contains collection.title.downcase %}
+      {% assign collection_title = collection.title | downcase | strip %}
+      {% if collection_names contains collection_title %}
         {% assign show_badge = true %}
         {% break %}
       {% endif %}
