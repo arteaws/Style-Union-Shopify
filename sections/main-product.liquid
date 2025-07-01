@@ -354,16 +354,8 @@
                {%- if settings.product_variants == 'swatches' -%}
                  <div class="product__variants-swatches mt4 mb6 no-js-hidden" data-section="{{ section.id }}" data-url="{{ product.url }}" {{ block.shopify_attributes }}>
                    {% for option in product.options_with_values %}
-                     {% render "swatch",
-                       option: option,
-                       current_variant: current_variant,
-                       product: product,
-                       show_color_swatches: settings.show_color_swatches,
-                       color_swatch_shape: settings.color_swatch_shape,
-                       color_swatch_style: settings.color_swatch_style,
-                       show_size_chart: show_size_chart,
-                       size_chart_label: size_chart_label,
-                       size_chart_page: size_chart_page %}
+                     {% render "swatch" %}
+  
                    {% endfor %}
                  </div>
                {%- else -%}
