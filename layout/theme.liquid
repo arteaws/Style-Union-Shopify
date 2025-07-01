@@ -99,7 +99,14 @@
 
     {{ content_for_header }}
 
-    
+     <style>
+   .Vtl-WishlistHeaderWrapper {
+    display: none !important;
+  }
+       .Vtl-WishlistButtonWrapper {
+    display: none !important;
+}
+ </style>
 
     <!-- Hotjar Tracking Code for https://styleunion.in/ -->
     <script>
@@ -318,6 +325,8 @@
     </script>
     {% render 'size-chart-custom' %}
     <!-- Added by Team SearchTap: Ends -->
+    
+    {% render 'magicSidecartScript' %}
     {% render 'razorpay-magic-checkout' %} 
   </body>
 </html>
