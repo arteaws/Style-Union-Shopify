@@ -1,0 +1,35 @@
+<div class="custom-badges">
+  {% for block in section.blocks %}
+    {% assign collection_list = block.settings.collections | split: ',' %}
+    {% assign collection_list_downcase = block.settings.collections | downcase | split: ',' %}
+    {% assign product_collections_downcase = product.collections | map: 'title' | join: ',' | downcase | split: ',' %}
+    
+    {% comment %} Check if any of the product collections match the badge's collections {% endcomment %}
+    {% assign show_badge = false %}
+    {% for collection in product_collections_downcase %}
+      {% if collection_list_downcase contains collection %}
+        {% assign show_badge = true %}
+        {% break %}
+      {% endif %}
+    {% endfor %}
+    
+    {% comment %} Check time duration if badge should be shown {% endcomment %}
+    {% if show_badge %}
+      {% assign badge_start_date = block.settings.start_date | default: "now" | date: "%s" %}
+      {% assign current_date = "now" | date: "%s" %}
+      {% assign duration_in_seconds = 0 %}
+      
+      {% case block.settings.duration %}
+        {% when '15_days' %}
+          {% assign duration_in_seconds = 1296000 %} {# 15 days in seconds #}
+        {% when '30_days' %}
+          {% assign duration_in_seconds = 2592000 %} {# 30 days in seconds #}
+      {% endcase %}
+      
+      {% assign expiration_date = badge_start_date | plus: duration_in_seconds %}
+      {% if block.settings.duration == 'infinite' or current_date <= expiration_date %}
+        <span class="product-badge">{{ block.settings.badge_name }}</span>
+      {% endif %}
+    {% endif %}
+  {% endfor %}
+</div>
