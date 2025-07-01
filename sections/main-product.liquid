@@ -187,22 +187,6 @@
   <div class="product__section-images product__section-image--{{ thumbnail_position }} carousel-container js-product-gallery span-6 md-span-12 sm-span-12 auto desktop-gallerr-cs"
     data-product-gallery data-product-single-media-group
     data-gallery-config='{{ product_gallery_config }}' data-aos="fade">
-    <div class="custom-badges">
-  {{ shop.metaobjects.custom_badges.value }}
-  {% if shop.metaobjects.custom_badges %}
-    {% for badge in shop.metaobjects.custom_badges.values %}
-      {% assign collection_names = badge.custom_badges.collection_names | split: ',' %}
-      
-      {% comment %} Check if product is in any of the badge's collections {% endcomment %}
-      {% for collection in product.collections %}
-        {% if collection_names contains collection.title %}
-          <span class="product-badge">{{ badge.custom_badges.badge_name }}</span>
-          {% break %}
-        {% endif %}
-      {% endfor %}
-    {% endfor %}
-  {% endif %}
-</div>
       <div class="pdp-wishlist-set-cs">
     <div id="smartwishlist" data-product="{{ product.id }}" data-variant="{{ product.variants.first.id }}"></div>
      </div>

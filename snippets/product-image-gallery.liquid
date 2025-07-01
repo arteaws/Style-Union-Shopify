@@ -498,6 +498,23 @@
 
   -%}
   <div id="slider" class=" {{ grid_width }} thumbs_{{ thumbnail_position }} auto {{ no_slider }}">
+<div class="custom-badges">
+  {% assign collection_names = product.collections | map: 'title' | join: ',' %}
+  
+  {% if collection_names contains 'Bestseller New' %}
+    <span class="product-badge">Most loved</span>
+  {% elsif collection_names contains 'Must Haves' %}
+    <span class="product-badge">Must Have</span>
+  {% elsif collection_names contains 'Last Few' %}
+    <span class="product-badge">Few Left</span>
+  {% elsif collection_names contains 'Store Bestseller' %}
+    <span class="product-badge">Selling Fast</span>
+  {% elsif collection_names contains 'Must Haves Essentials' %}
+    <span class="product-badge">New In</span>
+  {% elsif collection_names contains 'New In' %}
+    <span class="product-badge">New In</span>
+  {% endif %}
+</div>
     <div class="slides product-image-container carousel carousel-main js-carousel-main" data-product-id="{{ product.id }}">
       {% for media in product.media %}
         <div class="{{ media.media_type }}-slide carousel-cell js-main-carousel-cell" data-image-id="{{ media.id }}" data-slide-index="{{ forloop.index0 }}" tabindex="-1">
