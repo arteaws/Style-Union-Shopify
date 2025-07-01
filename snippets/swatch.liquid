@@ -10,71 +10,156 @@
 .swatch-hidden {
     display: none !important;
 }
- /* .swatch-sold-out {
+.swatch-sold-out {
     opacity: 0.5;
-}  */
-  #addToCart[type="submit"][value="Sold Out"] {
+} 
+#addToCart[type="submit"][value="Sold Out"] {
     display: none;
 } 
-  span.price__badge.price__badge--sold-out {
+span.price__badge.price__badge--sold-out {
     display: none;
 }  
 .swatch-sold-out .swatches__form--label {
     cursor: not-allowed;
 }
+/* Custom swatch styles */
+.swatches__swatch--color .swatches__form--label {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid #ccc;
+    display: block;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.3s ease;
+}
+.swatches__swatch--color .swatches__form--input:checked + .swatches__form--label {
+    border-color: #000;
+    transform: scale(1.1);
+}
+.swatches__swatch--regular .swatches__form--label {
+    padding: 8px 16px;
+    border: 1px solid #ccc;
+    background: #fff;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+.swatches__swatch--regular .swatches__form--input:checked + .swatches__form--label {
+    background: #000;
+    color: #fff;
+}
+.swatches__form--input {
+    display: none;
+}
+.swatches__sold-out--image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.swatches__container {
+    margin-bottom: 20px;
+}
+.swatches__option-name {
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+.swatch-element {
+    display: inline-block;
+    margin: 5px;
+    vertical-align: top;
+}
 </style>
 
 {%- liquid
   assign option_name = option.name | downcase
-  assign color_swatch_options = settings.swatch_option_names | replace: ' ,', ',' | replace: ', ', ',' | split: ',' | downcase
+  
+  comment
+    Define color and size options directly in code
+  endcomment
+  assign color_options = "color,colour,colors,colours" | split: ","
+  assign size_options = "size,sizes" | split: ","
+  
+  comment
+    Check if current option is color or size
+  endcomment
+  assign is_color_option = false
+  assign is_size_option = false
+  
+  for color_opt in color_options
+    if option_name contains color_opt
+      assign is_color_option = true
+      break
+    endif
+  endfor
+  
+  for size_opt in size_options
+    if option_name contains size_opt
+      assign is_size_option = true
+      break
+    endif
+  endfor
+  
   assign current_option = "option" | append: option.position
   assign other_options = "option1 option2 option3" | remove: current_option | strip | split: " "
-  assign size_swatches = "size, sizes" | split: ", "
 -%}
 
 <div class="swatches__container js-variant-selector product__section--element" data-option-index="{{ option.position }}" data-option-name="{{ option.name | downcase }}" data-other-options='{{ other_options | json }}'>
 
-  {% unless template == 'product.quick' %}
-    {% if show_size_chart and size_swatches contains option_name %}
-      <div class="size-chart">
-        <button
-          class="button-as-link js-modal-open"
-          type="button"
-          name="button"
-          aria-label="Open popup"
-          data-wau-modal-target="product-modal--{{ section.id }}--{{ forloop.index }}">
-          {{ size_chart_label }}
-        </button>
+  {% comment %} Size Chart Button (optional) {% endcomment %}
+  {% if is_size_option and show_size_chart %}
+    <div class="size-chart">
+      <button
+        class="button-as-link js-modal-open"
+        type="button"
+        name="button"
+        aria-label="Open popup"
+        data-wau-modal-target="product-modal--{{ section.id }}--{{ forloop.index }}">
+        Size Chart
+      </button>
 
-        <!-- modal content -->
-        <div data-wau-modal-content="product-modal--{{ section.id }}--{{ forloop.index }}" style="display: none;">
-          <div class="rte">
+      <div data-wau-modal-content="product-modal--{{ section.id }}--{{ forloop.index }}" style="display: none;">
+        <div class="rte">
+          {% if size_chart_page %}
             {{ size_chart_page.content }}
-          </div><!-- /.rte -->
+          {% else %}
+            <p>Size chart content goes here.</p>
+          {% endif %}
         </div>
       </div>
-    {% endif %}
-  {% endunless %}
+    </div>
+  {% endif %}
 
   <p class="swatches__option-name">{{ option.name }}: {% for value in option.values %}{% if option.selected_value == value %}<span id="selected-option-{{ option.position }}" class="swatches__option-value">{{ value }}</span>{% endif %}{% endfor %}</p>
 
   {% for value in option.values %}
     {%- liquid
-      assign image_url = value | handle | append: '.png' | file_url
-      assign css_color = value | split: ' ' | last | handle
-      assign available = false
-      assign swatch_image_url = nil
-      assign variant_image_url = nil
+      comment
+        Create color mapping for common colors
+      endcomment
+      assign color_map = "red:#FF0000,blue:#0000FF,green:#008000,black:#000000,white:#FFFFFF,yellow:#FFFF00,pink:#FFC0CB,purple:#800080,orange:#FFA500,brown:#A52A2A,gray:#808080,grey:#808080,navy:#000080,beige:#F5F5DC,cream:#FFFDD0,tan:#D2B48C,khaki:#F0E68C,silver:#C0C0C0,gold:#FFD700,maroon:#800000,olive:#808000,lime:#00FF00,aqua:#00FFFF,teal:#008080,fuchsia:#FF00FF" | split: ","
       
-      if value.swatch.image
-        assign swatch_image_url = value.swatch.image | image_url: width: 50
-      endif
-      if value.swatch.color and color_swatch_style == 'swatch'
-        assign css_color = value.swatch.color
-      endif
+      assign css_color = "#ccc"
+      assign value_handle = value | handle
+      
+      comment
+        Try to match color from mapping
+      endcomment
+      for color_pair in color_map
+        assign color_parts = color_pair | split: ":"
+        if color_parts[0] == value_handle
+          assign css_color = color_parts[1]
+          break
+        endif
+      endfor
+      
+      assign available = false
+      assign variant_image_url = nil
     -%}
 
-    <!-- Checking Availability - Show all variants regardless of availability -->
+    {% comment %} Check Availability {% endcomment %}
     {%- liquid
       assign available = false
       assign variant_exists = false
@@ -99,7 +184,7 @@
       endfor
     -%}
 
-    <!-- Building Variant Image -->
+    {% comment %} Get Variant Image {% endcomment %}
     {%- liquid
       for variant in product.variants
         unless variant[current_option] == value
@@ -124,12 +209,22 @@
       if current_variant[current_option] == value
         assign checked = 'checked="checked"'
       endif
-
-      assign swatch_img = null
-      assign swatch_color_name = value | handle | append: '.png'
-
-      if images[swatch_color_name] != blank
-        assign swatch_img = swatch_color_name | file_url
+      
+      comment
+        Check for custom swatch images in assets
+      endcomment
+      assign swatch_image_name = value_handle | append: '.png'
+      assign swatch_img = nil
+      
+      comment
+        Try to get swatch image from assets
+      endcomment
+      capture swatch_test
+        echo swatch_image_name | asset_url
+      endcapture
+      
+      if swatch_test contains swatch_image_name
+        assign swatch_img = swatch_image_name | asset_url
       endif
     -%}
 
@@ -145,7 +240,9 @@
     {% endcapture %}
 
     {% capture sold_out_image %}
-      <img class="swatches__sold-out--image crossed-out" src="{{ 'soldout.png' | asset_url }}" alt="Sold out image" />
+      <div class="swatches__sold-out--overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.8); display: flex; align-items: center; justify-content: center; font-size: 12px; color: #666;">
+        ✕
+      </div>
     {% endcapture %}
 
     {% capture regular_swatch %}
@@ -159,37 +256,40 @@
     {% endcapture %}
 
     {% capture color_swatch %}
-      <div class="swatches__swatch--color swatch-element color swatches__shape--{{ color_swatch_shape }} {% unless available %}soldout{% endunless %} js-swatch-element parent-dflex" data-option-value="{{ value | escape }}" data-option-position="{{ option.position }}" data-available="{{ available }}">
+      <div class="swatches__swatch--color swatch-element color {% unless available %}soldout{% endunless %} js-swatch-element parent-dflex" data-option-value="{{ value | escape }}" data-option-position="{{ option.position }}" data-available="{{ available }}">
         <div class="color_dflex">
-        {{ radio_button }}
-        {% if variant_image_url %}
-          <!-- Show variant image if available -->
-          <label class="swatches__form--label"
-            for="{{ section.id }}-{{ option.name }}-{{ forloop.index0 }}"
-            tabindex="0"
-            style="background-image: url({{ variant_image_url }}); background-position: center center; background-size: cover;">
-            {% unless available %}{{ sold_out_image }}{% endunless %}
-          </label>
-          <span class="swatches__color-name">{{ value | truncatewords:1 }}</span>
-
-        {% else %}
-          <!-- Fallback to color swatch if no variant image -->
-          <label class="swatches__form--label"
-            for="{{ section.id }}-{{ option.name }}-{{ forloop.index0 }}"
-            tabindex="0"
-            style="background-color: {{ css_color }};
-            {% unless color_swatch_style == 'default-color' %}
-              background-image: url({% if color_swatch_style == 'custom-image' %}{{ image_url }}{% elsif color_swatch_style == 'variant-image' %}{{ variant_image_url }}{% elsif color_swatch_style == 'swatch' %}{{ swatch_image_url }}{% endif %}); background-position: center center; background-size: 50px;
-            {% endunless %}">
-            {% unless available %}{{ sold_out_image }}{% endunless %}
-          </label>
-          <span class="swatches__color-name">{{ value }}</span>
-        {% endif %}
-          </div>
+          {{ radio_button }}
+          {% if variant_image_url %}
+            <!-- Show variant image if available -->
+            <label class="swatches__form--label"
+              for="{{ section.id }}-{{ option.name }}-{{ forloop.index0 }}"
+              tabindex="0"
+              style="background-image: url({{ variant_image_url }}); background-position: center center; background-size: cover; background-repeat: no-repeat;">
+              {% unless available %}{{ sold_out_image }}{% endunless %}
+            </label>
+          {% elsif swatch_img %}
+            <!-- Show custom swatch image if available -->
+            <label class="swatches__form--label"
+              for="{{ section.id }}-{{ option.name }}-{{ forloop.index0 }}"
+              tabindex="0"
+              style="background-image: url({{ swatch_img }}); background-position: center center; background-size: cover; background-repeat: no-repeat;">
+              {% unless available %}{{ sold_out_image }}{% endunless %}
+            </label>
+          {% else %}
+            <!-- Fallback to color background -->
+            <label class="swatches__form--label"
+              for="{{ section.id }}-{{ option.name }}-{{ forloop.index0 }}"
+              tabindex="0"
+              style="background-color: {{ css_color }};">
+              {% unless available %}{{ sold_out_image }}{% endunless %}
+            </label>
+          {% endif %}
+          <span class="swatches__color-name">{{ value | truncatewords: 1, '' }}</span>
+        </div>
       </div>
     {% endcapture %}
 
-    {% if show_color_swatches and color_swatch_options contains option_name %}
+    {% if is_color_option %}
       {{ color_swatch }}
     {% else %}
       {{ regular_swatch }}
@@ -211,9 +311,7 @@
       "option3": "{{ variant.option3 | escape }}"
     }{% unless forloop.last %},{% endunless %}
     {% endfor %}
-  ],
-  "colorOptions": {{ color_swatch_options | json }},
-  "sizeOptions": {{ size_swatches | json }}
+  ]
 }
 </script>
 {% endif %}
@@ -225,8 +323,15 @@ document.addEventListener('DOMContentLoaded', function() {
   
   const data = JSON.parse(productData.textContent);
   const variants = data.variants;
-  const colorOptions = data.colorOptions;
-  const sizeOptions = data.sizeOptions;
+  
+  // Define options directly in JavaScript
+  const colorOptions = ['color', 'colour', 'colors', 'colours'];
+  const sizeOptions = ['size', 'sizes'];
+  
+  // Helper function to check if option name contains any of the specified terms
+  function isOptionType(optionName, optionTypes) {
+    return optionTypes.some(type => optionName.includes(type));
+  }
   
   // Function to filter color swatches based on selected size
   function filterColorSwatches() {
@@ -236,7 +341,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     sizeContainers.forEach(function(container) {
       const optionName = container.getAttribute('data-option-name');
-      if (sizeOptions.includes(optionName)) {
+      if (isOptionType(optionName, sizeOptions)) {
         const checkedInput = container.querySelector('.swatches__form--input:checked');
         if (checkedInput) {
           selectedSize = checkedInput.value;
@@ -247,31 +352,21 @@ document.addEventListener('DOMContentLoaded', function() {
     // If no size is selected, show all colors
     if (!selectedSize) return;
     
-    // Get all colors for the selected size (regardless of availability)
+    // Get all colors for the selected size
     const availableColors = new Set();
     const soldOutColors = new Set();
     
     variants.forEach(function(variant) {
       if (variant.option1 === selectedSize || variant.option2 === selectedSize || variant.option3 === selectedSize) {
         // Add all option values for this variant to available colors
-        if (variant.option1 && variant.option1 !== selectedSize) {
-          availableColors.add(variant.option1);
-          if (!variant.available) {
-            soldOutColors.add(variant.option1);
+        [variant.option1, variant.option2, variant.option3].forEach(function(optionValue) {
+          if (optionValue && optionValue !== selectedSize) {
+            availableColors.add(optionValue);
+            if (!variant.available) {
+              soldOutColors.add(optionValue);
+            }
           }
-        }
-        if (variant.option2 && variant.option2 !== selectedSize) {
-          availableColors.add(variant.option2);
-          if (!variant.available) {
-            soldOutColors.add(variant.option2);
-          }
-        }
-        if (variant.option3 && variant.option3 !== selectedSize) {
-          availableColors.add(variant.option3);
-          if (!variant.available) {
-            soldOutColors.add(variant.option3);
-          }
-        }
+        });
       }
     });
     
@@ -280,7 +375,7 @@ document.addEventListener('DOMContentLoaded', function() {
       const optionName = container.getAttribute('data-option-name');
       
       // Only filter color containers, not size containers
-      if (colorOptions.includes(optionName)) {
+      if (isOptionType(optionName, colorOptions)) {
         const swatches = container.querySelectorAll('.js-swatch-element');
         
         swatches.forEach(function(swatch) {
@@ -290,7 +385,7 @@ document.addEventListener('DOMContentLoaded', function() {
           if (availableColors.has(optionValue)) {
             swatch.classList.remove('swatch-hidden');
             
-            // Update sold out status with opacity
+            // Update sold out status
             if (soldOutColors.has(optionValue) || !isAvailable) {
               swatch.classList.add('swatch-sold-out');
               swatch.classList.add('soldout');
@@ -311,43 +406,27 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
   
-  // Add event listeners to size inputs only
-  const sizeContainers = document.querySelectorAll('.js-variant-selector');
-  sizeContainers.forEach(function(container) {
+  // Add event listeners to all option inputs
+  const allContainers = document.querySelectorAll('.js-variant-selector');
+  allContainers.forEach(function(container) {
     const optionName = container.getAttribute('data-option-name');
+    const inputs = container.querySelectorAll('.swatches__form--input');
     
-    // Only add listeners to size options
-    if (sizeOptions.includes(optionName)) {
-      const sizeInputs = container.querySelectorAll('.swatches__form--input');
-      
-      sizeInputs.forEach(function(input) {
-        input.addEventListener('change', function() {
-          // Update selected option display
-          const optionPosition = this.getAttribute('data-position');
-          const selectedSpan = document.getElementById('selected-option-' + optionPosition);
-          if (selectedSpan) {
-            selectedSpan.textContent = this.value;
-          }
-          
-          // Filter color swatches
+    inputs.forEach(function(input) {
+      input.addEventListener('change', function() {
+        // Update selected option display
+        const optionPosition = this.getAttribute('data-position');
+        const selectedSpan = document.getElementById('selected-option-' + optionPosition);
+        if (selectedSpan) {
+          selectedSpan.textContent = this.value;
+        }
+        
+        // Filter color swatches if this is a size option
+        if (isOptionType(optionName, sizeOptions)) {
           filterColorSwatches();
-        });
+        }
       });
-    } else if (colorOptions.includes(optionName)) {
-      // Add listeners to color options just for updating display
-      const colorInputs = container.querySelectorAll('.swatches__form--input');
-      
-      colorInputs.forEach(function(input) {
-        input.addEventListener('change', function() {
-          // Update selected option display
-          const optionPosition = this.getAttribute('data-position');
-          const selectedSpan = document.getElementById('selected-option-' + optionPosition);
-          if (selectedSpan) {
-            selectedSpan.textContent = this.value;
-          }
-        });
-      });
-    }
+    });
   });
   
   // Initial filter on page load
