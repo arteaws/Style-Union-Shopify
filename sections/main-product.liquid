@@ -187,6 +187,7 @@
   <div class="product__section-images product__section-image--{{ thumbnail_position }} carousel-container js-product-gallery span-6 md-span-12 sm-span-12 auto desktop-gallerr-cs"
     data-product-gallery data-product-single-media-group
     data-gallery-config='{{ product_gallery_config }}' data-aos="fade">
+    {% render 'badges-snippet' %}
       <div class="pdp-wishlist-set-cs">
     <div id="smartwishlist" data-product="{{ product.id }}" data-variant="{{ product.variants.first.id }}"></div>
      </div>
