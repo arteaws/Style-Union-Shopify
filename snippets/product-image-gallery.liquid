@@ -499,21 +499,57 @@
   -%}
   <div id="slider" class=" {{ grid_width }} thumbs_{{ thumbnail_position }} auto {{ no_slider }}">
 <div class="custom-badges">
-  {% assign collection_names = product.collections | map: 'title' | join: ',' %}
+  {% comment %} Get current date for duration comparison {% endcomment %}
+  {% assign current_date = 'now' | date: '%s' %}
   
-  {% if collection_names contains 'Bestseller New' %}
-    <span class="product-badge">Most loved</span>
-  {% elsif collection_names contains 'Must Haves' %}
-    <span class="product-badge">Must Have</span>
-  {% elsif collection_names contains 'Last Few' %}
-    <span class="product-badge">Few Left</span>
-  {% elsif collection_names contains 'Store Bestseller' %}
-    <span class="product-badge">Selling Fast</span>
-  {% elsif collection_names contains 'Must Haves Essentials' %}
-    <span class="product-badge">New In</span>
-  {% elsif collection_names contains 'New In' %}
-    <span class="product-badge">New In</span>
-  {% endif %}
+  {% comment %} Get all custom badge metaobjects {% endcomment %}
+  {% assign badge_metaobjects = shop.metaobjects.custom_badges.values %}
+  
+  {% comment %} Get current product's collection titles in lowercase {% endcomment %}
+  {% assign product_collections = product.collections | map: 'title' | map: 'downcase' %}
+  
+  {% comment %} Loop through each badge metaobject {% endcomment %}
+  {% for badge in badge_metaobjects %}
+    {% comment %} Check if badge should be displayed based on duration {% endcomment %}
+    {% assign show_badge = false %}
+    
+    {% if badge.duration == 'Infinite Days' %}
+      {% assign show_badge = true %}
+    {% elsif badge.duration == '15days' %}
+      {% comment %} Calculate 15 days from badge creation/update date {% endcomment %}
+      {% assign badge_created = badge.created_at | date: '%s' %}
+      {% assign fifteen_days = 15 | times: 24 | times: 3600 %}
+      {% assign expiry_date = badge_created | plus: fifteen_days %}
+      {% if current_date <= expiry_date %}
+        {% assign show_badge = true %}
+      {% endif %}
+    {% elsif badge.duration == '30days' %}
+      {% comment %} Calculate 30 days from badge creation/update date {% endcomment %}
+      {% assign badge_created = badge.created_at | date: '%s' %}
+      {% assign thirty_days = 30 | times: 24 | times: 3600 %}
+      {% assign expiry_date = badge_created | plus: thirty_days %}
+      {% if current_date <= expiry_date %}
+        {% assign show_badge = true %}
+      {% endif %}
+    {% endif %}
+    
+    {% comment %} If badge should be shown, check if product is in specified collections {% endcomment %}
+    {% if show_badge %}
+      {% comment %} Get collection names from metaobject and convert to lowercase {% endcomment %}
+      {% assign badge_collections = badge.collection_names | split: ',' %}
+      
+      {% comment %} Loop through badge collections to check for matches {% endcomment %}
+      {% for badge_collection in badge_collections %}
+        {% assign badge_collection_clean = badge_collection | strip | downcase %}
+        
+        {% comment %} Check if current product is in this collection {% endcomment %}
+        {% if product_collections contains badge_collection_clean %}
+          <span class="product-badge">{{ badge.badge_name }}</span>
+          {% break %}
+        {% endif %}
+      {% endfor %}
+    {% endif %}
+  {% endfor %}
 </div>
     <div class="slides product-image-container carousel carousel-main js-carousel-main" data-product-id="{{ product.id }}">
       {% for media in product.media %}
