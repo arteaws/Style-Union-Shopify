@@ -1,4 +1,4 @@
-{%- if product -%}
+
   <div class="custom-badges">
     {% for block in section.blocks %}
       {% assign collection_list = block.settings.collections | split: ',' %}
@@ -36,4 +36,3 @@
       {% endif %}
     {% endfor %}
   </div>
-{%- endif -%}
