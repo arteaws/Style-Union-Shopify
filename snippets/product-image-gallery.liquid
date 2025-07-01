@@ -499,7 +499,7 @@
   -%}
   <div id="slider" class=" {{ grid_width }} thumbs_{{ thumbnail_position }} auto {{ no_slider }}">
 <div class="custom-badges">
-  {{ shop.metaobjects.custom_badges }}
+  {{ shop.metaobjects.custom_badges.value }}
   {% if shop.metaobjects.custom_badges %}
     {% for badge in shop.metaobjects.custom_badges.values %}
       {% assign collection_names = badge.custom_badges.collection_names | split: ',' %}
