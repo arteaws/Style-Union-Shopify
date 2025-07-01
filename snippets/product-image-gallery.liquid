@@ -499,21 +499,44 @@
   -%}
   <div id="slider" class=" {{ grid_width }} thumbs_{{ thumbnail_position }} auto {{ no_slider }}">
 <div class="custom-badges">
-  {% assign collection_names = product.collections | map: 'title' | join: ',' %}
+  {% assign current_date = 'now' | date: '%s' %}
   
-  {% if collection_names contains 'Bestseller New' %}
-    <span class="product-badge">Most loved</span>
-  {% elsif collection_names contains 'Must Haves' %}
-    <span class="product-badge">Must Have</span>
-  {% elsif collection_names contains 'Last Few' %}
-    <span class="product-badge">Few Left</span>
-  {% elsif collection_names contains 'Store Bestseller' %}
-    <span class="product-badge">Selling Fast</span>
-  {% elsif collection_names contains 'Must Haves Essentials' %}
-    <span class="product-badge">New In</span>
-  {% elsif collection_names contains 'New In' %}
-    <span class="product-badge">New In</span>
-  {% endif %}
+  {% for badge in shop.metaobjects.custom_badges.values %}
+    {% assign show_badge = false %}
+    {% assign collection_names = badge.custom_badges.collection_names | downcase | split: ',' %}
+    
+    {% comment %} Check if product is in any of the badge's collections {% endcomment %}
+    {% for collection in product.collections %}
+      {% if collection_names contains collection.title.downcase %}
+        {% assign show_badge = true %}
+        {% break %}
+      {% endif %}
+    {% endfor %}
+    
+    {% comment %} Check duration if badge should be shown {% endcomment %}
+    {% if show_badge %}
+      {% assign badge_duration = badge.custom_badges.duration %}
+      
+      {% case badge_duration %}
+        {% when '15days' %}
+          {% assign created_date = badge.created_at | date: '%s' %}
+          {% assign expiry_date = created_date | plus: 1296000 %} {# 15 days in seconds #}
+          {% if current_date < expiry_date %}
+            <span class="product-badge">{{ badge.custom_badges.badge_name }}</span>
+          {% endif %}
+          
+        {% when '30days' %}
+          {% assign created_date = badge.created_at | date: '%s' %}
+          {% assign expiry_date = created_date | plus: 2592000 %} {# 30 days in seconds #}
+          {% if current_date < expiry_date %}
+            <span class="product-badge">{{ badge.custom_badges.badge_name }}</span>
+          {% endif %}
+          
+        {% when 'Infinite Days' %}
+          <span class="product-badge">{{ badge.custom_badges.badge_name }}</span>
+      {% endcase %}
+    {% endif %}
+  {% endfor %}
 </div>
     <div class="slides product-image-container carousel carousel-main js-carousel-main" data-product-id="{{ product.id }}">
       {% for media in product.media %}
