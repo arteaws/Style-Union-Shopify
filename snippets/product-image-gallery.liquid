@@ -499,20 +499,19 @@
   -%}
   <div id="slider" class=" {{ grid_width }} thumbs_{{ thumbnail_position }} auto {{ no_slider }}">
 <div class="custom-badges">
-  {%- if shop.metaobjects.custom_badges -%}
-    {%- for badge in shop.metaobjects.custom_badges.values -%}
-      {%- assign collection_names = badge.custom_badges.collection_names | downcase | split: ',' | map: 'strip' | compact -%}
+  {% if shop.metaobjects.custom_badges %}
+    {% for badge in shop.metaobjects.custom_badges.values %}
+      {% assign collection_names = badge.custom_badges.collection_names | split: ',' %}
       
-      {%- comment -%} Check current product's collections {%- endcomment -%}
-      {%- for collection in product.collections -%}
-        {%- assign collection_title = collection.title | downcase | strip -%}
-        {%- if collection_names contains collection_title -%}
+      {% comment %} Check if product is in any of the badge's collections {% endcomment %}
+      {% for collection in product.collections %}
+        {% if collection_names contains collection.title %}
           <span class="product-badge">{{ badge.custom_badges.badge_name }}</span>
-          {%- break -%}
-        {%- endif -%}
-      {%- endfor -%}
-    {%- endfor -%}
-  {%- endif -%}
+          {% break %}
+        {% endif %}
+      {% endfor %}
+    {% endfor %}
+  {% endif %}
 </div>
     <div class="slides product-image-container carousel carousel-main js-carousel-main" data-product-id="{{ product.id }}">
       {% for media in product.media %}
