@@ -498,6 +498,7 @@
 
   -%}
   <div id="slider" class=" {{ grid_width }} thumbs_{{ thumbnail_position }} auto {{ no_slider }}">
+{% render 'badges-snippet', product: product %}
     <div class="slides product-image-container carousel carousel-main js-carousel-main" data-product-id="{{ product.id }}">
       {% for media in product.media %}
         <div class="{{ media.media_type }}-slide carousel-cell js-main-carousel-cell" data-image-id="{{ media.id }}" data-slide-index="{{ forloop.index0 }}" tabindex="-1">
