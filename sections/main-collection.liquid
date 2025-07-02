@@ -15,15 +15,17 @@
     padding-left:1rem;
     text-align:left;
   }
-  .custom-accordion-svg {
-        position: absolute;
-        right: 16px;
-        rotate: 180deg;
-        top: 12px;
-        line-height: 0;
-    }
-.custom-relative-btn.cs-open .custom-accordion-svg{
-  rotate: 0deg;
+.custom-accordion-svg {
+    position: absolute;
+    right: 16px;
+    rotate: 180deg;
+    top: 12px;
+    line-height: 0;
+    transition: rotate 0.3s ease; 
+}
+
+.custom-relative-btn.cs-open .custom-accordion-svg {
+    rotate: 0deg;
 }
   
 }
