@@ -26,7 +26,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.3s ease; /* Faster transition */
+    transition: all 0.3s ease;
   }
   .loadingBox {
     position: relative;
@@ -48,7 +48,7 @@
     -ms-animation-name: loading_animation;
     -webkit-animation-name: loading_animation;
     -moz-animation-name: loading_animation;
-    animation-duration: 0.8s; /* Faster animation */
+    animation-duration: 0.8s;
     -o-animation-duration: 0.8s;
     -ms-animation-duration: 0.8s;
     -webkit-animation-duration: 0.8s;
@@ -79,7 +79,7 @@
     cursor: pointer;
     border-radius: 5px;
   }
-  /* Faster, staggered animation delays */
+  
   #loading_1 {
     animation-delay: 0.1s;
     -o-animation-delay: 0.1s;
@@ -137,7 +137,6 @@
     -moz-animation-delay: 0.8s;
   }
 
-  /* Pristege */
   [class^="pagination"], [class^="Pagination"], .pagination {
     display: none !important;
   }
@@ -204,63 +203,79 @@
 
 <script>
   class InfiniteScroll extends HTMLElement {
-  constructor() {
-    super();
-    this.initGrid();
-    this.init();
-    this.page = 1;
-    this.isLoading = false; // Prevent multiple simultaneous requests
-    this.scrollToTopBtn = document.querySelector(".scrollToTopButton");
-    this.scrollToTopBtn.addEventListener(
-      "click",
-      this.scrollToTopFx.bind(this)
-    );
-  }
- 
-  initGrid() {
-    const gridOptions = [".ProductListWrapper", "#main-collection-product-grid", "#product-grid", ".product-list"];
-    for (let gridName of gridOptions) {
-      let grid = document.querySelector(gridName);
-      if (grid) {
-        this.gridName = gridName;
-        this.gridContainer = grid;
-        break;
+    constructor() {
+      super();
+      this.initGrid();
+      this.init();
+      this.currentPage = 1; // Start from page 1 (first page is already loaded)
+      this.isLoading = false;
+      this.loadedProducts = new Set(); // Track loaded products to prevent duplicates
+      this.scrollToTopBtn = document.querySelector(".scrollToTopButton");
+      if (this.scrollToTopBtn) {
+        this.scrollToTopBtn.addEventListener("click", this.scrollToTopFx.bind(this));
       }
     }
-  }
- 
-  init() {
-    const observer = new IntersectionObserver(this.revealItem.bind(this), {
-      root: null,
-      threshold: 0.2, // Increased threshold for earlier trigger
-      rootMargin: '200px' // Preload content 200px before it's visible
-    });
-    observer.observe(this);
-  }
- 
-  fetchNextPage(e) {
-    // Prevent multiple simultaneous requests
-    if (this.isLoading || e > this.dataset.pageSize) {
-      return;
+   
+    initGrid() {
+      const gridOptions = [".ProductListWrapper", "#main-collection-product-grid", "#product-grid", ".product-list"];
+      for (let gridName of gridOptions) {
+        let grid = document.querySelector(gridName);
+        if (grid) {
+          this.gridName = gridName;
+          this.gridContainer = grid;
+          break;
+        }
+      }
+      
+      // Track initially loaded products
+      this.trackExistingProducts();
     }
     
-    this.isLoading = true;
-    
-    if (e <= this.dataset.pageSize) {
-      const t = `{{ shop.url }}/${this.dataset.next}`;
-      const i = new URL(t);
-      i.searchParams.set("page", e);
-      const r = i.href;
+    trackExistingProducts() {
+      if (this.gridContainer) {
+        const existingProducts = this.gridContainer.querySelectorAll('[data-product-id]');
+        existingProducts.forEach(product => {
+          const productId = product.getAttribute('data-product-id');
+          if (productId) {
+            this.loadedProducts.add(productId);
+          }
+        });
+      }
+    }
+   
+    init() {
+      const observer = new IntersectionObserver(this.revealItem.bind(this), {
+        root: null,
+        threshold: 0.2,
+        rootMargin: '200px'
+      });
+      observer.observe(this);
+    }
+   
+    fetchNextPage() {
+      // Prevent multiple simultaneous requests
+      if (this.isLoading || this.currentPage >= this.dataset.pageSize) {
+        return;
+      }
       
-      // Use faster fetch with reduced timeout
+      this.isLoading = true;
+      this.currentPage++; // Increment to next page
+      
+      // Get current URL and modify it for next page
+      const currentUrl = new URL(window.location.href);
+      currentUrl.searchParams.set("page", this.currentPage);
+      const nextPageUrl = currentUrl.href;
+      
+      console.log(`Loading page ${this.currentPage} from: ${nextPageUrl}`);
+      
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
+      const timeoutId = setTimeout(() => controller.abort(), 10000);
       
-      fetch(`${r}`, { 
+      fetch(nextPageUrl, { 
         method: "GET", 
         headers: { 
           "Content-Type": "text/html",
-          "Cache-Control": "no-cache" // Ensure fresh content
+          "Cache-Control": "no-cache"
         },
         signal: controller.signal
       })
@@ -271,48 +286,82 @@
           }
           return response.text();
         })
-        .then((e) => {
-          const t = new DOMParser().parseFromString(e, "text/html");
-          const i = t.querySelector(this.gridName);
-          if (i && i.innerHTML) {
-            this.gridContainer.insertAdjacentHTML("beforeend", i.innerHTML);
+        .then((html) => {
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(html, "text/html");
+          const newGrid = doc.querySelector(this.gridName);
+          
+          if (newGrid && newGrid.innerHTML.trim()) {
+            // Extract new products and filter out duplicates
+            const newProducts = newGrid.querySelectorAll('[data-product-id]');
+            let addedCount = 0;
+            
+            newProducts.forEach(product => {
+              const productId = product.getAttribute('data-product-id');
+              if (productId && !this.loadedProducts.has(productId)) {
+                this.gridContainer.appendChild(product.cloneNode(true));
+                this.loadedProducts.add(productId);
+                addedCount++;
+              }
+            });
+            
+            console.log(`Added ${addedCount} new products from page ${this.currentPage}`);
+            
+            // If no new products were added, we might have reached the end
+            if (addedCount === 0) {
+              this.innerHTML = `<h2>${this.dataset.endText}</h2>`;
+              return;
+            }
+          } else {
+            // No more products available
+            this.innerHTML = `<h2>${this.dataset.endText}</h2>`;
+            return;
           }
+          
           this.isLoading = false;
         })
-        .catch((e) => {
+        .catch((error) => {
           clearTimeout(timeoutId);
-          console.error("Error:", e);
+          console.error("Error loading next page:", error);
           this.isLoading = false;
+          
+          // If it's an abort error, we might have reached the end
+          if (error.name === 'AbortError') {
+            this.innerHTML = `<h2>${this.dataset.endText}</h2>`;
+          }
         });
+      
+      // Check if we've reached the last page
+      if (this.currentPage >= this.dataset.pageSize) {
+        setTimeout(() => {
+          this.innerHTML = `<h2>${this.dataset.endText}</h2>`;
+        }, 2000);
+      }
     }
     
-    if (e == this.dataset.pageSize) {
-      this.innerHTML = `<h2>${this.dataset.endText}</h2>`;
+    revealItem(entries, observer) {
+      const [entry] = entries;
+      if (!entry.isIntersecting || this.isLoading) return;
+      
+      if (entry.target && this.currentPage < this.dataset.pageSize) {
+        setTimeout(() => {
+          this.fetchNextPage();
+        }, 100);
+      }
+      
+      if (this.currentPage >= this.dataset.pageSize) {
+        observer.unobserve(entry.target);
+      }
+    }
+    
+    scrollToTopFx(e) {
+      document.body.scrollTop = 0;
+      document.documentElement.scrollTop = 0;
+      if (e.currentTarget) {
+        e.currentTarget.style.display = "none";
+      }
     }
   }
   
-  revealItem(e, t) {
-    const [i] = e;
-    if (!i.isIntersecting || this.isLoading) return;
-    
-    if (i.target) {
-      this.page++;
-      // Use setTimeout to make loading feel more responsive
-      setTimeout(() => {
-        this.fetchNextPage(this.page);
-      }, 100);
-    }
-    
-    if (this.page == this.dataset.pageSize) {
-      t.unobserve(i.target);
-    }
-  }
-  
-  scrollToTopFx(e) {
-    document.body.scrollTop = 0;
-    document.documentElement.scrollTop = 0;
-    e.currentTarget.style.display = "none";
-  }
-}
-customElements.define("infinite-scroll", InfiniteScroll);
+  customElements.define("infinite-scroll", InfiniteScroll);
 </script>
