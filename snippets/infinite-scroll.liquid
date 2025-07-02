@@ -233,13 +233,16 @@
     
     trackExistingProducts() {
       if (this.gridContainer) {
-        const existingProducts = this.gridContainer.querySelectorAll('[data-product-id]');
+        // Look for products with various possible selectors
+        const existingProducts = this.gridContainer.querySelectorAll('.js-product-listing, .product-index, .ProductItem, [data-product-id]');
         existingProducts.forEach(product => {
-          const productId = product.getAttribute('data-product-id');
+          const productId = product.getAttribute('data-product-id') || 
+                          product.querySelector('[data-product-id]')?.getAttribute('data-product-id');
           if (productId) {
             this.loadedProducts.add(productId);
           }
         });
+        console.log(`Tracked ${this.loadedProducts.size} existing products`);
       }
     }
    
@@ -343,14 +346,16 @@
       const [entry] = entries;
       if (!entry.isIntersecting || this.isLoading) return;
       
-      if (entry.target && this.currentPage < this.dataset.pageSize) {
+      if (entry.target && this.currentPage < parseInt(this.dataset.pageSize)) {
+        console.log('Intersection observed, loading next page...');
         setTimeout(() => {
           this.fetchNextPage();
         }, 100);
       }
       
-      if (this.currentPage >= this.dataset.pageSize) {
+      if (this.currentPage >= parseInt(this.dataset.pageSize)) {
         observer.unobserve(entry.target);
+        this.innerHTML = `<h2>${this.dataset.endText}</h2>`;
       }
     }
     
