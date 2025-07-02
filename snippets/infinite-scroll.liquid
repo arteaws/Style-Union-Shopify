@@ -207,13 +207,16 @@
       super();
       this.initGrid();
       this.init();
-      this.currentPage = 1; // Start from page 1 (first page is already loaded)
+      this.page = 1; // Keep original logic
       this.isLoading = false;
-      this.loadedProducts = new Set(); // Track loaded products to prevent duplicates
+      this.loadedProductIds = new Set(); // Track loaded product IDs
       this.scrollToTopBtn = document.querySelector(".scrollToTopButton");
       if (this.scrollToTopBtn) {
         this.scrollToTopBtn.addEventListener("click", this.scrollToTopFx.bind(this));
       }
+      
+      // Track existing products on page load
+      this.trackExistingProducts();
     }
    
     initGrid() {
@@ -223,26 +226,26 @@
         if (grid) {
           this.gridName = gridName;
           this.gridContainer = grid;
+          console.log("Grid container found:", gridName);
           break;
         }
       }
       
-      // Track initially loaded products
-      this.trackExistingProducts();
+      if (!this.gridContainer) {
+        console.error("No grid container found!");
+      }
     }
     
     trackExistingProducts() {
       if (this.gridContainer) {
-        // Look for products with various possible selectors
-        const existingProducts = this.gridContainer.querySelectorAll('.js-product-listing, .product-index, .ProductItem, [data-product-id]');
+        const existingProducts = this.gridContainer.querySelectorAll('[data-product-id]');
         existingProducts.forEach(product => {
-          const productId = product.getAttribute('data-product-id') || 
-                          product.querySelector('[data-product-id]')?.getAttribute('data-product-id');
+          const productId = product.getAttribute('data-product-id');
           if (productId) {
-            this.loadedProducts.add(productId);
+            this.loadedProductIds.add(productId);
           }
         });
-        console.log(`Tracked ${this.loadedProducts.size} existing products`);
+        console.log(`Tracked ${this.loadedProductIds.size} existing products`);
       }
     }
    
@@ -253,109 +256,96 @@
         rootMargin: '200px'
       });
       observer.observe(this);
+      console.log("Intersection observer initialized");
     }
    
-    fetchNextPage() {
-      // Prevent multiple simultaneous requests
-      if (this.isLoading || this.currentPage >= this.dataset.pageSize) {
+    fetchNextPage(pageNum) {
+      if (this.isLoading || pageNum > this.dataset.pageSize) {
+        console.log("Already loading or reached max pages");
         return;
       }
       
       this.isLoading = true;
-      this.currentPage++; // Increment to next page
+      console.log(`Fetching page ${pageNum}`);
       
-      // Get current URL and modify it for next page
-      const currentUrl = new URL(window.location.href);
-      currentUrl.searchParams.set("page", this.currentPage);
-      const nextPageUrl = currentUrl.href;
-      
-      console.log(`Loading page ${this.currentPage} from: ${nextPageUrl}`);
-      
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 10000);
-      
-      fetch(nextPageUrl, { 
-        method: "GET", 
-        headers: { 
-          "Content-Type": "text/html",
-          "Cache-Control": "no-cache"
-        },
-        signal: controller.signal
-      })
-        .then((response) => {
-          clearTimeout(timeoutId);
-          if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-          }
-          return response.text();
+      if (pageNum <= this.dataset.pageSize) {
+        // Use original URL construction method
+        const baseUrl = `${window.location.origin}${this.dataset.next}`;
+        const url = new URL(baseUrl);
+        url.searchParams.set("page", pageNum);
+        const requestUrl = url.href;
+        
+        console.log("Request URL:", requestUrl);
+        
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 5000);
+        
+        fetch(requestUrl, { 
+          method: "GET", 
+          headers: { 
+            "Content-Type": "text/html",
+            "Cache-Control": "no-cache"
+          },
+          signal: controller.signal
         })
-        .then((html) => {
-          const parser = new DOMParser();
-          const doc = parser.parseFromString(html, "text/html");
-          const newGrid = doc.querySelector(this.gridName);
-          
-          if (newGrid && newGrid.innerHTML.trim()) {
-            // Extract new products and filter out duplicates
-            const newProducts = newGrid.querySelectorAll('[data-product-id]');
-            let addedCount = 0;
-            
-            newProducts.forEach(product => {
-              const productId = product.getAttribute('data-product-id');
-              if (productId && !this.loadedProducts.has(productId)) {
-                this.gridContainer.appendChild(product.cloneNode(true));
-                this.loadedProducts.add(productId);
-                addedCount++;
-              }
-            });
-            
-            console.log(`Added ${addedCount} new products from page ${this.currentPage}`);
-            
-            // If no new products were added, we might have reached the end
-            if (addedCount === 0) {
-              this.innerHTML = `<h2>${this.dataset.endText}</h2>`;
-              return;
+          .then((response) => {
+            clearTimeout(timeoutId);
+            if (!response.ok) {
+              throw new Error(`HTTP error! status: ${response.status}`);
             }
-          } else {
-            // No more products available
-            this.innerHTML = `<h2>${this.dataset.endText}</h2>`;
-            return;
-          }
-          
-          this.isLoading = false;
-        })
-        .catch((error) => {
-          clearTimeout(timeoutId);
-          console.error("Error loading next page:", error);
-          this.isLoading = false;
-          
-          // If it's an abort error, we might have reached the end
-          if (error.name === 'AbortError') {
-            this.innerHTML = `<h2>${this.dataset.endText}</h2>`;
-          }
-        });
+            return response.text();
+          })
+          .then((html) => {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, "text/html");
+            const newGrid = doc.querySelector(this.gridName);
+            
+            if (newGrid && newGrid.innerHTML) {
+              // Filter out products that are already loaded
+              const newProducts = newGrid.querySelectorAll('[data-product-id]');
+              let addedCount = 0;
+              
+              newProducts.forEach(product => {
+                const productId = product.getAttribute('data-product-id');
+                if (productId && !this.loadedProductIds.has(productId)) {
+                  this.gridContainer.insertAdjacentHTML("beforeend", product.outerHTML);
+                  this.loadedProductIds.add(productId);
+                  addedCount++;
+                }
+              });
+              
+              console.log(`Added ${addedCount} new unique products`);
+            }
+            this.isLoading = false;
+          })
+          .catch((error) => {
+            clearTimeout(timeoutId);
+            console.error("Fetch error:", error);
+            this.isLoading = false;
+          });
+      }
       
-      // Check if we've reached the last page
-      if (this.currentPage >= this.dataset.pageSize) {
-        setTimeout(() => {
-          this.innerHTML = `<h2>${this.dataset.endText}</h2>`;
-        }, 2000);
+      if (pageNum == this.dataset.pageSize) {
+        this.innerHTML = `<h2>${this.dataset.endText}</h2>`;
       }
     }
     
     revealItem(entries, observer) {
       const [entry] = entries;
+      console.log("Intersection observed:", entry.isIntersecting, "Loading:", this.isLoading);
+      
       if (!entry.isIntersecting || this.isLoading) return;
       
-      if (entry.target && this.currentPage < parseInt(this.dataset.pageSize)) {
-        console.log('Intersection observed, loading next page...');
+      if (entry.target) {
+        this.page++;
+        console.log("Loading page:", this.page);
         setTimeout(() => {
-          this.fetchNextPage();
+          this.fetchNextPage(this.page);
         }, 100);
       }
       
-      if (this.currentPage >= parseInt(this.dataset.pageSize)) {
+      if (this.page == this.dataset.pageSize) {
         observer.unobserve(entry.target);
-        this.innerHTML = `<h2>${this.dataset.endText}</h2>`;
       }
     }
     
