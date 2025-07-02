@@ -1,4 +1,15 @@
-
+<style>
+@media only screen and (max-width: 768px) {
+  .mobile-sticky-filter{
+    position: sticky;
+    top: 80px;
+    z-index: 99;
+    background: white;
+    left: 0;
+  }
+}
+  
+</style>
 {%- liquid
 
   assign collection_link = ''
@@ -97,7 +108,7 @@ data-collection-link="{{ collection_link }}">
       {%- endif -%}
 
       {% if show_sidebar %}
-        <form id="CollectionSidebarFiltersForm" class="span-3 md-span-12 sm-span-12 auto" data-collection-sidebar-filters>
+        <form id="CollectionSidebarFiltersForm" class="span-3 md-span-12 sm-span-12 auto mobile-sticky-filter" data-collection-sidebar-filters>
           {% render 'collection-sidebar',
             collection: collection, block: block %}
         </form>
