@@ -11,7 +11,7 @@
 
 {%  endcomment %}
 
-<a class="collection__sidebar-mobile-trigger js-collection-side-toggle" href="#">
+<a class="collection__sidebar-mobile-trigger js-collection-side-toggle custom-relative-btn" href="#">
   <svg width="20" height="20" viewBox="0 0 24 24">
     <g fill="none" fill-rule="evenodd">
       <rect width="24" height="24"/>
@@ -20,10 +20,7 @@
   </svg>
   <span>{{ 'collections.filters.filter_button' | t }}</span>
 </a>
-<div class="collection__page-sidebar custom-relative-btn" id="sidebar">
-  <div class="custom-accordion-svg">
-  {% render 'arrow-svg-custom-acc' %}
-  </div>
+<div class="collection__page-sidebar" id="sidebar">
   {% for block in section.blocks %}
     {% case block.type %}
 
