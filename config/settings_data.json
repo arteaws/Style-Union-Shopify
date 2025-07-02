@@ -427,12 +427,14 @@
     "color_swatch_style": "custom-image",
     "sale_items": "amount",
     "show_payment_button": true,
+    "cart_type": "drawer",
     "cart_featured_collection": "bestsellers",
     "show_cart_giftwrap": false,
     "show_shipping_note": false,
     "show_cart_notes": false,
-    "show_shipping_countdown": false,
-    "free_shipping_threshold": "100",
+    "shipping_calculator_default_country": "India",
+    "show_shipping_countdown": true,
+    "free_shipping_threshold": "1699",
     "free_shipping_bg": "#313131",
     "twittername": "https://x.com/styleunion_in?mx=2",
     "facebook_url": "https://www.facebook.com/Styleunion.in",
@@ -543,6 +545,11 @@
           "button_vertical_position": "lowest",
           "greeting_message": ""
         }
+      },
+      "7278732907249339192": {
+        "type": "shopify://apps/rimix-product-badges/blocks/rimix-helper/46f9dcab-fec8-4959-8563-b2334479cd94",
+        "disabled": false,
+        "settings": {}
       },
       "17920835415960095625": {
         "type": "shopify://apps/swatch-king/blocks/variant-swatch-king/0850b1e4-ba30-4a0d-a8f4-f9a939276d7d",

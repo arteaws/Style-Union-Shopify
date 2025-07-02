@@ -634,9 +634,9 @@
                  <!-- {{ form | payment_button }} -->
                   {% if product.selected_or_first_available_variant.available %}
  <div class="shopify-payment-button">
-  <button type="button" id="flo-buy-now-button" onclick="handleFloBuyNowBtn(event)" class="shopify-payment-button__button shopify-payment-button__button--unbranded" name="flo-buy-now-button" style="width:100%; border-radius: 10px;">
-    {{ 'BUY IT NOW' }}
-</button>
+ {% comment %} <button type="button" id="flo-buy-now-button" onclick="handleFloBuyNowBtn(event)" class="shopify-payment-button__button shopify-payment-button__button--unbranded" name="flo-buy-now-button" style="width:100%; border-radius: 10px;">
+    {{ 'BUY IT NOW' }} 
+</button>{% endcomment %}
  </div>
  {%- endif -%}
  

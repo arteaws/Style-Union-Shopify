@@ -119,7 +119,14 @@ select.restock-alerts-country-select.selectBoxStyle {
  </style>
     {{ content_for_header }}
 
-    
+     <style>
+   .Vtl-WishlistHeaderWrapper {
+    display: none !important;
+  }
+       .Vtl-WishlistButtonWrapper {
+    display: none !important;
+}
+ </style>
 
     <!-- Hotjar Tracking Code for https://styleunion.in/ -->
     <script>
@@ -336,7 +343,10 @@ select.restock-alerts-country-select.selectBoxStyle {
         }
       });
     </script>
+    {% render 'size-chart-custom' %}
     <!-- Added by Team SearchTap: Ends -->
-    <!-- {% render 'razorpay-magic-checkout' %} -->
+    
+    {% render 'magicSidecartScript' %}
+    {% render 'razorpay-magic-checkout' %} 
   </body>
 </html>
