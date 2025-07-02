@@ -6560,6 +6560,7 @@ theme.CollectionFilters = {
     sidebarToggle.addEventListener('click', function(event){
      event.preventDefault();
      theme.Helpers.toggleClass("sidebar", "open");
+    console.log("yhi toh hai");
     });
 
 	},
