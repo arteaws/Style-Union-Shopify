@@ -20,14 +20,13 @@
   infinite-scroll {
     position: absolute;
     width: 100%;
-    /* max-width:800px; */
     font-weight: 600;
     bottom: 0;
     left: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.5s ease;
+    transition: all 0.3s ease; /* Faster transition */
   }
   .loadingBox {
     position: relative;
@@ -43,17 +42,17 @@
     background-color: rgb(0, 0, 0);
     width: 28px;
     height: 28px;
-    margin: 0 1px; /* Small spacing between dots */
+    margin: 0 1px;
     animation-name: loading_animation;
     -o-animation-name: loading_animation;
     -ms-animation-name: loading_animation;
     -webkit-animation-name: loading_animation;
     -moz-animation-name: loading_animation;
-    animation-duration: 1.5s;
-    -o-animation-duration: 1.5s;
-    -ms-animation-duration: 1.5s;
-    -webkit-animation-duration: 1.5s;
-    -moz-animation-duration: 1.5s;
+    animation-duration: 0.8s; /* Faster animation */
+    -o-animation-duration: 0.8s;
+    -ms-animation-duration: 0.8s;
+    -webkit-animation-duration: 0.8s;
+    -moz-animation-duration: 0.8s;
     animation-iteration-count: infinite;
     -o-animation-iteration-count: infinite;
     -ms-animation-iteration-count: infinite;
@@ -80,61 +79,62 @@
     cursor: pointer;
     border-radius: 5px;
   }
+  /* Faster, staggered animation delays */
   #loading_1 {
+    animation-delay: 0.1s;
+    -o-animation-delay: 0.1s;
+    -ms-animation-delay: 0.1s;
+    -webkit-animation-delay: 0.1s;
+    -moz-animation-delay: 0.1s;
+  }
+  #loading_2 {
+    animation-delay: 0.2s;
+    -o-animation-delay: 0.2s;
+    -ms-animation-delay: 0.2s;
+    -webkit-animation-delay: 0.2s;
+    -moz-animation-delay: 0.2s;
+  }
+  #loading_3 {
+    animation-delay: 0.3s;
+    -o-animation-delay: 0.3s;
+    -ms-animation-delay: 0.3s;
+    -webkit-animation-delay: 0.3s;
+    -moz-animation-delay: 0.3s;
+  }
+  #loading_4 {
+    animation-delay: 0.4s;
+    -o-animation-delay: 0.4s;
+    -ms-animation-delay: 0.4s;
+    -webkit-animation-delay: 0.4s;
+    -moz-animation-delay: 0.4s;
+  }
+  #loading_5 {
+    animation-delay: 0.5s;
+    -o-animation-delay: 0.5s;
+    -ms-animation-delay: 0.5s;
+    -webkit-animation-delay: 0.5s;
+    -moz-animation-delay: 0.5s;
+  }
+  #loading_6 {
     animation-delay: 0.6s;
     -o-animation-delay: 0.6s;
     -ms-animation-delay: 0.6s;
     -webkit-animation-delay: 0.6s;
     -moz-animation-delay: 0.6s;
   }
-  #loading_2 {
-    animation-delay: 0.75s;
-    -o-animation-delay: 0.75s;
-    -ms-animation-delay: 0.75s;
-    -webkit-animation-delay: 0.75s;
-    -moz-animation-delay: 0.75s;
-  }
-  #loading_3 {
-    animation-delay: 0.9s;
-    -o-animation-delay: 0.9s;
-    -ms-animation-delay: 0.9s;
-    -webkit-animation-delay: 0.9s;
-    -moz-animation-delay: 0.9s;
-  }
-  #loading_4 {
-    animation-delay: 1.05s;
-    -o-animation-delay: 1.05s;
-    -ms-animation-delay: 1.05s;
-    -webkit-animation-delay: 1.05s;
-    -moz-animation-delay: 1.05s;
-  }
-  #loading_5 {
-    animation-delay: 1.2s;
-    -o-animation-delay: 1.2s;
-    -ms-animation-delay: 1.2s;
-    -webkit-animation-delay: 1.2s;
-    -moz-animation-delay: 1.2s;
-  }
-  #loading_6 {
-    animation-delay: 1.35s;
-    -o-animation-delay: 1.35s;
-    -ms-animation-delay: 1.35s;
-    -webkit-animation-delay: 1.35s;
-    -moz-animation-delay: 1.35s;
-  }
   #loading_7 {
-    animation-delay: 1.5s;
-    -o-animation-delay: 1.5s;
-    -ms-animation-delay: 1.5s;
-    -webkit-animation-delay: 1.5s;
-    -moz-animation-delay: 1.5s;
+    animation-delay: 0.7s;
+    -o-animation-delay: 0.7s;
+    -ms-animation-delay: 0.7s;
+    -webkit-animation-delay: 0.7s;
+    -moz-animation-delay: 0.7s;
   }
   #loading_8 {
-    animation-delay: 1.64s;
-    -o-animation-delay: 1.64s;
-    -ms-animation-delay: 1.64s;
-    -webkit-animation-delay: 1.64s;
-    -moz-animation-delay: 1.64s;
+    animation-delay: 0.8s;
+    -o-animation-delay: 0.8s;
+    -ms-animation-delay: 0.8s;
+    -webkit-animation-delay: 0.8s;
+    -moz-animation-delay: 0.8s;
   }
 
   /* Pristege */
@@ -209,6 +209,7 @@
     this.initGrid();
     this.init();
     this.page = 1;
+    this.isLoading = false; // Prevent multiple simultaneous requests
     this.scrollToTopBtn = document.querySelector(".scrollToTopButton");
     this.scrollToTopBtn.addEventListener(
       "click",
@@ -231,43 +232,82 @@
   init() {
     const observer = new IntersectionObserver(this.revealItem.bind(this), {
       root: null,
-      threshold: 0.05,
+      threshold: 0.2, // Increased threshold for earlier trigger
+      rootMargin: '200px' // Preload content 200px before it's visible
     });
     observer.observe(this);
   }
  
   fetchNextPage(e) {
+    // Prevent multiple simultaneous requests
+    if (this.isLoading || e > this.dataset.pageSize) {
+      return;
+    }
+    
+    this.isLoading = true;
+    
     if (e <= this.dataset.pageSize) {
       const t = `{{ shop.url }}/${this.dataset.next}`;
       const i = new URL(t);
       i.searchParams.set("page", e);
       const r = i.href;
-      fetch(`${r}`, { method: "GET", headers: { "Content-Type": "text/html" } })
-        .then((e) => e.text())
+      
+      // Use faster fetch with reduced timeout
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
+      
+      fetch(`${r}`, { 
+        method: "GET", 
+        headers: { 
+          "Content-Type": "text/html",
+          "Cache-Control": "no-cache" // Ensure fresh content
+        },
+        signal: controller.signal
+      })
+        .then((response) => {
+          clearTimeout(timeoutId);
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          return response.text();
+        })
         .then((e) => {
           const t = new DOMParser().parseFromString(e, "text/html");
-          const i = t.querySelector(this.gridName).innerHTML;
-          this.gridContainer.insertAdjacentHTML("beforeend", i);        
+          const i = t.querySelector(this.gridName);
+          if (i && i.innerHTML) {
+            this.gridContainer.insertAdjacentHTML("beforeend", i.innerHTML);
+          }
+          this.isLoading = false;
         })
         .catch((e) => {
+          clearTimeout(timeoutId);
           console.error("Error:", e);
+          this.isLoading = false;
         });
     }
+    
     if (e == this.dataset.pageSize) {
       this.innerHTML = `<h2>${this.dataset.endText}</h2>`;
     }
   }
+  
   revealItem(e, t) {
     const [i] = e;
-    if (!i.isIntersecting) return;
+    if (!i.isIntersecting || this.isLoading) return;
+    
     if (i.target) {
       this.page++;
-      this.fetchNextPage(this.page);
+      // Use setTimeout to make loading feel more responsive
+      setTimeout(() => {
+        this.fetchNextPage(this.page);
+      }, 100);
     }
+    
     if (this.page == this.dataset.pageSize) {
       t.unobserve(i.target);
     }
   }
+  
   scrollToTopFx(e) {
     document.body.scrollTop = 0;
     document.documentElement.scrollTop = 0;
