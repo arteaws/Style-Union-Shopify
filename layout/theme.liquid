@@ -96,7 +96,27 @@
       {{ main_font_italic | font_face: font_display: 'swap' }}
       {{ main_font_bold_italic | font_face: font_display: 'swap' }}
     </style>
-
+ <style>
+   .Vtl-WishlistHeaderWrapper {
+    display: none !important;
+}
+.nm-portal > .restock-alerts-notify-button {
+    width: 100%;
+    border-radius: 10px;
+}
+.nm-portal >  .restock-alerts-branding-text.brandingStyle {
+    display: none;
+}
+select.restock-alerts-country-select.selectBoxStyle {
+    height: unset;
+}
+ select.restock-alerts-variant-select.selectBoxStyle {
+    height: unset;
+}
+ .Vtl-BackInStockButtonWrapper {
+    display: none !important;
+}  
+ </style>
     {{ content_for_header }}
 
      <style>

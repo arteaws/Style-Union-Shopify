@@ -1,64 +1,11 @@
-{% comment %}
-
-
 <style>
-.product__nav {
-    float: right;
-    display: none;
-}
-
-
-.product__section-images .zoom_btn {
-left: 10px !important;
- right:unset; 
-}
-/* .mobile-pdp-slider{
-  display:none;
-} */
-.indiviual-merged-div{
-  position:relative;
-}
- .custom-pdp-set {
-    position: absolute;
-    z-index: 999;
-    right: 18px;
-    top: 10px;
+ .Vtl-WishlistButtonWrapper {
+    display: none  !important;
 } 
-
-  
-@media only screen and (max-width: 600px) {
-.product__section.product-template.global__section{
-  margin-top:0 !important;
+.Vtl-BackInStockButton {
+    padding: 16px 24px !important;
+    border-radius: 12px;
 }
-.product__section-container {
-    padding-top: 0 !important;
-}  
-.custom-pdp-set {
-    right: 14px !important;
-    top: 25px !important;
-}
-.mobile-pdp-slider{
-  display:block;
-}
-.desktop-gallerr-cs{
-    display:none;
-}
-/* .custom-pdp-set {
-        width: fit-content;
-        position: absolute;
-        z-index: 99;
-        left: unset !important;
-        right: 16px !important;
-        top: 28px !important;
-    } */
-  
-}
-  
-</style>
-
-
-{% endcomment %}
-<style>
 .pdp-wishlist-set-cs {
     position: absolute;
     z-index: 99;
@@ -68,7 +15,108 @@ left: 10px !important;
 .product__section-images .zoom_btn {
     top: 40px;
     left: 10px;
+}
+.custom-badges {
+    color: #151414;
+    width: fit-content;
+    position: absolute;
+    z-index: 9;
+    top: 6px;
+    left: 6px;
+    background: #fff;
+    padding: 0px 10px;
+    font-size: 8px;
+    font-weight: 900;
+    text-transform: uppercase;
+} 
+
+  .cs-custom-size__trigger {
+    cursor: pointer;
+    text-decoration: underline;
+    color: inherit;
+  }
+  
+.cs-custom-size__popup {
+    display: none;
+    position: fixed;
+    top: 0;
+    overflow: scroll;
+    left: 0;
+    width: 100%;
+    height: 90vh;
+    z-index: 99999;
+    align-items: center;
+    justify-content: center;
+}
+  .cs-overflow{
+    overflow:hidden;
+  }
+  .cs-custom-size__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+  
+.cs-custom-size__content {
+    position: relative;
+    background: white;
+    height: 80%;
+    padding: 20px;
+    overflow: scroll;
+    border-radius: 4px;
+    width: 60%;
+    text-align: center;
+    z-index: 1;
+}
+  .cs-custom-size__close {
+    position: absolute;
+    top: 5px;
+    right: 0;
+    color: black;
+    background: none;
+    border: none;
+    font-size: 40px;
+    cursor: pointer;
+}
+.cs-custom-size__close:hover {
+    border-radius: 30px;
+    padding: 0 25px;
+    transition: unset;
+    background: transparent;
+    color: black;
+}
+ /* .custom-size-cs-chart-new{
+  display:flex;
+  align-items:center;
+} 
+.scale-svg-cs > img {
+    width: 30px;
+    height: 30px;
+} */
+@media only screen and (max-width: 600px) {
+.cs-custom-size__content {
+    width: 90%;
+} 
+}
+
+
+  
 </style>
+
+<div class="cs-custom-size">
+  <div class="cs-custom-size__popup">
+    <div class="cs-custom-size__overlay"></div>
+    <div class="cs-custom-size__content">
+      {% render 'size-chart-snipp' %}
+      <button class="cs-custom-size__close">&times;</button>
+    </div>
+  </div>
+</div>
+
+
 {%- liquid
 
   assign current_variant = product.selected_or_first_available_variant
@@ -95,7 +143,6 @@ left: 10px !important;
   endif
 
 -%}
-
 <section id="product-{{ product.id }}"
   class="product__section product-template global__section row grid__wrapper"
   data-product-id="{{ product.id }}"
@@ -401,7 +448,6 @@ left: 10px !important;
               style="visibility:hidden; min-height: 120px;" data-store-availability-container {{ block.shopify_attributes }}>
             </div>
               {% endunless %}
-
           {%- when 'product_quantity' -%}
             {% unless product.tags contains 'gift-with-purchase' %}
             {% unless product.gift_card? %}
@@ -425,7 +471,11 @@ left: 10px !important;
               <label for="variantSku">{{ 'customer.order.details.sku' | t }}:</label>
               <span id="variantSku" class="variant_sku">{{ current_variant.sku }}</span>
             </div>
-
+            {%- when 'custom-size-chart' -%}
+            <div class="custom-size-cs-chart-new">
+       {% comment %}    <div class="scale-svg-cs"><img src="https://cdn.shopify.com/s/files/1/0623/4754/2777/files/1_-_1_-_Ruler.jpg?v=1750992022" alt="Ruler image"></div> {% endcomment %}
+              <a href="#" class="cs-custom-size__trigger">Size Chart</a>
+            </div>
           {%- when 'text_content' -%}
             {% if block.settings.text != blank %}
               <div class="product__section--text product__section--element rte" {{ block.shopify_attributes }}>
@@ -433,16 +483,24 @@ left: 10px !important;
               </div>
             {% endif %}
 
-          {%- when 'text_popup' -%}
-            {% if block.settings.text != blank and block.settings.popup_trigger != blank %}
-              <div class="product__section--popup product__section--element{% if block.settings.show_inline %} inline{% endif %}" {{ block.shopify_attributes }}>
-                <button class="product__contact-trigger button-as-link js-modal-open js-contact-trigger" type="button" name="button" data-wau-modal-target="popup-content--{{ block.id }}" >{{ block.settings.popup_trigger }}</button>
-                <div data-wau-modal-content="popup-content--{{ block.id }}" style="display: none">
-                  {{ block.settings.text }}
-                </div>
-              </div>
-            {% endif %}
-
+        {%- when 'text_popup' -%}
+  {% if block.settings.popup_trigger != blank %}
+    <div class="product__section--popup product__section--element{% if block.settings.show_inline %} inline{% endif %}" {{ block.shopify_attributes }}>
+      <button class="product__contact-trigger button-as-link js-modal-open js-contact-trigger" type="button" name="button" data-wau-modal-target="popup-content--{{ block.id }}">
+        {{ block.settings.popup_trigger }}
+      </button>
+      <div data-wau-modal-content="popup-content--{{ block.id }}" style="display: none">
+        {{ block.settings.text }}
+        {%- if block.settings.page_content != blank -%}
+          {%- assign selected_page = pages[block.settings.page_content] -%}
+          <div class="rte">
+            {{ selected_page.content }}
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  {% endif %}
+    {% render 'size-chart-custom' %}
           {%- when 'text_with_icon' -%}
             {% liquid
               assign icon = block.settings.icon
@@ -704,7 +762,57 @@ left: 10px !important;
 <script type="application/json" id="ModelJson-{{ section.id }}">
   {{ product.media | where: 'media_type', 'model' | json }}
 </script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const trigger = document.querySelector('.cs-custom-size__trigger');
+    const popup = document.querySelector('.cs-custom-size__popup');
+    const overlay = document.querySelector('.cs-custom-size__overlay');
+    const closeBtn = document.querySelector('.cs-custom-size__close');
+    const body = document.body;
+    
+    if (trigger && popup) {
+      // Open popup and disable body scroll
+      trigger.addEventListener('click', function(e) {
+        e.preventDefault();
+        popup.style.display = 'flex';
+        body.classList.add('cs-overflow');
+        document.querySelector('.header-section').style.display = "none"
+      });
+      
+      // Close popup and enable body scroll (click on overlay)
+      overlay.addEventListener('click', function() {
+        popup.style.display = 'none';
+        body.classList.remove('cs-overflow');
+      });
+      
+      // Close popup and enable body scroll (click on close button)
+      closeBtn.addEventListener('click', function() {
+        popup.style.display = 'none';
+        body.classList.remove('cs-overflow');
+        document.querySelector('.header-section').style.display = "block"
+      });
+    }
+  });
+</script>
 
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Get the elements
+    const innerMainTab = document.querySelector('.inner-main-tab-cs');
+    const customSizeChart = document.querySelector('.custom-size-cs-chart-new');
+    
+    // Check if the innerMainTab exists and is empty
+    if (innerMainTab && customSizeChart) {
+        if (innerMainTab.innerHTML.trim() === '') {
+            // Hide the custom size chart if inner main tab is empty
+            customSizeChart.style.display = 'none';
+        }
+    }
+});
+
+</script>
+
+                
 {% schema %}
 {
   "name": "Product page",
@@ -936,6 +1044,12 @@ left: 10px !important;
       "settings": []
     },
     {
+      "type": "custom-size-chart",
+      "name": "custom-size-chart",
+      "limit": 1,
+      "settings": []
+    },
+    {
       "type": "product_variants",
       "name": "Variants",
       "limit": 1,
@@ -1039,32 +1153,37 @@ left: 10px !important;
         }
       ]
     },
+{
+  "name": "Text popup",
+  "type": "text_popup",
+  "settings": [
     {
-      "name":"Text popup",
-      "type": "text_popup",
-      "settings":
-      [
-        {
-          "label": "Popup modal label",
-          "id": "popup_trigger",
-          "type": "text",
-          "default": "Popup label"
-        },
-        {
-          "label": "Text",
-          "id": "text",
-          "type": "richtext",
-          "default": "<p>Add additional text content</p>"
-        },
-        {
-          "label": "Show popup label inline",
-          "id": "show_inline",
-          "type": "checkbox",
-          "default": false,
-          "info": "Show inline with other popup links where selected"
-        }
-      ]
+      "label": "Popup modal label",
+      "id": "popup_trigger",
+      "type": "text",
+      "default": "Popup label"
     },
+    {
+      "label": "Text",
+      "id": "text",
+      "type": "richtext",
+      "default": "<p>Add additional text content</p>"
+    },
+    {
+      "label": "Page content",
+      "id": "page_content",
+      "type": "page",
+      "info": "Select a page to use its content in the popup"
+    },
+    {
+      "label": "Show popup label inline",
+      "id": "show_inline",
+      "type": "checkbox",
+      "default": false,
+      "info": "Show inline with other popup links where selected"
+    }
+  ]
+},
     {
       "type": "text_with_icon",
       "name": "Text with icon",

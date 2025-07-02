@@ -6585,6 +6585,7 @@ theme.CollectionFilters = {
     WAU.ProductGridVideo.init();
 	},
 	renderSectionFromFetch: function renderSectionFromFetch(url, section) {
+      
 		fetch(url)
 			.then(response => response.text())
 			.then((responseText) => {

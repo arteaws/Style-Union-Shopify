@@ -34,6 +34,9 @@
 
 -%}
 <style>
+.new.icn {
+    display: none;
+}  
 div#custom-smart-wishlist {
     z-index: 999;
     position: absolute;
@@ -41,12 +44,39 @@ div#custom-smart-wishlist {
     right: 12px;
     top: 6px;
 }
-  
+.custom-badges-collection-card {
+    color: #151414;
+    width: fit-content;
+    position: absolute;
+    z-index: 9;
+    top: 6px;
+    left: 6px;
+    background: #fff;
+    padding: 0px 10px;
+    font-size: 8px;
+    font-weight: 900;
+    text-transform: uppercase;
+} 
 </style>
 
 
 
 <div class="prod-container">
+  <div class="custom-badges-collection-card">
+  {% assign collection_names = product.collections | map: 'title' | join: ',' %}
+  
+  {% if collection_names contains 'Bestseller New' %}
+    <span class="product-badge">Most loved</span>
+  {% elsif collection_names contains 'Must Haves' %}
+    <span class="product-badge">Must Have</span>
+  {% elsif collection_names contains 'Last Few' %}
+    <span class="product-badge">Few Left</span>
+  {% elsif collection_names contains 'Store Bestseller' %}
+    <span class="product-badge">Selling Fast</span>
+  {% elsif collection_names contains 'New In' %}
+    <span class="product-badge">New In</span>
+  {% endif %}
+</div>
   {% if product.available %}
    {% for col in product.collections %}
      {% if col.handle == 'new' %}

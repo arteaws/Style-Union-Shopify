@@ -1,0 +1,316 @@
+<style>
+    .tab-container {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    .tab {
+      padding: 2px 20px;
+      cursor: pointer;
+      color: #999;
+      line-height: 1;
+    }
+   .tab:nth-child(1){
+     border-right:1px solid black;
+   }
+    .tab.active {
+      color:#107be9;
+    }
+    .tab-content {
+      display: none;
+    }
+    .tab-content.active {
+      display: block;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: center;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 8px;
+    }
+    thead {
+      background-color: #f5f5f5;
+    }
+  .main-conatiner > div > img{
+    width: fit-content;
+    margin-right:auto;
+    margin-left:auto;
+  }
+  .main-pop-up-content img{
+    width: fit-content;
+    margin-right:auto;
+    margin-left:auto;
+  }
+  .cs-title-pop{
+    font-size: 17px;
+    font-weight: 900;
+    margin-bottom: 0;
+    color:#333333;
+}
+  .size-chart-txt{
+    color:#333333;
+    font-size:12px;
+  }
+  center.center-cs-tag {
+    border-bottom: 1px solid black;
+    margin-bottom: 1rem;
+}
+</style>
+
+<div class="main-pop-up-content">
+<center class="center-cs-tag">
+<p class="cs-title-pop">{{ product.title }}</p>
+ <p class="size-chart-txt">Size Charts</p> 
+</center>
+<div class="inner-main-tab-cs">  
+{% if product.type == "Women's Leggings" or
+      product.tags contains "Women Sleepwear Leggings" or 
+      product.tags contains "Womens Ethnic Leggings" or 
+      product.tags contains "Women ankle leggings" or 
+      product.tags contains "Sports Leggings" or 
+      product.tags contains "Womens Sports" %}  
+<div class="leggings-page-content 1">
+  {% assign leggings_page = pages['womens-leggings'] %}
+  {{ leggings_page.content }}
+</div>
+{% endif %}
+{% if  product.tags contains "Women Top with Pant & with Shrug Set"  %}  
+<div class="women-top-with-pant-with-shrug-set-page-content 2">
+  {% assign women-top-with-pant-with-shrug-set = pages['women-top-with-pant-with-shrug-set'] %}
+  {{ women-top-with-pant-with-shrug-set.content }}
+</div>
+{% endif %}
+{% if  product.tags contains "Mens Ethnic Shirts"  %}  
+<div class="mens-ethnic-shirt-page-content 3">
+  {% assign mens-ethnic-shirt = pages['mens-ethnic-shirt'] %}
+  {{ mens-ethnic-shirt.content }}
+</div>
+{% endif %}
+{% if  product.tags contains "Girls T-shirt and Shorts Sleepwear set"  %}  
+<div class="Girls-T-shirt-and-Shorts-Sleepwear-set-page-content 4">
+  {% assign Girls-T-shirt-and-Shorts-Sleepwear-set = pages['Girls-T-shirt-and-Shorts-Sleepwear-set'] %}
+  {{ Girls-T-shirt-and-Shorts-Sleepwear-set.content }}
+</div>
+{% endif %}
+{% if product.type == "Girl's Shorts" or  product.tags contains "Girls Shorts"  %}  
+<div class="girls-shorts-1-y-to-12-y-page-content 5">
+  {% assign girls-shorts-1-y-to-12-y = pages['girls-shorts-1-y-to-12-y'] %}
+  {{ girls-shorts-1-y-to-12-y.content }}
+</div>
+{% endif %}
+{% if product.type == "Girl's Graphic Frocks" or  product.tags contains "Girls Frock"  %}  
+<div class="girls-frocks-page-content 6">
+  {% assign girls-frocks = pages['girls-frocks'] %}
+  {{ girls-frocks.content }}
+</div>
+{% endif %}
+{% if  product.tags contains "Women Long dress"  %}  
+<div class="womens-long-dress-page-content 7">
+  {% assign womens-long-dress = pages['womens-long-dress'] %}
+  {{ womens-long-dress.content }}
+</div>
+{% endif %}
+  {% if product.type == "Girl's Sleepwear Sets" or  product.tags contains "Girls Sleepwear Sets"   or  product.tags contains "Girls Sleepwear"  or  product.tags contains "Girls T-Shirt with Track Pant Sleepwear Set" %}  
+<div class="girls-t-shirt-with-track-pant-sleepwear-set-content 8">
+  {% assign girls-t-shirt-with-track-pant-sleepwear-set = pages['girls-t-shirt-with-track-pant-sleepwear-set'] %}
+  {{ girls-t-shirt-with-track-pant-sleepwear-set.content }}
+</div>
+{% endif %}
+  {% if product.type == "Men's Shorts" or product.type == "Men's Sports Shorts"  or product.type == "Men's Short" or  product.tags contains "MENS Shorts"   or  product.tags contains "Mens Sleepwear Shorts" %}  
+<div class="mens-shorts-content 9">
+  {% assign mens-shorts = pages['mens-shorts'] %}
+  {{ mens-shorts.content }}
+</div>
+{% endif %}
+  {% if product.type == "Men's Cargos" or product.type == "CARGO PANT" or  product.tags contains "Men's Cargo Pant"   %}  
+<div class="mens-cargo-pant-1-content 10">
+  {% assign mens-cargo-pant-1 = pages['mens-cargo-pant-1'] %}
+  {{ mens-cargo-pant-1.content }}
+</div>
+{% endif %}
+ {% if product.type == "Men's Cargos" or product.type == "CARGO PANT" or  product.tags contains "Men's Cargo Pant"   %}  
+<div class="mens-cargo-pant-content 11">
+  {% assign mens-cargo-pant = pages['mens-cargo-pant'] %}
+  {{ mens-cargo-pant.content }}
+</div>
+{% endif %}
+ {% if  product.tags contains "Men full sleeve short kurta"   %}  
+<div class="men-full-sleeve-short-kurta-content 12">
+  {% assign men-full-sleeve-short-kurta = pages['men-full-sleeve-short-kurta'] %}
+  {{ men-full-sleeve-short-kurta.content }}
+</div>
+{% endif %}
+ {% if product.type == " Men's Polo T-shirts" or product.type == "Men's Sports Polo T-shirts" or product.type == "Men's Cargo Pant" or  product.tags contains "Mens Essential Tees"  or  product.tags contains "Mens Regular Fit T-Shirt"  %} 
+<div class="mens-t-shirt-content 13">
+  {% assign mens-t-shirt = pages['mens-t-shirt'] %}
+  {{ mens-t-shirt.content }}
+</div>
+{% endif %}
+ {% if  product.tags contains "Mens Sweat Tees"  or  product.tags contains "Men's Sweat Tees"  %} 
+<div class="mens-sweat-tees-content 14">
+  {% assign mens-sweat-tees = pages['mens-sweat-tees'] %}
+  {{ mens-sweat-tees.content }}
+</div>
+{% endif %}
+ {% if  product.tags contains "Men Fluid-X Denim"  %} 
+<div class="men-fluid-x-denim-content 15">
+  {% assign men-fluid-x-denim = pages['men-fluid-x-denim'] %}
+  {{ men-fluid-x-denim.content }}
+</div>
+{% endif %}
+ {% if  product.tags contains "Tank Top" or product.tags contains "Womens Tank Tops" %} 
+<div class="women-tank-top-content 16">
+  {% assign women-tank-top = pages['women-tank-top'] %}
+  {{ women-tank-top.content }}
+</div>
+{% endif %}
+ {% if  product.tags contains "Men's T-Shirt and Short Sleepwear Set"  %} 
+<div class="mens-t-shirt-and-short-sleepwear-set-content 17">
+  {% assign mens-t-shirt-and-short-sleepwear-set = pages['mens-t-shirt-and-short-sleepwear-set'] %}
+  {{ mens-t-shirt-and-short-sleepwear-set.content }}
+</div>
+{% endif %}
+  {% if product.type == "Women's Kurta" or product.type == " Women's Kurtas" or  product.tags contains "Womens Kurta"  or  product.tags contains "Womens Kurtas"  or  product.tags contains "Women's Kurtas" or  product.tags contains "Womens Kurta Jackets"   or  product.tags contains " Womens Short Kurtas" %}  
+<div class="womens-kurta-content 18">
+  {% assign womens-kurta = pages['womens-kurta'] %}
+  {{ womens-kurta.content }}
+</div>
+{% endif %}
+  {% if  product.tags contains "Mens Long Kurtas" or product.tags contains "Mens Long Kurta" %}  
+<div class="mens-long-kurta-content 19">
+  {% assign mens-long-kurta = pages['mens-long-kurta'] %}
+  {{ mens-long-kurta.content }}
+</div>
+{% endif %}
+  {% if  product.tags contains "Mens Sweaters" or product.tags contains "Men Sweaters"  or product.tags contains "Men's Sweaters" %}  
+<div class="mens-sweaters-content 20">
+  {% assign mens-sweaters = pages['mens-sweaters'] %}
+  {{ mens-sweaters.content }}
+</div>
+{% endif %}
+  {% if  product.tags contains "Cape" or product.tags contains "Women Cape Set"  %}  
+<div class="women-cape-set-content 21">
+  {% assign women-cape-set = pages['women-cape-set'] %}
+  {{ women-cape-set.content }}
+</div>
+{% endif %}
+  {% if  product.tags contains "Men's Winter Jackets" or product.tags contains "Men's Windcheaters" or product.tags contains "Mens Windcheaters" %}  
+<div class="men-knit-air-dry-jacket-content 22">
+  {% assign men-knit-air-dry-jacket = pages['men-knit-air-dry-jacket'] %}
+  {{ men-knit-air-dry-jacket.content }}
+</div>
+{% endif %}
+  {% if  product.tags contains "Women Kurta With Pant and dupatta" %}  
+<div class="women-kurta-with-pant-with-dupatta-content 23">
+  {% assign women-kurta-with-pant-with-dupatta = pages['women-kurta-with-pant-with-dupatta'] %}
+  {{ women-kurta-with-pant-with-dupatta.content }}
+</div>
+{% endif %}
+  {% if  product.type == "Men's Sweatshirt" or product.type == "Men's Sweatshirts" or product.type == "Men's Hoodie Sweatshirts"  or  product.tags contains "Men's Sports Sweatshirts"  or  product.tags contains "Men's Sports Sweatshirts" %}  
+<div class="mens-sweatshirt-content 24">
+  {% assign mens-sweatshirt = pages['mens-sweatshirt'] %}
+  {{ mens-sweatshirt.content }}
+</div>
+{% endif %}
+  {% if  product.type == " Women's Kurta Set" or  product.tags contains "Womens Kurta Sets"  or  product.tags contains "Womens Kurta and Pant sets"  or  product.tags contains " Women's Kurta Sets" %}  
+<div class="womens-kurta-set-content 25">
+  {% assign womens-kurta-set = pages['womens-kurta-set'] %}
+  {{ womens-kurta-set.content }}
+</div>
+{% endif %}
+  {% if   product.tags contains "Women Regular Fit T-Shirt" %}  
+<div class="women-regular-fit-t-shirt-content 26">
+  {% assign women-regular-fit-t-shirt = pages['women-regular-fit-t-shirt'] %}
+  {{ women-regular-fit-t-shirt.content }}
+</div>
+{% endif %}
+</div>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Generate unique chart counter
+  let chartCounter = 0;
+  
+  // Find all tab containers in the popup
+  const tabContainers = document.querySelectorAll('.tab-container');
+  
+  // Initialize each tab container independently
+  tabContainers.forEach(container => {
+    chartCounter++;
+    const chartId = 'chart-' + chartCounter;
+    
+    // Set unique identifier for this chart
+    container.setAttribute('data-chart-id', chartId);
+    
+    // Get tabs within this container only
+    const tabs = container.querySelectorAll('.tab');
+    
+    // Find the parent section that contains both tabs and content
+    let parentSection = container.parentElement;
+    while (parentSection && !parentSection.classList.contains('main-conatiner') && parentSection.parentElement) {
+      parentSection = parentSection.parentElement;
+    }
+    if (!parentSection) parentSection = container.parentElement;
+    
+    // Get all tab content sections within this parent section
+    const tabContents = parentSection.querySelectorAll('.tab-content');
+    
+    // Assign unique identifiers to tab contents
+    tabContents.forEach((content, index) => {
+      content.setAttribute('data-chart-id', chartId);
+      if (content.id === 'inches' || content.classList.contains('active') || index === 0) {
+        content.setAttribute('data-tab-type', 'inches');
+      } else {
+        content.setAttribute('data-tab-type', 'cm');
+      }
+    });
+    
+    // Add click event listener to each tab in this container
+    tabs.forEach(tab => {
+      tab.addEventListener('click', function() {
+        // Get the tab type from data attribute
+        const tabType = this.getAttribute('data-tab');
+        if (!tabType) return;
+        
+        // Remove active class from all tabs in this container
+        tabs.forEach(el => {
+          el.classList.remove('active');
+        });
+        
+        // Hide all tab contents for this specific chart
+        const chartContents = parentSection.querySelectorAll(`[data-chart-id="${chartId}"]`);
+        chartContents.forEach(el => {
+          if (el.classList.contains('tab-content')) {
+            el.classList.remove('active');
+          }
+        });
+        
+        // Show the selected tab content and mark tab as active
+        const targetContent = parentSection.querySelector(`[data-chart-id="${chartId}"][data-tab-type="${tabType}"]`);
+        if (targetContent) {
+          targetContent.classList.add('active');
+          this.classList.add('active');
+        }
+      });
+    });
+    
+    // Ensure first tab is active by default
+    if (tabs.length > 0) {
+      const firstTab = tabs[0];
+      const firstTabType = firstTab.getAttribute('data-tab') || 'inches';
+      
+      // Make sure first tab is marked as active
+      firstTab.classList.add('active');
+      
+      // Make sure corresponding content is active
+      const firstContent = parentSection.querySelector(`[data-chart-id="${chartId}"][data-tab-type="${firstTabType}"]`);
+      if (firstContent) {
+        firstContent.classList.add('active');
+      }
+    }
+  });
+});
+</script>
