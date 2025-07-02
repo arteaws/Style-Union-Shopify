@@ -228,7 +228,9 @@ data-collection-link="{{ collection_link }}">
         </div>
       {%- endif -%}
 
-
+      {% unless collection.products_count <= product_limit %}
+        {% render 'pagination', paginate: paginate %}
+      {% endunless %}
     </div>
   {% render 'infinite-scroll',
     next_page: paginate.next.url,
