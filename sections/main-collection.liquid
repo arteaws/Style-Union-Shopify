@@ -174,7 +174,7 @@ data-collection-link="{{ collection_link }}">
         {% endif %}
 
         {%- if collection.products.size >= 1 -%}
-          <div id="main-collection-product-grid Huratips-Loop"
+          <div id="main-collection-product-grid"
           class="product-loop collection__page-products grid-align-{{ settings.details_align }} span-12 auto"
           data-aos="fade"
           data-id="{{ section.id }}">
@@ -217,7 +217,7 @@ data-collection-link="{{ collection_link }}">
           </div>
 
         {%- else -%}
-          <div id="main-collection-product-grid Huratips-Loop"
+          <div id="main-collection-product-grid"
           class="collection collection--empty span-12 auto"
           data-id="{{ section.id }}">
             <span class="rte">{{ 'collections.filters.use_fewer_filters_html' | t: link: collection.url, class: "underline" }}</span>
@@ -247,6 +247,18 @@ data-collection-link="{{ collection_link }}">
     </div>
   {% endpaginate %}
 </section>
+
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    var endlessScroll = new Ajaxinate({
+      container: '#main-collection-product-grid',
+      pagination: '#Huratips-Pagination',
+	loadingText: '<img src="" >'
+    });
+  });
+</script>
+
 
 {% schema %}
 {
