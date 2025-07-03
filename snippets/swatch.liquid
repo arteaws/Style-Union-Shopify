@@ -1,27 +1,54 @@
 <style>
 .swatch-sold-out .color_dflex {
     opacity: 0.6;
-}  
+    position: relative;
+}
+
+/* Add strikethrough line for sold out swatches */
+.swatch-sold-out .color_dflex::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+        to bottom right,
+        transparent 45%,
+        #000000 45%,
+        #000000 55%,
+        transparent 55%
+    );
+    pointer-events: none;
+    z-index: 10;
+}
+
 .color_dflex {
     display: flex;
     flex-direction: column;
     align-items: center;
 }
+
 .swatches__color-name{
   font-size: 12px;
 }
+
 .swatch-hidden {
     display: none !important;
 }
- /* .swatch-sold-out {
+
+/* .swatch-sold-out {
     opacity: 0.5;
 }  */
-  #addToCart[type="submit"][value="Sold Out"] {
+
+#addToCart[type="submit"][value="Sold Out"] {
     display: none;
 } 
-  span.price__badge.price__badge--sold-out {
+
+span.price__badge.price__badge--sold-out {
     display: none;
 }  
+
 .swatch-sold-out .swatches__form--label {
     cursor: not-allowed;
 }
