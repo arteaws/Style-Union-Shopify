@@ -115,30 +115,7 @@ data-section-id="{{ section.id }}"
 data-section-type="collection-section"
 data-collection-link="{{ collection_link }}">
 
-  {% comment %} First get all in-stock products {% endcomment %}
-  {% assign in_stock_products = collection.products | where: 'available', true %}
-  
-  {% comment %} Then get all sold-out products {% endcomment %}
-  {% assign sold_out_products = collection.products | where: 'available', false %}
-  
-  {% comment %} Calculate total products per page {% endcomment %}
-  {% assign product_limit = section.settings.products_per_page | default: 12 %}
-  
-  {% comment %} Calculate how many pages of in-stock products we have {% endcomment %}
-  {% assign in_stock_pages = in_stock_products.size | divided_by: product_limit | plus: 1 %}
-  
-  {% comment %} Paginate - if we're on the last page, include sold-out products {% endcomment %}
-  {% if paginate.current_page == in_stock_pages %}
-    {% assign products_to_show = in_stock_products | concat: sold_out_products %}
-    {% assign current_offset = paginate.current_offset %}
-    {% assign current_products = products_to_show | offset: current_offset | limit: product_limit %}
-  {% else %}
-    {% paginate in_stock_products by product_limit %}
-      {% assign current_products = paginate.collection %}
-    {% endpaginate %}
-  {% endif %}
-
-  {% paginate current_products by product_limit %}
+  {% paginate collection.products by product_limit %}
     <div id="CollectionProductGrid" class="span-12 auto grid__wrapper grid__wrapper-nest gr0">
 
       {%- if section.settings.description_position == 'top' -%}
@@ -204,15 +181,15 @@ data-collection-link="{{ collection_link }}">
           </div>
         {% endif %}
 
-        {%- if current_products.size >= 1 -%}
+        {%- if collection.products.size >= 1 -%}
           <div id="main-collection-product-grid"
           class="product-loop collection__page-products grid-align-{{ settings.details_align }} span-12 auto"
           data-aos="fade"
           data-id="{{ section.id }}">
-            {% for product in current_products %}
+            {% for product in collection.products %}
               {% unless product.tags contains 'gift-with-purchase' %}
                 <div id="product-listing-{{ product.id }}" 
-                  class="item product-index collection__page-product js-product-listing {% unless product.available %}sold-out-product{% endunless %}"
+                  class="item product-index collection__page-product js-product-listing"
                   data-alpha="{{ product.title }}" 
                   data-product-id="{{ product.id }}" 
                   data-price="{{ product.price }}"
@@ -238,9 +215,6 @@ data-collection-link="{{ collection_link }}">
             <style>
               .collection__page-products {
                 grid-template-columns: repeat({{ grid }}, 1fr);
-              }
-              .sold-out-product {
-                order: 999; /* Ensure sold out products appear last */
               }
             </style>
           </div>
@@ -273,9 +247,15 @@ data-collection-link="{{ collection_link }}">
           </div>
         </div>
       {%- endif -%}
+{% comment %}
+      {% unless collection.products_count <= product_limit %}
+        {% render 'pagination', paginate: paginate %}
+      {% endunless %}
+    {% endcomment %}
     </div>
   {% endpaginate %}
 </section>
+
 
 <script>
   document.addEventListener("DOMContentLoaded", function() {
