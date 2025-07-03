@@ -1,0 +1,528 @@
+<infinite-scroll data-next="{{ next_page }}" data-page-size="{{ page_size }}" data-end-text="{{ end_text }}">
+  {% if page_size > 1 %}
+    <div class="loadingBox">
+      <span id="loading_1" class="loadingScroll">&nbsp</span>
+      <span id="loading_2" class="loadingScroll">&nbsp</span>
+      <span id="loading_3" class="loadingScroll">&nbsp</span>
+      <span id="loading_4" class="loadingScroll">&nbsp</span>
+      <span id="loading_5" class="loadingScroll">&nbsp</span>
+      <span id="loading_6" class="loadingScroll">&nbsp</span>
+      <span id="loading_7" class="loadingScroll">&nbsp</span>
+      <span id="loading_8" class="loadingScroll">&nbsp</span>
+    </div>
+  {% endif %}
+</infinite-scroll>
+<div class="scrollToTopButton">Scroll To Top</div>
+<style>
+  .collection__page.row.grid__wrapper{
+    position:relative;
+  }
+  infinite-scroll {
+    position: absolute;
+    width: 100%;
+    font-weight: 600;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+  }
+  .loadingBox {
+    position: relative;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 28px;
+    margin: auto;
+  }
+  .loadingScroll {
+    position: relative;
+    background-color: rgb(0, 0, 0);
+    width: 28px;
+    height: 28px;
+    margin: 0 1px;
+    animation-name: loading_animation;
+    -o-animation-name: loading_animation;
+    -ms-animation-name: loading_animation;
+    -webkit-animation-name: loading_animation;
+    -moz-animation-name: loading_animation;
+    animation-duration: 0.8s;
+    -o-animation-duration: 0.8s;
+    -ms-animation-duration: 0.8s;
+    -webkit-animation-duration: 0.8s;
+    -moz-animation-duration: 0.8s;
+    animation-iteration-count: infinite;
+    -o-animation-iteration-count: infinite;
+    -ms-animation-iteration-count: infinite;
+    -webkit-animation-iteration-count: infinite;
+    -moz-animation-iteration-count: infinite;
+    animation-direction: normal;
+    -o-animation-direction: normal;
+    -ms-animation-direction: normal;
+    -webkit-animation-direction: normal;
+    -moz-animation-direction: normal;
+    transform: scale(0.3);
+    -o-transform: scale(0.3);
+    -ms-transform: scale(0.3);
+    -webkit-transform: scale(0.3);
+    -moz-transform: scale(0.3);
+  }
+  .scrollToTopButton {
+    position: fixed;
+    bottom: 20px;
+    right: 149px;
+    background: #ececec;
+    padding: 5px 10px;
+    z-index: 1;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  
+  #loading_1 {
+    animation-delay: 0.1s;
+    -o-animation-delay: 0.1s;
+    -ms-animation-delay: 0.1s;
+    -webkit-animation-delay: 0.1s;
+    -moz-animation-delay: 0.1s;
+  }
+  #loading_2 {
+    animation-delay: 0.2s;
+    -o-animation-delay: 0.2s;
+    -ms-animation-delay: 0.2s;
+    -webkit-animation-delay: 0.2s;
+    -moz-animation-delay: 0.2s;
+  }
+  #loading_3 {
+    animation-delay: 0.3s;
+    -o-animation-delay: 0.3s;
+    -ms-animation-delay: 0.3s;
+    -webkit-animation-delay: 0.3s;
+    -moz-animation-delay: 0.3s;
+  }
+  #loading_4 {
+    animation-delay: 0.4s;
+    -o-animation-delay: 0.4s;
+    -ms-animation-delay: 0.4s;
+    -webkit-animation-delay: 0.4s;
+    -moz-animation-delay: 0.4s;
+  }
+  #loading_5 {
+    animation-delay: 0.5s;
+    -o-animation-delay: 0.5s;
+    -ms-animation-delay: 0.5s;
+    -webkit-animation-delay: 0.5s;
+    -moz-animation-delay: 0.5s;
+  }
+  #loading_6 {
+    animation-delay: 0.6s;
+    -o-animation-delay: 0.6s;
+    -ms-animation-delay: 0.6s;
+    -webkit-animation-delay: 0.6s;
+    -moz-animation-delay: 0.6s;
+  }
+  #loading_7 {
+    animation-delay: 0.7s;
+    -o-animation-delay: 0.7s;
+    -ms-animation-delay: 0.7s;
+    -webkit-animation-delay: 0.7s;
+    -moz-animation-delay: 0.7s;
+  }
+  #loading_8 {
+    animation-delay: 0.8s;
+    -o-animation-delay: 0.8s;
+    -ms-animation-delay: 0.8s;
+    -webkit-animation-delay: 0.8s;
+    -moz-animation-delay: 0.8s;
+  }
+
+  [class^="pagination"], [class^="Pagination"], .pagination {
+    display: none !important;
+  }
+
+  .js .features--show-element-staggering .ProductList--grid div.ProductItem {
+    visibility: visible;
+  }
+
+  .js .product-card[reveal-on-scroll="true"] {
+    opacity: 1;
+  }
+
+  @keyframes loading_animation {
+    0% {
+      transform: scale(1);
+      background-color: rgb(0, 0, 0);
+    }
+    100% {
+      transform: scale(0.3);
+      background-color: rgb(255, 255, 255);
+    }
+  }
+  @-o-keyframes loading_animation {
+    0% {
+      -o-transform: scale(1);
+      background-color: rgb(0, 0, 0);
+    }
+    100% {
+      -o-transform: scale(0.3);
+      background-color: rgb(255, 255, 255);
+    }
+  }
+  @-ms-keyframes loading_animation {
+    0% {
+      -ms-transform: scale(1);
+      background-color: rgb(0, 0, 0);
+    }
+    100% {
+      -ms-transform: scale(0.3);
+      background-color: rgb(255, 255, 255);
+    }
+  }
+  @-webkit-keyframes loading_animation {
+    0% {
+      -webkit-transform: scale(1);
+      background-color: rgb(0, 0, 0);
+    }
+    100% {
+      -webkit-transform: scale(0.3);
+      background-color: rgb(255, 255, 255);
+    }
+  }
+  @-moz-keyframes loading_animation {
+    0% {
+      -moz-transform: scale(1);
+      background-color: rgb(0, 0, 0);
+    }
+    100% {
+      -moz-transform: scale(0.3);
+      background-color: rgb(255, 255, 255);
+    }
+  }
+</style>
+
+<script>
+  class InfiniteScroll extends HTMLElement {
+    constructor() {
+      super();
+      this.initGrid();
+      this.init();
+      this.currentPage = 1; // Start from page 1
+      this.isLoading = false;
+      this.loadedProductIds = new Set();
+      this.maxPages = parseInt(this.dataset.pageSize) || 999; // Set high default
+      this.hasMorePages = true;
+      this.consecutiveEmptyPages = 0; // Track empty responses
+      
+      this.scrollToTopBtn = document.querySelector(".scrollToTopButton");
+      if (this.scrollToTopBtn) {
+        this.scrollToTopBtn.addEventListener("click", this.scrollToTopFx.bind(this));
+      }
+      
+      this.trackExistingProducts();
+    }
+   
+    initGrid() {
+      const gridOptions = [".ProductListWrapper", "#main-collection-product-grid", "#product-grid", ".product-list", ".collection-grid", ".product-grid-container"];
+      
+      for (let gridName of gridOptions) {
+        let grid = document.querySelector(gridName);
+        if (grid) {
+          this.gridName = gridName;
+          this.gridContainer = grid;
+          console.log("Grid container found:", gridName);
+          break;
+        }
+      }
+      
+      // Fallback: look for any container with product items
+      if (!this.gridContainer) {
+        const productContainers = document.querySelectorAll('[class*="product"], [class*="Product"], [id*="product"], [id*="Product"]');
+        for (let container of productContainers) {
+          if (container.children.length > 0) {
+            this.gridContainer = container;
+            this.gridName = container.className || container.id;
+            console.log("Fallback grid container found:", this.gridName);
+            break;
+          }
+        }
+      }
+      
+      if (!this.gridContainer) {
+        console.error("No grid container found!");
+        return false;
+      }
+      
+      return true;
+    }
+    
+    trackExistingProducts() {
+      if (!this.gridContainer) return;
+      
+      // Try multiple selectors for product identification
+      const productSelectors = [
+        '[data-product-id]',
+        '[data-product-handle]',
+        '.product-item',
+        '.ProductItem',
+        '.product-card',
+        '.product'
+      ];
+      
+      for (let selector of productSelectors) {
+        const existingProducts = this.gridContainer.querySelectorAll(selector);
+        if (existingProducts.length > 0) {
+          existingProducts.forEach(product => {
+            const productId = product.getAttribute('data-product-id') || 
+                            product.getAttribute('data-product-handle') || 
+                            product.getAttribute('data-id') ||
+                            this.generateUniqueId(product);
+            
+            if (productId) {
+              this.loadedProductIds.add(productId);
+            }
+          });
+          console.log(`Tracked ${this.loadedProductIds.size} existing products using selector: ${selector}`);
+          break;
+        }
+      }
+    }
+    
+    generateUniqueId(element) {
+      // Generate a unique ID based on element content or attributes
+      const href = element.querySelector('a')?.href;
+      const title = element.querySelector('[class*="title"], h1, h2, h3')?.textContent;
+      const image = element.querySelector('img')?.src;
+      
+      if (href) return href;
+      if (title && image) return title + image;
+      if (title) return title;
+      
+      return Math.random().toString(36).substr(2, 9);
+    }
+   
+    init() {
+      if (!this.gridContainer) {
+        console.error("Cannot initialize: No grid container found");
+        return;
+      }
+      
+      const observer = new IntersectionObserver(this.revealItem.bind(this), {
+        root: null,
+        threshold: 0.1,
+        rootMargin: '100px'
+      });
+      
+      observer.observe(this);
+      console.log("Infinite scroll initialized");
+    }
+   
+    fetchNextPage() {
+      if (this.isLoading || !this.hasMorePages) {
+        console.log("Fetch blocked - Loading:", this.isLoading, "Has more:", this.hasMorePages, "Page:", this.currentPage);
+        return;
+      }
+      
+      this.isLoading = true;
+      this.currentPage++;
+      
+      console.log(`Fetching page ${this.currentPage}`);
+      
+      // Show loading animation
+      this.style.opacity = '1';
+      
+      const baseUrl = this.dataset.next;
+      let requestUrl;
+      
+      // Handle different URL formats
+      if (baseUrl.includes('?')) {
+        requestUrl = `${baseUrl}&page=${this.currentPage}`;
+      } else {
+        requestUrl = `${baseUrl}?page=${this.currentPage}`;
+      }
+      
+      // Ensure full URL
+      if (!requestUrl.startsWith('http')) {
+        requestUrl = `${window.location.origin}${requestUrl}`;
+      }
+      
+      console.log("Request URL:", requestUrl);
+      
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 10000); // Increased timeout
+      
+      fetch(requestUrl, { 
+        method: "GET", 
+        headers: { 
+          "Content-Type": "text/html",
+          "Cache-Control": "no-cache",
+          "X-Requested-With": "XMLHttpRequest"
+        },
+        signal: controller.signal
+      })
+      .then((response) => {
+        clearTimeout(timeoutId);
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.text();
+      })
+      .then((html) => {
+        this.processNewContent(html);
+      })
+      .catch((error) => {
+        clearTimeout(timeoutId);
+        console.error("Fetch error:", error);
+        this.isLoading = false;
+        this.style.opacity = '0.5';
+        
+        // Retry logic for network errors
+        if (error.name !== 'AbortError') {
+          console.log("Retrying in 2 seconds...");
+          setTimeout(() => {
+            this.currentPage--; // Reset page counter
+            this.fetchNextPage();
+          }, 2000);
+        } else {
+          this.hasMorePages = false;
+        }
+      });
+    }
+    
+    processNewContent(html) {
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(html, "text/html");
+      const newGrid = doc.querySelector(this.gridName);
+      
+      if (!newGrid || !newGrid.innerHTML.trim()) {
+        console.log("No more content found - end of products");
+        this.hasMorePages = false;
+        this.showEndMessage();
+        return;
+      }
+      
+      // Find new products using multiple strategies
+      let newProducts = [];
+      const productSelectors = [
+        '[data-product-id]',
+        '[data-product-handle]',
+        '.product-item',
+        '.ProductItem',
+        '.product-card',
+        '.product'
+      ];
+      
+      for (let selector of productSelectors) {
+        newProducts = newGrid.querySelectorAll(selector);
+        if (newProducts.length > 0) break;
+      }
+      
+      // Fallback: get all direct children
+      if (newProducts.length === 0) {
+        newProducts = Array.from(newGrid.children).filter(child => 
+          child.tagName !== 'SCRIPT' && 
+          child.tagName !== 'STYLE' && 
+          child.textContent.trim() !== ''
+        );
+      }
+      
+      let addedCount = 0;
+      
+      if (newProducts.length > 0) {
+        newProducts.forEach(product => {
+          const productId = product.getAttribute('data-product-id') || 
+                          product.getAttribute('data-product-handle') || 
+                          product.getAttribute('data-id') ||
+                          this.generateUniqueId(product);
+          
+          // Only add if not already loaded
+          if (!this.loadedProductIds.has(productId)) {
+            this.gridContainer.insertAdjacentHTML("beforeend", product.outerHTML);
+            this.loadedProductIds.add(productId);
+            addedCount++;
+          }
+        });
+        
+        console.log(`Added ${addedCount} new unique products from page ${this.currentPage}`);
+        
+        // Trigger any additional scripts for new products
+        this.initializeNewProducts();
+      } else {
+        console.log("No products found in new content");
+        this.hasMorePages = false;
+      }
+      
+      // Check if we've reached the end
+      if (this.currentPage >= this.maxPages || addedCount === 0) {
+        this.hasMorePages = false;
+        this.showEndMessage();
+      }
+      
+      this.isLoading = false;
+      this.style.opacity = '0.3';
+    }
+    
+    initializeNewProducts() {
+      // Trigger any Shopify or theme-specific initialization for new products
+      if (typeof theme !== 'undefined' && theme.init) {
+        theme.init();
+      }
+      
+      // Trigger lazy loading for images
+      const newImages = this.gridContainer.querySelectorAll('img[data-src]:not([src])');
+      newImages.forEach(img => {
+        if (img.dataset.src) {
+          img.src = img.dataset.src;
+        }
+      });
+      
+      // Dispatch custom event for other scripts
+      document.dispatchEvent(new CustomEvent('infiniteScrollLoaded', {
+        detail: { newProductsCount: this.gridContainer.children.length }
+      }));
+    }
+    
+    showEndMessage() {
+      this.innerHTML = `<div style="text-align: center; padding: 20px;"><h3>${this.dataset.endText || 'No more products to load'}</h3></div>`;
+    }
+    
+    revealItem(entries, observer) {
+      const [entry] = entries;
+      
+      if (!entry.isIntersecting || this.isLoading || !this.hasMorePages) {
+        return;
+      }
+      
+      console.log("Intersection triggered - loading next page");
+      
+      // Add small delay to prevent rapid firing
+      setTimeout(() => {
+        if (!this.isLoading && this.hasMorePages) {
+          this.fetchNextPage();
+        }
+      }, 250);
+      
+      // Stop observing if we've reached the end
+      if (this.currentPage >= this.maxPages || !this.hasMorePages) {
+        observer.unobserve(entry.target);
+      }
+    }
+    
+    scrollToTopFx(e) {
+      document.body.scrollTop = 0;
+      document.documentElement.scrollTop = 0;
+      if (e.currentTarget) {
+        e.currentTarget.style.display = "none";
+      }
+    }
+  }
+  
+  // Initialize when DOM is ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+      customElements.define("infinite-scroll", InfiniteScroll);
+    });
+  } else {
+    customElements.define("infinite-scroll", InfiniteScroll);
+  }
+</script>

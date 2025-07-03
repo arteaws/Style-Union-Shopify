@@ -12,10 +12,6 @@
     "main": {
       "type": "main-product",
       "blocks": {
-        "judge_me_reviews_preview_badge_VFKhjp": {
-          "type": "shopify://apps/judge-me-reviews/blocks/preview_badge/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
-          "settings": {}
-        },
         "product_sku_KLVbQq": {
           "type": "product_sku",
           "settings": {}
@@ -89,7 +85,6 @@
         }
       },
       "block_order": [
-        "judge_me_reviews_preview_badge_VFKhjp",
         "product_sku_KLVbQq",
         "kiwi_size_chart_recommender_kiwi_sizing_rbN9rH",
         "896887d5-6a65-431c-9081-550cbc1a6676",

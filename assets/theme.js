@@ -6530,27 +6530,27 @@ theme.CollectionFilters = {
 			});
 		});
 	},
-	sidebarFilters: function sidebarFilters(context) {
-		const filters = document.querySelectorAll('.js-collection-side-filter');
+sidebarFilters: function sidebarFilters(context) {
+    const filters = document.querySelectorAll('.js-collection-side-filter');
 
-		filters.forEach((item, i) => {
-			item.addEventListener('click', (event) => {
-				event.preventDefault();
+    filters.forEach((item, i) => {
+        item.addEventListener('click', (event) => {
+            event.preventDefault();
 
-				if ( item.querySelector('input[type="checkbox"]').checked ) {
-					item.classList.remove('current');
-					item.querySelector('input[type="checkbox"]').checked = false;
-				} else {
-					item.classList.add('current');
-					item.querySelector('input[type="checkbox"]').checked = true;
-				}
+            if ( item.querySelector('input[type="checkbox"]').checked ) {
+                item.classList.remove('current');
+                item.querySelector('input[type="checkbox"]').checked = false;
+            } else {
+                item.classList.add('current');
+                item.querySelector('input[type="checkbox"]').checked = true;
+            }
 
-				const formData = new FormData(item.closest('form'));
-				const searchParams = new URLSearchParams(formData).toString();
+            const formData = new FormData(item.closest('form'));
+            const searchParams = new URLSearchParams(formData).toString();
 
-				theme.CollectionFilters.renderPage(searchParams);
-			});
-		});
+            theme.CollectionFilters.renderPage(searchParams);
+        });
+    });
 
     // Mobile sidebar Trigger
     const sidebarToggle = document.querySelector('.js-collection-side-toggle');
@@ -6558,11 +6558,16 @@ theme.CollectionFilters = {
     if (!sidebarToggle) return false;
 
     sidebarToggle.addEventListener('click', function(event){
-     event.preventDefault();
-     theme.Helpers.toggleClass("sidebar", "open");
+        event.preventDefault();
+        theme.Helpers.toggleClass("sidebar", "open");
+        
+        // Toggle cs-open class on .custom-relative-btn
+        const customRelativeBtn = document.querySelector('.custom-relative-btn');
+        if (customRelativeBtn) {
+            customRelativeBtn.classList.toggle('cs-open');
+        }
     });
-
-	},
+},
 	renderFilters: function renderFilters() {
     if ( document.querySelector("[data-collection-filters-hz]") || document.querySelector("[data-collection-sort-by]") ) {
 			theme.CollectionFilters.horizontalFilters();
@@ -6585,6 +6590,7 @@ theme.CollectionFilters = {
     WAU.ProductGridVideo.init();
 	},
 	renderSectionFromFetch: function renderSectionFromFetch(url, section) {
+      
 		fetch(url)
 			.then(response => response.text())
 			.then((responseText) => {

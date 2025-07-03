@@ -6349,9 +6349,9 @@ ul.product__tabs {
   display: none;
 }
 
-.swatches__swatch--color.soldout {
+/* .swatches__swatch--color.soldout {
   display: none !important;
-}
+} */
 
 .swatches__swatch--regular.soldout label,
 .swatches__swatch--color.soldout label  {
@@ -6361,7 +6361,7 @@ ul.product__tabs {
   /* khtml, old safari */
   -moz-opacity: 0.6;
   /* mozilla, netscape */
-  opacity: 0.6;
+  /* opacity: 0.6; */
   /* fx, safari, opera */
 }
 
