@@ -294,6 +294,20 @@ document.addEventListener('DOMContentLoaded', function() {
   const colorOptions = data.colorOptions;
   const sizeOptions = data.sizeOptions;
   
+  // Function to update selected class for regular swatches
+  function updateSelectedClass() {
+    const regularSwatches = document.querySelectorAll('.swatches__swatch--regular');
+    
+    regularSwatches.forEach(function(swatch) {
+      const input = swatch.querySelector('.swatches__form--input');
+      if (input && input.checked) {
+        swatch.classList.add('selected-cs');
+      } else {
+        swatch.classList.remove('selected-cs');
+      }
+    });
+  }
+  
   // Function to check if all colors are sold out for a selected size
   function checkSizeAvailability(selectedSize) {
     const availableColors = new Set();
@@ -424,47 +438,35 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
   
-  // Add event listeners to size inputs only
-  const sizeContainers = document.querySelectorAll('.js-variant-selector');
-  sizeContainers.forEach(function(container) {
+  // Add event listeners to all inputs
+  const allContainers = document.querySelectorAll('.js-variant-selector');
+  allContainers.forEach(function(container) {
     const optionName = container.getAttribute('data-option-name');
+    const inputs = container.querySelectorAll('.swatches__form--input');
     
-    // Only add listeners to size options
-    if (sizeOptions.includes(optionName)) {
-      const sizeInputs = container.querySelectorAll('.swatches__form--input');
-      
-      sizeInputs.forEach(function(input) {
-        input.addEventListener('change', function() {
-          // Update selected option display
-          const optionPosition = this.getAttribute('data-position');
-          const selectedSpan = document.getElementById('selected-option-' + optionPosition);
-          if (selectedSpan) {
-            selectedSpan.textContent = this.value;
-          }
-          
-          // Filter color swatches
+    inputs.forEach(function(input) {
+      input.addEventListener('change', function() {
+        // Update selected option display
+        const optionPosition = this.getAttribute('data-position');
+        const selectedSpan = document.getElementById('selected-option-' + optionPosition);
+        if (selectedSpan) {
+          selectedSpan.textContent = this.value;
+        }
+        
+        // Update selected class for regular swatches
+        updateSelectedClass();
+        
+        // If this is a size option, filter color swatches
+        if (sizeOptions.includes(optionName)) {
           filterColorSwatches();
-        });
+        }
       });
-    } else if (colorOptions.includes(optionName)) {
-      // Add listeners to color options just for updating display
-      const colorInputs = container.querySelectorAll('.swatches__form--input');
-      
-      colorInputs.forEach(function(input) {
-        input.addEventListener('change', function() {
-          // Update selected option display
-          const optionPosition = this.getAttribute('data-position');
-          const selectedSpan = document.getElementById('selected-option-' + optionPosition);
-          if (selectedSpan) {
-            selectedSpan.textContent = this.value;
-          }
-        });
-      });
-    }
+    });
   });
   
   // Initial setup on page load
   updateSizeSwatches();
   filterColorSwatches();
+  updateSelectedClass();
 });
 </script>
