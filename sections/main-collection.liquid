@@ -181,96 +181,63 @@ data-collection-link="{{ collection_link }}">
           </div>
         {% endif %}
 
-{%- if collection.products.size >= 1 -%}
-  {%- comment -%} Separate available and sold-out products {%- endcomment -%}
-  {%- assign available_products = "" | split: ',' -%}
-  {%- assign sold_out_products = "" | split: ',' -%}
-  
-  {%- for product in collection.products -%}
-    {%- unless product.tags contains 'gift-with-purchase' -%}
-      {%- if product.available -%}
-        {%- assign available_products = available_products | push: product -%}
-      {%- else -%}
-        {%- assign sold_out_products = sold_out_products | push: product -%}
-      {%- endif -%}
-    {%- endunless -%}
-  {%- endfor -%}
-  
-  <div id="main-collection-product-grid"
-    class="product-loop collection__page-products grid-align-{{ settings.details_align }} span-12 auto"
-    data-aos="fade"
-    data-id="{{ section.id }}">
-    
-    {%- comment -%} First display available products {%- endcomment -%}
-    {%- for product in available_products -%}
-      <div id="product-listing-{{ product.id }}" 
-        class="item product-index collection__page-product js-product-listing"
-        data-alpha="{{ product.title }}" 
-        data-product-id="{{ product.id }}" 
-        data-price="{{ product.price }}"
-        data-aos="fade"
-        data-aos-delay="{{ forloop.index | minus: 1 | modulo: aos_mod | times: 100 }}">
-        {% liquid
-          assign loading = 'lazy'
-          assign fetch_priority = 'auto'
-          if forloop.index <= grid
-            assign loading = 'eager'
-            assign fetch_priority = 'high'
-          endif
-        %}
-        {% render 'product-listing',
-          product: product,
-          collection: collection,
-          loading: loading,
-          fetchpriority: fetch_priority %}
-      </div>
-    {%- endfor -%}
-    
-    {%- comment -%} Then display sold-out products {%- endcomment -%}
-    {%- for product in sold_out_products -%}
-      <div id="product-listing-{{ product.id }}" 
-        class="item product-index collection__page-product js-product-listing sold-out-product"
-        data-alpha="{{ product.title }}" 
-        data-product-id="{{ product.id }}" 
-        data-price="{{ product.price }}"
-        data-aos="fade"
-        data-aos-delay="{{ forloop.index | minus: 1 | modulo: aos_mod | times: 100 }}">
-        {% liquid
-          assign loading = 'lazy'
-          assign fetch_priority = 'auto'
-        %}
-        {% render 'product-listing',
-          product: product,
-          collection: collection,
-          loading: loading,
-          fetchpriority: fetch_priority %}
-      </div>
-    {%- endfor -%}
-    
-    <style>
-      .collection__page-products {
-        grid-template-columns: repeat({{ grid }}, 1fr);
-      }
-    </style>
-  </div>
-  
-  <div id="Huratips-Pagination" class="custom-flex-pagination">
-    {% if paginate.next %}
-      <a href="{{ paginate.next.url }}">Loading More</a>
-    {% endif %}  
-  </div>
-{%- else -%}
-  <div id="main-collection-product-grid"
-    class="collection collection--empty span-12 auto"
-    data-id="{{ section.id }}">
-    <span class="rte">{{ 'collections.filters.use_fewer_filters_html' | t: link: collection.url, class: "underline" }}</span>
-  </div>
-  <div id="Huratips-Pagination">
-    {% if paginate.next %}
-      <a href="{{ paginate.next.url }}">Loading More</a>
-    {% endif %}  
-  </div>
-{%- endif -%}
+        {%- if collection.products.size >= 1 -%}
+          <div id="main-collection-product-grid"
+          class="product-loop collection__page-products grid-align-{{ settings.details_align }} span-12 auto"
+          data-aos="fade"
+          data-id="{{ section.id }}">
+            {% for product in collection.products %}
+              {% unless product.tags contains 'gift-with-purchase' %}
+                <div id="product-listing-{{ product.id }}" 
+                  class="item product-index collection__page-product js-product-listing"
+                  data-alpha="{{ product.title }}" 
+                  data-product-id="{{ product.id }}" 
+                  data-price="{{ product.price }}"
+                  data-aos="fade"
+                  data-aos-delay="{{ forloop.index | minus: 1 | modulo: aos_mod | times: 100 }}">
+                  {% liquid
+                    assign loading = 'lazy'
+                    assign fetch_priority = 'auto'
+                    if forloop.index <= grid
+                      assign loading = 'eager'
+                      assign fetch_priority = 'high'
+                    endif
+                  %}
+                  {% render 'product-listing',
+                    product: product,
+                    collection: collection,
+                    loading: loading,
+                    fetchpriority: fetch_priority %}
+                </div>
+              {% endunless %}
+            {% endfor %}
+
+            <style>
+              .collection__page-products {
+                grid-template-columns: repeat({{ grid }}, 1fr);
+              }
+            </style>
+          </div>
+          <div id="Huratips-Pagination" class="custom-flex-pagination">
+          {% if paginate.next %}
+          <a href="{{ paginate.next.url }}">Loading More</a>
+          {% endif %}  
+          </div>
+
+        {%- else -%}
+          <div id="main-collection-product-grid"
+          class="collection collection--empty span-12 auto"
+          data-id="{{ section.id }}">
+            <span class="rte">{{ 'collections.filters.use_fewer_filters_html' | t: link: collection.url, class: "underline" }}</span>
+          </div>
+          <div id="Huratips-Pagination">
+          {% if paginate.next %}
+          <a href="{{ paginate.next.url }}">Loading More</a>
+          {% endif %}  
+          </div>
+
+        {%- endif -%}
+
       {% if show_sidebar %}</div>{% endif %}
 
       {%- if section.settings.description_position == 'bottom' -%}
