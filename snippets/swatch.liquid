@@ -31,7 +31,7 @@
     cursor: not-allowed;
 }
 
-/* CSS diagonal cross for sold out variants */
+/* CSS diagonal cross for sold out color variants - FIXED */
 .swatches__sold-out--image.crossed-out {
     position: absolute;
     top: 0;
@@ -45,17 +45,16 @@
 .swatches__sold-out--image.crossed-out::before {
     content: '';
     position: absolute;
-    top: 50%;
-    left: 50%;
-    /* width:80px; */
-    width: fit-content;
-    height: 2px;
-    background-color: #000000;
-    transform: translate(-50%, -50%) rotate(45deg);
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, transparent 48%, #000000 48%, #000000 52%, transparent 52%);
     z-index: 3;
+    pointer-events: none;
 }
 
-/* Size strike-through styling */
+/* Size strike-through styling - FIXED */
 .size-strike-on {
     position: relative;
     opacity: 0.6;
@@ -64,12 +63,11 @@
 .size-strike-on::before {
     content: '';
     position: absolute;
-    top: 50%;
-    left: 50%;
-    width: fit-content;
-    height: 2px;
-    background-color: #000000;
-    transform: translate(-50%, -50%) rotate(50deg);
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, transparent 48%, #000000 48%, #000000 52%, transparent 52%);
     z-index: 2;
     pointer-events: none;
 }
@@ -83,6 +81,35 @@
     position: relative;
     display: inline-block;
 }
+
+/* Alternative method using calculated diagonal width (if linear gradient doesn't work) */
+/*
+.swatches__sold-out--image.crossed-out::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 141.42%;
+    height: 2px;
+    background-color: #000000;
+    transform: translate(-50%, -50%) rotate(45deg);
+    z-index: 3;
+    pointer-events: none;
+}
+
+.size-strike-on::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 141.42%;
+    height: 2px;
+    background-color: #000000;
+    transform: translate(-50%, -50%) rotate(45deg);
+    z-index: 2;
+    pointer-events: none;
+}
+*/
 </style>
 
 {%- liquid
