@@ -176,7 +176,7 @@
             for="{{ section.id }}-{{ option.name }}-{{ forloop.index0 }}"
             tabindex="0"
             style="background-image: url({{ variant_image_url }}); background-position: center center; background-size: cover;">
-            {% unless available %} <img class="swatches__sold-out--image crossed-out" src="{{ 'soldout.png' | asset_url }}" alt="Sold out image" />{% endunless %}
+           <img class="swatches__sold-out--image crossed-out" src="{{ 'soldout.png' | asset_url }}" alt="Sold out image" />
            
           </label>
           <span class="swatches__color-name">{{ value | truncatewords:1 }}</span>
@@ -190,7 +190,7 @@
             {% unless color_swatch_style == 'default-color' %}
              background-image: url({{ variant_image_url }});; background-position: center center; background-size: 50px;
             {% endunless %}">
-            {% unless available %} <img class="swatches__sold-out--image crossed-out" src="{{ 'soldout.png' | asset_url }}" alt="Sold out image" />{% endunless %}
+             <img class="swatches__sold-out--image crossed-out" src="{{ 'soldout.png' | asset_url }}" alt="Sold out image" />
           </label>
           <span class="swatches__color-name">{{ value }}</span>
         {% endif %}
