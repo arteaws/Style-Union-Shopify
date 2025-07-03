@@ -66,7 +66,7 @@
     top: 50%;
     left: 50%;
     width: calc(100% * 1.414); /* √2 times the width to cover diagonal */
-    height: 2px;
+    height: 1px;
     background-color: #000000;
     transform: translate(-50%, -50%) rotate(45deg);
     z-index: 2;
@@ -74,7 +74,7 @@
 }
 
 /* Alternative method for size boxes - using dynamic diagonal calculation */
-.size-strike-on::after {
+/* .size-strike-on::after {
     content: '';
     position: absolute;
     top: 0;
@@ -86,7 +86,7 @@
     z-index: 3;
     pointer-events: none;
     display: none; /* Use this if the primary method doesn't work */
-}
+} */
 
 .size-strike-on .swatches__form--label {
     cursor: not-allowed;
