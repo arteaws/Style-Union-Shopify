@@ -174,8 +174,7 @@ data-collection-link="{{ collection_link }}">
         {% endif %}
 
         {%- if collection.products.size >= 1 -%}
-          <div id="main-collection-product-grid"
-          
+          <div id="main-collection-product-grid Huratips-Loop"
           class="product-loop collection__page-products grid-align-{{ settings.details_align }} span-12 auto"
           data-aos="fade"
           data-id="{{ section.id }}">
@@ -218,7 +217,7 @@ data-collection-link="{{ collection_link }}">
           </div>
 
         {%- else -%}
-          <div id="main-collection-product-grid"
+          <div id="main-collection-product-grid Huratips-Loop"
           class="collection collection--empty span-12 auto"
           data-id="{{ section.id }}">
             <span class="rte">{{ 'collections.filters.use_fewer_filters_html' | t: link: collection.url, class: "underline" }}</span>
@@ -240,10 +239,11 @@ data-collection-link="{{ collection_link }}">
           </div>
         </div>
       {%- endif -%}
-
+{% comment %}
       {% unless collection.products_count <= product_limit %}
         {% render 'pagination', paginate: paginate %}
       {% endunless %}
+    {% endcomment %}
     </div>
   {% endpaginate %}
 </section>
