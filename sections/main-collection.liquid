@@ -1,10 +1,14 @@
 
 
 <style>
+.custom-flex-pagination{
+  text-align:center;
+  margin-top:1rem;
+}  
 .preloader-new{
-  width:100px;
+  width:40px;
   margin:auto;
-  height:100px;
+  height:40px;
 }
 /* @media only screen and (min-width: 1000px) and (max-width: 2560px)  {
 .mobile-sticky-filter .collection__page-sidebar{
@@ -214,7 +218,7 @@ data-collection-link="{{ collection_link }}">
               }
             </style>
           </div>
-          <div id="Huratips-Pagination">
+          <div id="Huratips-Pagination" class="custom-flex-pagination">
           {% if paginate.next %}
           <a href="{{ paginate.next.url }}">Loading More</a>
           {% endif %}  
