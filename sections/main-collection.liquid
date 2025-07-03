@@ -210,12 +210,24 @@ data-collection-link="{{ collection_link }}">
               }
             </style>
           </div>
+          <div id="Huratips-Pagination">
+          {% if paginate.next %}
+          <a href="{{ paginate.next.url }}">Loading More</a>
+          {% endif %}  
+          </div>
+
         {%- else -%}
           <div id="main-collection-product-grid"
           class="collection collection--empty span-12 auto"
           data-id="{{ section.id }}">
             <span class="rte">{{ 'collections.filters.use_fewer_filters_html' | t: link: collection.url, class: "underline" }}</span>
           </div>
+          <div id="Huratips-Pagination">
+          {% if paginate.next %}
+          <a href="{{ paginate.next.url }}">Loading More</a>
+          {% endif %}  
+          </div>
+
         {%- endif -%}
 
       {% if show_sidebar %}</div>{% endif %}
