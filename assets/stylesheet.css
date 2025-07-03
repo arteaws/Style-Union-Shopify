@@ -6345,9 +6345,9 @@ ul.product__tabs {
   top: 0;
 }
 
-.swatches__sold-out--image {
+/* .swatches__sold-out--image {
   display: none;
-}
+} */
 
 /* .swatches__swatch--color.soldout {
   display: none !important;
