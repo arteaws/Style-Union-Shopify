@@ -170,30 +170,24 @@
       <div class="swatches__swatch--color swatch-element color swatches__shape--{{ color_swatch_shape }} {% unless available %}soldout{% endunless %} js-swatch-element parent-dflex" data-option-value="{{ value | escape }}" data-option-position="{{ option.position }}" data-available="{{ available }}">
         <div class="color_dflex">
         {{ radio_button }}
-        {% if variant_image_url %}
-          <!-- Show variant image if available -->
-          <label class="swatches__form--label"
-            for="{{ section.id }}-{{ option.name }}-{{ forloop.index0 }}"
-            tabindex="0"
-            style="background-image: url({{ variant_image_url }}); background-position: center center; background-size: cover;">
-            {% unless available %}{{ sold_out_image }}{% endunless %}
-          </label>
-          <span class="swatches__color-name">{{ value | truncatewords:1 }}</span>
-
-        {% else %}
-          <!-- Fallback to color swatch if no variant image -->
-          <label class="swatches__form--label"
-            for="{{ section.id }}-{{ option.name }}-{{ forloop.index0 }}"
-            tabindex="0"
-            style="
+        
+        <!-- Single consistent label structure -->
+        <label class="swatches__form--label"
+          for="{{ section.id }}-{{ option.name }}-{{ forloop.index0 }}"
+          tabindex="0"
+          style="
+          {% if variant_image_url %}
+            background-image: url({{ variant_image_url }}); background-position: center center; background-size: cover;
+          {% else %}
             {% unless color_swatch_style == 'default-color' %}
-             background-image: url({{ variant_image_url }});; background-position: center center; background-size: 50px;
-            {% endunless %}">
-            {% unless available %}{{ sold_out_image }}{% endunless %}
-          </label>
-          <span class="swatches__color-name">{{ value }}</span>
-        {% endif %}
-          </div>
+              background-color: {{ css_color }};
+            {% endunless %}
+          {% endif %}">
+          {% unless available %}{{ sold_out_image }}{% endunless %}
+        </label>
+        
+        <span class="swatches__color-name">{{ value }}</span>
+        </div>
       </div>
     {% endcapture %}
 
