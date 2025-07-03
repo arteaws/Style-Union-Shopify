@@ -181,48 +181,71 @@ data-collection-link="{{ collection_link }}">
           </div>
         {% endif %}
 
-        {%- if collection.products.size >= 1 -%}
-          <div id="main-collection-product-grid"
-          class="product-loop collection__page-products grid-align-{{ settings.details_align }} span-12 auto"
+{%- if collection.products.size >= 1 -%}
+  <div id="main-collection-product-grid"
+    class="product-loop collection__page-products grid-align-{{ settings.details_align }} span-12 auto"
+    data-aos="fade"
+    data-id="{{ section.id }}">
+    {%- comment -%} First loop through available products {%- endcomment -%}
+    {% for product in collection.products %}
+      {% unless product.tags contains 'gift-with-purchase' or product.available == false %}
+        <div id="product-listing-{{ product.id }}" 
+          class="item product-index collection__page-product js-product-listing"
+          data-alpha="{{ product.title }}" 
+          data-product-id="{{ product.id }}" 
+          data-price="{{ product.price }}"
           data-aos="fade"
-          data-id="{{ section.id }}">
-            {% for product in collection.products %}
-              {% unless product.tags contains 'gift-with-purchase' %}
-                <div id="product-listing-{{ product.id }}" 
-                  class="item product-index collection__page-product js-product-listing"
-                  data-alpha="{{ product.title }}" 
-                  data-product-id="{{ product.id }}" 
-                  data-price="{{ product.price }}"
-                  data-aos="fade"
-                  data-aos-delay="{{ forloop.index | minus: 1 | modulo: aos_mod | times: 100 }}">
-                  {% liquid
-                    assign loading = 'lazy'
-                    assign fetch_priority = 'auto'
-                    if forloop.index <= grid
-                      assign loading = 'eager'
-                      assign fetch_priority = 'high'
-                    endif
-                  %}
-                  {% render 'product-listing',
-                    product: product,
-                    collection: collection,
-                    loading: loading,
-                    fetchpriority: fetch_priority %}
-                </div>
-              {% endunless %}
-            {% endfor %}
+          data-aos-delay="{{ forloop.index | minus: 1 | modulo: aos_mod | times: 100 }}">
+          {% liquid
+            assign loading = 'lazy'
+            assign fetch_priority = 'auto'
+            if forloop.index <= grid
+              assign loading = 'eager'
+              assign fetch_priority = 'high'
+            endif
+          %}
+          {% render 'product-listing',
+            product: product,
+            collection: collection,
+            loading: loading,
+            fetchpriority: fetch_priority %}
+        </div>
+      {% endunless %}
+    {% endfor %}
 
-            <style>
-              .collection__page-products {
-                grid-template-columns: repeat({{ grid }}, 1fr);
-              }
-            </style>
-          </div>
-          <div id="Huratips-Pagination" class="custom-flex-pagination">
-          {% if paginate.next %}
-          <a href="{{ paginate.next.url }}">Loading More</a>
-          {% endif %}  
-          </div>
+    {%- comment -%} Then loop through sold out products {%- endcomment -%}
+    {% for product in collection.products %}
+      {% unless product.tags contains 'gift-with-purchase' or product.available %}
+        <div id="product-listing-{{ product.id }}" 
+          class="item product-index collection__page-product js-product-listing sold-out-last"
+          data-alpha="{{ product.title }}" 
+          data-product-id="{{ product.id }}" 
+          data-price="{{ product.price }}"
+          data-aos="fade"
+          data-aos-delay="{{ forloop.index | minus: 1 | modulo: aos_mod | times: 100 }}">
+          {% render 'product-listing',
+            product: product,
+            collection: collection,
+            loading: 'lazy',
+            fetchpriority: 'low' %}
+        </div>
+      {% endunless %}
+    {% endfor %}
+
+    <style>
+      .collection__page-products {
+        grid-template-columns: repeat({{ grid }}, 1fr);
+      }
+      .sold-out-last {
+        order: 1; /* This will push sold out items to the end */
+      }
+    </style>
+  </div>
+  <div id="Huratips-Pagination" class="custom-flex-pagination">
+    {% if paginate.next %}
+      <a href="{{ paginate.next.url }}">Loading More</a>
+    {% endif %}  
+  </div>
 
         {%- else -%}
           <div id="main-collection-product-grid"
