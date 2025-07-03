@@ -18,9 +18,7 @@
 .swatch-hidden {
     display: none !important;
 }
- /* .swatch-sold-out {
-    opacity: 0.5;
-}  */
+
   #addToCart[type="submit"][value="Sold Out"] {
     display: none;
 } 
@@ -31,7 +29,7 @@
     cursor: not-allowed;
 }
 
-/* CSS diagonal cross for sold out color variants - FIXED */
+
 .swatches__sold-out--image.crossed-out {
     position: absolute;
     top: 0;
@@ -54,7 +52,7 @@
     pointer-events: none;
 }
 
-/* Size strike-through styling - FIXED for variable box sizes */
+
 .size-strike-on {
     position: relative;
     opacity: 0.6;
@@ -80,59 +78,15 @@
   pointer-events: none;
 }
 
-/* Alternative method for size boxes - using dynamic diagonal calculation */
-/* .size-strike-on::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: 
-        linear-gradient(45deg, transparent calc(50% - 1px), #000000 calc(50% - 1px), #000000 calc(50% + 1px), transparent calc(50% + 1px));
-    z-index: 3;
-    pointer-events: none;
-    display: none; /* Use this if the primary method doesn't work */
-} */
-
 .size-strike-on .swatches__form--label {
     cursor: not-allowed;
 }
 
-/* Ensure proper positioning context for crosses */
 .swatches__form--label {
     position: relative;
     display: inline-block;
 }
 
-/* Alternative method using calculated diagonal width (if linear gradient doesn't work) */
-/*
-.swatches__sold-out--image.crossed-out::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 141.42%;
-    height: 2px;
-    background-color: #000000;
-    transform: translate(-50%, -50%) rotate(45deg);
-    z-index: 3;
-    pointer-events: none;
-}
-
-.size-strike-on::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 141.42%;
-    height: 2px;
-    background-color: #000000;
-    transform: translate(-50%, -50%) rotate(45deg);
-    z-index: 2;
-    pointer-events: none;
-}
-*/
 </style>
 
 {%- liquid
