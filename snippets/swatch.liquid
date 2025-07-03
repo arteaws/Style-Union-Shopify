@@ -157,7 +157,7 @@
     {% endcapture %}
 
     {% capture regular_swatch %}
-      <div class="swatches__swatch--regular swatch-element {% unless available %}soldout{% endunless %} js-swatch-element" data-option-value="{{ value | escape }}" data-option-position="{{ option.position }}" data-available="{{ available }}">
+      <div class="swatches__swatch--regular yhi swatch-element {% unless available %}soldout{% endunless %} js-swatch-element" data-option-value="{{ value | escape }}" data-option-position="{{ option.position }}" data-available="{{ available }}">
         {{ radio_button }}
         <label class="swatches__form--label" for="{{ section.id }}-{{ option.name }}-{{ forloop.index0 }}" tabindex="0">
           {{ value }}
