@@ -157,7 +157,7 @@
     {% endcapture %}
 
     {% capture regular_swatch %}
-      <div class="swatches__swatch--regular yhi swatch-element {% unless available %}soldout{% endunless %} js-swatch-element" data-option-value="{{ value | escape }}" data-option-position="{{ option.position }}" data-available="{{ available }}">
+      <div class="swatches__swatch--regular swatch-element {% unless available %}soldout{% endunless %} js-swatch-element custom-outer-sold-out" data-option-value="{{ value | escape }}" data-option-position="{{ option.position }}" data-available="{{ available }}">
         {{ radio_button }}
         <label class="swatches__form--label" for="{{ section.id }}-{{ option.name }}-{{ forloop.index0 }}" tabindex="0">
           {{ value }}
@@ -237,6 +237,36 @@ document.addEventListener('DOMContentLoaded', function() {
   const colorOptions = data.colorOptions;
   const sizeOptions = data.sizeOptions;
   
+  // Function to check if all color swatches are sold out and add outer class
+  function checkAllColorsSoldOut() {
+    const sizeContainers = document.querySelectorAll('.js-variant-selector');
+    
+    sizeContainers.forEach(function(container) {
+      const optionName = container.getAttribute('data-option-name');
+      
+      // Only check color containers
+      if (colorOptions.includes(optionName)) {
+        const swatches = container.querySelectorAll('.js-swatch-element:not(.swatch-hidden)');
+        const soldOutSwatches = container.querySelectorAll('.js-swatch-element:not(.swatch-hidden).swatch-sold-out');
+        
+        // Check if all visible swatches are sold out
+        if (swatches.length > 0 && swatches.length === soldOutSwatches.length) {
+          // All color swatches are sold out
+          const outerSoldOutDivs = container.querySelectorAll('.custom-outer-sold-out');
+          outerSoldOutDivs.forEach(function(div) {
+            div.classList.add('outer-cs-soldout');
+          });
+        } else {
+          // Not all color swatches are sold out
+          const outerSoldOutDivs = container.querySelectorAll('.custom-outer-sold-out');
+          outerSoldOutDivs.forEach(function(div) {
+            div.classList.remove('outer-cs-soldout');
+          });
+        }
+      }
+    });
+  }
+  
   // Function to filter color swatches based on selected size
   function filterColorSwatches() {
     // Get currently selected size
@@ -254,7 +284,11 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     // If no size is selected, show all colors
-    if (!selectedSize) return;
+    if (!selectedSize) {
+      // Check all colors sold out status when no size selected
+      checkAllColorsSoldOut();
+      return;
+    }
     
     // Get all colors for the selected size (regardless of availability)
     const availableColors = new Set();
@@ -318,6 +352,9 @@ document.addEventListener('DOMContentLoaded', function() {
         });
       }
     });
+    
+    // Check if all visible color swatches are sold out after filtering
+    checkAllColorsSoldOut();
   }
   
   // Add event listeners to size inputs only
