@@ -139,7 +139,9 @@ select.restock-alerts-country-select.selectBoxStyle {
           a.appendChild(r);
       })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
     </script>
-  {% include 'pagefly-app-header' %}</head>
+  {% include 'pagefly-app-header' %}
+  {% if template contains 'collection' %}{{ 'https://cdn.shopify.com/s/files/1/0382/4185/files/ajaxinate.js?937' | script_tag }}{% endif %}
+  </head>
 
   <body
     class="gridlock template-{{ template | handleize }} {% render 'body-classes' | strip %} js-slideout-toggle-wrapper js-modal-toggle-wrapper"
