@@ -210,8 +210,9 @@
       this.currentPage = 1; // Start from page 1
       this.isLoading = false;
       this.loadedProductIds = new Set();
-      this.maxPages = parseInt(this.dataset.pageSize) || 10;
+      this.maxPages = parseInt(this.dataset.pageSize) || 999; // Set high default
       this.hasMorePages = true;
+      this.consecutiveEmptyPages = 0; // Track empty responses
       
       this.scrollToTopBtn = document.querySelector(".scrollToTopButton");
       if (this.scrollToTopBtn) {
@@ -317,15 +318,15 @@
     }
    
     fetchNextPage() {
-      if (this.isLoading || !this.hasMorePages || this.currentPage > this.maxPages) {
-        console.log("Fetch blocked - Loading:", this.isLoading, "Has more:", this.hasMorePages, "Page:", this.currentPage, "Max:", this.maxPages);
+      if (this.isLoading || !this.hasMorePages) {
+        console.log("Fetch blocked - Loading:", this.isLoading, "Has more:", this.hasMorePages, "Page:", this.currentPage);
         return;
       }
       
       this.isLoading = true;
       this.currentPage++;
       
-      console.log(`Fetching page ${this.currentPage} of ${this.maxPages}`);
+      console.log(`Fetching page ${this.currentPage}`);
       
       // Show loading animation
       this.style.opacity = '1';
@@ -376,12 +377,14 @@
         this.style.opacity = '0.5';
         
         // Retry logic for network errors
-        if (error.name !== 'AbortError' && this.currentPage <= this.maxPages) {
+        if (error.name !== 'AbortError') {
           console.log("Retrying in 2 seconds...");
           setTimeout(() => {
             this.currentPage--; // Reset page counter
             this.fetchNextPage();
           }, 2000);
+        } else {
+          this.hasMorePages = false;
         }
       });
     }
