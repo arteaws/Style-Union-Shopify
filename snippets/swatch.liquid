@@ -42,7 +42,7 @@
     z-index: 2;
 }
 
-.swatches__sold-out--image.crossed-out::before {
+/* .swatches__sold-out--image.crossed-out::before {
     content: '';
     position: absolute;
     top: 0;
@@ -52,7 +52,7 @@
     background: linear-gradient(45deg, transparent 48%, #000000 48%, #000000 52%, transparent 52%);
     z-index: 3;
     pointer-events: none;
-}
+} */
 
 /* Size strike-through styling - FIXED */
 .size-strike-on {
@@ -60,7 +60,7 @@
     opacity: 0.6;
 }
 
-.size-strike-on::before {
+/* .size-strike-on::before {
     content: '';
     position: absolute;
     top: 0;
@@ -71,7 +71,7 @@
     z-index: 2;
     pointer-events: none;
 }
-
+ */
 .size-strike-on .swatches__form--label {
     cursor: not-allowed;
 }
@@ -82,8 +82,7 @@
     display: inline-block;
 }
 
-/* Alternative method using calculated diagonal width (if linear gradient doesn't work) */
-/*
+
 .swatches__sold-out--image.crossed-out::after {
     content: '';
     position: absolute;
@@ -109,7 +108,7 @@
     z-index: 2;
     pointer-events: none;
 }
-*/
+
 </style>
 
 {%- liquid
