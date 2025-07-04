@@ -38,6 +38,7 @@
     height: 100%;
     pointer-events: none;
     z-index: 2;
+    display: none; /* Hide by default */
 }
 
 .swatches__sold-out--image.crossed-out::before {
@@ -226,7 +227,7 @@ background-color: #fff;
     {% endcapture %}
 
     {% capture color_swatch %}
-      <div class="swatches__swatch--color swatch-element color swatches__shape--{{ color_swatch_shape }} {% unless available %}soldout{% endunless %} js-swatch-element parent-dflex" data-option-value="{{ value | escape }}" data-option-position="{{ option.position }}" data-available="{{ available }}">
+      <div class="swatches__swatch--color swatch-element color swatches__shape--{{ color_swatch_shape }} {% unless available %}soldout swatch-sold-out{% endunless %} js-swatch-element parent-dflex" data-option-value="{{ value | escape }}" data-option-position="{{ option.position }}" data-available="{{ available }}">
         <div class="color_dflex">
         {{ radio_button }}
         {% if variant_image_url %}
@@ -235,7 +236,7 @@ background-color: #fff;
             for="{{ section.id }}-{{ option.name }}-{{ forloop.index0 }}"
             tabindex="0"
             style="background-image: url({{ variant_image_url }}); background-position: center center; background-size: cover;">
-           <div class="swatches__sold-out--image crossed-out"></div>
+           {% unless available %}<div class="swatches__sold-out--image crossed-out" style="display: block;"></div>{% endunless %}
            
           </label>
           <span class="swatches__color-name">{{ value | truncatewords:1 }}</span>
@@ -249,7 +250,7 @@ background-color: #fff;
             {% unless color_swatch_style == 'default-color' %}
              background-image: url({{ variant_image_url }});; background-position: center center; background-size: 50px;
             {% endunless %}">
-             <div class="swatches__sold-out--image crossed-out"></div>
+             {% unless available %}<div class="swatches__sold-out--image crossed-out" style="display: block;"></div>{% endunless %}
           </label>
           <span class="swatches__color-name">{{ value }}</span>
         {% endif %}
@@ -373,8 +374,35 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
     
-    // If no size is selected, show all colors
-    if (!selectedSize) return;
+    // If no size is selected, show all colors with their original availability
+    if (!selectedSize) {
+      const colorContainers = document.querySelectorAll('.js-variant-selector');
+      colorContainers.forEach(function(container) {
+        const optionName = container.getAttribute('data-option-name');
+        if (colorOptions.includes(optionName)) {
+          const swatches = container.querySelectorAll('.js-swatch-element');
+          swatches.forEach(function(swatch) {
+            const isOriginallyAvailable = swatch.getAttribute('data-available') === 'true';
+            const crossedOut = swatch.querySelector('.crossed-out');
+            
+            swatch.classList.remove('swatch-hidden');
+            
+            if (isOriginallyAvailable) {
+              swatch.classList.remove('swatch-sold-out', 'soldout');
+              if (crossedOut) {
+                crossedOut.style.display = 'none';
+              }
+            } else {
+              swatch.classList.add('swatch-sold-out', 'soldout');
+              if (crossedOut) {
+                crossedOut.style.display = 'block';
+              }
+            }
+          });
+        }
+      });
+      return;
+    }
     
     // Get all colors for the selected size (regardless of availability)
     const availableColors = new Set();
@@ -405,7 +433,8 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     // Show/hide color swatches
-    sizeContainers.forEach(function(container) {
+    const colorContainers = document.querySelectorAll('.js-variant-selector');
+    colorContainers.forEach(function(container) {
       const optionName = container.getAttribute('data-option-name');
       
       // Only filter color containers, not size containers
@@ -414,18 +443,22 @@ document.addEventListener('DOMContentLoaded', function() {
         
         swatches.forEach(function(swatch) {
           const optionValue = swatch.getAttribute('data-option-value');
-          const isAvailable = swatch.getAttribute('data-available') === 'true';
+          const crossedOut = swatch.querySelector('.crossed-out');
           
           if (availableColors.has(optionValue)) {
             swatch.classList.remove('swatch-hidden');
             
             // Update sold out status with opacity
-            if (soldOutColors.has(optionValue) || !isAvailable) {
-              swatch.classList.add('swatch-sold-out');
-              swatch.classList.add('soldout');
+            if (soldOutColors.has(optionValue)) {
+              swatch.classList.add('swatch-sold-out', 'soldout');
+              if (crossedOut) {
+                crossedOut.style.display = 'block';
+              }
             } else {
-              swatch.classList.remove('swatch-sold-out');
-              swatch.classList.remove('soldout');
+              swatch.classList.remove('swatch-sold-out', 'soldout');
+              if (crossedOut) {
+                crossedOut.style.display = 'none';
+              }
             }
           } else {
             swatch.classList.add('swatch-hidden');
