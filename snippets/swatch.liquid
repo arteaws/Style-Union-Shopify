@@ -19,16 +19,15 @@
     display: none !important;
 }
 
-  #addToCart[type="submit"][value="Sold Out"] {
+#addToCart[type="submit"][value="Sold Out"] {
     display: none;
 } 
-  span.price__badge.price__badge--sold-out {
+span.price__badge.price__badge--sold-out {
     display: none;
 }  
 .swatch-sold-out .swatches__form--label {
     cursor: not-allowed;
 }
-
 
 .swatches__sold-out--image.crossed-out {
     position: absolute;
@@ -38,6 +37,7 @@
     height: 100%;
     pointer-events: none;
     z-index: 2;
+    display: none;
 }
 
 .swatches__sold-out--image.crossed-out::before {
@@ -47,20 +47,19 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(45deg, transparent 51%, #000000 48%, #000000 52%, transparent 52%);
+    background: linear-gradient(45deg, transparent 46%, #000000 47%, #000000 53%, transparent 54%);
     z-index: 3;
     pointer-events: none;
 }
-
 
 .size-strike-on {
     position: relative;
     opacity: 0.6;
 }
- .custom-outer-sold-out{
+.custom-outer-sold-out{
    width:60px;
    height:40px;
- } 
+} 
 .custom-outer-sold-out .swatches__form--label {
   width: 100%;
   height: 100%;
@@ -88,7 +87,6 @@ background-color: #fff;
     position: relative;
     display: inline-block;
 }
-
 </style>
 
 {%- liquid
@@ -236,7 +234,6 @@ background-color: #fff;
             tabindex="0"
             style="background-image: url({{ variant_image_url }}); background-position: center center; background-size: cover;">
            <div class="swatches__sold-out--image crossed-out"></div>
-           
           </label>
           <span class="swatches__color-name">{{ value | truncatewords:1 }}</span>
 
@@ -296,6 +293,141 @@ document.addEventListener('DOMContentLoaded', function() {
   const colorOptions = data.colorOptions;
   const sizeOptions = data.sizeOptions;
   
+  // Helper function to get currently selected values for each option
+  function getCurrentSelections() {
+    const selections = {};
+    const containers = document.querySelectorAll('.js-variant-selector');
+    
+    containers.forEach(function(container) {
+      const optionName = container.getAttribute('data-option-name');
+      const checkedInput = container.querySelector('.swatches__form--input:checked');
+      if (checkedInput) {
+        const optionPosition = checkedInput.getAttribute('data-position');
+        selections['option' + optionPosition] = checkedInput.value;
+      }
+    });
+    
+    return selections;
+  }
+  
+  // Function to check if a specific variant combination is available
+  function isVariantAvailable(option1, option2, option3) {
+    return variants.some(function(variant) {
+      return variant.option1 === option1 && 
+             variant.option2 === option2 && 
+             variant.option3 === option3 && 
+             variant.available;
+    });
+  }
+  
+  // Function to update color swatches based on current selections
+  function updateColorSwatches() {
+    const currentSelections = getCurrentSelections();
+    const colorContainers = document.querySelectorAll('.js-variant-selector');
+    
+    colorContainers.forEach(function(container) {
+      const optionName = container.getAttribute('data-option-name');
+      
+      if (colorOptions.includes(optionName)) {
+        const optionPosition = container.getAttribute('data-option-index');
+        const currentOption = 'option' + optionPosition;
+        
+        const swatches = container.querySelectorAll('.js-swatch-element');
+        
+        swatches.forEach(function(swatch) {
+          const colorValue = swatch.getAttribute('data-option-value');
+          const crossedOut = swatch.querySelector('.crossed-out');
+          
+          // Create test variant combination
+          const testVariant = {
+            option1: currentSelections.option1,
+            option2: currentSelections.option2,
+            option3: currentSelections.option3
+          };
+          
+          // Replace the current option with the color value we're testing
+          testVariant[currentOption] = colorValue;
+          
+          // Check if this combination is available
+          const available = isVariantAvailable(testVariant.option1, testVariant.option2, testVariant.option3);
+          
+          // Update swatch styling
+          if (available) {
+            swatch.classList.remove('swatch-sold-out', 'soldout');
+            if (crossedOut) {
+              crossedOut.style.display = 'none';
+            }
+          } else {
+            swatch.classList.add('swatch-sold-out', 'soldout');
+            if (crossedOut) {
+              crossedOut.style.display = 'block';
+            }
+          }
+        });
+      }
+    });
+  }
+  
+  // Function to update size swatches based on current selections
+  function updateSizeSwatches() {
+    const currentSelections = getCurrentSelections();
+    const sizeContainers = document.querySelectorAll('.js-variant-selector');
+    
+    sizeContainers.forEach(function(container) {
+      const optionName = container.getAttribute('data-option-name');
+      
+      if (sizeOptions.includes(optionName)) {
+        const optionPosition = container.getAttribute('data-option-index');
+        const currentOption = 'option' + optionPosition;
+        
+        const swatches = container.querySelectorAll('.js-swatch-element');
+        
+        swatches.forEach(function(swatch) {
+          const sizeValue = swatch.getAttribute('data-option-value');
+          
+          // Create test variant combination
+          const testVariant = {
+            option1: currentSelections.option1,
+            option2: currentSelections.option2,
+            option3: currentSelections.option3
+          };
+          
+          // Replace the current option with the size value we're testing
+          testVariant[currentOption] = sizeValue;
+          
+          // Check if ANY combination with this size is available
+          let hasAvailableColorForSize = false;
+          
+          // Get all possible color values for other options
+          const otherOptions = ['option1', 'option2', 'option3'].filter(opt => opt !== currentOption);
+          
+          variants.forEach(function(variant) {
+            if (variant[currentOption] === sizeValue && variant.available) {
+              // Check if this variant matches our other selected options (if any)
+              let matches = true;
+              otherOptions.forEach(function(otherOpt) {
+                if (currentSelections[otherOpt] && variant[otherOpt] !== currentSelections[otherOpt]) {
+                  matches = false;
+                }
+              });
+              
+              if (matches) {
+                hasAvailableColorForSize = true;
+              }
+            }
+          });
+          
+          // Update size swatch styling
+          if (hasAvailableColorForSize) {
+            swatch.classList.remove('size-strike-on');
+          } else {
+            swatch.classList.add('size-strike-on');
+          }
+        });
+      }
+    });
+  }
+  
   // Function to update selected class for regular swatches
   function updateSelectedClass() {
     const regularSwatches = document.querySelectorAll('.swatches__swatch--regular');
@@ -310,140 +442,16 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
   
-  // Function to check if all colors are sold out for a selected size
-  function checkSizeAvailability(selectedSize) {
-    const availableColors = new Set();
-    const totalColors = new Set();
-    
-    variants.forEach(function(variant) {
-      if (variant.option1 === selectedSize || variant.option2 === selectedSize || variant.option3 === selectedSize) {
-        // Add all color option values for this variant
-        [variant.option1, variant.option2, variant.option3].forEach(function(optionValue) {
-          if (optionValue && optionValue !== selectedSize) {
-            totalColors.add(optionValue);
-            if (variant.available) {
-              availableColors.add(optionValue);
-            }
-          }
-        });
-      }
-    });
-    
-    // Return true if all colors are sold out
-    return totalColors.size > 0 && availableColors.size === 0;
-  }
-  
-  // Function to update size swatch styling
-  function updateSizeSwatches() {
-    const sizeContainers = document.querySelectorAll('.js-variant-selector');
-    
-    sizeContainers.forEach(function(container) {
-      const optionName = container.getAttribute('data-option-name');
-      
-      if (sizeOptions.includes(optionName)) {
-        const swatches = container.querySelectorAll('.js-swatch-element');
-        
-        swatches.forEach(function(swatch) {
-          const optionValue = swatch.getAttribute('data-option-value');
-          const allColorsSoldOut = checkSizeAvailability(optionValue);
-          
-          if (allColorsSoldOut) {
-            swatch.classList.add('size-strike-on');
-          } else {
-            swatch.classList.remove('size-strike-on');
-          }
-        });
-      }
-    });
-  }
-  
-  // Function to filter color swatches based on selected size
-  function filterColorSwatches() {
-    // Get currently selected size
-    const sizeContainers = document.querySelectorAll('.js-variant-selector');
-    let selectedSize = null;
-    
-    sizeContainers.forEach(function(container) {
-      const optionName = container.getAttribute('data-option-name');
-      if (sizeOptions.includes(optionName)) {
-        const checkedInput = container.querySelector('.swatches__form--input:checked');
-        if (checkedInput) {
-          selectedSize = checkedInput.value;
-        }
-      }
-    });
-    
-    // If no size is selected, show all colors
-    if (!selectedSize) return;
-    
-    // Get all colors for the selected size (regardless of availability)
-    const availableColors = new Set();
-    const soldOutColors = new Set();
-    
-    variants.forEach(function(variant) {
-      if (variant.option1 === selectedSize || variant.option2 === selectedSize || variant.option3 === selectedSize) {
-        // Add all option values for this variant to available colors
-        if (variant.option1 && variant.option1 !== selectedSize) {
-          availableColors.add(variant.option1);
-          if (!variant.available) {
-            soldOutColors.add(variant.option1);
-          }
-        }
-        if (variant.option2 && variant.option2 !== selectedSize) {
-          availableColors.add(variant.option2);
-          if (!variant.available) {
-            soldOutColors.add(variant.option2);
-          }
-        }
-        if (variant.option3 && variant.option3 !== selectedSize) {
-          availableColors.add(variant.option3);
-          if (!variant.available) {
-            soldOutColors.add(variant.option3);
-          }
-        }
-      }
-    });
-    
-    // Show/hide color swatches
-    sizeContainers.forEach(function(container) {
-      const optionName = container.getAttribute('data-option-name');
-      
-      // Only filter color containers, not size containers
-      if (colorOptions.includes(optionName)) {
-        const swatches = container.querySelectorAll('.js-swatch-element');
-        
-        swatches.forEach(function(swatch) {
-          const optionValue = swatch.getAttribute('data-option-value');
-          const isAvailable = swatch.getAttribute('data-available') === 'true';
-          
-          if (availableColors.has(optionValue)) {
-            swatch.classList.remove('swatch-hidden');
-            
-            // Update sold out status with opacity
-            if (soldOutColors.has(optionValue) || !isAvailable) {
-              swatch.classList.add('swatch-sold-out');
-              swatch.classList.add('soldout');
-            } else {
-              swatch.classList.remove('swatch-sold-out');
-              swatch.classList.remove('soldout');
-            }
-          } else {
-            swatch.classList.add('swatch-hidden');
-            // Uncheck hidden color options
-            const input = swatch.querySelector('.swatches__form--input');
-            if (input && input.checked) {
-              input.checked = false;
-            }
-          }
-        });
-      }
-    });
+  // Function to update all swatches
+  function updateAllSwatches() {
+    updateColorSwatches();
+    updateSizeSwatches();
+    updateSelectedClass();
   }
   
   // Add event listeners to all inputs
   const allContainers = document.querySelectorAll('.js-variant-selector');
   allContainers.forEach(function(container) {
-    const optionName = container.getAttribute('data-option-name');
     const inputs = container.querySelectorAll('.swatches__form--input');
     
     inputs.forEach(function(input) {
@@ -455,20 +463,13 @@ document.addEventListener('DOMContentLoaded', function() {
           selectedSpan.textContent = this.value;
         }
         
-        // Update selected class for regular swatches
-        updateSelectedClass();
-        
-        // If this is a size option, filter color swatches
-        if (sizeOptions.includes(optionName)) {
-          filterColorSwatches();
-        }
+        // Update all swatches based on new selection
+        updateAllSwatches();
       });
     });
   });
   
   // Initial setup on page load
-  updateSizeSwatches();
-  filterColorSwatches();
-  updateSelectedClass();
+  updateAllSwatches();
 });
 </script>
