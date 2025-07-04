@@ -509,10 +509,14 @@
     <span class="product-badge">Few Left</span>
   {% elsif collection_names contains 'Store Bestseller' %}
     <span class="product-badge">Selling Fast</span>
-  {% elsif collection_names contains 'Must Haves Essentials' %}
-    <span class="product-badge">New In</span>
-  {% elsif collection_names contains 'New In' %}
-    <span class="product-badge">New In</span>
+  {% elsif collection_names contains 'Must Haves Essentials' or collection_names contains 'New In' %}
+    {% assign product_created_date = product.created_at | date: '%s' %}
+    {% assign current_date = 'now' | date: '%s' %}
+    {% assign seconds_in_30_days = 2592000 %} <!-- 30 days in seconds -->
+    {% assign difference = current_date | minus: product_created_date %}
+    {% if difference < seconds_in_30_days %}
+      <span class="product-badge">New In</span>
+    {% endif %}
   {% endif %}
 </div>
     <div class="slides product-image-container carousel carousel-main js-carousel-main" data-product-id="{{ product.id }}">
