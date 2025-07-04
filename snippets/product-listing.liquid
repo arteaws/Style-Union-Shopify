@@ -62,7 +62,7 @@ div#custom-smart-wishlist {
 
 
 <div class="prod-container">
-  <div class="custom-badges-collection-card">
+<div class="custom-badges-collection-card">
   {% assign collection_names = product.collections | map: 'title' | join: ',' %}
   
   {% if collection_names contains 'Bestseller New' %}
@@ -74,7 +74,13 @@ div#custom-smart-wishlist {
   {% elsif collection_names contains 'Store Bestseller' %}
     <span class="product-badge">Selling Fast</span>
   {% elsif collection_names contains 'New In' %}
-    <span class="product-badge">New In</span>
+    {% assign product_created_date = product.created_at | date: '%s' %}
+    {% assign current_date = 'now' | date: '%s' %}
+    {% assign seconds_in_30_days = 2592000 %} <!-- 30 days in seconds -->
+    {% assign difference = current_date | minus: product_created_date %}
+    {% if difference < seconds_in_30_days %}
+      <span class="product-badge">New In</span>
+    {% endif %}
   {% endif %}
 </div>
   {% if product.available %}
