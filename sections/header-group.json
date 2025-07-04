@@ -48,6 +48,7 @@
         },
         "announcement_text_6rckWQ": {
           "type": "announcement_text",
+          "disabled": true,
           "settings": {
             "announcement_text": "<p>Get ₹200 off on the first order</p>"
           }
@@ -78,69 +79,9 @@
         "nav_height": 30,
         "linklist_breakpoint": 13
       }
-    },
-    "badges_add_section_9TNRkR": {
-      "type": "badges-add-section",
-      "blocks": {
-        "badge_7Nnerc": {
-          "type": "badge",
-          "settings": {
-            "badge_name": "Most loved",
-            "collections": "Bestseller New",
-            "duration": "infinite",
-            "start_date": "now"
-          }
-        },
-        "badge_YGbJVY": {
-          "type": "badge",
-          "settings": {
-            "badge_name": "Must Have",
-            "collections": "Must Haves",
-            "duration": "infinite",
-            "start_date": "now"
-          }
-        },
-        "badge_rAnekF": {
-          "type": "badge",
-          "settings": {
-            "badge_name": "Few Left",
-            "collections": "Last Few",
-            "duration": "infinite",
-            "start_date": "now"
-          }
-        },
-        "badge_69VBnD": {
-          "type": "badge",
-          "settings": {
-            "badge_name": "Selling Fast",
-            "collections": "Store Bestseller",
-            "duration": "infinite",
-            "start_date": "now"
-          }
-        },
-        "badge_nm39bQ": {
-          "type": "badge",
-          "settings": {
-            "badge_name": "New In",
-            "collections": "Must Haves Essentials,New In",
-            "duration": "infinite",
-            "start_date": "now"
-          }
-        }
-      },
-      "block_order": [
-        "badge_7Nnerc",
-        "badge_YGbJVY",
-        "badge_rAnekF",
-        "badge_69VBnD",
-        "badge_nm39bQ"
-      ],
-      "name": "Dynamic Product Badges",
-      "settings": {}
     }
   },
   "order": [
-    "header",
-    "badges_add_section_9TNRkR"
+    "header"
   ]
 }

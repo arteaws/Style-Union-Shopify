@@ -188,6 +188,7 @@
     },
     "promotion_bar_MeWrAY": {
       "type": "promotion-bar",
+      "disabled": true,
       "settings": {
         "rich_text": "<p>Get <strong>₹200/- off</strong> <strong>on your first order</strong> above ₹1899, Use Code: <strong>FIRSTBUY200</strong></p>",
         "background": "#f6f6f6",
