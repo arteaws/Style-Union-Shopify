@@ -1,22 +1,26 @@
 <script id="RazorpayMagicSidecartConfig" type="application/json">
- {
-   "email": "{{ customer.email }}",
-   "phone": "{{ customer.phone }}",
-   "config": {
-     "isEnabled": false,
-     "upsellWidget": {
-	"isEnabled": true
-     },
-     "theme": {
-       "color": "#000000"
-     },
-     "messageBanner": {
-       "isEnabled": true,
-       "message": "",
-       "color": "",
-       "textColor": ""
-     }
-   }
- }
+  {
+    "email": "{{ customer.email }}",
+    "phone": "{{ customer.phone }}",
+    "config": {
+      "isEnabled": true,
+      "customSelectors": {
+          "cartIcon": ".my-cart-link-container",
+          "addToCart": "#addToCart"
+         },
+      "upsellWidget": {
+  "isEnabled": true
+      },
+      "theme": {
+        "color": "#000000"
+      },
+      "messageBanner": {
+        "isEnabled": true,
+        "message": "",
+        "color": "",
+        "textColor": ""
+      }
+    }
+  }
 </script>
 <script src="https://magic-plugins.razorpay.com/shopify-sidecart/magic-shopify-sidecart.js" defer></script>
