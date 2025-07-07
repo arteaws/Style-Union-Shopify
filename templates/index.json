@@ -602,7 +602,7 @@
           "type": "text_block",
           "settings": {
             "icon": "returns",
-            "rich_text": "<p>14 day easy returns</p>",
+            "rich_text": "<p>15 day easy returns</p>",
             "link": ""
           }
         },
@@ -618,12 +618,13 @@
           "type": "text_block",
           "settings": {
             "icon": "location",
-            "rich_text": "<p>85+ stores across India</p>",
+            "rich_text": "<p>100+ stores across India</p>",
             "link": ""
           }
         },
         "text_block_rrpyx7": {
           "type": "text_block",
+          "disabled": true,
           "settings": {
             "icon": "appliance",
             "rich_text": "<p>Add text with an image or icon</p>",
