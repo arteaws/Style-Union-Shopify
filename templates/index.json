@@ -448,11 +448,11 @@
         "image_kzDQYb": {
           "type": "image",
           "settings": {
-            "image": "shopify://shop_images/desktop_banner_-_style_union_5.png",
+            "image": "shopify://shop_images/desktop_banner_-_style_union_5.webp",
             "overlay_color": "#000000",
             "overlay_opacity": 0,
             "caption_position": "middle_center",
-            "mobile_image": "shopify://shop_images/2_3.png",
+            "mobile_image": "shopify://shop_images/2_3.webp",
             "hide_caption_background": false,
             "heading": "",
             "subheading": "",
