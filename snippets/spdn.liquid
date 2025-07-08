@@ -1,25 +1,77 @@
-<script>var _listeners=[];
-EventTarget.prototype.addEventListenerBase=EventTarget.prototype.addEventListener,EventTarget.prototype.addEventListener=function(e,t,p){_listeners.push({target:this,type:e,listener:t}),this.addEventListenerBase(e,t,p)},EventTarget.prototype.removeEventListeners=function(e){for(var t=0;t!=_listeners.length;t++){var r=_listeners[t],n=r.target,s=r.type,i=r.listener;n==this&&s==e&&this.removeEventListener(s,i)}};</script><script type="text/worker" id="spdnworker">onmessage=function(e){var t=new Request("https://"+"{{ 'spdn.js' | asset_url }}",{redirect:"follow"});fetch(t).then(e=>e.text()).then(e=>{postMessage(e)})};</script>
-<script type="text/javascript">var spdnx=new Worker("data:text/javascript;base64,"+btoa(document.getElementById("spdnworker").textContent));spdnx.onmessage=function(t){var e=document.createElement("script");e.type="text/javascript",e.textContent=t.data,document.head.appendChild(e)},spdnx.postMessage("init");</script>
+<script>
+  var _listeners = [];
+  (EventTarget.prototype.addEventListenerBase = EventTarget.prototype.addEventListener),
+  (EventTarget.prototype.addEventListener = function (eventType, listener, options) {
+    _listeners.push({ target: this, type: eventType, listener: listener });
+    this.addEventListenerBase(eventType, listener, options);
+  }),
+  (EventTarget.prototype.removeEventListeners = function (eventType) {
+    for (var i = 0; i < _listeners.length; i++) {
+      var listenerObj = _listeners[i],
+          target = listenerObj.target,
+          type = listenerObj.type,
+          listener = listenerObj.listener;
+      if (target == this && type == eventType) {
+        this.removeEventListener(type, listener);
+      }
+    }
+  });
+</script>
+<script type="text/worker" id="spdnworker">
+  onmessage = function (event) {
+    var request = new Request('https://' + "{{ 'spdn.js' | asset_url }}", { redirect: 'follow' });
+    fetch(request)
+      .then((response) => response.text())
+      .then((scriptContent) => {
+        postMessage(scriptContent);
+      });
+  };
+</script>
+<script type="text/javascript">
+  var spdnx = new Worker('data:text/javascript;base64,' + btoa(document.getElementById('spdnworker').textContent));
+  spdnx.onmessage = function (event) {
+    var script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.textContent = event.data;
+    document.head.appendChild(script);
+  };
+  spdnx.postMessage('init');
+</script>
 <script type="text/javascript" data-spdn="1">
-const spdnObserver=new MutationObserver(mutations=>{mutations.forEach(({addedNodes})=>{addedNodes.forEach(node=>{
-if(node.tagName==='SCRIPT'&&node.innerHTML.includes('asyncLoad')){node.type='text/spdnscript'}
+  const observer = new MutationObserver((mutations) => {
+    mutations.forEach(({ addedNodes }) => {
+      addedNodes.forEach((node) => {
+        if (node.tagName === 'SCRIPT' && node.innerHTML.includes('asyncLoad')) {
+          node.type = 'text/spdnscript';
+        }
+        if (node.nodeType === 1 && node.tagName === 'SCRIPT') {
+          if (
+            node.src.includes('https://bridge.shopflo.com/js/shopflo.bundle.js')||
+            node.src.includes('https://styleunion.in/checkouts/internal/preloads.js?locale=en-IN&version=checkout-renderer')||
+            node.src.includes('www.googletagmanager.com')||
+            node.src.includes('app.kiwisizing.com')||
+            node.src.includes('checkout.razorpay.com')||
+            node.src.includes('cdn-sf.vitals.app')||
+            node.src.includes('www.clarity.ms')||
+            node.src.includes('judge.me')||
+            node.src.includes('klaviyo')||
+            node.dataset.Blockspdn == '1'
 
-if(node.nodeType===1 && node.tagName==='SCRIPT'){
-
-if(
-  node.src.includes('www.googletagmanager.com')
-  ||node.src.includes('app.kiwisizing.com')
-  ||node.src.includes('bridge.shopflo.com')
-  ||node.src.includes('checkout.razorpay.com')
-  ||node.src.includes('cdn-sf.vitals.app')
-  ||node.src.includes('cdn.s3.pop-convert.com')
-  ||node.src.includes('www.clarity.ms')
-  ||node.src.includes('magic-plugins.razorpay.com')
-  ||node.dataset.Blockspdn == "1"
-    ){ node.type='text/spdnscript'; }
-}
-
-if(node.tagName==='SCRIPT'&&node.className=='analytics'){node.type='text/spdnscript'}
-})})})
-var ua = navigator.userAgent.toLowerCase();if ((ua.indexOf('chrome') > -1 || ua.indexOf('firefox') > -1) && window.location.href.indexOf("no-optimization") === -1) {spdnObserver.observe(document.documentElement,{childList:true,subtree:true})}</script>
+          ) {
+            node.type = 'text/spdnscript';
+          }
+        }
+        if(node.tagName==='SCRIPT' && node.className=='analytics') {
+          node.type='text/spdnscript';
+        }
+      });
+    });
+  });
+  var ua = navigator.userAgent.toLowerCase();
+  if (
+    (ua.indexOf('chrome') > -1 || ua.indexOf('firefox') > -1) &&
+    window.location.href.indexOf('no-optimization') === -1
+  ) {
+    observer.observe(document.documentElement, { childList: true, subtree: true });
+  }
+</script>
