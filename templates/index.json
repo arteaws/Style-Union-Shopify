@@ -283,11 +283,11 @@
         "image_6KGYdT": {
           "type": "image",
           "settings": {
-            "image": "shopify://shop_images/style_union_1910_x_1000_px_1400_x_400_px.png",
+            "image": "shopify://shop_images/style_union_1910_x_1000_px_1400_x_400_px.webp",
             "overlay_color": "#000000",
             "overlay_opacity": 0,
             "caption_position": "middle_center",
-            "mobile_image": "shopify://shop_images/style_union_12.png",
+            "mobile_image": "shopify://shop_images/style_union_12.webp",
             "hide_caption_background": false,
             "heading": "",
             "subheading": "",
