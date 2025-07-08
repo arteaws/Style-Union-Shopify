@@ -46,11 +46,10 @@
         }
         if (node.nodeType === 1 && node.tagName === 'SCRIPT') {
           if (
-            node.src.includes('https://bridge.shopflo.com/js/shopflo.bundle.js')||
-            node.src.includes('https://styleunion.in/checkouts/internal/preloads.js?locale=en-IN&version=checkout-renderer')||
+            node.src.includes('bridge.shopflo.com')||
+            node.src.includes('opt.oclinks.app')||
             node.src.includes('www.googletagmanager.com')||
             node.src.includes('app.kiwisizing.com')||
-            node.src.includes('checkout.razorpay.com')||
             node.src.includes('cdn-sf.vitals.app')||
             node.src.includes('www.clarity.ms')||
             node.src.includes('judge.me')||
@@ -58,8 +57,9 @@
             node.src.includes('smartwishlist.js')||
             node.src.includes('https://styleunion.in/cart.js')||
             node.src.includes('https://analytics.google.com')||
-            node.src.includes('hotjar')||
+            node.src.includes('script.hotjar.com')||
             node.src.includes('searchtap.js')||
+            node.src.includes('checkout-static-next.razorpay.com')||
             node.dataset.Blockspdn == '1'
 
           ) {
