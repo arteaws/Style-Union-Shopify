@@ -124,11 +124,11 @@
         "image_rCYnhj": {
           "type": "image",
           "settings": {
-            "image": "shopify://shop_images/holiday_mens_banner-4.png",
+            "image": "shopify://shop_images/holiday_mens_banner-4.webp",
             "overlay_color": "#000000",
             "overlay_opacity": 0,
             "caption_position": "middle_center",
-            "mobile_image": "shopify://shop_images/Copy_of_holiday_mens_banner_800_x_1200_px_-4.png",
+            "mobile_image": "shopify://shop_images/Copy_of_holiday_mens_banner_800_x_1200_px_-4.webp",
             "hide_caption_background": false,
             "heading": "",
             "subheading": "",
@@ -145,11 +145,11 @@
         "image_P9rDbb": {
           "type": "image",
           "settings": {
-            "image": "shopify://shop_images/holiday_mens_banner-2_16888da9-bc90-4780-bf68-99446dd85636.png",
+            "image": "shopify://shop_images/holiday_mens_banner-2_16888da9-bc90-4780-bf68-99446dd85636.webp",
             "overlay_color": "#000000",
             "overlay_opacity": 0,
             "caption_position": "middle_center",
-            "mobile_image": "shopify://shop_images/Copy_of_holiday_mens_banner_800_x_1200_px.png",
+            "mobile_image": "shopify://shop_images/Copy_of_holiday_mens_banner_800_x_1200_px.webp",
             "hide_caption_background": false,
             "heading": "",
             "subheading": "",
