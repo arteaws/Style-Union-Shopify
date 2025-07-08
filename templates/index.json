@@ -103,11 +103,11 @@
         "d3250875-f7c1-40bb-aec9-87edb0224b73": {
           "type": "image",
           "settings": {
-            "image": "shopify://shop_images/holiday_mens_banner-3.png",
+            "image": "shopify://shop_images/holiday_mens_banner-3.webp",
             "overlay_color": "#000000",
             "overlay_opacity": 0,
             "caption_position": "middle_center",
-            "mobile_image": "shopify://shop_images/Copy_of_holiday_mens_banner_800_x_1200_px_-3.png",
+            "mobile_image": "shopify://shop_images/Copy_of_holiday_mens_banner_800_x_1200_px_-3.webp",
             "hide_caption_background": false,
             "heading": "",
             "subheading": "",
