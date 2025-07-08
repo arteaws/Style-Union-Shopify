@@ -653,11 +653,11 @@
         "image_pFCieq": {
           "type": "image",
           "settings": {
-            "image": "shopify://shop_images/1800x800_1.png",
+            "image": "shopify://shop_images/1800x800_1.webp",
             "overlay_color": "#000000",
             "overlay_opacity": 0,
             "caption_position": "middle_center",
-            "mobile_image": "shopify://shop_images/1080x1350.png",
+            "mobile_image": "shopify://shop_images/1080x1350.webp",
             "hide_caption_background": false,
             "heading": "",
             "subheading": "",
