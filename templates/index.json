@@ -198,6 +198,7 @@
     },
     "featured_collection_7YBDCT": {
       "type": "featured-collection",
+      "disabled": true,
       "settings": {
         "heading": "Women Bestsellers You Can't Miss",
         "collection": "bestseller-new-women",
@@ -211,6 +212,7 @@
     },
     "featured_collection_FncWKw": {
       "type": "featured-collection",
+      "disabled": true,
       "settings": {
         "heading": "Men Bestsellers You Can't Miss",
         "collection": "bestseller-new-men",
@@ -252,6 +254,7 @@
         "featured_collection_rkDDcb",
         "featured_collection_QQfxie"
       ],
+      "disabled": true,
       "settings": {
         "title": "Shop by Category",
         "grid": 3,
@@ -267,6 +270,7 @@
     },
     "featured_collection_UJJgQ3": {
       "type": "featured-collection",
+      "disabled": true,
       "settings": {
         "heading": "Hot Picks This Week",
         "collection": "store-bestseller-1",
@@ -306,6 +310,7 @@
       "block_order": [
         "image_6KGYdT"
       ],
+      "disabled": true,
       "settings": {
         "full_width": true,
         "slideshow_size": "natural",
