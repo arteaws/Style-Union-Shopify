@@ -348,5 +348,46 @@ select.restock-alerts-country-select.selectBoxStyle {
     
     {% render 'magicSidecartScript' %}
     {% render 'razorpay-magic-checkout' %} 
+    <script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Find all img elements with PNG source
+  const images = document.querySelectorAll('img[src$=".png"], img[src$=".PNG"]');
+  
+  // Check if browser supports WebP
+  function checkWebPSupport(callback) {
+    const webP = new Image();
+    webP.onload = webP.onerror = function() {
+      callback(webP.height === 2);
+    };
+    webP.src = 'data:image/webp;base64,UklGRjoAAABXRUJQVlA4IC4AAACyAgCdASoCAAIALmk0mk0iIiIiIgBoSygABc6WWgAA/veff/0PP8bA//LwYAAA';
+  }
+  
+  checkWebPSupport(function(isSupported) {
+    if (isSupported) {
+      images.forEach(function(img) {
+        const src = img.src;
+        
+        // Only convert if not already WebP and not from Shopify CDN (to avoid double conversion)
+        if (!src.includes('.webp') && !src.includes('cdn.shopify.com')) {
+          // Create new src with .webp extension
+          const newSrc = src.replace(/\.png$/i, '.webp');
+          
+          // Create test image to check if WebP version exists
+          const testImg = new Image();
+          testImg.onload = function() {
+            // If WebP version loads successfully, replace the src
+            img.src = newSrc;
+          };
+          testImg.onerror = function() {
+            // WebP version doesn't exist, keep original
+            console.log('WebP version not found for:', src);
+          };
+          testImg.src = newSrc;
+        }
+      });
+    }
+  });
+});
+</script>
   </body>
 </html>
