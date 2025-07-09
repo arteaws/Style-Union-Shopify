@@ -63,7 +63,6 @@
         "featured_collection_pjfzQc",
         "featured_collection_amN9fK"
       ],
-      "disabled": true,
       "settings": {
         "title": "",
         "grid": 6,
@@ -171,6 +170,7 @@
         "image_rCYnhj",
         "image_P9rDbb"
       ],
+      "disabled": true,
       "settings": {
         "full_width": true,
         "slideshow_size": "natural",
