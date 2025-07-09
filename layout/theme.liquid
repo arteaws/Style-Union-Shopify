@@ -348,41 +348,5 @@ select.restock-alerts-country-select.selectBoxStyle {
     
     {% render 'magicSidecartScript' %}
     {% render 'razorpay-magic-checkout' %} 
-    <script>
-document.addEventListener('DOMContentLoaded', function() {
-  // Only run on homepage
-  if (window.location.pathname !== '/') return;
-
-  // Get all sections on the page
-  const allSections = Array.from(document.querySelectorAll('section, .shopify-section'));
-  
-  // If there are 4 or fewer sections, do nothing
-  if (allSections.length <= 4) return;
-
-  // Hide all sections after the 4th one
-  allSections.forEach((section, index) => {
-    if (index >= 4) {
-      section.style.display = 'none';
-    }
-  });
-
-  // Function to load remaining sections
-  function loadRemainingSections() {
-    allSections.forEach((section, index) => {
-      if (index >= 4 && section.style.display === 'none') {
-        section.style.display = ''; // Show the section
-      }
-    });
-    
-    // Remove the event listener after loading
-    window.removeEventListener('mousemove', loadRemainingSections);
-    window.removeEventListener('touchstart', loadRemainingSections);
-  }
-
-  // Add event listeners for mouse movement and touch
-  window.addEventListener('mousemove', loadRemainingSections);
-  window.addEventListener('touchstart', loadRemainingSections);
-});
-</script>
   </body>
 </html>
