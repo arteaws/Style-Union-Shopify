@@ -82,11 +82,11 @@
         "image_6zdbji": {
           "type": "image",
           "settings": {
-            "image": "shopify://shop_images/MAN_800_x_1200_px_1800_x_800_px_4.webp",
+            "image": "shopify://shop_images/MAN_800_x_1200_px_1800_x_800_px_4.png",
             "overlay_color": "#000000",
             "overlay_opacity": 0,
             "caption_position": "middle_center",
-            "mobile_image": "shopify://shop_images/MAN_800_x_1200_px_5.webp",
+            "mobile_image": "shopify://shop_images/MAN_800_x_1200_px_5.png",
             "hide_caption_background": false,
             "heading": "",
             "subheading": "",
@@ -103,11 +103,11 @@
         "d3250875-f7c1-40bb-aec9-87edb0224b73": {
           "type": "image",
           "settings": {
-            "image": "shopify://shop_images/holiday_mens_banner-3.webp",
+            "image": "shopify://shop_images/holiday_mens_banner-3.png",
             "overlay_color": "#000000",
             "overlay_opacity": 0,
             "caption_position": "middle_center",
-            "mobile_image": "shopify://shop_images/Copy_of_holiday_mens_banner_800_x_1200_px_-3.webp",
+            "mobile_image": "shopify://shop_images/Copy_of_holiday_mens_banner_800_x_1200_px_-3.png",
             "hide_caption_background": false,
             "heading": "",
             "subheading": "",
@@ -124,11 +124,11 @@
         "image_rCYnhj": {
           "type": "image",
           "settings": {
-            "image": "shopify://shop_images/holiday_mens_banner-4.webp",
+            "image": "shopify://shop_images/holiday_mens_banner-4.png",
             "overlay_color": "#000000",
             "overlay_opacity": 0,
             "caption_position": "middle_center",
-            "mobile_image": "shopify://shop_images/Copy_of_holiday_mens_banner_800_x_1200_px_-4.webp",
+            "mobile_image": "shopify://shop_images/Copy_of_holiday_mens_banner_800_x_1200_px_-4.png",
             "hide_caption_background": false,
             "heading": "",
             "subheading": "",
@@ -145,11 +145,11 @@
         "image_P9rDbb": {
           "type": "image",
           "settings": {
-            "image": "shopify://shop_images/holiday_mens_banner-2_16888da9-bc90-4780-bf68-99446dd85636.webp",
+            "image": "shopify://shop_images/holiday_mens_banner-2_16888da9-bc90-4780-bf68-99446dd85636.png",
             "overlay_color": "#000000",
             "overlay_opacity": 0,
             "caption_position": "middle_center",
-            "mobile_image": "shopify://shop_images/Copy_of_holiday_mens_banner_800_x_1200_px.webp",
+            "mobile_image": "shopify://shop_images/Copy_of_holiday_mens_banner_800_x_1200_px.png",
             "hide_caption_background": false,
             "heading": "",
             "subheading": "",
@@ -283,11 +283,11 @@
         "image_6KGYdT": {
           "type": "image",
           "settings": {
-            "image": "shopify://shop_images/style_union_1910_x_1000_px_1400_x_400_px.webp",
+            "image": "shopify://shop_images/style_union_1910_x_1000_px_1400_x_400_px.png",
             "overlay_color": "#000000",
             "overlay_opacity": 0,
             "caption_position": "middle_center",
-            "mobile_image": "shopify://shop_images/style_union_12.webp",
+            "mobile_image": "shopify://shop_images/style_union_12.png",
             "hide_caption_background": false,
             "heading": "",
             "subheading": "",
@@ -448,11 +448,11 @@
         "image_kzDQYb": {
           "type": "image",
           "settings": {
-            "image": "shopify://shop_images/desktop_banner_-_style_union_5.webp",
+            "image": "shopify://shop_images/desktop_banner_-_style_union_5.png",
             "overlay_color": "#000000",
             "overlay_opacity": 0,
             "caption_position": "middle_center",
-            "mobile_image": "shopify://shop_images/2_3.webp",
+            "mobile_image": "shopify://shop_images/2_3.png",
             "hide_caption_background": false,
             "heading": "",
             "subheading": "",
@@ -602,7 +602,7 @@
           "type": "text_block",
           "settings": {
             "icon": "returns",
-            "rich_text": "<p>14 day easy returns</p>",
+            "rich_text": "<p>15 day easy returns</p>",
             "link": ""
           }
         },
@@ -618,12 +618,13 @@
           "type": "text_block",
           "settings": {
             "icon": "location",
-            "rich_text": "<p>85+ stores across India</p>",
+            "rich_text": "<p>100+ stores across India</p>",
             "link": ""
           }
         },
         "text_block_rrpyx7": {
           "type": "text_block",
+          "disabled": true,
           "settings": {
             "icon": "appliance",
             "rich_text": "<p>Add text with an image or icon</p>",
@@ -653,11 +654,11 @@
         "image_pFCieq": {
           "type": "image",
           "settings": {
-            "image": "shopify://shop_images/1800x800_1.webp",
+            "image": "shopify://shop_images/1800x800_1.png",
             "overlay_color": "#000000",
             "overlay_opacity": 0,
             "caption_position": "middle_center",
-            "mobile_image": "shopify://shop_images/1080x1350.webp",
+            "mobile_image": "shopify://shop_images/1080x1350.png",
             "hide_caption_background": false,
             "heading": "",
             "subheading": "",
