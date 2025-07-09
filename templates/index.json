@@ -170,7 +170,6 @@
         "image_rCYnhj",
         "image_P9rDbb"
       ],
-      "disabled": true,
       "settings": {
         "full_width": true,
         "slideshow_size": "natural",
@@ -198,7 +197,6 @@
     },
     "featured_collection_7YBDCT": {
       "type": "featured-collection",
-      "disabled": true,
       "settings": {
         "heading": "Women Bestsellers You Can't Miss",
         "collection": "bestseller-new-women",
@@ -212,7 +210,6 @@
     },
     "featured_collection_FncWKw": {
       "type": "featured-collection",
-      "disabled": true,
       "settings": {
         "heading": "Men Bestsellers You Can't Miss",
         "collection": "bestseller-new-men",
@@ -254,7 +251,6 @@
         "featured_collection_rkDDcb",
         "featured_collection_QQfxie"
       ],
-      "disabled": true,
       "settings": {
         "title": "Shop by Category",
         "grid": 3,
@@ -270,7 +266,6 @@
     },
     "featured_collection_UJJgQ3": {
       "type": "featured-collection",
-      "disabled": true,
       "settings": {
         "heading": "Hot Picks This Week",
         "collection": "store-bestseller-1",
@@ -310,7 +305,6 @@
       "block_order": [
         "image_6KGYdT"
       ],
-      "disabled": true,
       "settings": {
         "full_width": true,
         "slideshow_size": "natural",
@@ -365,7 +359,6 @@
         "featured_collection_kpqcnX",
         "featured_collection_tCX9ba"
       ],
-      "disabled": true,
       "settings": {
         "title": "",
         "grid": 4,
@@ -381,7 +374,6 @@
     },
     "featured_collection_whLgVm": {
       "type": "featured-collection",
-      "disabled": true,
       "settings": {
         "heading": "Bestsellers in Women's Sleepwear",
         "collection": "bestsellers-in-womens-sleepwear",
@@ -421,7 +413,6 @@
       "block_order": [
         "image_fRVQhn"
       ],
-      "disabled": true,
       "settings": {
         "full_width": true,
         "slideshow_size": "natural",
@@ -440,7 +431,6 @@
     },
     "featured_collection_hziNCf": {
       "type": "featured-collection",
-      "disabled": true,
       "settings": {
         "heading": "Men's Shorts",
         "collection": "mens-shorts",
@@ -480,7 +470,6 @@
       "block_order": [
         "image_kzDQYb"
       ],
-      "disabled": true,
       "settings": {
         "full_width": true,
         "slideshow_size": "natural",
@@ -499,7 +488,6 @@
     },
     "featured_collection_cQQyJY": {
       "type": "featured-collection",
-      "disabled": true,
       "settings": {
         "heading": "Women's Jeans",
         "collection": "womens-jeans",
@@ -513,7 +501,6 @@
     },
     "featured_collection_3DWziR": {
       "type": "featured-collection",
-      "disabled": true,
       "settings": {
         "heading": "Men's Jeans",
         "collection": "mens-jeans-1",
@@ -553,7 +540,6 @@
       "block_order": [
         "image_PqYEXK"
       ],
-      "disabled": true,
       "settings": {
         "full_width": true,
         "slideshow_size": "natural",
@@ -572,7 +558,6 @@
     },
     "featured_collection_GHkCfK": {
       "type": "featured-collection",
-      "disabled": true,
       "settings": {
         "heading": "Men's Everyday Essentials",
         "collection": "mens-smart-essentials",
@@ -586,7 +571,6 @@
     },
     "slideshow_4WbwqB": {
       "type": "slideshow",
-      "disabled": true,
       "settings": {
         "full_width": true,
         "slideshow_size": "natural",
@@ -654,7 +638,6 @@
         "text_block_9XHhgY",
         "text_block_rrpyx7"
       ],
-      "disabled": true,
       "settings": {
         "heading": "",
         "icon_height": 30,
@@ -692,7 +675,6 @@
       "block_order": [
         "image_pFCieq"
       ],
-      "disabled": true,
       "settings": {
         "full_width": true,
         "slideshow_size": "natural",
@@ -737,7 +719,6 @@
       "block_order": [
         "image_zPVKkH"
       ],
-      "disabled": true,
       "settings": {
         "full_width": true,
         "slideshow_size": "natural",
@@ -814,7 +795,6 @@
         "text_block_WD6LUt",
         "text_block_wAKPUr"
       ],
-      "disabled": true,
       "settings": {
         "heading": "4.8 Average Rating on Google",
         "slider_speed": 5,
@@ -850,7 +830,6 @@
       "block_order": [
         "image_LTwwnj"
       ],
-      "disabled": true,
       "settings": {
         "full_width": true,
         "slideshow_size": "natural",
