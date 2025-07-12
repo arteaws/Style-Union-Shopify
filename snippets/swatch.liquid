@@ -343,6 +343,23 @@ document.addEventListener('DOMContentLoaded', function() {
     return totalColors.size > 0 && availableColors.size === 0;
   }
   
+  // NEW FUNCTION: Check if a selected color is available in a specific size
+  function checkColorAvailabilityInSize(selectedColor, sizeValue) {
+    let colorAvailableInSize = false;
+    
+    variants.forEach(function(variant) {
+      // Check if this variant contains both the selected color and the size
+      const hasColor = variant.option1 === selectedColor || variant.option2 === selectedColor || variant.option3 === selectedColor;
+      const hasSize = variant.option1 === sizeValue || variant.option2 === sizeValue || variant.option3 === sizeValue;
+      
+      if (hasColor && hasSize && variant.available) {
+        colorAvailableInSize = true;
+      }
+    });
+    
+    return colorAvailableInSize;
+  }
+  
   // Function to update size swatch styling
   function updateSizeSwatches() {
     const sizeContainers = document.querySelectorAll('.js-variant-selector');
@@ -358,6 +375,54 @@ document.addEventListener('DOMContentLoaded', function() {
           const allColorsSoldOut = checkSizeAvailability(optionValue);
           
           if (allColorsSoldOut) {
+            swatch.classList.add('size-strike-on');
+          } else {
+            swatch.classList.remove('size-strike-on');
+          }
+        });
+      }
+    });
+  }
+  
+  // NEW FUNCTION: Update size swatches based on selected color
+  function updateSizeSwatchesForColor() {
+    // Get currently selected color
+    const colorContainers = document.querySelectorAll('.js-variant-selector');
+    let selectedColor = null;
+    
+    colorContainers.forEach(function(container) {
+      const optionName = container.getAttribute('data-option-name');
+      if (colorOptions.includes(optionName)) {
+        const checkedInput = container.querySelector('.swatches__form--input:checked');
+        if (checkedInput) {
+          selectedColor = checkedInput.value;
+        }
+      }
+    });
+    
+    // If no color is selected, reset all sizes to default state
+    if (!selectedColor) {
+      updateSizeSwatches();
+      return;
+    }
+    
+    // Update size swatches based on selected color availability
+    const sizeContainers = document.querySelectorAll('.js-variant-selector');
+    
+    sizeContainers.forEach(function(container) {
+      const optionName = container.getAttribute('data-option-name');
+      
+      if (sizeOptions.includes(optionName)) {
+        const swatches = container.querySelectorAll('.js-swatch-element');
+        
+        swatches.forEach(function(swatch) {
+          const sizeValue = swatch.getAttribute('data-option-value');
+          const colorAvailableInSize = checkColorAvailabilityInSize(selectedColor, sizeValue);
+          const allColorsSoldOut = checkSizeAvailability(sizeValue);
+          
+          // Strike out if either all colors are sold out for this size
+          // OR if the selected color is not available in this size
+          if (allColorsSoldOut || !colorAvailableInSize) {
             swatch.classList.add('size-strike-on');
           } else {
             swatch.classList.remove('size-strike-on');
@@ -469,6 +534,11 @@ document.addEventListener('DOMContentLoaded', function() {
         if (sizeOptions.includes(optionName)) {
           filterColorSwatches();
         }
+        
+        // NEW: If this is a color option, update size swatches
+        if (colorOptions.includes(optionName)) {
+          updateSizeSwatchesForColor();
+        }
       });
     });
   });
@@ -477,5 +547,6 @@ document.addEventListener('DOMContentLoaded', function() {
   updateSizeSwatches();
   filterColorSwatches();
   updateSelectedClass();
+  updateSizeSwatchesForColor(); // NEW: Initial color-based size filtering
 });
 </script>
