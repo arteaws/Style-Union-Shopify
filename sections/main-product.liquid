@@ -1,4 +1,13 @@
 <style>
+  {% if template.name == 'product' %}
+  <style>
+    #addToCart[type="submit"][value="Sold Out"] {
+      display: none;
+    }
+  </style>
+{% endif %}
+
+
  .Vtl-WishlistButtonWrapper {
     display: none  !important;
 } 
