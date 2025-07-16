@@ -10,6 +10,104 @@
   assign show_payment_button = settings.show_payment_button
 
 -%}
+
+<style>
+.swatch-sold-out .color_dflex {
+    opacity: 0.6;
+}  
+
+.swatch-sold-out .color_dflex .swatches__form--label .crossed-out{
+  display:block !important;
+}  
+  
+.color_dflex {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.swatches__color-name{
+  font-size: 12px;
+}
+.swatch-hidden {
+    display: none !important;
+}
+
+span.price__badge.price__badge--sold-out {
+    display: none;
+}  
+.swatch-sold-out .swatches__form--label {
+    cursor: not-allowed;
+}
+
+.swatches__sold-out--image.crossed-out {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 2;
+    display: none;
+}
+
+.swatch-sold-out .swatches__sold-out--image.crossed-out {
+    display: block;
+}
+
+.swatches__sold-out--image.crossed-out::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, transparent 48%, #000000 48%, #000000 52%, transparent 52%);
+    z-index: 3;
+    pointer-events: none;
+}
+
+.size-strike-on {
+    position: relative;
+    opacity: 0.6;
+}
+ .custom-outer-sold-out{
+   width:60px;
+   height:40px;
+ } 
+.custom-outer-sold-out .swatches__form--label {
+  width: 100%;
+  height: 100%;
+}
+.size-strike-on::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 68px;
+  height: 1px;
+  background-color: #000000;
+  transform: translate(-50%, -50%) rotate(31deg);
+  z-index: 2;
+  pointer-events: none;
+}
+.size-strike-on.selected-cs::before {
+background-color: #fff;
+}
+.size-strike-on .swatches__form--label {
+    cursor: not-allowed;
+}
+
+.swatches__form--label {
+    position: relative;
+    display: inline-block;
+}
+
+.swatches__swatch--regular.selected-cs .swatches__form--label {
+    background-color: #000;
+    color: #fff;
+}
+</style>
+
 <template data-html="content">
   <div class="product__inner-wrapper product__quickview-wrapper product-{{ product.id }} js-quickview-wrapper"
     data-payment-button="{{ settings.show_payment_button }}"
@@ -43,7 +141,6 @@
        }
      {% endcapture %}
 
-
       <div class="product__section-container">
         <div class="product__section-images carousel-container js-product-gallery"
         data-product-gallery data-product-single-media-group data-gallery-config='{{ product_gallery_config }}'>
@@ -75,19 +172,6 @@
 
               {% render 'product-price', variant: current_variant, product: product %}
 
-              {% comment %}
-                {%- if cart.taxes_included or shop.shipping_policy.body != blank -%}
-                  <div class="product__policies rte" data-product-policies>
-                    {%- if cart.taxes_included -%}
-                      {{ 'products.product.include_taxes' | t }}
-                    {%- endif -%}
-                    {%- if shop.shipping_policy.body != blank -%}
-                      {{ 'products.product.shipping_policy_html' | t: link: shop.shipping_policy.url }}
-                    {%- endif -%}
-                  </div>
-                {%- endif -%}
-              {% endcomment %}
-
               {%- form 'product', product, id: 'product-form-installment' -%}
                 <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
                 <select style="display:none;" name='id'>
@@ -97,11 +181,11 @@
                 </select>
                 <div class="spi-banner">
                   {{ form | payment_terms }}
-                </div><!-- /#spi-banner -->
+                </div>
               {%- endform -%}
             </div>
 
-                <!-- Product variants -->
+                <!-- Product variants with enhanced swatch functionality -->
                 {%- assign product_form_id = 'product-form-' | append: section.id -%}
                 {% form 'product', product,
                    id: product_form_id,
@@ -113,13 +197,150 @@
                    {%- if settings.product_variants == 'swatches' -%}
                      <div class="product__variants-swatches mt4 mb6 no-js-hidden" data-section="{{ section.id }}" data-url="{{ product.url }}">
                        {% for option in product.options_with_values %}
-                         {% render "swatch",
-                           option: option,
-                           current_variant: current_variant,
-                           product: product,
-                           show_color_swatches: settings.show_color_swatches,
-                           color_swatch_shape: settings.color_swatch_shape,
-                           color_swatch_style: settings.color_swatch_style %}
+                         {%- liquid
+                           assign option_name = option.name | downcase
+                           assign color_swatch_options = settings.swatch_option_names | replace: ' ,', ',' | replace: ', ', ',' | split: ',' | downcase
+                           assign current_option = "option" | append: option.position
+                           assign other_options = "option1 option2 option3" | remove: current_option | strip | split: " "
+                           assign size_swatches = "size, sizes" | split: ", "
+                         -%}
+
+                         <div class="swatches__container js-variant-selector product__section--element" data-option-index="{{ option.position }}" data-option-name="{{ option.name | downcase }}" data-other-options='{{ other_options | json }}'>
+
+                           <p class="swatches__option-name">{{ option.name }}: {% for value in option.values %}{% if option.selected_value == value %}<span id="selected-option-{{ option.position }}" class="swatches__option-value">{{ value }}</span>{% endif %}{% endfor %}</p>
+
+                           {% for value in option.values %}
+                             {%- liquid
+                               assign image_url = value | handle | append: '.png' | file_url
+                               assign css_color = value | split: ' ' | last | handle
+                               assign available = false
+                               assign swatch_image_url = nil
+                               assign variant_image_url = nil
+                               
+                               if value.swatch.image
+                                 assign swatch_image_url = value.swatch.image | image_url: width: 50
+                               endif
+                               if value.swatch.color and color_swatch_style == 'swatch'
+                                 assign css_color = value.swatch.color
+                               endif
+                             -%}
+
+                             <!-- Checking Availability -->
+                             {%- liquid
+                               assign available = false
+                               assign variant_exists = false
+
+                               for variant in product.variants
+                                 unless variant[current_option] == value
+                                   continue
+                                 endunless
+
+                                 unless variant[other_options[0]] == current_variant[other_options[0]]
+                                   continue
+                                 endunless
+
+                                 unless variant[other_options[1]] == current_variant[other_options[1]]
+                                   continue
+                                 endunless
+
+                                 assign variant_exists = true
+                                 if variant.available
+                                   assign available = true
+                                 endif
+                               endfor
+                             -%}
+
+                             <!-- Building Variant Image -->
+                             {%- liquid
+                               for variant in product.variants
+                                 unless variant[current_option] == value
+                                   continue
+                                 endunless
+
+                                 unless variant[other_options[0]] == current_variant[other_options[0]]
+                                   continue
+                                 endunless
+
+                                 unless variant[other_options[1]] == current_variant[other_options[1]]
+                                   continue
+                                 endunless
+
+                                 if variant.image
+                                   assign variant_image_url = variant.image | image_url: width: 100, height: 100, crop: 'center'
+                                 endif
+                                 break
+                               endfor
+
+                               assign checked = ""
+                               if current_variant[current_option] == value
+                                 assign checked = 'checked="checked"'
+                               endif
+
+                               assign swatch_img = null
+                               assign swatch_color_name = value | handle | append: '.png'
+
+                               if images[swatch_color_name] != blank
+                                 assign swatch_img = swatch_color_name | file_url
+                               endif
+                             -%}
+
+                             {% capture radio_button %}
+                               <input type="radio" id="{{ section.id }}-{{ option.name }}-{{ forloop.index0 }}"
+                                   class="swatches__form--input"
+                                   name="{{ option_name }}"
+                                   value="{{ value | escape }}"
+                                   form="product-form-{{ section.id }}"
+                                   data-position="{{ option.position }}"
+                                   data-option-value="{{ value | escape }}"
+                                   {{ checked }}>
+                             {% endcapture %}
+
+                             {% capture sold_out_cross %}
+                               <div class="swatches__sold-out--image crossed-out"></div>
+                             {% endcapture %}
+
+                             {% capture regular_swatch %}
+                               <div class="swatches__swatch--regular swatch-element {% unless available %}soldout{% endunless %} js-swatch-element custom-outer-sold-out" data-option-value="{{ value | escape }}" data-option-position="{{ option.position }}" data-available="{{ available }}">
+                                 {{ radio_button }}
+                                 <label class="swatches__form--label" for="{{ section.id }}-{{ option.name }}-{{ forloop.index0 }}" tabindex="0">
+                                   {{ value }}
+                                   {{ sold_out_cross }}
+                                 </label>
+                               </div>
+                             {% endcapture %}
+
+                             {% capture color_swatch %}
+                               <div class="swatches__swatch--color swatch-element color swatches__shape--{{ color_swatch_shape }} {% unless available %}soldout{% endunless %} js-swatch-element parent-dflex" data-option-value="{{ value | escape }}" data-option-position="{{ option.position }}" data-available="{{ available }}">
+                                 <div class="color_dflex">
+                                 {{ radio_button }}
+                                 {% if variant_image_url %}
+                                   <label class="swatches__form--label"
+                                     for="{{ section.id }}-{{ option.name }}-{{ forloop.index0 }}"
+                                     tabindex="0"
+                                     style="background-image: url({{ variant_image_url }}); background-position: center center; background-size: cover;">
+                                    {{ sold_out_cross }}
+                                   </label>
+                                   <span class="swatches__color-name">{{ value | truncatewords:1 }}</span>
+                                 {% else %}
+                                   <label class="swatches__form--label fallback"
+                                     for="{{ section.id }}-{{ option.name }}-{{ forloop.index0 }}"
+                                     tabindex="0"
+                                     style="background-color: {{ css_color }};">
+                                      {{ sold_out_cross }}
+                                   </label>
+                                   <span class="swatches__color-name">{{ value }}</span>
+                                 {% endif %}
+                                   </div>
+                               </div>
+                             {% endcapture %}
+
+                             {% if show_color_swatches and color_swatch_options contains option_name %}
+                               {{ color_swatch }}
+                             {% else %}
+                               {{ regular_swatch }}
+                             {% endif %}
+                           {% endfor %}
+                         </div>
                        {% endfor %}
                      </div>
                    {%- else -%}
@@ -195,14 +416,11 @@
                      data-product-id: product.id %}
 
                     {%- liquid
-
                       assign call_to_action = 'products.product.add_to_cart' | t
                       unless current_variant.available
                         assign call_to_action = 'products.product.sold_out' | t
                       endunless
-
                       assign product_form_id = 'product-form-' | append: section.id
-
                     -%}
 
                     <input class="formVariantId" name="id" type="hidden" value="{{ product.selected_or_first_available_variant.id }}">
@@ -217,31 +435,273 @@
                     <input id="addToCart" type="submit" name="button" class="add clearfix AddtoCart js-ajax-submit {% if settings.show_payment_button and product.selling_plan_groups.size == 0 %} secondary-button{% endif %}" value="{{ call_to_action }}" {% unless current_variant.available %}disabled{% endunless %} />
 
                     {% if settings.show_payment_button %}
-                     <!-- {{ form | payment_button }} -->
                       {% if product.selected_or_first_available_variant.available %}
- <div class="shopify-payment-button">
-  {% comment %}<button type="button" id="flo-buy-now-button" onclick="handleFloBuyNowBtn(event)" class="shopify-payment-button__button shopify-payment-button__button--unbranded" name="flo-buy-now-button" style="width:100%; border-radius: 10px;">
-    {{ 'BUY IT NOW' }}
-</button>{% endcomment %}
- </div>
- {%- endif -%}
- 
-                      
+                        <div class="shopify-payment-button">
+                        </div>
+                      {%- endif -%}
                     {% endif %}
                   {%-  endform -%}
                 </div>
                 <div class="product-single__store-availability-container product__section--element" data-store-availability-container></div>
-
               </div>
             </div>
         </div>
       </div>
 
-      <script type="application/json" id="ModelJson-{{ section.id }}">
-        {{ product.media | where: 'media_type', 'model' | json }}
+      <!-- Add variant data for JavaScript -->
+      <script id="product-variants-data-{{ section.id }}" type="application/json">
+      {
+        "variants": [
+          {% for variant in product.variants %}
+          {
+            "id": {{ variant.id }},
+            "available": {{ variant.available }},
+            "option1": "{{ variant.option1 | escape }}",
+            "option2": "{{ variant.option2 | escape }}",
+            "option3": "{{ variant.option3 | escape }}"
+          }{% unless forloop.last %},{% endunless %}
+          {% endfor %}
+        ],
+        "colorOptions": {{ settings.swatch_option_names | replace: ' ,', ',' | replace: ', ', ',' | split: ',' | downcase | json }},
+        "sizeOptions": ["size", "sizes"]
+      }
       </script>
-      {% if show_payment_button %}
-        <script>Shopify.PaymentButton.init()</script>
-      {% endif %}
-  </div>
-</template>
+
+      <script>
+      // Enhanced swatch functionality for quick drawer
+      document.addEventListener('DOMContentLoaded', function() {
+        const productData = document.getElementById('product-variants-data-{{ section.id }}');
+        if (!productData) return;
+        
+        const data = JSON.parse(productData.textContent);
+        const variants = data.variants;
+        const colorOptions = data.colorOptions;
+        const sizeOptions = data.sizeOptions;
+        
+        // Function to update selected class for regular swatches
+        function updateSelectedClass() {
+          const regularSwatches = document.querySelectorAll('.js-quickview-wrapper .swatches__swatch--regular');
+          
+          regularSwatches.forEach(function(swatch) {
+            const input = swatch.querySelector('.swatches__form--input');
+            if (input && input.checked) {
+              swatch.classList.add('selected-cs');
+            } else {
+              swatch.classList.remove('selected-cs');
+            }
+          });
+        }
+        
+        // Function to check if all colors are sold out for a selected size
+        function checkSizeAvailability(selectedSize) {
+          const availableColors = new Set();
+          const totalColors = new Set();
+          
+          variants.forEach(function(variant) {
+            if (variant.option1 === selectedSize || variant.option2 === selectedSize || variant.option3 === selectedSize) {
+              [variant.option1, variant.option2, variant.option3].forEach(function(optionValue) {
+                if (optionValue && optionValue !== selectedSize) {
+                  totalColors.add(optionValue);
+                  if (variant.available) {
+                    availableColors.add(optionValue);
+                  }
+                }
+              });
+            }
+          });
+          
+          return totalColors.size > 0 && availableColors.size === 0;
+        }
+        
+        // Function to check if a selected color is available in a specific size
+        function checkColorAvailabilityInSize(selectedColor, sizeValue) {
+          let colorAvailableInSize = false;
+          
+          variants.forEach(function(variant) {
+            const hasColor = variant.option1 === selectedColor || variant.option2 === selectedColor || variant.option3 === selectedColor;
+            const hasSize = variant.option1 === sizeValue || variant.option2 === sizeValue || variant.option3 === sizeValue;
+            
+            if (hasColor && hasSize && variant.available) {
+              colorAvailableInSize = true;
+            }
+          });
+          
+          return colorAvailableInSize;
+        }
+        
+        // Function to update size swatch styling
+        function updateSizeSwatches() {
+          const sizeContainers = document.querySelectorAll('.js-quickview-wrapper .js-variant-selector');
+          
+          sizeContainers.forEach(function(container) {
+            const optionName = container.getAttribute('data-option-name');
+            
+            if (sizeOptions.includes(optionName)) {
+              const swatches = container.querySelectorAll('.js-swatch-element');
+              
+              swatches.forEach(function(swatch) {
+                const optionValue = swatch.getAttribute('data-option-value');
+                const allColorsSoldOut = checkSizeAvailability(optionValue);
+                
+                if (allColorsSoldOut) {
+                  swatch.classList.add('size-strike-on');
+                } else {
+                  swatch.classList.remove('size-strike-on');
+                }
+              });
+            }
+          });
+        }
+        
+        // Function to update size swatches based on selected color
+        function updateSizeSwatchesForColor() {
+          const colorContainers = document.querySelectorAll('.js-quickview-wrapper .js-variant-selector');
+          let selectedColor = null;
+          
+          colorContainers.forEach(function(container) {
+            const optionName = container.getAttribute('data-option-name');
+            if (colorOptions.includes(optionName)) {
+              const checkedInput = container.querySelector('.swatches__form--input:checked');
+              if (checkedInput) {
+                selectedColor = checkedInput.value;
+              }
+            }
+          });
+          
+          if (!selectedColor) {
+            updateSizeSwatches();
+            return;
+          }
+          
+          const sizeContainers = document.querySelectorAll('.js-quickview-wrapper .js-variant-selector');
+          
+          sizeContainers.forEach(function(container) {
+            const optionName = container.getAttribute('data-option-name');
+            
+            if (sizeOptions.includes(optionName)) {
+              const swatches = container.querySelectorAll('.js-swatch-element');
+              
+              swatches.forEach(function(swatch) {
+                const sizeValue = swatch.getAttribute('data-option-value');
+                const colorAvailableInSize = checkColorAvailabilityInSize(selectedColor, sizeValue);
+                const allColorsSoldOut = checkSizeAvailability(sizeValue);
+                
+                if (allColorsSoldOut || !colorAvailableInSize) {
+                  swatch.classList.add('size-strike-on');
+                } else {
+                  swatch.classList.remove('size-strike-on');
+                }
+              });
+            }
+          });
+        }
+        
+        // Function to filter color swatches based on selected size
+        function filterColorSwatches() {
+          const sizeContainers = document.querySelectorAll('.js-quickview-wrapper .js-variant-selector');
+          let selectedSize = null;
+          
+          sizeContainers.forEach(function(container) {
+            const optionName = container.getAttribute('data-option-name');
+            if (sizeOptions.includes(optionName)) {
+              const checkedInput = container.querySelector('.swatches__form--input:checked');
+              if (checkedInput) {
+                selectedSize = checkedInput.value;
+              }
+            }
+          });
+          
+          if (!selectedSize) return;
+          
+          const availableColors = new Set();
+          const completelySoldOutColors = new Set();
+          const allColorsForSize = new Set();
+          
+          variants.forEach(function(variant) {
+            if (variant.option1 === selectedSize || variant.option2 === selectedSize || variant.option3 === selectedSize) {
+              [variant.option1, variant.option2, variant.option3].forEach(function(optionValue) {
+                if (optionValue && optionValue !== selectedSize) {
+                  allColorsForSize.add(optionValue);
+                  if (variant.available) {
+                    availableColors.add(optionValue);
+                  }
+                }
+              });
+            }
+          });
+          
+          allColorsForSize.forEach(function(color) {
+            if (!availableColors.has(color)) {
+              completelySoldOutColors.add(color);
+            }
+          });
+          
+          sizeContainers.forEach(function(container) {
+            const optionName = container.getAttribute('data-option-name');
+            
+            if (colorOptions.includes(optionName)) {
+              const swatches = container.querySelectorAll('.js-swatch-element');
+              
+              swatches.forEach(function(swatch) {
+                const optionValue = swatch.getAttribute('data-option-value');
+                
+                if (allColorsForSize.has(optionValue)) {
+                  swatch.classList.remove('swatch-hidden');
+                  
+                  if (completelySoldOutColors.has(optionValue)) {
+                    swatch.classList.add('swatch-sold-out');
+                    swatch.classList.add('soldout');
+                  } else {
+                    swatch.classList.remove('swatch-sold-out');
+                    swatch.classList.remove('soldout');
+                  }
+                } else {
+                  swatch.classList.add('swatch-hidden');
+                  const input = swatch.querySelector('.swatches__form--input');
+                  if (input && input.checked) {
+                    input.checked = false;
+                  }
+                }
+              });
+            }
+          });
+        }
+        
+        // Add event listeners to all inputs within the quick drawer
+        const allContainers = document.querySelectorAll('.js-quickview-wrapper .js-variant-selector');
+        allContainers.forEach(function(container) {
+          const optionName = container.getAttribute('data-option-name');
+          const inputs = container.querySelectorAll('.swatches__form--input');
+          
+          inputs.forEach(function(input) {
+            input.addEventListener('change', function() {
+              // Update selected option display
+              const optionPosition = this.getAttribute('data-position');
+              const selectedSpan = document.getElementById('selected-option-' + optionPosition);
+              if (selectedSpan) {
+                selectedSpan.textContent = this.value;
+              }
+              
+              // Update selected class for regular swatches
+              updateSelectedClass();
+              
+              // If this is a size option, filter color swatches
+              if (sizeOptions.includes(optionName)) {
+                filterColorSwatches();
+              }
+              
+              // If this is a color option, update size swatches
+              if (colorOptions.includes(optionName)) {
+                updateSizeSwatchesForColor();
+              }
+            });
+          });
+        });
+        
+        // Initial setup on page load
+        updateSizeSwatches();
+          filterColorSwatches();
+  updateSelectedClass();
+  updateSizeSwatchesForColor(); // NEW: Initial color-based size filtering
+});
+</script>
