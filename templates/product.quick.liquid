@@ -245,3 +245,277 @@
       {% endif %}
   </div>
 </template>
+{% if option.position == 1 %}
+<script id="product-variants-data-{{ section.id }}" type="application/json">
+{
+  "variants": [
+    {% for variant in product.variants %}
+    {
+      "id": {{ variant.id }},
+      "available": {{ variant.available }},
+      "option1": "{{ variant.option1 | escape }}",
+      "option2": "{{ variant.option2 | escape }}",
+      "option3": "{{ variant.option3 | escape }}"
+    }{% unless forloop.last %},{% endunless %}
+    {% endfor %}
+  ],
+  "colorOptions": {{ color_swatch_options | json }},
+  "sizeOptions": {{ size_swatches | json }}
+}
+</script>
+{% endif %}
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const productData = document.getElementById('product-variants-data-{{ section.id }}');
+  if (!productData) return;
+  
+  const data = JSON.parse(productData.textContent);
+  const variants = data.variants;
+  const colorOptions = data.colorOptions;
+  const sizeOptions = data.sizeOptions;
+  
+  // Function to update selected class for regular swatches
+  function updateSelectedClass() {
+    const regularSwatches = document.querySelectorAll('.swatches__swatch--regular');
+    
+    regularSwatches.forEach(function(swatch) {
+      const input = swatch.querySelector('.swatches__form--input');
+      if (input && input.checked) {
+        swatch.classList.add('selected-cs');
+      } else {
+        swatch.classList.remove('selected-cs');
+      }
+    });
+  }
+  
+  // Function to check if all colors are sold out for a selected size
+  function checkSizeAvailability(selectedSize) {
+    const availableColors = new Set();
+    const totalColors = new Set();
+    
+    variants.forEach(function(variant) {
+      if (variant.option1 === selectedSize || variant.option2 === selectedSize || variant.option3 === selectedSize) {
+        // Add all color option values for this variant
+        [variant.option1, variant.option2, variant.option3].forEach(function(optionValue) {
+          if (optionValue && optionValue !== selectedSize) {
+            totalColors.add(optionValue);
+            if (variant.available) {
+              availableColors.add(optionValue);
+            }
+          }
+        });
+      }
+    });
+    
+    // Return true if all colors are sold out
+    return totalColors.size > 0 && availableColors.size === 0;
+  }
+  
+  // NEW FUNCTION: Check if a selected color is available in a specific size
+  function checkColorAvailabilityInSize(selectedColor, sizeValue) {
+    let colorAvailableInSize = false;
+    
+    variants.forEach(function(variant) {
+      // Check if this variant contains both the selected color and the size
+      const hasColor = variant.option1 === selectedColor || variant.option2 === selectedColor || variant.option3 === selectedColor;
+      const hasSize = variant.option1 === sizeValue || variant.option2 === sizeValue || variant.option3 === sizeValue;
+      
+      if (hasColor && hasSize && variant.available) {
+        colorAvailableInSize = true;
+      }
+    });
+    
+    return colorAvailableInSize;
+  }
+  
+  // Function to update size swatch styling
+  function updateSizeSwatches() {
+    const sizeContainers = document.querySelectorAll('.js-variant-selector');
+    
+    sizeContainers.forEach(function(container) {
+      const optionName = container.getAttribute('data-option-name');
+      
+      if (sizeOptions.includes(optionName)) {
+        const swatches = container.querySelectorAll('.js-swatch-element');
+        
+        swatches.forEach(function(swatch) {
+          const optionValue = swatch.getAttribute('data-option-value');
+          const allColorsSoldOut = checkSizeAvailability(optionValue);
+          
+          if (allColorsSoldOut) {
+            swatch.classList.add('size-strike-on');
+          } else {
+            swatch.classList.remove('size-strike-on');
+          }
+        });
+      }
+    });
+  }
+  
+  // NEW FUNCTION: Update size swatches based on selected color
+  function updateSizeSwatchesForColor() {
+    // Get currently selected color
+    const colorContainers = document.querySelectorAll('.js-variant-selector');
+    let selectedColor = null;
+    
+    colorContainers.forEach(function(container) {
+      const optionName = container.getAttribute('data-option-name');
+      if (colorOptions.includes(optionName)) {
+        const checkedInput = container.querySelector('.swatches__form--input:checked');
+        if (checkedInput) {
+          selectedColor = checkedInput.value;
+        }
+      }
+    });
+    
+    // If no color is selected, reset all sizes to default state
+    if (!selectedColor) {
+      updateSizeSwatches();
+      return;
+    }
+    
+    // Update size swatches based on selected color availability
+    const sizeContainers = document.querySelectorAll('.js-variant-selector');
+    
+    sizeContainers.forEach(function(container) {
+      const optionName = container.getAttribute('data-option-name');
+      
+      if (sizeOptions.includes(optionName)) {
+        const swatches = container.querySelectorAll('.js-swatch-element');
+        
+        swatches.forEach(function(swatch) {
+          const sizeValue = swatch.getAttribute('data-option-value');
+          const colorAvailableInSize = checkColorAvailabilityInSize(selectedColor, sizeValue);
+          const allColorsSoldOut = checkSizeAvailability(sizeValue);
+          
+          // Strike out if either all colors are sold out for this size
+          // OR if the selected color is not available in this size
+          if (allColorsSoldOut || !colorAvailableInSize) {
+            swatch.classList.add('size-strike-on');
+          } else {
+            swatch.classList.remove('size-strike-on');
+          }
+        });
+      }
+    });
+  }
+  
+  // Function to filter color swatches based on selected size
+  function filterColorSwatches() {
+    // Get currently selected size
+    const sizeContainers = document.querySelectorAll('.js-variant-selector');
+    let selectedSize = null;
+    
+    sizeContainers.forEach(function(container) {
+      const optionName = container.getAttribute('data-option-name');
+      if (sizeOptions.includes(optionName)) {
+        const checkedInput = container.querySelector('.swatches__form--input:checked');
+        if (checkedInput) {
+          selectedSize = checkedInput.value;
+        }
+      }
+    });
+    
+    // If no size is selected, show all colors
+    if (!selectedSize) return;
+    
+    // Get all colors for the selected size and their availability status
+    const availableColors = new Set();
+    const completelySoldOutColors = new Set();
+    const allColorsForSize = new Set();
+    
+    variants.forEach(function(variant) {
+      if (variant.option1 === selectedSize || variant.option2 === selectedSize || variant.option3 === selectedSize) {
+        // Add all option values for this variant to available colors
+        [variant.option1, variant.option2, variant.option3].forEach(function(optionValue) {
+          if (optionValue && optionValue !== selectedSize) {
+            allColorsForSize.add(optionValue);
+            if (variant.available) {
+              availableColors.add(optionValue);
+            }
+          }
+        });
+      }
+    });
+    
+    // Find colors that are completely sold out for this size
+    allColorsForSize.forEach(function(color) {
+      if (!availableColors.has(color)) {
+        completelySoldOutColors.add(color);
+      }
+    });
+    
+    // Show/hide color swatches
+    sizeContainers.forEach(function(container) {
+      const optionName = container.getAttribute('data-option-name');
+      
+      // Only filter color containers, not size containers
+      if (colorOptions.includes(optionName)) {
+        const swatches = container.querySelectorAll('.js-swatch-element');
+        
+        swatches.forEach(function(swatch) {
+          const optionValue = swatch.getAttribute('data-option-value');
+          
+          if (allColorsForSize.has(optionValue)) {
+            swatch.classList.remove('swatch-hidden');
+            
+            // Update sold out status - only mark as sold out if completely unavailable
+            if (completelySoldOutColors.has(optionValue)) {
+              swatch.classList.add('swatch-sold-out');
+              swatch.classList.add('soldout');
+            } else {
+              swatch.classList.remove('swatch-sold-out');
+              swatch.classList.remove('soldout');
+            }
+          } else {
+            swatch.classList.add('swatch-hidden');
+            // Uncheck hidden color options
+            const input = swatch.querySelector('.swatches__form--input');
+            if (input && input.checked) {
+              input.checked = false;
+            }
+          }
+        });
+      }
+    });
+  }
+  
+  // Add event listeners to all inputs
+  const allContainers = document.querySelectorAll('.js-variant-selector');
+  allContainers.forEach(function(container) {
+    const optionName = container.getAttribute('data-option-name');
+    const inputs = container.querySelectorAll('.swatches__form--input');
+    
+    inputs.forEach(function(input) {
+      input.addEventListener('change', function() {
+        // Update selected option display
+        const optionPosition = this.getAttribute('data-position');
+        const selectedSpan = document.getElementById('selected-option-' + optionPosition);
+        if (selectedSpan) {
+          selectedSpan.textContent = this.value;
+        }
+        
+        // Update selected class for regular swatches
+        updateSelectedClass();
+        
+        // If this is a size option, filter color swatches
+        if (sizeOptions.includes(optionName)) {
+          filterColorSwatches();
+        }
+        
+        // NEW: If this is a color option, update size swatches
+        if (colorOptions.includes(optionName)) {
+          updateSizeSwatchesForColor();
+        }
+      });
+    });
+  });
+  
+  // Initial setup on page load
+  updateSizeSwatches();
+  filterColorSwatches();
+  updateSelectedClass();
+  updateSizeSwatchesForColor(); // NEW: Initial color-based size filtering
+});
+</script>
