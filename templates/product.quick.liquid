@@ -1,3 +1,16 @@
+{% if template.name == 'collection' %}
+  <style>
+    #addToCart[type="submit"][value="Sold Out"] {
+      display: block !important;
+    }
+  </style>
+{% endif %}
+
+
+
+
+
+
 {% layout none %}
 
 {%- liquid
