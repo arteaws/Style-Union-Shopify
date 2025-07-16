@@ -1,15 +1,14 @@
 {% layout none %}
 
 {%- liquid
-
   assign show_vendor = settings.vendor
   assign show_sku = false
   assign show_quantity = true
   assign show_payment_button = settings.show_payment_button
   assign current_variant = product.selected_or_first_available_variant
   assign show_payment_button = settings.show_payment_button
-
 -%}
+
 <template data-html="content">
   <div class="product__inner-wrapper product__quickview-wrapper product-{{ product.id }} js-quickview-wrapper"
     data-payment-button="{{ settings.show_payment_button }}"
@@ -43,7 +42,6 @@
        }
      {% endcapture %}
 
-
       <div class="product__section-container">
         <div class="product__section-images carousel-container js-product-gallery"
         data-product-gallery data-product-single-media-group data-gallery-config='{{ product_gallery_config }}'>
@@ -75,19 +73,6 @@
 
               {% render 'product-price', variant: current_variant, product: product %}
 
-              {% comment %}
-                {%- if cart.taxes_included or shop.shipping_policy.body != blank -%}
-                  <div class="product__policies rte" data-product-policies>
-                    {%- if cart.taxes_included -%}
-                      {{ 'products.product.include_taxes' | t }}
-                    {%- endif -%}
-                    {%- if shop.shipping_policy.body != blank -%}
-                      {{ 'products.product.shipping_policy_html' | t: link: shop.shipping_policy.url }}
-                    {%- endif -%}
-                  </div>
-                {%- endif -%}
-              {% endcomment %}
-
               {%- form 'product', product, id: 'product-form-installment' -%}
                 <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
                 <select style="display:none;" name='id'>
@@ -97,143 +82,134 @@
                 </select>
                 <div class="spi-banner">
                   {{ form | payment_terms }}
-                </div><!-- /#spi-banner -->
+                </div>
               {%- endform -%}
             </div>
 
-                <!-- Product variants -->
-                {%- assign product_form_id = 'product-form-' | append: section.id -%}
-                {% form 'product', product,
-                   id: product_form_id,
-                   class: "product__form-container product_form relative",
-                   data-product-form: product_form_config,
-                   data-product-id: product.id %}
+            <!-- Product variants -->
+            {%- assign product_form_id = 'product-form-' | append: section.id -%}
+            {% form 'product', product,
+               id: product_form_id,
+               class: "product__form-container product_form relative",
+               data-product-form: product_form_config,
+               data-product-id: product.id %}
 
-                  {%- unless product.has_only_default_variant -%}
-                   {%- if settings.product_variants == 'swatches' -%}
-                     <div class="product__variants-swatches mt4 mb6 no-js-hidden" data-section="{{ section.id }}" data-url="{{ product.url }}">
-                       {% for option in product.options_with_values %}
-                         {% render "swatch",
-                           option: option,
-                           current_variant: current_variant,
-                           product: product,
-                           show_color_swatches: settings.show_color_swatches,
-                           color_swatch_shape: settings.color_swatch_shape,
-                           color_swatch_style: settings.color_swatch_style %}
-                       {% endfor %}
+              {%- unless product.has_only_default_variant -%}
+               {%- if settings.product_variants == 'swatches' -%}
+                 <div class="product__variants-swatches mt4 mb6 no-js-hidden" data-section="{{ section.id }}" data-url="{{ product.url }}">
+                   {% for option in product.options_with_values %}
+                     {% render "swatch",
+                       option: option,
+                       current_variant: current_variant,
+                       product: product,
+                       show_color_swatches: settings.show_color_swatches,
+                       color_swatch_shape: settings.color_swatch_shape,
+                       color_swatch_style: settings.color_swatch_style,
+                       section_id: section.id %}
+                   {% endfor %}
+                 </div>
+               {%- else -%}
+                 <div class="product__variants-select no-js-hidden" data-section="{{ section.id }}" data-url="{{ product.url }}">
+                   {%- for option in product.options_with_values -%}
+                     <div class="product-form__input product-form__input--dropdown product__section--element">
+                       <label class="form__label" for="Option-{{ section.id }}-{{ forloop.index0 }}">
+                         {{ option.name }}
+                       </label>
+                       <div class="select">
+                         <select id="Option-{{ section.id }}-{{ forloop.index0 }}"
+                           class="js-variant-selector styled-select"
+                           name="options[{{ option.name | escape }}]"
+                           form="product-form-{{ section.id }}"
+                         >
+                           {%- for value in option.values -%}
+                             <option value="{{ value | escape }}" {% if option.selected_value == value %}selected="selected"{% endif %}>
+                               {{ value }}
+                             </option>
+                           {%- endfor -%}
+                         </select>
+                       </div>
                      </div>
-                   {%- else -%}
-                     <div class="product__variants-select no-js-hidden" data-section="{{ section.id }}" data-url="{{ product.url }}">
-                       {%- for option in product.options_with_values -%}
-                         <div class="product-form__input product-form__input--dropdown product__section--element">
-                           <label class="form__label" for="Option-{{ section.id }}-{{ forloop.index0 }}">
-                             {{ option.name }}
-                           </label>
-                           <div class="select">
-                             <select id="Option-{{ section.id }}-{{ forloop.index0 }}"
-                               class="js-variant-selector styled-select"
-                               name="options[{{ option.name | escape }}]"
-                               form="product-form-{{ section.id }}"
-                             >
-                               {%- for value in option.values -%}
-                                 <option value="{{ value | escape }}" {% if option.selected_value == value %}selected="selected"{% endif %}>
-                                   {{ value }}
-                                 </option>
-                               {%- endfor -%}
-                             </select>
-                           </div>
-                         </div>
-                       {%- endfor -%}
-                     </div>
-                   {%- endif -%}
-                  {%- endunless -%}
+                   {%- endfor -%}
+                 </div>
+               {%- endif -%}
+              {%- endunless -%}
 
-                  <noscript class="product__variants-select product-form__noscript-wrapper-{{ section.id }}">
-                    <div class="product-form__input product-form__input--dropdown{% if product.has_only_default_variant %} hidden{% endif %}">
-                      <label class="form__label" for="Variants-{{ section.id }}">{{ 'products.product.select_option' | t }}</label>
-                      <div class="select">
-                        <select name="id" id="Variants-{{ section.id }}" class="styled-select">
-                          {%- for variant in product.variants -%}
-                            <option
-                              {% if variant == product.selected_or_first_available_variant %}selected="selected"{% endif %}
-                              {% if variant.available == false %}disabled{% endif %}
-                              value="{{ variant.id }}"
-                            >
-                              {{ variant.title }}
-                              {%- if variant.available == false %} - {{ 'products.product.sold_out' | t }}{% endif %}
-                              - {{ variant.price | money | strip_html }}
-                            </option>
-                          {%- endfor -%}
-                        </select>
-                      </div>
-                    </div>
-                  </noscript>
-
-                  <input class="formVariantId" name="" type="hidden" value="{{ product.selected_or_first_available_variant.id }}">
-                {% endform %}
-
-                <!-- Quantity -->
-                <div class="product__section--qty qty-selection product__section--element" data-product-qty {{ block.shopify_attributes }}>
-                  <label for="qty-{{ product.id }}" class="h5">{{ 'products.product.quantity' | t }}</label>
-                  <div class="product__quantity--wrapper">
-                    <button class="down quantity-control-down" type="button">
-                      <span class="visuallyhidden">{{ 'products.product.decrease' | t: product: product.title | escape }}</span>
-                    -</button>
-                      <input id="qty-{{ product.id }}" min="1" type="text" name="quantity" class="formQty quantity" value="1" />
-                    <button class="up quantity-control-up" type="button">
-                      <span class="visuallyhidden">{{ 'products.product.increase' | t: product: product.title | escape }}</span>
-                    +</button>
+              <noscript class="product__variants-select product-form__noscript-wrapper-{{ section.id }}">
+                <div class="product-form__input product-form__input--dropdown{% if product.has_only_default_variant %} hidden{% endif %}">
+                  <label class="form__label" for="Variants-{{ section.id }}">{{ 'products.product.select_option' | t }}</label>
+                  <div class="select">
+                    <select name="id" id="Variants-{{ section.id }}" class="styled-select">
+                      {%- for variant in product.variants -%}
+                        <option
+                          {% if variant == product.selected_or_first_available_variant %}selected="selected"{% endif %}
+                          {% if variant.available == false %}disabled{% endif %}
+                          value="{{ variant.id }}"
+                        >
+                          {{ variant.title }}
+                          {%- if variant.available == false %} - {{ 'products.product.sold_out' | t }}{% endif %}
+                          - {{ variant.price | money | strip_html }}
+                        </option>
+                      {%- endfor -%}
+                    </select>
                   </div>
                 </div>
+              </noscript>
 
-                <!-- Product buttons -->
-                <div class="product__section--buttons product-add product__section--element" {{ block.shopify_attributes }}>
-                  {%- assign product_form_id = 'product-form-buttons-' | append: section.id -%}
-                  {% form 'product', product,
-                     id: product_form_id,
-                     class: "product__form-buttons js-prod-form-submit relative",
-                     data-product-id: product.id %}
+              <input class="formVariantId" name="" type="hidden" value="{{ product.selected_or_first_available_variant.id }}">
+            {% endform %}
 
-                    {%- liquid
-
-                      assign call_to_action = 'products.product.add_to_cart' | t
-                      unless current_variant.available
-                        assign call_to_action = 'products.product.sold_out' | t
-                      endunless
-
-                      assign product_form_id = 'product-form-' | append: section.id
-
-                    -%}
-
-                    <input class="formVariantId" name="id" type="hidden" value="{{ product.selected_or_first_available_variant.id }}">
-                    <input class="formQty" type="hidden" name="quantity" value="1" />
-                    <div class="note note-success js-added-msg" style="display: none">
-                      <b>{{ 'products.product.added' | t }}</b>&nbsp;&nbsp;&nbsp;<a class="underline" href="{{ routes.cart_url }}">{{ 'products.product.view_cart' | t }}</a> {{ 'products.product.or' | t }} <a class="underline" href="{{ routes.all_products_collection_url }}">{{ 'products.product.continue' | t }}</a>.
-                    </div>
-                    <div class="note note-error js-error-msg" style="display: none">
-                      <b>{{ 'cart.general.cart_error' | t }}</b>&nbsp;&nbsp;&nbsp;{{ 'cart.general.update_qty_error' | t }}
-                    </div>
-
-                    <input id="addToCart" type="submit" name="button" class="add clearfix AddtoCart js-ajax-submit {% if settings.show_payment_button and product.selling_plan_groups.size == 0 %} secondary-button{% endif %}" value="{{ call_to_action }}" {% unless current_variant.available %}disabled{% endunless %} />
-
-                    {% if settings.show_payment_button %}
-                     <!-- {{ form | payment_button }} -->
-                      {% if product.selected_or_first_available_variant.available %}
- <div class="shopify-payment-button">
-  {% comment %}<button type="button" id="flo-buy-now-button" onclick="handleFloBuyNowBtn(event)" class="shopify-payment-button__button shopify-payment-button__button--unbranded" name="flo-buy-now-button" style="width:100%; border-radius: 10px;">
-    {{ 'BUY IT NOW' }}
-</button>{% endcomment %}
- </div>
- {%- endif -%}
- 
-                      
-                    {% endif %}
-                  {%-  endform -%}
-                </div>
-                <div class="product-single__store-availability-container product__section--element" data-store-availability-container></div>
-
+            <!-- Quantity -->
+            <div class="product__section--qty qty-selection product__section--element" data-product-qty>
+              <label for="qty-{{ product.id }}" class="h5">{{ 'products.product.quantity' | t }}</label>
+              <div class="product__quantity--wrapper">
+                <button class="down quantity-control-down" type="button">
+                  <span class="visuallyhidden">{{ 'products.product.decrease' | t: product: product.title | escape }}</span>
+                -</button>
+                  <input id="qty-{{ product.id }}" min="1" type="text" name="quantity" class="formQty quantity" value="1" />
+                <button class="up quantity-control-up" type="button">
+                  <span class="visuallyhidden">{{ 'products.product.increase' | t: product: product.title | escape }}</span>
+                +</button>
               </div>
             </div>
+
+            <!-- Product buttons -->
+            <div class="product__section--buttons product-add product__section--element">
+              {%- assign product_form_id = 'product-form-buttons-' | append: section.id -%}
+              {% form 'product', product,
+                 id: product_form_id,
+                 class: "product__form-buttons js-prod-form-submit relative",
+                 data-product-id: product.id %}
+
+                {%- liquid
+                  assign call_to_action = 'products.product.add_to_cart' | t
+                  unless current_variant.available
+                    assign call_to_action = 'products.product.sold_out' | t
+                  endunless
+                  assign product_form_id = 'product-form-' | append: section.id
+                -%}
+
+                <input class="formVariantId" name="id" type="hidden" value="{{ product.selected_or_first_available_variant.id }}">
+                <input class="formQty" type="hidden" name="quantity" value="1" />
+                <div class="note note-success js-added-msg" style="display: none">
+                  <b>{{ 'products.product.added' | t }}</b>&nbsp;&nbsp;&nbsp;<a class="underline" href="{{ routes.cart_url }}">{{ 'products.product.view_cart' | t }}</a> {{ 'products.product.or' | t }} <a class="underline" href="{{ routes.all_products_collection_url }}">{{ 'products.product.continue' | t }}</a>.
+                </div>
+                <div class="note note-error js-error-msg" style="display: none">
+                  <b>{{ 'cart.general.cart_error' | t }}</b>&nbsp;&nbsp;&nbsp;{{ 'cart.general.update_qty_error' | t }}
+                </div>
+
+                <input id="addToCart" type="submit" name="button" class="add clearfix AddtoCart js-ajax-submit {% if settings.show_payment_button and product.selling_plan_groups.size == 0 %} secondary-button{% endif %}" value="{{ call_to_action }}" {% unless current_variant.available %}disabled{% endunless %} />
+
+                {% if settings.show_payment_button %}
+                  {% if product.selected_or_first_available_variant.available %}
+                    <div class="shopify-payment-button">
+                      {{ form | payment_button }}
+                    </div>
+                  {%- endif -%}
+                {% endif %}
+              {%-  endform -%}
+            </div>
+            <div class="product-single__store-availability-container product__section--element" data-store-availability-container></div>
+          </div>
         </div>
       </div>
 
@@ -245,3 +221,315 @@
       {% endif %}
   </div>
 </template>
+
+<style>
+  /* Swatch Styles */
+  .swatch-sold-out .color_dflex {
+      opacity: 0.6;
+  }  
+
+  .swatch-sold-out .color_dflex .swatches__form--label .crossed-out{
+    display:block !important;
+  }  
+  
+  .color_dflex {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+  }
+  .swatches__color-name{
+    font-size: 12px;
+    margin-top: 5px;
+    text-align: center;
+  }
+  .swatch-hidden {
+      display: none !important;
+  }
+
+  .swatch-sold-out .swatches__form--label {
+      cursor: not-allowed;
+  }
+
+  .swatches__sold-out--image.crossed-out {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 2;
+  }
+
+  .swatches__sold-out--image.crossed-out::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(45deg, transparent 51%, #000000 48%, #000000 52%, transparent 52%);
+      z-index: 3;
+      pointer-events: none;
+  }
+
+  .size-strike-on {
+      position: relative;
+      opacity: 0.6;
+  }
+  .custom-outer-sold-out{
+    width:60px;
+    height:40px;
+  } 
+  .custom-outer-sold-out .swatches__form--label {
+    width: 100%;
+    height: 100%;
+  }
+  .size-strike-on::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 68px;
+    height: 1px;
+    background-color: #000000;
+    transform: translate(-50%, -50%) rotate(31deg);
+    z-index: 2;
+    pointer-events: none;
+  }
+  .size-strike-on.selected-cs::before {
+    background-color: #fff;
+  }
+  .size-strike-on .swatches__form--label {
+      cursor: not-allowed;
+  }
+
+  .swatches__form--label {
+      position: relative;
+      display: inline-block;
+  }
+  
+  /* Swatch Container */
+  .swatches__container {
+    margin-bottom: 15px;
+  }
+  
+  .swatches__option-name {
+    font-weight: bold;
+    margin-bottom: 8px;
+  }
+  
+  .swatches__option-value {
+    font-weight: normal;
+  }
+  
+  /* Color Swatches */
+  .swatches__swatch--color {
+    display: inline-block;
+    margin: 0 10px 10px 0;
+    position: relative;
+  }
+  
+  .swatches__swatch--color .swatches__form--label {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: block;
+    border: 1px solid #e0e0e0;
+    overflow: hidden;
+  }
+  
+  /* Size Swatches */
+  .swatches__swatch--regular {
+    display: inline-block;
+    margin: 0 10px 10px 0;
+  }
+  
+  .swatches__swatch--regular .swatches__form--label {
+    padding: 8px 12px;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    display: inline-block;
+    min-width: 40px;
+    text-align: center;
+  }
+  
+  /* Selected State */
+  .swatches__swatch--regular.selected-cs .swatches__form--label,
+  .swatches__swatch--color.selected-cs .swatches__form--label {
+    border-color: #000;
+    background-color: #000;
+    color: #fff;
+  }
+  
+  /* Hover State */
+  .swatches__swatch--regular:not(.soldout):hover .swatches__form--label,
+  .swatches__swatch--color:not(.soldout):hover .swatches__form--label {
+    border-color: #000;
+  }
+  
+  /* Input Styles */
+  .swatches__form--input {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Initialize swatches for quick drawer
+  function initQuickDrawerSwatches() {
+    const quickDrawer = document.querySelector('.js-quickview-wrapper');
+    if (!quickDrawer) return;
+    
+    // Get product data from JSON
+    const productData = JSON.parse(quickDrawer.querySelector('[data-product-json]').textContent);
+    const variants = productData.variants;
+    const colorOptions = {{ settings.swatch_option_names | replace: ' ,', ',' | replace: ', ', ',' | split: ',' | downcase | json }};
+    const sizeOptions = ["size", "sizes"];
+    
+    // Find all swatch containers in the quick drawer
+    const swatchContainers = quickDrawer.querySelectorAll('.js-variant-selector');
+    
+    swatchContainers.forEach(function(container) {
+      const optionName = container.getAttribute('data-option-name');
+      const inputs = container.querySelectorAll('.swatches__form--input');
+      
+      inputs.forEach(function(input) {
+        input.addEventListener('change', function() {
+          // Update selected option display
+          const optionPosition = this.getAttribute('data-position');
+          const selectedSpan = container.querySelector('#selected-option-' + optionPosition);
+          if (selectedSpan) {
+            selectedSpan.textContent = this.value;
+          }
+          
+          // Update selected class for swatches
+          updateSelectedClass(container);
+          
+          // Filter options based on selection
+          if (colorOptions.includes(optionName)) {
+            updateSizeSwatchesForColor(container, variants, colorOptions, sizeOptions);
+          } else if (sizeOptions.includes(optionName)) {
+            filterColorSwatches(container, variants, colorOptions, sizeOptions);
+          }
+        });
+      });
+    });
+    
+    // Initial setup
+    swatchContainers.forEach(function(container) {
+      updateSelectedClass(container);
+      const optionName = container.getAttribute('data-option-name');
+      
+      if (colorOptions.includes(optionName)) {
+        updateSizeSwatchesForColor(container, variants, colorOptions, sizeOptions);
+      } else if (sizeOptions.includes(optionName)) {
+        filterColorSwatches(container, variants, colorOptions, sizeOptions);
+      }
+    });
+  }
+  
+  // Helper function to update selected class
+  function updateSelectedClass(container) {
+    const swatches = container.querySelectorAll('.js-swatch-element');
+    
+    swatches.forEach(function(swatch) {
+      const input = swatch.querySelector('.swatches__form--input');
+      if (input && input.checked) {
+        swatch.classList.add('selected-cs');
+      } else {
+        swatch.classList.remove('selected-cs');
+      }
+    });
+  }
+  
+  // Function to filter color swatches based on selected size
+  function filterColorSwatches(container, variants, colorOptions, sizeOptions) {
+    const selectedSize = getSelectedOptionValue(container);
+    if (!selectedSize) return;
+    
+    // Get all color containers
+    const colorContainers = document.querySelectorAll('.js-variant-selector');
+    colorContainers.forEach(function(colorContainer) {
+      const optionName = colorContainer.getAttribute('data-option-name');
+      if (!colorOptions.includes(optionName)) return;
+      
+      const colorSwatches = colorContainer.querySelectorAll('.js-swatch-element');
+      
+      colorSwatches.forEach(function(swatch) {
+        const colorValue = swatch.getAttribute('data-option-value');
+        const isAvailable = checkVariantAvailable(variants, selectedSize, colorValue, sizeOptions, colorOptions);
+        
+        if (isAvailable) {
+          swatch.classList.remove('swatch-hidden', 'swatch-sold-out');
+        } else {
+          swatch.classList.add('swatch-hidden', 'swatch-sold-out');
+          // Uncheck if hidden
+          const input = swatch.querySelector('.swatches__form--input');
+          if (input && input.checked) {
+            input.checked = false;
+          }
+        }
+      });
+    });
+  }
+  
+  // Function to update size swatches based on selected color
+  function updateSizeSwatchesForColor(container, variants, colorOptions, sizeOptions) {
+    const selectedColor = getSelectedOptionValue(container);
+    if (!selectedColor) return;
+    
+    // Get all size containers
+    const sizeContainers = document.querySelectorAll('.js-variant-selector');
+    sizeContainers.forEach(function(sizeContainer) {
+      const optionName = sizeContainer.getAttribute('data-option-name');
+      if (!sizeOptions.includes(optionName)) return;
+      
+      const sizeSwatches = sizeContainer.querySelectorAll('.js-swatch-element');
+      
+      sizeSwatches.forEach(function(swatch) {
+        const sizeValue = swatch.getAttribute('data-option-value');
+        const isAvailable = checkVariantAvailable(variants, sizeValue, selectedColor, sizeOptions, colorOptions);
+        
+        if (isAvailable) {
+          swatch.classList.remove('size-strike-on');
+        } else {
+          swatch.classList.add('size-strike-on');
+        }
+      });
+    });
+  }
+  
+  // Helper function to get selected option value
+  function getSelectedOptionValue(container) {
+    const input = container.querySelector('.swatches__form--input:checked');
+    return input ? input.value : null;
+  }
+  
+  // Helper function to check if variant is available
+  function checkVariantAvailable(variants, option1, option2, sizeOptions, colorOptions) {
+    for (const variant of variants) {
+      let matches = 0;
+      
+      // Check which options match
+      if (variant.option1 === option1 || variant.option2 === option1 || variant.option3 === option1) matches++;
+      if (variant.option1 === option2 || variant.option2 === option2 || variant.option3 === option2) matches++;
+      
+      if (matches === 2 && variant.available) {
+        return true;
+      }
+    }
+    return false;
+  }
+  
+  // Initialize when quick drawer is opened
+  document.addEventListener('quickview:open', function() {
+    initQuickDrawerSwatches();
+  });
+  
+  // Also initialize on page load if quick drawer is already open
+  initQuickDrawerSwatches();
+});
+</script>
