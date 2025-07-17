@@ -162,7 +162,7 @@ WAU.Slideout = (function () {
 		wrapper.classList.add("slideout-" + direction + "--open");
 		wrapper.classList.remove("slideout-" + direction + "--closed");
 		targetSlideoutEl.classList.add('slideout--active');
-
+        console.log('sure...');
 		opener.setAttribute("aria-expanded", "true");
 
     // Fix body wrapper so no scrolling on mobile
