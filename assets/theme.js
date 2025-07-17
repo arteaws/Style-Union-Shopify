@@ -158,26 +158,363 @@ WAU.Slideout = (function () {
 	 * @param direction:String - the drction to open the slideout in.
 	 * @param targetSlideoutEl:Node - The slideout element that will be opened.
 	 */
-	function open(direction, targetSlideoutEl, opener) {
-		wrapper.classList.add("slideout-" + direction + "--open");
-		wrapper.classList.remove("slideout-" + direction + "--closed");
-		targetSlideoutEl.classList.add('slideout--active');
-        console.log('sure...');
-		opener.setAttribute("aria-expanded", "true");
-
+function open(direction, targetSlideoutEl, opener) {
+    wrapper.classList.add("slideout-" + direction + "--open");
+    wrapper.classList.remove("slideout-" + direction + "--closed");
+    targetSlideoutEl.classList.add('slideout--active');
+    console.log('sure...');
+    opener.setAttribute("aria-expanded", "true");
+    
     // Fix body wrapper so no scrolling on mobile
     let scrollPosition = Math.abs(0 - document.querySelector('.site-wrap').getBoundingClientRect().top);
-
+    
     // Set tabindex so it will tab slideout
     targetSlideoutEl.querySelectorAll('*').forEach((item, i) => {
-      item.removeAttribute('tabIndex');
+        item.removeAttribute('tabIndex');
     });
-
+    
     wrapper.style.overflow = 'hidden';
     wrapper.style.position = 'fixed';
     wrapper.style.top = `-${scrollPosition}px`;
     wrapper.style.width = '100%';
-	}
+    
+    // Add swatches CSS styles
+    addSwatchesStyles();
+    
+    // Initialize swatches functionality
+    initializeSwatches(targetSlideoutEl);
+}
+
+function addSwatchesStyles() {
+    // Check if styles are already added
+    if (document.getElementById('swatches-styles')) {
+        return;
+    }
+    
+    const style = document.createElement('style');
+    style.id = 'swatches-styles';
+    style.textContent = `
+        .swatch-sold-out .color_dflex {
+            opacity: 0.6;
+        }  
+        .swatch-sold-out .color_dflex .swatches__form--label .crossed-out{
+            display:block !important;
+        }  
+        
+        .color_dflex {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .swatches__color-name{
+            font-size: 12px;
+        }
+        .swatch-hidden {
+            display: none !important;
+        }
+        span.price__badge.price__badge--sold-out {
+            display: none;
+        }  
+        .swatch-sold-out .swatches__form--label {
+            cursor: not-allowed;
+        }
+        .swatches__sold-out--image.crossed-out {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 2;
+        }
+        .swatches__sold-out--image.crossed-out::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent 51%, #000000 48%, #000000 52%, transparent 52%);
+            z-index: 3;
+            pointer-events: none;
+        }
+        .size-strike-on {
+            position: relative;
+            opacity: 0.6;
+        }
+        .custom-outer-sold-out{
+            width:60px;
+            height:40px;
+        } 
+        .custom-outer-sold-out .swatches__form--label {
+            width: 100%;
+            height: 100%;
+        }
+        .size-strike-on::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 68px;
+            height: 1px;
+            background-color: #000000;
+            transform: translate(-50%, -50%) rotate(31deg);
+            z-index: 2;
+            pointer-events: none;
+        }
+        .size-strike-on.selected-cs::before {
+            background-color: #fff;
+        }
+        .size-strike-on .swatches__form--label {
+            cursor: not-allowed;
+        }
+        .swatches__form--label {
+            position: relative;
+            display: inline-block;
+        }
+    `;
+    document.head.appendChild(style);
+}
+
+function initializeSwatches(targetSlideoutEl) {
+    // Find the product data script within the drawer
+    const productDataScript = targetSlideoutEl.querySelector('[id^="product-variants-data-"]');
+    if (!productDataScript) {
+        console.warn('Product variants data not found in drawer');
+        return;
+    }
+    
+    const data = JSON.parse(productDataScript.textContent);
+    const variants = data.variants;
+    const colorOptions = data.colorOptions;
+    const sizeOptions = data.sizeOptions;
+    
+    // Function to update selected class for regular swatches
+    function updateSelectedClass() {
+        const regularSwatches = targetSlideoutEl.querySelectorAll('.swatches__swatch--regular');
+        
+        regularSwatches.forEach(function(swatch) {
+            const input = swatch.querySelector('.swatches__form--input');
+            if (input && input.checked) {
+                swatch.classList.add('selected-cs');
+            } else {
+                swatch.classList.remove('selected-cs');
+            }
+        });
+    }
+    
+    // Function to check if all colors are sold out for a selected size
+    function checkSizeAvailability(selectedSize) {
+        const availableColors = new Set();
+        const totalColors = new Set();
+        
+        variants.forEach(function(variant) {
+            if (variant.option1 === selectedSize || variant.option2 === selectedSize || variant.option3 === selectedSize) {
+                [variant.option1, variant.option2, variant.option3].forEach(function(optionValue) {
+                    if (optionValue && optionValue !== selectedSize) {
+                        totalColors.add(optionValue);
+                        if (variant.available) {
+                            availableColors.add(optionValue);
+                        }
+                    }
+                });
+            }
+        });
+        
+        return totalColors.size > 0 && availableColors.size === 0;
+    }
+    
+    // Function to check if a selected color is available in a specific size
+    function checkColorAvailabilityInSize(selectedColor, sizeValue) {
+        let colorAvailableInSize = false;
+        
+        variants.forEach(function(variant) {
+            const hasColor = variant.option1 === selectedColor || variant.option2 === selectedColor || variant.option3 === selectedColor;
+            const hasSize = variant.option1 === sizeValue || variant.option2 === sizeValue || variant.option3 === sizeValue;
+            
+            if (hasColor && hasSize && variant.available) {
+                colorAvailableInSize = true;
+            }
+        });
+        
+        return colorAvailableInSize;
+    }
+    
+    // Function to update size swatch styling
+    function updateSizeSwatches() {
+        const sizeContainers = targetSlideoutEl.querySelectorAll('.js-variant-selector');
+        
+        sizeContainers.forEach(function(container) {
+            const optionName = container.getAttribute('data-option-name');
+            
+            if (sizeOptions.includes(optionName)) {
+                const swatches = container.querySelectorAll('.js-swatch-element');
+                
+                swatches.forEach(function(swatch) {
+                    const optionValue = swatch.getAttribute('data-option-value');
+                    const allColorsSoldOut = checkSizeAvailability(optionValue);
+                    
+                    if (allColorsSoldOut) {
+                        swatch.classList.add('size-strike-on');
+                    } else {
+                        swatch.classList.remove('size-strike-on');
+                    }
+                });
+            }
+        });
+    }
+    
+    // Function to update size swatches based on selected color
+    function updateSizeSwatchesForColor() {
+        const colorContainers = targetSlideoutEl.querySelectorAll('.js-variant-selector');
+        let selectedColor = null;
+        
+        colorContainers.forEach(function(container) {
+            const optionName = container.getAttribute('data-option-name');
+            if (colorOptions.includes(optionName)) {
+                const checkedInput = container.querySelector('.swatches__form--input:checked');
+                if (checkedInput) {
+                    selectedColor = checkedInput.value;
+                }
+            }
+        });
+        
+        if (!selectedColor) {
+            updateSizeSwatches();
+            return;
+        }
+        
+        const sizeContainers = targetSlideoutEl.querySelectorAll('.js-variant-selector');
+        
+        sizeContainers.forEach(function(container) {
+            const optionName = container.getAttribute('data-option-name');
+            
+            if (sizeOptions.includes(optionName)) {
+                const swatches = container.querySelectorAll('.js-swatch-element');
+                
+                swatches.forEach(function(swatch) {
+                    const sizeValue = swatch.getAttribute('data-option-value');
+                    const colorAvailableInSize = checkColorAvailabilityInSize(selectedColor, sizeValue);
+                    const allColorsSoldOut = checkSizeAvailability(sizeValue);
+                    
+                    if (allColorsSoldOut || !colorAvailableInSize) {
+                        swatch.classList.add('size-strike-on');
+                    } else {
+                        swatch.classList.remove('size-strike-on');
+                    }
+                });
+            }
+        });
+    }
+    
+    // Function to filter color swatches based on selected size
+    function filterColorSwatches() {
+        const sizeContainers = targetSlideoutEl.querySelectorAll('.js-variant-selector');
+        let selectedSize = null;
+        
+        sizeContainers.forEach(function(container) {
+            const optionName = container.getAttribute('data-option-name');
+            if (sizeOptions.includes(optionName)) {
+                const checkedInput = container.querySelector('.swatches__form--input:checked');
+                if (checkedInput) {
+                    selectedSize = checkedInput.value;
+                }
+            }
+        });
+        
+        if (!selectedSize) return;
+        
+        const availableColors = new Set();
+        const completelySoldOutColors = new Set();
+        const allColorsForSize = new Set();
+        
+        variants.forEach(function(variant) {
+            if (variant.option1 === selectedSize || variant.option2 === selectedSize || variant.option3 === selectedSize) {
+                [variant.option1, variant.option2, variant.option3].forEach(function(optionValue) {
+                    if (optionValue && optionValue !== selectedSize) {
+                        allColorsForSize.add(optionValue);
+                        if (variant.available) {
+                            availableColors.add(optionValue);
+                        }
+                    }
+                });
+            }
+        });
+        
+        allColorsForSize.forEach(function(color) {
+            if (!availableColors.has(color)) {
+                completelySoldOutColors.add(color);
+            }
+        });
+        
+        sizeContainers.forEach(function(container) {
+            const optionName = container.getAttribute('data-option-name');
+            
+            if (colorOptions.includes(optionName)) {
+                const swatches = container.querySelectorAll('.js-swatch-element');
+                
+                swatches.forEach(function(swatch) {
+                    const optionValue = swatch.getAttribute('data-option-value');
+                    
+                    if (allColorsForSize.has(optionValue)) {
+                        swatch.classList.remove('swatch-hidden');
+                        
+                        if (completelySoldOutColors.has(optionValue)) {
+                            swatch.classList.add('swatch-sold-out');
+                            swatch.classList.add('soldout');
+                        } else {
+                            swatch.classList.remove('swatch-sold-out');
+                            swatch.classList.remove('soldout');
+                        }
+                    } else {
+                        swatch.classList.add('swatch-hidden');
+                        const input = swatch.querySelector('.swatches__form--input');
+                        if (input && input.checked) {
+                            input.checked = false;
+                        }
+                    }
+                });
+            }
+        });
+    }
+    
+    // Add event listeners to all inputs within the drawer
+    const allContainers = targetSlideoutEl.querySelectorAll('.js-variant-selector');
+    allContainers.forEach(function(container) {
+        const optionName = container.getAttribute('data-option-name');
+        const inputs = container.querySelectorAll('.swatches__form--input');
+        
+        inputs.forEach(function(input) {
+            // Remove existing listeners to prevent duplicates
+            input.removeEventListener('change', handleSwatchChange);
+            input.addEventListener('change', handleSwatchChange);
+            
+            function handleSwatchChange() {
+                const optionPosition = this.getAttribute('data-position');
+                const selectedSpan = targetSlideoutEl.querySelector('#selected-option-' + optionPosition);
+                if (selectedSpan) {
+                    selectedSpan.textContent = this.value;
+                }
+                
+                updateSelectedClass();
+                
+                if (sizeOptions.includes(optionName)) {
+                    filterColorSwatches();
+                }
+                
+                if (colorOptions.includes(optionName)) {
+                    updateSizeSwatchesForColor();
+                }
+            }
+        });
+    });
+    
+    // Initial setup
+    updateSizeSwatches();
+    filterColorSwatches();
+    updateSelectedClass();
+    updateSizeSwatchesForColor();
+}
 
 	/*
 	 * @description - Closes all slideouts. Puts a11y focus back on the original opener.
