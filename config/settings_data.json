@@ -385,13 +385,13 @@
     "button_text": "#ffffff",
     "button_hover": "#000000",
     "button_text_hover": "#ffffff",
-    "secondary_button_color": "#ddd",
-    "secondary_button_text": "#000",
+    "secondary_button_color": "#dddddd",
+    "secondary_button_text": "#000000",
     "new_background": "#ffffff",
     "new_text": "#000000",
     "sale_background": "#bc0000",
     "sale_text": "#ffffff",
-    "soldout_background": "#222",
+    "soldout_background": "#222222",
     "soldout_text": "#ffffff",
     "footer_background": "#ffffff",
     "footer_color": "#000000",
@@ -557,8 +557,8 @@
         "settings": {}
       },
       "yoast-seo-metatags": {
-        "type": "shopify://apps/yoast-seo-seo-for-everyone/blocks/metatags/7c777011-bc88-4743-a24e-64336e1e5b46",
-        "disabled": false,
+        "type": "shopify://apps/yoast-seo/blocks/metatags/7c777011-bc88-4743-a24e-64336e1e5b46",
+        "disabled": true,
         "settings": {}
       }
     }
