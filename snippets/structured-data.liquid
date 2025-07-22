@@ -1,5 +1,12 @@
+{%- comment -%}
+This file has been modified by the Yoast SEO for Shopify app.
+You can learn more about this (and learn how to cleanly revert these changes) at https://yoa.st/removing-theme-changes.
+{%- endcomment -%}
 {% if template contains 'index' %}
-  <script type="application/ld+json">
+  {%- comment -%}Yoast SEO schema control block: start.{%- endcomment -%}
+{%- assign yoast_seo_settings = shop.metafields.yoast_seo.settings.value | default: shop.metafields.yoast_seo.settings -%}
+{%- if disabled_by_yoast_seo or yoast_seo_settings.schema.useTheme.schema or yoast_seo_settings.schema.useTheme.organization -%}
+<script type="application/ld+json">
    {
    "@context": "https://schema.org",
    "@type": "Organization",
@@ -19,7 +26,9 @@
       {%- if settings.instagram_url != blank -%},"{{ settings.instagram_url }}"{% endif -%}
      ]
    }
-  </script>
+  {%- comment -%}Yoast SEO schema control block: end.{%- endcomment -%}
+</script>
+{%- endif -%}
 {% elsif template contains 'article' %}
   <script type="application/ld+json">
    {
@@ -42,7 +51,10 @@
    }
   </script>
 {% elsif template contains 'product' %}
-  <script type="application/ld+json">
+  {%- comment -%}Yoast SEO schema control block: start.{%- endcomment -%}
+{%- assign yoast_seo_settings = shop.metafields.yoast_seo.settings.value | default: shop.metafields.yoast_seo.settings -%}
+{%- if disabled_by_yoast_seo or yoast_seo_settings.schema.useTheme.schema or yoast_seo_settings.schema.useTheme.product -%}
+<script type="application/ld+json">
    {
      "@context": "https://schema.org",
      "@type": "Product",
@@ -82,5 +94,7 @@
        {% endfor %}
     ]
    }
-  </script>
+  {%- comment -%}Yoast SEO schema control block: end.{%- endcomment -%}
+</script>
+{%- endif -%}
 {% endif %}

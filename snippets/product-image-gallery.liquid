@@ -1,3 +1,7 @@
+{%- comment -%}
+This file has been modified by the Yoast SEO for Shopify app.
+You can learn more about this (and learn how to cleanly revert these changes) at https://yoa.st/removing-theme-changes.
+{%- endcomment -%}
 {% comment %}
 
 {% capture thumbnails %}
@@ -163,7 +167,7 @@
                 {% if click_to_enlarge and template != 'product.quick' %}
                   <a class="zoom_btn"
                      href="{{ media | image_url: width: 2400 }}"
-                     itemprop="contentUrl"
+                     {% if disabled_by_yoast_seo %}itemprop="contentUrl"{% endif %}
                      tabindex="-1"
                      title="Click to zoom"
                      data-index="{{ forloop.index0 }}"
@@ -577,7 +581,7 @@
                 {% if click_to_enlarge and template != 'product.quick' %}
                   <a class="zoom_btn"
                      href="{{ media | image_url: width: 2400 }}"
-                     itemprop="contentUrl"
+                     {% if disabled_by_yoast_seo %}itemprop="contentUrl"{% endif %}
                      tabindex="-1"
                      title="Click to zoom"
                      data-index="{{ forloop.index0 }}"

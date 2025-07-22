@@ -551,28 +551,13 @@
         "disabled": true,
         "settings": {}
       },
-      "17920835415960095625": {
-        "type": "shopify://apps/swatch-king/blocks/variant-swatch-king/0850b1e4-ba30-4a0d-a8f4-f9a939276d7d",
-        "disabled": true,
-        "settings": {
-          "alignment": "center",
-          "swatch_location": "After price",
-          "switch_on_hover": true,
-          "preselect_variant": true
-        }
-      },
-      "16216491870256628967": {
-        "type": "shopify://apps/bss-labels-badges/blocks/bss-pl-config-data/91bfe765-b604-49a1-805e-3599fa600b24",
-        "disabled": false,
-        "settings": {}
-      },
       "5134484470793087125": {
         "type": "shopify://apps/vitals/blocks/app-embed/aeb48102-2a5a-4f39-bdbd-d8d49f4e20b8",
         "disabled": false,
         "settings": {}
       },
-      "11349500561483629931": {
-        "type": "shopify://apps/notify-me/blocks/app-embed/b399b727-6c85-44fc-9e21-63114bd72054",
+      "yoast-seo-metatags": {
+        "type": "shopify://apps/yoast-seo-seo-for-everyone/blocks/metatags/7c777011-bc88-4743-a24e-64336e1e5b46",
         "disabled": false,
         "settings": {}
       }
