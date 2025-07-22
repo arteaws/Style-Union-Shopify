@@ -20,7 +20,9 @@
             {% endfor %}
           </ul>
         {% endif %}
-        <h1>{{ article.title }}</h1>
+    {% if article.title != blank %}
+        <h1 style="text-align: left;">{{ article.title }}</h1>
+    {% endif %}
         {% if section.settings.show_date or section.settings.show_author %}
           <p class="posted">
             {% if section.settings.show_author %}
