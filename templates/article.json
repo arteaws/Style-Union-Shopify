@@ -11,6 +11,7 @@
   "sections": {
     "banner": {
       "type": "banner-image",
+      "disabled": true,
       "settings": {}
     },
     "rich_text_xiL6Ji": {
@@ -24,7 +25,7 @@
         "link": "",
         "link_text": "",
         "background": "#ffffff",
-        "color": "#000",
+        "color": "#000000",
         "width": 60,
         "align_text": "center",
         "section_padding": "both"
