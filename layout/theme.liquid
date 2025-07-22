@@ -141,20 +141,7 @@ select.restock-alerts-country-select.selectBoxStyle {
     </script>
   {% include 'pagefly-app-header' %}
   {% if template contains 'collection' %}{{ 'https://cdn.shopify.com/s/files/1/0382/4185/files/ajaxinate.js?937' | script_tag }}{% endif %}
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org/",
-  "@type": "WebSite",
-  "name": "Style Union",
-  "url": "https://styleunion.in/",
-  "potentialAction": {
-    "@type": "SearchAction",
-    "target": "https://styleunion.in/search?q={search_term_string}",
-    "query-input": "required name=search_term_string"
-  }
-}
-</script>
-
+{% render 'organizaition-schema' %}
 <!-- Organization Schema (already available, but need to be optimized): -->
   </head>
 
