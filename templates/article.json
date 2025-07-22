@@ -11,11 +11,11 @@
   "sections": {
     "banner": {
       "type": "banner-image",
-      "disabled": true,
       "settings": {}
     },
     "rich_text_xiL6Ji": {
       "type": "rich-text",
+      "disabled": true,
       "name": "Rich text",
       "settings": {
         "heading": "{{ section.settings.page.title }}",
