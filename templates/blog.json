@@ -28,10 +28,10 @@
         "d8daa176-308f-4aea-a55e-f53d51249821"
       ],
       "settings": {
-        "text": "<p>Add some descriptive text to your Blog page.</p>",
+        "text": "",
         "tag_navigation": true,
         "article_tags": true,
-        "show_author": true,
+        "show_author": false,
         "show_date": true,
         "sidebar_text_align": "center",
         "sidebar_block_border": true
