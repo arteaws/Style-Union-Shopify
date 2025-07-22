@@ -11,6 +11,7 @@
   "sections": {
     "banner": {
       "type": "banner-image",
+      "disabled": true,
       "settings": {}
     },
     "main": {
