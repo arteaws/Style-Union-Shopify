@@ -16,17 +16,10 @@
     "main": {
       "type": "main-article",
       "blocks": {
-        "d3f887d6-a996-4d77-8d18-424793503690": {
-          "type": "profile",
-          "settings": {
-            "heading": "Meet the Author",
-            "bio_text": "<p>Add some profile text to talk about the author</p>"
-          }
-        },
         "0d965260-a53e-422d-ae8e-02bc1581c4c3": {
           "type": "product",
           "settings": {
-            "featured_product": "",
+            "featured_product": "flare-fit-box-inwared-pleat-a-line-kurta-with-pant-set-ems00028",
             "show_button": false,
             "button_text": "Shop this product"
           }
@@ -48,7 +41,6 @@
         }
       },
       "block_order": [
-        "d3f887d6-a996-4d77-8d18-424793503690",
         "0d965260-a53e-422d-ae8e-02bc1581c4c3",
         "d65b5c7c-4674-44e1-996e-d5c8fd1d9087",
         "0919b52e-3aad-4944-8d86-9b61854b4865"
