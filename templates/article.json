@@ -34,12 +34,12 @@
     "main": {
       "type": "main-article",
       "blocks": {
-        "0d965260-a53e-422d-ae8e-02bc1581c4c3": {
-          "type": "product",
+        "0919b52e-3aad-4944-8d86-9b61854b4865": {
+          "type": "blog-posts",
           "settings": {
-            "featured_product": "flare-fit-box-inwared-pleat-a-line-kurta-with-pant-set-ems00028",
-            "show_button": false,
-            "button_text": "Shop this product"
+            "blog": "fashion",
+            "heading": "More posts",
+            "show_excerpt": false
           }
         },
         "d65b5c7c-4674-44e1-996e-d5c8fd1d9087": {
@@ -48,20 +48,11 @@
             "heading": "Subscribe",
             "text": "<p>Explain the benefits of subscribing</p>"
           }
-        },
-        "0919b52e-3aad-4944-8d86-9b61854b4865": {
-          "type": "blog-posts",
-          "settings": {
-            "blog": "fashion",
-            "heading": "More posts",
-            "show_excerpt": false
-          }
         }
       },
       "block_order": [
-        "0d965260-a53e-422d-ae8e-02bc1581c4c3",
-        "d65b5c7c-4674-44e1-996e-d5c8fd1d9087",
-        "0919b52e-3aad-4944-8d86-9b61854b4865"
+        "0919b52e-3aad-4944-8d86-9b61854b4865",
+        "d65b5c7c-4674-44e1-996e-d5c8fd1d9087"
       ],
       "settings": {
         "show_article_image": true,
