@@ -103,7 +103,7 @@ If you plan to remove PageFly, please see the guide in our help center first: ht
 {%- endif -%}{% endif %}
 
     {% render 'social-media-meta-tags' %}
-    {% render 'structured-data' %}
+    {% comment %}   {% render 'structured-data' %} {% endcomment %}
     {% render 'css-variables' %}
 
     <link rel="stylesheet" href="{{ 'stylesheet.css' | asset_url }}" type="text/css">
