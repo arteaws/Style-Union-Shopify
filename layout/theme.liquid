@@ -81,7 +81,7 @@
     {% if page_description %}<meta name="description" content="{{ page_description | escape }}">{% endif %}
 
     {% render 'social-media-meta-tags' %}
- {% comment %}   {% render 'structured-data' %} {% endcomment %}
+    {% render 'structured-data' %}
     {% render 'css-variables' %}
 
     <link rel="stylesheet" href="{{ 'stylesheet.css' | asset_url }}" type="text/css">
@@ -141,8 +141,7 @@ select.restock-alerts-country-select.selectBoxStyle {
     </script>
   {% include 'pagefly-app-header' %}
   {% if template contains 'collection' %}{{ 'https://cdn.shopify.com/s/files/1/0382/4185/files/ajaxinate.js?937' | script_tag }}{% endif %}
-{% render 'organizaition-schema' %}
-<!-- Organization Schema (already available, but need to be optimized): -->
+{% comment %}{% render 'organizaition-schema' %} {% endcomment %}
   </head>
 
   <body
