@@ -17,7 +17,7 @@
         "announcement_text_ywPcyg": {
           "type": "announcement_text",
           "settings": {
-            "announcement_text": "<p>Deliveries may be delayed due to the current weather conditions.</p>"
+            "announcement_text": "<p>Deliveries may be delayed due to the current weather conditions</p>"
           }
         },
         "announcement_text_VgTGgD": {
