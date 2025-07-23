@@ -82,11 +82,11 @@
         "image_6zdbji": {
           "type": "image",
           "settings": {
-            "image": "shopify://shop_images/MAN_800_x_1200_px_1800_x_800_px_4.png",
+            "image": "shopify://shop_images/MAN_800_x_1200_px_1800_x_800_px_4_9e352c5f-2e2b-4236-9d88-3131e8033de8.webp",
             "overlay_color": "#000000",
             "overlay_opacity": 0,
             "caption_position": "middle_center",
-            "mobile_image": "shopify://shop_images/MAN_800_x_1200_px_5.png",
+            "mobile_image": "shopify://shop_images/MAN_800_x_1200_px_5_b68ad8de-2628-4cc3-a662-fc0eec845596.webp",
             "hide_caption_background": false,
             "heading": "",
             "subheading": "",
