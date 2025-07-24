@@ -252,6 +252,17 @@
         "subheading_size": 14,
         "section_padding": "both"
       }
+    },
+    "custom_recently_viewed_eYWrxm": {
+      "type": "custom-recently-viewed",
+      "name": "custom-recently-viewed",
+      "settings": {
+        "heading": "Recently Viewed",
+        "desktop_slides": 4,
+        "mobile_slides": 2,
+        "show_navigation": true,
+        "show_pagination": true
+      }
     }
   },
   "order": [
@@ -265,6 +276,7 @@
     "173746604670dd2455",
     "related-products",
     "1722496108e78788ab",
-    "slideshow_jmAaDM"
+    "slideshow_jmAaDM",
+    "custom_recently_viewed_eYWrxm"
   ]
 }
