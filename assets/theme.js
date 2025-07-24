@@ -6928,7 +6928,7 @@ sidebarFilters: function sidebarFilters(context) {
 	},
 	renderSectionFromFetch: function renderSectionFromFetch(url, section) {
       console.log("Show Infinite"); 
-      {% if template contains 'collection' %}{{ 'https://cdn.shopify.com/s/files/1/0382/4185/files/ajaxinate.js?937' | script_tag }}{% endif %}
+  {{ 'https://cdn.shopify.com/s/files/1/0382/4185/files/ajaxinate.js?937' | script_tag }}
 		fetch(url)
 			.then(response => response.text())
 			.then((responseText) => {
