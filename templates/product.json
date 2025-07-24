@@ -168,6 +168,7 @@
     },
     "custom_recently_viewed_eYWrxm": {
       "type": "custom-recently-viewed",
+      "disabled": true,
       "name": "custom-recently-viewed",
       "settings": {
         "heading": "Recently Viewed",
