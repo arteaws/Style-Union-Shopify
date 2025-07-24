@@ -6964,6 +6964,7 @@ sidebarFilters: function sidebarFilters(context) {
     document.getElementById('CollectionProductGrid').innerHTML = innerHTML;
 	},
 	onActiveFilterClick: function onActiveFilterClick(event) {
+         console.log("Show Infinite"); 
 		event.preventDefault();
 		theme.CollectionFilters.renderPage(new URL(event.currentTarget.href).searchParams.toString());
 	},
