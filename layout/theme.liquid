@@ -351,52 +351,76 @@ select.restock-alerts-country-select.selectBoxStyle {
     
     {% render 'magicSidecartScript' %}
     {% render 'razorpay-magic-checkout' %} 
-    <script>
-    // Track product views - this should run on every page
-    (function() {
-      // Function to set cookie
-      function setCookie(name, value, days) {
-        const date = new Date();
-        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-        document.cookie = name + "=" + value + "; expires=" + date.toUTCString() + "; path=/; SameSite=Lax";
-      }
+<!-- Recently Viewed Products Global Tracking - Add this before </body> in theme.liquid -->
+<script>
+(function() {
+  'use strict';
+  
+  // Cookie helper functions
+  function setCookie(name, value, days) {
+    const date = new Date();
+    date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+    const expires = "expires=" + date.toUTCString();
+    document.cookie = name + "=" + value + ";" + expires + ";path=/;SameSite=Lax";
+  }
+  
+  function getCookie(name) {
+    const nameEQ = name + "=";
+    const ca = document.cookie.split(';');
+    for(let i = 0; i < ca.length; i++) {
+      let c = ca[i];
+      while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+      if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+    }
+    return null;
+  }
+  
+  // Track product views
+  function trackProductView() {
+    // Only run on product pages
+    if (window.location.pathname.includes('/products/')) {
+      // Extract product handle from URL
+      const pathParts = window.location.pathname.split('/');
+      const productHandle = pathParts[pathParts.indexOf('products') + 1];
       
-      // Function to get cookie
-      function getCookie(name) {
-        const cookieValue = document.cookie.split('; ').find(row => row.startsWith(name + '='));
-        return cookieValue ? cookieValue.split('=')[1] : '';
-      }
-      
-      // Only track on product pages
-      {%- if request.page_type == 'product' -%}
-        const productHandle = '{{ product.handle }}';
+      if (productHandle && productHandle !== '') {
+        let recentlyViewed = [];
+        const existingCookie = getCookie('recently_viewed');
         
-        if (productHandle) {
-          let recentlyViewed = [];
-          const existingCookie = getCookie('recently_viewed');
-          
-          if (existingCookie) {
-            recentlyViewed = existingCookie.split(',').filter(handle => handle.trim() !== '');
-          }
-          
-          // Remove if already exists to avoid duplicates
-          recentlyViewed = recentlyViewed.filter(item => item !== productHandle);
-          
-          // Add to beginning of array
-          recentlyViewed.unshift(productHandle);
-          
-          // Keep only last 10 products
-          recentlyViewed = recentlyViewed.slice(0, 10);
-          
-          // Set cookie (expires in 30 days)
-          setCookie('recently_viewed', recentlyViewed.join(','), 30);
-          
-          // Debug log
-          console.log('Recently viewed updated:', recentlyViewed);
+        if (existingCookie && existingCookie !== '') {
+          recentlyViewed = existingCookie.split(',').filter(handle => handle.trim() !== '');
         }
-      {%- endif -%}
-    })();
-       
-    </script>
+        
+        // Remove if already exists (to move to front)
+        recentlyViewed = recentlyViewed.filter(handle => handle !== productHandle);
+        
+        // Add current product to front
+        recentlyViewed.unshift(productHandle);
+        
+        // Keep only last 10 products
+        recentlyViewed = recentlyViewed.slice(0, 10);
+        
+        // Save cookie
+        setCookie('recently_viewed', recentlyViewed.join(','), 30);
+        
+        // Debug log
+        console.log('Product tracked:', productHandle);
+        console.log('Recently viewed:', recentlyViewed);
+      }
+    }
+  }
+  
+  // Run when DOM is loaded
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', trackProductView);
+  } else {
+    trackProductView();
+  }
+  
+  // Also track on AJAX page loads (for themes with AJAX navigation)
+  document.addEventListener('shopify:section:load', trackProductView);
+  
+})();
+</script>
   </body>
 </html>
