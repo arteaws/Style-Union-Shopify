@@ -125,68 +125,142 @@
 </div>
 
 <script>
-  // Enhanced product tracker that works with all product templates
   document.addEventListener('DOMContentLoaded', function() {
-    // Check if this is a product page
-    if (window.location.pathname.match(/\/products\/[^\/]+/)) {
-      // Get product data from Shopify object or meta tags
-      const productData = {
-        id: {{ product.id | default: 'null' | json }},
-        title: {{ product.title | default: 'Untitled Product' | json }},
-        url: window.location.pathname,
-        image: {{ product.featured_image | img_url: '400x' | default: '' | json }},
-        handle: {{ product.handle | default: 'null' | json }}
-      };
-
-      // Only proceed if we have valid product data
-      if (!productData.id || productData.id === 'null') {
-        console.warn('Product ID not found - tracking skipped');
-        return;
-      }
-
-      // Get existing recent products
-      let recentProducts = [];
+    // Function to safely get recent products
+    function getRecentProducts() {
       try {
-        const storedData = localStorage.getItem('recentlyViewedProducts');
-        recentProducts = storedData ? JSON.parse(storedData) : [];
+        const storedData = localStorage.getItem('recentlyViewedProducts') || '[]';
+        const products = JSON.parse(storedData);
         
-        // Validate stored data structure
-        recentProducts = recentProducts.filter(item => 
-          item && item.id && item.url && item.handle
-        );
+        // Basic validation - ensure each product has at least a URL
+        return products.filter(p => p && p.url);
       } catch (e) {
-        console.error('Error parsing recent products:', e);
-        recentProducts = [];
-      }
-
-      // Remove if this product already exists (using both ID and handle for reliability)
-      recentProducts = recentProducts.filter(p => 
-        p.id !== productData.id && p.handle !== productData.handle
-      );
-
-      // Add new product to beginning of array
-      recentProducts.unshift(productData);
-
-      // Enforce maximum limit (16 products)
-      const MAX_PRODUCTS = 16;
-      if (recentProducts.length > MAX_PRODUCTS) {
-        recentProducts = recentProducts.slice(0, MAX_PRODUCTS);
-      }
-
-      // Save back to localStorage
-      try {
-        localStorage.setItem('recentlyViewedProducts', JSON.stringify(recentProducts));
-      } catch (e) {
-        console.error('Error saving recent products:', e);
-        // Fallback: Try removing older items if storage is full
-        if (e.name === 'QuotaExceededError') {
-          localStorage.setItem('recentlyViewedProducts', 
-            JSON.stringify(recentProducts.slice(0, MAX_PRODUCTS - 2)));
-        }
+        console.error('Error loading recent products:', e);
+        return [];
       }
     }
+
+    function initializeSlider(products, sectionId, showName) {
+      const container = document.getElementById(`recent-products-container-${sectionId}`);
+      const section = container?.closest('.custom-recent-products');
+      
+      if (!container || !section) return;
+      
+      // Always show section (even if empty)
+      section.style.display = 'block';
+      container.innerHTML = '';
+      
+      // Display message if no products
+      if (products.length === 0) {
+        container.innerHTML = `
+          <div class="swiper-slide" style="width: 100%; text-align: center;">
+            <p>No recently viewed products yet</p>
+          </div>
+        `;
+        return;
+      }
+      
+      // Create slides for each product
+      products.forEach(product => {
+        const slide = document.createElement('div');
+        slide.className = 'swiper-slide custom-recent-products__slide';
+        slide.style.width = 'auto'; // Let Swiper handle width
+        
+        const link = document.createElement('a');
+        link.href = product.url;
+        link.style.display = 'block';
+        link.style.width = '100%';
+        
+        // Image container
+        const imgContainer = document.createElement('div');
+        imgContainer.className = 'custom-recent-products__image-container';
+        
+        const img = document.createElement('img');
+        img.className = 'custom-recent-products__image';
+        img.src = product.image || '{{ "image-placeholder.png" | asset_img_url: "400x" }}';
+        img.alt = product.title || 'Product image';
+        img.loading = 'lazy';
+        img.onerror = function() {
+          this.src = '{{ "image-placeholder.png" | asset_img_url: "400x" }}';
+        };
+        
+        imgContainer.appendChild(img);
+        link.appendChild(imgContainer);
+        
+        // Product title
+        if (showName) {
+          const title = document.createElement('div');
+          title.className = 'custom-recent-products__title';
+          title.textContent = product.title || 'Product';
+          link.appendChild(title);
+        }
+        
+        slide.appendChild(link);
+        container.appendChild(slide);
+      });
+      
+      // Initialize Swiper (destroy old instance if exists)
+      const sliderEl = container.closest('.swiper');
+      if (window.recentProductsSwiper) {
+        window.recentProductsSwiper.destroy(true, true);
+      }
+      
+      // Special configuration for single product
+      const isSingleProduct = products.length === 1;
+      
+      window.recentProductsSwiper = new Swiper(sliderEl, {
+        slidesPerView: isSingleProduct ? 1 : 'auto',
+        centeredSlides: isSingleProduct,
+        spaceBetween: 20,
+        watchOverflow: true,
+        navigation: {
+          nextEl: '.swiper-button-next',
+          prevEl: '.swiper-button-prev',
+        },
+        breakpoints: {
+          320: {
+            slidesPerView: isSingleProduct ? 1 : {{ mobile_slides }},
+            spaceBetween: 15
+          },
+          750: {
+            slidesPerView: isSingleProduct ? 1 : {{ desktop_slides }},
+            spaceBetween: 30
+          }
+        }
+      });
+      
+      // Hide arrows if only one product
+      if (isSingleProduct) {
+        const arrows = sliderEl.querySelectorAll('.swiper-button-next, .swiper-button-prev');
+        arrows.forEach(arrow => arrow.style.display = 'none');
+      }
+    }
+    
+    // Load and display products
+    function updateSlider() {
+      const products = getRecentProducts().slice(0, {{ max_products }});
+      initializeSlider(products, '{{ section.id }}', {{ show_product_name }});
+    }
+    
+    // Initial load
+    updateSlider();
+    
+    // Update when storage changes
+    window.addEventListener('storage', updateSlider);
   });
 </script>
+
+<style>
+  /* Add this to your existing styles */
+  .custom-recent-products__slide {
+    min-width: 150px; /* Minimum slide width */
+  }
+  
+  /* Center single product */
+  .swiper-slide:only-child {
+    margin: 0 auto;
+  }
+</style>
 {% schema %}
 {
   "name": "Custom Recent Products",
