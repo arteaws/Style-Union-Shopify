@@ -34,7 +34,7 @@
   }
 </style>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/8.4.7/swiper-bundle.min.css" />
-
+<h2>Recently Viewed Section</h2>
 {%- liquid
   assign recently_viewed = request.cookies['recently_viewed'] | split: ','
   assign product_handles_to_show = recently_viewed | uniq
