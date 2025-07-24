@@ -6989,16 +6989,18 @@ renderSectionFromFetch: function renderSectionFromFetch(url, section) {
 	onActiveFilterClick: function onActiveFilterClick(event) { 
 		event.preventDefault();
 		theme.CollectionFilters.renderPage(new URL(event.currentTarget.href).searchParams.toString());
-        initEndlessScroll();
+
 	},
 	updateURLHash: function updateURLHash(searchParams) {
 		history.pushState({ searchParams }, '', `${window.location.pathname}${searchParams && '?'.concat(searchParams)}`);
+      console.log('show infinite 2');
 	},
 	getSections: function getSections() {
     return [
       {
         id: 'main-collection-product-grid',
         section: document.getElementById('main-collection-product-grid').dataset.id,
+        console.log('show infinite 3');
       }
     ]
   }
