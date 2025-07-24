@@ -6924,11 +6924,10 @@ sidebarFilters: function sidebarFilters(context) {
       }
 		}
     Shopify.theme.quickview.init();
-    WAU.ProductGridVideo.init();
-    console.log("Show Infinite");  
+    WAU.ProductGridVideo.init(); 
 	},
 	renderSectionFromFetch: function renderSectionFromFetch(url, section) {
-      
+      console.log("Show Infinite"); 
 		fetch(url)
 			.then(response => response.text())
 			.then((responseText) => {
