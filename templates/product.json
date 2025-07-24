@@ -166,15 +166,18 @@
         "limit": 4
       }
     },
-    "custom_recently_viewed_eYWrxm": {
+    "custom_recently_viewed_c84JA9": {
       "type": "custom-recently-viewed",
-      "name": "custom-recently-viewed",
+      "name": "Custom Recent Products",
       "settings": {
-        "heading": "Recently Viewed",
+        "heading": "Recently Viewed Products",
+        "heading_size": 24,
         "desktop_slides": 4,
         "mobile_slides": 2,
-        "show_navigation": true,
-        "show_pagination": true
+        "max_products": 10,
+        "show_product_name": true,
+        "bg_color": "#f5f5f5",
+        "text_color": "#333333"
       }
     },
     "related_products_yiNFzD": {
@@ -272,7 +275,7 @@
     "1625846216758d1de0",
     "custom_liquid_wwxdTR",
     "product-recommendations",
-    "custom_recently_viewed_eYWrxm",
+    "custom_recently_viewed_c84JA9",
     "related_products_yiNFzD",
     "173761949576689837",
     "173746604670dd2455",
