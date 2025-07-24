@@ -6926,17 +6926,67 @@ sidebarFilters: function sidebarFilters(context) {
     Shopify.theme.quickview.init();
     WAU.ProductGridVideo.init(); 
 	},
-	renderSectionFromFetch: function renderSectionFromFetch(url, section) {
-      console.log("Show Infinite"); 
-		fetch(url)
-			.then(response => response.text())
-			.then((responseText) => {
-				const html = responseText;
-				this.filterData = [...this.filterData, { html, url }];
-				theme.CollectionFilters.renderProductGrid(html);
-				theme.CollectionFilters.renderFilters();
-			});
-	},
+
+// Global variable to store the current Ajaxinate instance
+let endlessScrollInstance = null;
+
+// Function to initialize/reinitialize infinite scroll
+function initializeInfiniteScroll() {
+    // Destroy existing instance if it exists
+    if (endlessScrollInstance && typeof endlessScrollInstance.destroy === 'function') {
+        endlessScrollInstance.destroy();
+    }
+    
+    // Check if pagination exists before initializing
+    const paginationElement = document.querySelector('#Huratips-Pagination a');
+    if (paginationElement) {
+        endlessScrollInstance = new Ajaxinate({
+            container: '#main-collection-product-grid',
+            pagination: '#Huratips-Pagination',
+            loadingText: '<img class="preloader-new" src="https://cdn.shopify.com/s/files/1/0623/4754/2777/files/Iphone-spinner-2_a34e5a24-da69-4a18-b9ba-563ae9b95135.gif?v=1751544968" >',
+            callback: function() {
+                // This function runs after new content is loaded
+                if (typeof ReloadSmartWishlist === 'function') {
+                    ReloadSmartWishlist();
+                }
+            }
+        });
+    }
+}
+
+// Updated renderSectionFromFetch function
+renderSectionFromFetch: function renderSectionFromFetch(url, section) {
+    console.log("Show Infinite");
+    fetch(url)
+        .then(response => response.text())
+        .then((responseText) => {
+            const html = responseText;
+            this.filterData = [...this.filterData, { html, url }];
+            theme.CollectionFilters.renderProductGrid(html);
+            theme.CollectionFilters.renderFilters();
+            
+            // Reinitialize infinite scroll after new content is loaded
+            setTimeout(() => {
+                initializeInfiniteScroll();
+            }, 100); // Small delay to ensure DOM is updated
+        })
+        .catch(error => {
+            console.error('Error fetching filtered content:', error);
+        });
+},
+
+// Initial setup on page load
+document.addEventListener("DOMContentLoaded", function() {
+    initializeInfiniteScroll();
+});
+
+// Alternative approach if you need to reinitialize after any filter change
+// You can call this function whenever filters are applied
+function reinitializeScrollAfterFilter() {
+    setTimeout(() => {
+        initializeInfiniteScroll();
+    }, 200);
+},
 	renderSectionFromCache: function renderSectionFromCache(filterDataUrl, section) {
 		const html = this.filterData.find(filterDataUrl).html;
 		theme.CollectionFilters.renderProductGrid(html);
