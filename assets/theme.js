@@ -6962,9 +6962,10 @@ sidebarFilters: function sidebarFilters(context) {
       .getElementById('CollectionProductGrid').innerHTML;
 
     document.getElementById('CollectionProductGrid').innerHTML = innerHTML;
+        console.log("Show Infinite 2"); 
 	},
 	onActiveFilterClick: function onActiveFilterClick(event) {
-         console.log("Show Infinite"); 
+         console.log("Show Infinite 3"); 
 		event.preventDefault();
 		theme.CollectionFilters.renderPage(new URL(event.currentTarget.href).searchParams.toString());
 	},
