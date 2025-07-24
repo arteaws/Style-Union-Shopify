@@ -1,3 +1,21 @@
+
+function initEndlessScroll() {
+  let endlessScroll = new Ajaxinate({
+    container: '#main-collection-product-grid',
+    pagination: '#Huratips-Pagination',
+    loadingText: '<img class="preloader-new" src="https://cdn.shopify.com/s/files/1/0623/4754/2777/files/Iphone-spinner-2_a34e5a24-da69-4a18-b9ba-563ae9b95135.gif?v=1751544968" >',
+    callback: function() {
+      // This function runs after new content is loaded
+      if (typeof ReloadSmartWishlist === 'function') {
+        ReloadSmartWishlist();
+      }
+    }
+  });
+}
+
+
+
+
 window.theme = window.theme || {};
 
 (function vendorAOS(){
