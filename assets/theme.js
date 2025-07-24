@@ -6925,6 +6925,7 @@ sidebarFilters: function sidebarFilters(context) {
 		}
     Shopify.theme.quickview.init();
     WAU.ProductGridVideo.init();
+    console.log("Show Infinite");  
 	},
 	renderSectionFromFetch: function renderSectionFromFetch(url, section) {
       
