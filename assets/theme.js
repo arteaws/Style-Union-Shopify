@@ -6947,7 +6947,7 @@ sidebarFilters: function sidebarFilters(context) {
 	},
   
 renderSectionFromFetch: function renderSectionFromFetch(url, section) {
-  console.log("Show Infinite"); 
+  // console.log("Show Infinite"); 
   fetch(url)
     .then(response => response.text())
     .then((responseText) => {
@@ -6993,10 +6993,10 @@ renderSectionFromFetch: function renderSectionFromFetch(url, section) {
 	},
 	updateURLHash: function updateURLHash(searchParams) {
 		history.pushState({ searchParams }, '', `${window.location.pathname}${searchParams && '?'.concat(searchParams)}`);
-      console.log('show infinite 2');
+      // console.log('show infinite 2');
 	},
 	getSections: function getSections() {
-            console.log('show infinite 3'); 
+    initEndlessScroll();
     return [
       {
         id: 'main-collection-product-grid',
