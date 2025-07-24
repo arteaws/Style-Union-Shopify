@@ -20,7 +20,6 @@
     position: relative;
   }
 
-
   .custom-recent-products__heading {
     font-size: {{ heading_size }}px;
     text-align: center;
@@ -39,6 +38,7 @@
     flex-direction: column;
     align-items: center;
     height: auto;
+    width: calc((100% - ({{ desktop_slides | minus: 1 }} * 30px)) / {{ desktop_slides }});
   }
   
   .custom-recent-products__image-container {
@@ -91,7 +91,8 @@
   .swiper-button-prev::after {
     font-size: 20px;
   }
-  
+
+  /* Mobile styles */
   @media (max-width: 749px) {
     .custom-recent-products__slider {
       padding: 0 15px;
@@ -101,9 +102,24 @@
       font-size: calc({{ heading_size }}px * 0.8);
     }
     
+    .custom-recent-products__slide {
+      width: calc((100% - ({{ mobile_slides | minus: 1 }} * 15px)) / {{ mobile_slides }});
+    }
+    
     .swiper-button-next,
     .swiper-button-prev {
       display: none;
+    }
+  }
+
+  /* Special case for single product */
+  .swiper-slide.swiper-slide-single {
+    width: calc((100% - ({{ desktop_slides | minus: 1 }} * 30px)) / {{ desktop_slides }});
+  }
+
+  @media (max-width: 749px) {
+    .swiper-slide.swiper-slide-single {
+      width: calc((100% - ({{ mobile_slides | minus: 1 }} * 15px)) / {{ mobile_slides }});
     }
   }
 </style>
@@ -164,8 +180,9 @@
       // Create slides for each product
       products.forEach(product => {
         const slide = document.createElement('div');
-        slide.className = 'swiper-slide custom-recent-products__slide';
-        slide.style.width = 'auto'; // Let Swiper handle width
+        slide.className = products.length === 1 ? 
+          'swiper-slide custom-recent-products__slide swiper-slide-single' : 
+          'swiper-slide custom-recent-products__slide';
         
         const link = document.createElement('a');
         link.href = product.url;
@@ -206,12 +223,9 @@
         window.recentProductsSwiper.destroy(true, true);
       }
       
-      // Special configuration for single product
-      const isSingleProduct = products.length === 1;
-      
       window.recentProductsSwiper = new Swiper(sliderEl, {
-        slidesPerView: isSingleProduct ? 1 : 'auto',
-        centeredSlides: isSingleProduct,
+        slidesPerView: 'auto',
+        centeredSlides: false,
         spaceBetween: 20,
         watchOverflow: true,
         navigation: {
@@ -220,18 +234,18 @@
         },
         breakpoints: {
           320: {
-            slidesPerView: isSingleProduct ? 1 : {{ mobile_slides }},
+            slidesPerView: 'auto',
             spaceBetween: 15
           },
           750: {
-            slidesPerView: isSingleProduct ? 1 : {{ desktop_slides }},
+            slidesPerView: 'auto',
             spaceBetween: 30
           }
         }
       });
       
       // Hide arrows if only one product
-      if (isSingleProduct) {
+      if (products.length === 1) {
         const arrows = sliderEl.querySelectorAll('.swiper-button-next, .swiper-button-prev');
         arrows.forEach(arrow => arrow.style.display = 'none');
       }
