@@ -1,118 +1,79 @@
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
-    // Function to safely get and validate recent products
-    function getValidRecentProducts() {
-      try {
-        const storedData = localStorage.getItem('recentlyViewedProducts');
-        if (!storedData) return [];
-        
-        const products = JSON.parse(storedData);
-        
-        // Validate each product and ensure required fields exist
-        return products.filter(product => {
-          return product && 
-                 product.id && 
-                 product.url && 
-                 product.image && 
-                 product.image !== 'undefined' && 
-                 product.image !== 'null' &&
-                 !product.image.includes('no-image');
-        });
-      } catch (e) {
-        console.error('Error loading recent products:', e);
-        return [];
-      }
+  // Universal product tracker that works with all product templates
+  (function() {
+    // Check if this is a product page
+    const isProductPage = window.location.pathname.match(/\/products\/[^\/]+/);
+    if (!isProductPage) return;
+
+    // Get product data with multiple fallback methods
+    const productData = {
+      id: {{ product.id | default: 'null' | json }},
+      title: {{ product.title | default: 'Untitled Product' | json }},
+      url: window.location.pathname,
+      image: getProductImage(),
+      handle: {{ product.handle | default: 'null' | json }}
+    };
+
+    // Helper function to get product image with multiple fallbacks
+    function getProductImage() {
+      // Try Shopify product object first
+      {% if product.featured_image %}
+        return {{ product.featured_image | img_url: '400x' | json }};
+      {% endif %}
+      
+      // Fallback to meta tags
+      const metaImage = document.querySelector('meta[property="og:image"]');
+      if (metaImage) return metaImage.content;
+      
+      // Final fallback
+      return '';
     }
 
-    function updateRecentProductsSlider(sectionId, maxProducts, showName) {
-      const validProducts = getValidRecentProducts();
-      const container = document.getElementById(`recent-products-container-${sectionId}`);
-      const sectionElement = container?.closest('.custom-recent-products');
-      
-      if (!container || !sectionElement) return;
-      
-      // Hide section if no valid products
-      if (validProducts.length === 0) {
-        sectionElement.style.display = 'none';
-        return;
-      }
-      
-      sectionElement.style.display = '';
-      
-      // Clear existing slides
-      container.innerHTML = '';
-      
-      // Create slides for each product (limited to maxProducts)
-      validProducts.slice(0, maxProducts).forEach(product => {
-        const slide = document.createElement('div');
-        slide.className = 'swiper-slide custom-recent-products__slide';
-        
-        const link = document.createElement('a');
-        link.href = product.url;
-        link.style.display = 'block';
-        link.style.width = '100%';
-        
-        const imageContainer = document.createElement('div');
-        imageContainer.className = 'custom-recent-products__image-container';
-        
-        const image = document.createElement('img');
-        image.className = 'custom-recent-products__image';
-        image.src = product.image;
-        image.alt = product.title || 'Product image';
-        image.loading = 'lazy';
-        image.onerror = function() {
-          // Fallback image if original fails to load
-          this.src = '{{ "image-fallback.png" | asset_img_url: "400x" }}';
-        };
-        
-        imageContainer.appendChild(image);
-        link.appendChild(imageContainer);
-        
-        if (showName && product.title) {
-          const title = document.createElement('div');
-          title.className = 'custom-recent-products__title';
-          title.textContent = product.title;
-          link.appendChild(title);
-        }
-        
-        slide.appendChild(link);
-        container.appendChild(slide);
-      });
-      
-      // Initialize or update Swiper
-      const sliderEl = container.closest('.swiper');
-      if (window.recentProductsSwiper) {
-        window.recentProductsSwiper.destroy(true, true);
-        delete window.recentProductsSwiper;
-      }
-      
-      window.recentProductsSwiper = new Swiper(sliderEl, {
-        slidesPerView: 'auto',
-        centeredSlides: false,
-        spaceBetween: 20,
-        navigation: {
-          nextEl: '.swiper-button-next',
-          prevEl: '.swiper-button-prev',
-        },
-        breakpoints: {
-          320: {
-            slidesPerView: {{ mobile_slides }},
-            spaceBetween: 15
-          },
-          750: {
-            slidesPerView: {{ desktop_slides }},
-            spaceBetween: 30
-          }
-        }
-      });
+    // Only proceed if we have minimum required data
+    if (!productData.id || productData.id === 'null') {
+      console.warn('Product tracking skipped - missing ID');
+      return;
     }
-    
-    // Initialize the slider
-    updateRecentProductsSlider('{{ section.id }}', {{ max_products }}, {{ show_product_name }});
-    
-    // Update when storage changes (from other tabs)
-    window.addEventListener('storage', function() {
-      updateRecentProductsSlider('{{ section.id }}', {{ max_products }}, {{ show_product_name }});
-    });
-  });
+
+    // Get or initialize recent products array
+    let recentProducts = [];
+    try {
+      const storedData = localStorage.getItem('recentlyViewedProducts') || '[]';
+      recentProducts = JSON.parse(storedData);
+      
+      // Clean existing data
+      recentProducts = recentProducts.filter(item => 
+        item && item.id && item.url && (item.image || item.title)
+      );
+    } catch (e) {
+      console.error('Error parsing recent products:', e);
+      recentProducts = [];
+    }
+
+    // Remove duplicates (check by both ID and handle)
+    recentProducts = recentProducts.filter(p => 
+      p.id !== productData.id && p.handle !== productData.handle
+    );
+
+    // Add current product to beginning
+    recentProducts.unshift(productData);
+
+    // Maintain maximum of 16 products
+    const MAX_PRODUCTS = 16;
+    if (recentProducts.length > MAX_PRODUCTS) {
+      recentProducts = recentProducts.slice(0, MAX_PRODUCTS);
+    }
+
+    // Save to localStorage with error handling
+    try {
+      localStorage.setItem('recentlyViewedProducts', JSON.stringify(recentProducts));
+    } catch (e) {
+      console.error('LocalStorage error:', e);
+      // If storage is full, try removing older items
+      if (e.name === 'QuotaExceededError') {
+        localStorage.setItem('recentlyViewedProducts', 
+          JSON.stringify(recentProducts.slice(0, MAX_PRODUCTS - 3)));
+      }
+    }
+  })();
 </script>
