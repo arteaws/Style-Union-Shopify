@@ -1,0 +1,27 @@
+<script>
+  // Track recently viewed products
+  document.addEventListener('DOMContentLoaded', function() {
+    // Check if this is a product page
+    if (window.location.pathname.includes('/products/')) {
+      // Get product data
+      const productData = {
+        id: {{ product.id | json }},
+        title: {{ product.title | json }},
+        url: window.location.pathname,
+        image: {{ product.featured_image | img_url: '400x' | json }}
+      };
+      
+      // Get existing recent products
+      let recentProducts = JSON.parse(localStorage.getItem('recentlyViewedProducts') || [];
+      
+      // Remove if this product already exists
+      recentProducts = recentProducts.filter(p => p.id !== productData.id);
+      
+      // Add new product to beginning of array
+      recentProducts.unshift(productData);
+      
+      // Save back to localStorage
+      localStorage.setItem('recentlyViewedProducts', JSON.stringify(recentProducts));
+    }
+  });
+</script>
