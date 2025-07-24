@@ -6957,7 +6957,7 @@ renderSectionFromFetch: function renderSectionFromFetch(url, section) {
       theme.CollectionFilters.renderFilters();
       
       // Initialize endless scroll after new content is loaded
-      initEndlessScroll();
+      // initEndlessScroll();
     });
 },
 	renderSectionFromCache: function renderSectionFromCache(filterDataUrl, section) {
@@ -6985,6 +6985,7 @@ renderSectionFromFetch: function renderSectionFromFetch(url, section) {
       .getElementById('CollectionProductGrid').innerHTML;
 
     document.getElementById('CollectionProductGrid').innerHTML = innerHTML;
+    initEndlessScroll();
 	},
 	onActiveFilterClick: function onActiveFilterClick(event) { 
 		event.preventDefault();
