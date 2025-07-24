@@ -1,97 +1,191 @@
 {%- liquid
-
-  assign section_padding = ''
-  if section.settings.section_padding == 'top'
-    assign section_padding = 'pb0'
-  elsif section.settings.section_padding == 'bottom'
-    assign section_padding = 'mt0'
-  elsif section.settings.section_padding == 'none'
-    assign section_padding = 'mt0 pb0'
-  endif
-
+  assign recently_viewed = request.cookies['recently_viewed'] | split: ','
+  assign product_handles_to_show = recently_viewed | uniq
+  assign products_to_show = ''
+  
+  for handle in product_handles_to_show
+    assign product = all_products[handle]
+    if product != blank
+      capture products_to_show
+        echo products_to_show
+        unless forloop.first
+          echo ','
+        endunless
+        echo product.id
+      endcapture
+    endif
+  endfor
 -%}
 
-<section class="global__section section-{{ section.id }} {{ section_padding }}"
-data-section-id="{{ section.id }}"
-data-aos="fade"
-data-section-type="related-products">
-
-  <div class="row grid__wrapper">
-    {% if section.settings.title != blank %}
-      <div class="span-12 auto">
-        <h2 class="section-heading mb0">{{ section.settings.title | escape }}</h2>
+{%- if products_to_show != blank -%}
+  <div class="recently-viewed-slider-section" data-section-id="{{ section.id }}">
+    <div class="page-width">
+      <h2 class="section-header">{{ section.settings.heading | default: 'Recently Viewed' }}</h2>
+      
+      <div class="swiper recently-viewed-swiper"
+           data-desktop-slides="{{ section.settings.desktop_slides }}"
+           data-mobile-slides="{{ section.settings.mobile_slides }}">
+        <div class="swiper-wrapper">
+          {%- assign products_list = products_to_show | split: ',' -%}
+          {%- for product_id in products_list -%}
+            {%- assign product = all_products[product_id] -%}
+            {%- if product != blank -%}
+              <div class="swiper-slide">
+                {% render 'product-listing', product: product %}
+              </div>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+        
+        {%- if section.settings.show_navigation -%}
+          <div class="swiper-button-next"></div>
+          <div class="swiper-button-prev"></div>
+        {%- endif -%}
+        
+        {%- if section.settings.show_pagination -%}
+          <div class="swiper-pagination"></div>
+        {%- endif -%}
       </div>
-    {% endif %}
-
-    <div class="related__products grid__wrapper grid__wrapper-nest product-loop span-12 auto">
-
-        {% for block in section.blocks %}
-        {% assign related_product = block.settings.product %}
-          {% unless related_product == blank %}
-            <div class="featured__collection-product product-index js-product-listing span-3 auto md-span-4 sm-span-6" 
-              id="product-listing-{{ product.id }}" 
-              data-product-id="{{ product.id }}"
-              data-alpha="{{ product.title }}"
-              data-price="{{ product.price }}"
-              data-aos="fade"
-              data-aos-delay="{{ forloop.index | times: 100 }}">
-              {% render 'product-listing', product: related_product %}
-            </div>
-          {% endunless %}
-        {% endfor %}
     </div>
+  </div>
 
-</section>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Initialize swiper
+      const swiper = new Swiper('.recently-viewed-swiper', {
+        slidesPerView: 1,
+        spaceBetween: 20,
+        navigation: {
+          nextEl: '.swiper-button-next',
+          prevEl: '.swiper-button-prev',
+        },
+        pagination: {
+          el: '.swiper-pagination',
+          clickable: true,
+        },
+        breakpoints: {
+          640: {
+            slidesPerView: parseInt(document.querySelector('.recently-viewed-swiper').dataset.mobileSlides) || 2,
+            spaceBetween: 20
+          },
+          1024: {
+            slidesPerView: parseInt(document.querySelector('.recently-viewed-swiper').dataset.desktopSlides) || 4,
+            spaceBetween: 30
+          }
+        }
+      });
+      
+      // Track product views and update cookie
+      {%- if request.page_type == 'product' -%}
+        const productHandle = '{{ product.handle }}';
+        let recentlyViewed = [];
+        const cookieValue = document.cookie.split('; ').find(row => row.startsWith('recently_viewed='));
+        
+        if (cookieValue) {
+          recentlyViewed = cookieValue.split('=')[1].split(',');
+        }
+        
+        // Remove if already exists to avoid duplicates
+        recentlyViewed = recentlyViewed.filter(item => item !== productHandle);
+        
+        // Add to beginning of array
+        recentlyViewed.unshift(productHandle);
+        
+        // Keep only last X products
+        const maxProducts = 10;
+        recentlyViewed = recentlyViewed.slice(0, maxProducts);
+        
+        // Set cookie (expires in 30 days)
+        const date = new Date();
+        date.setTime(date.getTime() + (30 * 24 * 60 * 60 * 1000));
+        document.cookie = `recently_viewed=${recentlyViewed.join(',')}; expires=${date.toUTCString()}; path=/`;
+      {%- endif -%}
+    });
+  </script>
+{%- endif -%}
 
 {% schema %}
 {
-  "name": "Related products",
-  "max_blocks": 4,
+  "name": "Recently Viewed Products",
   "settings": [
     {
       "type": "text",
-      "id": "title",
+      "id": "heading",
       "label": "Heading",
-      "default": "You might like"
+      "default": "Recently Viewed"
     },
     {
-      "type": "select",
-      "id": "section_padding",
-      "label": "Section spacing",
-      "options": [
-        {
-          "value": "top",
-          "label": "Top"
-        },
-        {
-          "value": "bottom",
-          "label": "Bottom"
-        },
-        {
-          "value": "both",
-          "label": "Both"
-        },
-        {
-          "value": "none",
-          "label": "None"
-        }
-      ],
-      "default": "both"
+      "type": "range",
+      "id": "desktop_slides",
+      "min": 1,
+      "max": 6,
+      "step": 1,
+      "label": "Desktop slides per view",
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "mobile_slides",
+      "min": 1,
+      "max": 3,
+      "step": 1,
+      "label": "Mobile slides per view",
+      "default": 2
+    },
+    {
+      "type": "checkbox",
+      "id": "show_navigation",
+      "label": "Show navigation arrows",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_pagination",
+      "label": "Show pagination dots",
+      "default": true
     }
   ],
-  "blocks": [
+  "presets": [
     {
-      "type": "product",
-      "name": "Product",
-      "settings": [
-        {
-          "type": "product",
-          "id": "product",
-          "label": "Product",
-          "info": "Choose a product or connect a dynamic source using metafields for hand picked related items per product."
-        }
-      ]
+      "name": "Recently Viewed Products",
+      "category": "Products"
     }
   ]
 }
 {% endschema %}
+
+<style>
+  .recently-viewed-slider-section {
+    margin: 40px 0;
+  }
+  
+  .recently-viewed-slider-section .section-header {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+  
+  .recently-viewed-swiper {
+    padding: 10px;
+  }
+  
+  .swiper-button-next,
+  .swiper-button-prev {
+    color: #000;
+    background: rgba(255,255,255,0.8);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .swiper-button-next:after,
+  .swiper-button-prev:after {
+    font-size: 20px;
+  }
+  
+  .swiper-pagination-bullet-active {
+    background: #000;
+  }
+</style>
