@@ -33,7 +33,7 @@
   .swiper-pagination-bullet-active {
     background: #000;
   }
-
+</style>
 {%- liquid
   assign recently_viewed = request.cookies['recently_viewed'] | split: ','
   assign product_handles_to_show = recently_viewed | uniq
@@ -190,4 +190,3 @@
 }
 {% endschema %}
 
-</style>
