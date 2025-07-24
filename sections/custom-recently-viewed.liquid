@@ -1,187 +1,238 @@
+{%- liquid
+  assign desktop_slides = section.settings.desktop_slides
+  assign mobile_slides = section.settings.mobile_slides
+  assign heading = section.settings.heading
+  assign bg_color = section.settings.bg_color
+  assign text_color = section.settings.text_color
+  assign heading_size = section.settings.heading_size
+  assign max_products = section.settings.max_products
+  assign show_product_name = section.settings.show_product_name
+-%}
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js" defer></script>
+
 <style>
-  .recently-viewed-section {
-    margin: 40px 0;
-    padding: 0 20px;
+  .custom-recent-products {
+    background-color: {{ bg_color }};
+    color: {{ text_color }};
+    padding: 40px 0;
   }
   
-  .recently-viewed-section .section-header {
+  .custom-recent-products__heading {
+    font-size: {{ heading_size }}px;
     text-align: center;
     margin-bottom: 30px;
   }
   
-  .recently-viewed-section h2 {
-    font-size: 2rem;
-    font-weight: bold;
-    margin: 0;
-  }
-  
-  .recently-viewed-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 20px;
+  .custom-recent-products__slider {
     max-width: 1200px;
     margin: 0 auto;
+    padding: 0 20px;
   }
   
-  .recently-viewed-product {
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    overflow: hidden;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  .custom-recent-products__slide {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 10px;
   }
   
-  .recently-viewed-product:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-  }
-  
-  .recently-viewed-product img {
+  .custom-recent-products__image {
     width: 100%;
-    height: 250px;
+    height: auto;
+    aspect-ratio: 1/1;
     object-fit: cover;
-    display: block;
+    border-radius: 8px;
+    margin-bottom: 10px;
   }
   
-  .recently-viewed-product-info {
-    padding: 15px;
-  }
-  
-  .recently-viewed-product-title {
-    font-size: 1.1rem;
-    font-weight: 600;
-    margin: 0 0 10px 0;
-    line-height: 1.3;
-  }
-  
-  .recently-viewed-product-title a {
-    text-decoration: none;
-    color: #333;
-  }
-  
-  .recently-viewed-product-title a:hover {
-    color: #007bff;
-  }
-  
-  .recently-viewed-product-price {
-    font-size: 1.1rem;
-    font-weight: bold;
-    color: #007bff;
-  }
-  
-  .recently-viewed-empty {
+  .custom-recent-products__title {
+    font-size: 16px;
     text-align: center;
-    padding: 40px 20px;
-    color: #666;
+    color: {{ text_color }};
+    text-decoration: none;
   }
   
-  @media (max-width: 768px) {
-    .recently-viewed-grid {
-      grid-template-columns: repeat(2, 1fr);
-      gap: 15px;
+  .swiper-button-next,
+  .swiper-button-prev {
+    color: {{ text_color }};
+  }
+  
+  @media (max-width: 749px) {
+    .custom-recent-products__slider {
+      padding: 0 15px;
     }
     
-    .recently-viewed-product img {
-      height: 200px;
-    }
-    
-    .recently-viewed-section h2 {
-      font-size: 1.5rem;
+    .custom-recent-products__heading {
+      font-size: calc({{ heading_size }}px * 0.8);
     }
   }
 </style>
 
-{%- liquid
-  assign recently_viewed_handles = request.cookies['recently_viewed'] | split: ','
-  assign valid_products = ''
-  assign product_count = 0
+<div class="custom-recent-products" data-section-id="{{ section.id }}">
+  {% if heading != blank %}
+    <h2 class="custom-recent-products__heading">{{ heading }}</h2>
+  {% endif %}
   
-  for handle in recently_viewed_handles
-    assign clean_handle = handle | strip
-    if clean_handle != blank
-      assign product = all_products[clean_handle]
-      if product != blank and product.available
-        if product_count > 0
-          assign valid_products = valid_products | append: ','
-        endif
-        assign valid_products = valid_products | append: clean_handle
-        assign product_count = product_count | plus: 1
-        if product_count >= 8
-          break
-        endif
-      endif
-    endif
-  endfor
--%}
-
-<div class="recently-viewed-section" data-section-id="{{ section.id }}">
-  <div class="section-header">
-    <h2>{{ section.settings.heading | default: 'Recently Viewed Products' }}</h2>
+  <div class="custom-recent-products__slider-container">
+    <div class="swiper custom-recent-products__slider">
+      <div class="swiper-wrapper" id="recent-products-container-{{ section.id }}">
+        <!-- Products will be loaded via JavaScript -->
+      </div>
+      
+      <div class="swiper-button-next"></div>
+      <div class="swiper-button-prev"></div>
+    </div>
   </div>
-  
-  {%- if valid_products != blank -%}
-    <div class="recently-viewed-grid">
-      {%- assign products_list = valid_products | split: ',' -%}
-      {%- for handle in products_list -%}
-        {%- assign product = all_products[handle] -%}
-        {%- if product != blank -%}
-          <div class="recently-viewed-product">
-            <a href="{{ product.url }}">
-              {%- if product.featured_image -%}
-                <img src="{{ product.featured_image | image_url: width: 300 }}" 
-                     alt="{{ product.featured_image.alt | escape }}"
-                     loading="lazy">
-              {%- else -%}
-                <div style="width:100%;height:250px;background:#f5f5f5;display:flex;align-items:center;justify-content:center;color:#999;">
-                  No Image
-                </div>
-              {%- endif -%}
-            </a>
-            <div class="recently-viewed-product-info">
-              <h3 class="recently-viewed-product-title">
-                <a href="{{ product.url }}">{{ product.title }}</a>
-              </h3>
-              <div class="recently-viewed-product-price">
-                {%- if product.compare_at_price > product.price -%}
-                  <span style="text-decoration: line-through; color: #999; margin-right: 10px;">
-                    {{ product.compare_at_price | money }}
-                  </span>
-                {%- endif -%}
-                {{ product.price | money }}
-              </div>
-            </div>
-          </div>
-        {%- endif -%}
-      {%- endfor -%}
-    </div>
-  {%- else -%}
-    <div class="recently-viewed-empty">
-      <p>No recently viewed products found. Start browsing to see your recently viewed items here!</p>
-    </div>
-  {%- endif -%}
 </div>
 
-<!-- Debug Info (remove in production) -->
-<!-- 
-Cookie value: {{ request.cookies['recently_viewed'] }}
-Valid products: {{ valid_products }}
-Product count: {{ product_count }}
--->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Function to get recently viewed products from localStorage
+    function getRecentProducts() {
+      const recentProductsJSON = localStorage.getItem('recentlyViewedProducts');
+      return recentProductsJSON ? JSON.parse(recentProductsJSON) : [];
+    }
+    
+    // Function to update the slider with recent products
+    function updateRecentProductsSlider(sectionId, maxProducts, showName) {
+      const recentProducts = getRecentProducts();
+      const container = document.getElementById(`recent-products-container-${sectionId}`);
+      
+      if (!container || recentProducts.length === 0) return;
+      
+      // Clear existing slides
+      container.innerHTML = '';
+      
+      // Limit to max products
+      const productsToShow = recentProducts.slice(0, maxProducts);
+      
+      // Create slides for each product
+      productsToShow.forEach(product => {
+        const slide = document.createElement('div');
+        slide.className = 'swiper-slide custom-recent-products__slide';
+        
+        const link = document.createElement('a');
+        link.href = product.url;
+        
+        const image = document.createElement('img');
+        image.className = 'custom-recent-products__image';
+        image.src = product.image;
+        image.alt = product.title;
+        image.loading = 'lazy';
+        
+        link.appendChild(image);
+        
+        if (showName) {
+          const title = document.createElement('a');
+          title.className = 'custom-recent-products__title';
+          title.href = product.url;
+          title.textContent = product.title;
+          link.appendChild(title);
+        }
+        
+        slide.appendChild(link);
+        container.appendChild(slide);
+      });
+      
+      // Initialize or update Swiper
+      const sliderEl = container.closest('.swiper');
+      if (window.recentProductsSwiper) {
+        window.recentProductsSwiper.update();
+      } else {
+        window.recentProductsSwiper = new Swiper(sliderEl, {
+          slidesPerView: {{ mobile_slides }},
+          spaceBetween: 20,
+          navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+          },
+          breakpoints: {
+            750: {
+              slidesPerView: {{ desktop_slides }},
+              spaceBetween: 30
+            }
+          }
+        });
+      }
+    }
+    
+    // Initialize the slider
+    updateRecentProductsSlider('{{ section.id }}', {{ max_products }}, {{ show_product_name }});
+  });
+</script>
 
 {% schema %}
 {
-  "name": "custom-recently-viewed",
+  "name": "Custom Recent Products",
   "settings": [
     {
       "type": "text",
       "id": "heading",
-      "label": "Section Heading",
+      "label": "Heading",
       "default": "Recently Viewed Products"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "min": 12,
+      "max": 36,
+      "step": 1,
+      "unit": "px",
+      "label": "Heading size",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "desktop_slides",
+      "min": 1,
+      "max": 6,
+      "step": 1,
+      "label": "Number of slides on desktop",
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "mobile_slides",
+      "min": 1,
+      "max": 3,
+      "step": 1,
+      "label": "Number of slides on mobile",
+      "default": 2
+    },
+    {
+      "type": "range",
+      "id": "max_products",
+      "min": 3,
+      "max": 20,
+      "step": 1,
+      "label": "Maximum products to show",
+      "default": 10
+    },
+    {
+      "type": "checkbox",
+      "id": "show_product_name",
+      "label": "Show product name",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background color",
+      "default": "#f5f5f5"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#333333"
     }
   ],
   "presets": [
     {
-      "name": "custom-recently-viewed",
-      "category": "Product"
+      "name": "Custom Recent Products",
+      "category": "Products"
     }
   ]
 }
