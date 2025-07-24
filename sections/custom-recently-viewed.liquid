@@ -114,43 +114,6 @@
           }
         });
       }
-      
-      // Track product views and update cookie
-      {%- if request.page_type == 'product' -%}
-        const productId = '{{ product.id }}';
-        let recentlyViewed = getCookie('recently_viewed');
-        
-        if (!recentlyViewed) {
-          recentlyViewed = [];
-        } else {
-          recentlyViewed = recentlyViewed.split(',');
-        }
-        
-        // Remove if already exists to avoid duplicates
-        recentlyViewed = recentlyViewed.filter(item => item !== productId);
-        
-        // Add to beginning of array
-        recentlyViewed.unshift(productId);
-        
-        // Keep only last 10 products
-        recentlyViewed = recentlyViewed.slice(0, 10);
-        
-        // Set cookie (expires in 30 days)
-        setCookie('recently_viewed', recentlyViewed.join(','), 30);
-        
-        // Helper functions for cookies
-        function getCookie(name) {
-          const value = `; ${document.cookie}`;
-          const parts = value.split(`; ${name}=`);
-          if (parts.length === 2) return parts.pop().split(';').shift();
-        }
-        
-        function setCookie(name, value, days) {
-          const date = new Date();
-          date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-          document.cookie = `${name}=${value}; expires=${date.toUTCString()}; path=/`;
-        }
-      {%- endif -%}
     });
   </script>
 {%- endif -%}
