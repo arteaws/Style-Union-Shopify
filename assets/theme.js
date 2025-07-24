@@ -6985,11 +6985,11 @@ renderSectionFromFetch: function renderSectionFromFetch(url, section) {
       .getElementById('CollectionProductGrid').innerHTML;
 
     document.getElementById('CollectionProductGrid').innerHTML = innerHTML;
-    initEndlessScroll();
 	},
 	onActiveFilterClick: function onActiveFilterClick(event) { 
 		event.preventDefault();
 		theme.CollectionFilters.renderPage(new URL(event.currentTarget.href).searchParams.toString());
+        initEndlessScroll();
 	},
 	updateURLHash: function updateURLHash(searchParams) {
 		history.pushState({ searchParams }, '', `${window.location.pathname}${searchParams && '?'.concat(searchParams)}`);
