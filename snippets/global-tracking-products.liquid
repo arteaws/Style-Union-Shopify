@@ -1,49 +1,362 @@
 <script>
-  // Track recently viewed products
-  document.addEventListener('DOMContentLoaded', function() {
-    // Check if this is a product page and product data exists
-    if (window.location.pathname.includes('/products/') && typeof ProductJson !== 'undefined') {
-      // Get current product handle from URL
-      const productHandle = window.location.pathname.split('/products/')[1].split('/')[0];
+/**
+ * Global Recent Products Tracker
+ * File: assets/recent-products-global.js
+ * 
+ * This script should be included in theme.liquid or layout/theme.liquid
+ * It tracks product page visits and stores them in localStorage for persistence
+ */
+
+(function() {
+  'use strict';
+  
+  // Configuration
+  const STORAGE_KEY = 'recentlyViewedProducts';
+  const MAX_RECENT_PRODUCTS = 20; // Maximum number of products to store
+  
+  // Product data structure
+  function createProductData(handle, title, image, url) {
+    return {
+      handle: handle,
+      title: title,
+      image: image,
+      url: url,
+      timestamp: Date.now()
+    };
+  }
+  
+  // Get stored recent products
+  function getStoredProducts() {
+    try {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      return stored ? JSON.parse(stored) : [];
+    } catch (e) {
+      console.error('Error reading recent products from localStorage:', e);
+      return [];
+    }
+  }
+  
+  // Save products to storage
+  function saveProducts(products) {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(products));
       
-      // Get product data
-      const productData = {
-        id: {{ product.id | json }},
-        title: {{ product.title | json }},
-        url: `/products/${productHandle}`,
-        image: {{ product.featured_image | img_url: '400x' | json }}
-      };
+      // Dispatch custom event for sections to listen to
+      window.dispatchEvent(new CustomEvent('recentProductsUpdated', {
+        detail: { products: products }
+      }));
       
-      // Skip if no image available
-      if (!productData.image || productData.image.includes('no-image')) return;
-      
-      // Get existing recent products
-      let recentProducts = [];
+    } catch (e) {
+      console.error('Error saving recent products to localStorage:', e);
+    }
+  }
+  
+  // Add product to recent list
+  function addRecentProduct(productData) {
+    let products = getStoredProducts();
+    
+    // Remove existing product if it's already in the list
+    products = products.filter(p => p.handle !== productData.handle);
+    
+    // Add new product to the beginning
+    products.unshift(productData);
+    
+    // Limit the number of stored products
+    if (products.length > MAX_RECENT_PRODUCTS) {
+      products = products.slice(0, MAX_RECENT_PRODUCTS);
+    }
+    
+    // Save updated list
+    saveProducts(products);
+  }
+  
+  // Remove product from recent list
+  function removeRecentProduct(handle) {
+    let products = getStoredProducts();
+    products = products.filter(p => p.handle !== handle);
+    saveProducts(products);
+  }
+  
+  // Clear all recent products
+  function clearRecentProducts() {
+    try {
+      localStorage.removeItem(STORAGE_KEY);
+      window.dispatchEvent(new CustomEvent('recentProductsUpdated', {
+        detail: { products: [] }
+      }));
+    } catch (e) {
+      console.error('Error clearing recent products:', e);
+    }
+  }
+  
+  // Get product image URL (with multiple fallback methods)
+  function getProductImage() {
+    let imageUrl = null;
+    
+    // Method 1: Try to get featured image from window.product object
+    if (window.product && window.product.featured_image) {
+      imageUrl = window.product.featured_image;
+    }
+    
+    // Method 2: Try to get from product JSON-LD structured data
+    if (!imageUrl) {
       try {
-        const storedProducts = localStorage.getItem('recentlyViewedProducts');
-        recentProducts = storedProducts ? JSON.parse(storedProducts) : [];
+        const jsonLd = document.querySelector('script[type="application/ld+json"]');
+        if (jsonLd) {
+          const data = JSON.parse(jsonLd.textContent);
+          if (data.image && Array.isArray(data.image) && data.image.length > 0) {
+            imageUrl = data.image[0];
+          } else if (data.image && typeof data.image === 'string') {
+            imageUrl = data.image;
+          }
+        }
       } catch (e) {
-        console.error('Error parsing recent products:', e);
-        recentProducts = [];
-      }
-      
-      // Remove if this product already exists
-      recentProducts = recentProducts.filter(p => p.id !== productData.id);
-      
-      // Add new product to beginning of array
-      recentProducts.unshift(productData);
-      
-      // Limit to max products (20)
-      if (recentProducts.length > 20) {
-        recentProducts = recentProducts.slice(0, 20);
-      }
-      
-      // Save back to localStorage
-      try {
-        localStorage.setItem('recentlyViewedProducts', JSON.stringify(recentProducts));
-      } catch (e) {
-        console.error('Error saving recent products:', e);
+        console.log('Could not parse JSON-LD for product image');
       }
     }
-  });
+    
+    // Method 3: Try to get from meta tags
+    if (!imageUrl) {
+      const ogImage = document.querySelector('meta[property="og:image"]');
+      if (ogImage && ogImage.content && ogImage.content.includes('products')) {
+        imageUrl = ogImage.content;
+      }
+    }
+    
+    // Method 4: Try to get from product page selectors (multiple theme support)
+    if (!imageUrl) {
+      const imageSelectors = [
+        '.product__media img[src*="products"]',
+        '.product-single__photo img[src*="products"]', 
+        '.product-image img[src*="products"]',
+        '.product__featured-image img',
+        '.product-single__featured-image img',
+        '.product-gallery img[src*="products"]:first-child',
+        '.product-photos img[src*="products"]:first-child',
+        '.product-images img[src*="products"]:first-child',
+        '[data-product-image] img',
+        '[data-product-featured-image] img',
+        '.shopify-product-gallery img[src*="products"]:first-child',
+        '.product-form__media img[src*="products"]',
+        '.product__slider img[src*="products"]',
+        '.product-single__media img[src*="products"]'
+      ];
+      
+      for (let selector of imageSelectors) {
+        const img = document.querySelector(selector);
+        if (img && img.src && img.src.includes('products')) {
+          imageUrl = img.src;
+          break;
+        }
+      }
+    }
+    
+    // Method 5: Try to get from any product-related image
+    if (!imageUrl) {
+      const allImages = document.querySelectorAll('img[src*="products"]');
+      for (let img of allImages) {
+        if (img.src && img.naturalWidth > 100) { // Ensure it's not a tiny image
+          imageUrl = img.src;
+          break;
+        }
+      }
+    }
+    
+    // Method 6: Look for Shopify CDN images
+    if (!imageUrl) {
+      const shopifyImages = document.querySelectorAll('img[src*="shopify.com"], img[src*="cdn.shopify"]');
+      for (let img of shopifyImages) {
+        if (img.src && (img.src.includes('products') || img.src.includes('files'))) {
+          imageUrl = img.src;
+          break;
+        }
+      }
+    }
+    
+    // Clean up the image URL if found
+    if (imageUrl) {
+      // Remove any query parameters that might cause issues
+      imageUrl = imageUrl.split('?')[0];
+      
+      // Ensure it's a proper URL
+      if (!imageUrl.startsWith('http')) {
+        if (imageUrl.startsWith('//')) {
+          imageUrl = 'https:' + imageUrl;
+        } else if (imageUrl.startsWith('/')) {
+          imageUrl = window.location.origin + imageUrl;
+        }
+      }
+      
+      // Add a size parameter for optimization (Shopify CDN)
+      if (imageUrl.includes('shopify.com') && !imageUrl.includes('_') && !imageUrl.includes('?')) {
+        imageUrl = imageUrl.replace(/\.(jpg|jpeg|png|webp)$/i, '_300x300.$1');
+      }
+      
+      return imageUrl;
+    }
+    
+    // Fallback: Create a placeholder with product name
+    const productTitle = getProductTitle();
+    const placeholder = `https://via.placeholder.com/300x300/f0f0f0/666666?text=${encodeURIComponent(productTitle.substring(0, 20))}`;
+    
+    return placeholder;
+  }
+  
+  // Get product title
+  function getProductTitle() {
+    // Try window.product first
+    if (window.product && window.product.title) {
+      return window.product.title;
+    }
+    
+    // Try to find title in DOM
+    const titleSelectors = [
+      '.product-single__title',
+      '.product__title',
+      '.product-title',
+      'h1.product-single__title',
+      'h1[data-product-title]',
+      '.product h1',
+      '.product-single h1'
+    ];
+    
+    for (let selector of titleSelectors) {
+      const titleElement = document.querySelector(selector);
+      if (titleElement) {
+        return titleElement.textContent.trim();
+      }
+    }
+    
+    // Fallback to page title
+    return document.title.split(' – ')[0] || document.title;
+  }
+  
+  // Get product handle from URL
+  function getProductHandle() {
+    const path = window.location.pathname;
+    const match = path.match(/\/products\/([^\/\?]+)/);
+    return match ? match[1] : null;
+  }
+  
+  // Check if current page is a product page
+  function isProductPage() {
+    return window.location.pathname.includes('/products/') && 
+           !window.location.pathname.includes('/collections/');
+  }
+  
+  // Track current product if on product page
+  function trackCurrentProduct() {
+    if (!isProductPage()) return;
+    
+    const handle = getProductHandle();
+    if (!handle) return;
+    
+    // Multiple attempts to get product data
+    let attempts = 0;
+    const maxAttempts = 5;
+    
+    function attemptTracking() {
+      attempts++;
+      
+      const title = getProductTitle();
+      const image = getProductImage();
+      const url = window.location.href.split('?')[0]; // Remove query parameters
+      
+      console.log(`Attempt ${attempts}: Title: ${title}, Image: ${image}`);
+      
+      if (title && image && !image.includes('placeholder')) {
+        const productData = createProductData(handle, title, image, url);
+        addRecentProduct(productData);
+        console.log('Product tracked successfully:', productData);
+        return true;
+      }
+      
+      // If we haven't succeeded and have attempts left, try again
+      if (attempts < maxAttempts) {
+        setTimeout(attemptTracking, 1000 * attempts); // Increasing delay
+        return false;
+      }
+      
+      // Final attempt with whatever we have
+      if (title) {
+        const finalImage = image || `https://via.placeholder.com/300x300/f0f0f0/666666?text=${encodeURIComponent(title.substring(0, 15))}`;
+        const productData = createProductData(handle, title, finalImage, url);
+        addRecentProduct(productData);
+        console.log('Product tracked with fallback:', productData);
+      }
+      
+      return true;
+    }
+    
+    // Start tracking attempts
+    setTimeout(attemptTracking, 500);
+  }
+  
+  // Initialize when DOM is ready
+  function init() {
+    // Track current product if on product page
+    trackCurrentProduct();
+    
+    // Also listen for window.product changes (some themes load this dynamically)
+    let productCheckInterval = setInterval(() => {
+      if (window.product && isProductPage()) {
+        clearInterval(productCheckInterval);
+        setTimeout(trackCurrentProduct, 100);
+      }
+    }, 500);
+    
+    // Clear interval after 10 seconds to avoid infinite checking
+    setTimeout(() => {
+      if (productCheckInterval) {
+        clearInterval(productCheckInterval);
+      }
+    }, 10000);
+    
+    // Also track when navigating via AJAX (for themes that use it)
+    let currentURL = window.location.href;
+    const observer = new MutationObserver(() => {
+      if (window.location.href !== currentURL) {
+        currentURL = window.location.href;
+        setTimeout(trackCurrentProduct, 500);
+      }
+    });
+    
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true
+    });
+    
+    // Listen for theme-specific events
+    document.addEventListener('product:loaded', trackCurrentProduct);
+    document.addEventListener('variant:change', trackCurrentProduct);
+    window.addEventListener('product:updated', trackCurrentProduct);
+  }
+  
+  // Expose public API
+  window.RecentProducts = {
+    add: addRecentProduct,
+    remove: removeRecentProduct,
+    clear: clearRecentProducts,
+    get: getStoredProducts,
+    track: trackCurrentProduct
+  };
+  
+  // Initialize when page loads
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+  
+  // For debugging
+  if (window.location.search.includes('debug=recent')) {
+    console.log('Recent Products Debug Mode');
+    console.log('Stored products:', getStoredProducts());
+    console.log('Current page is product:', isProductPage());
+    console.log('Product handle:', getProductHandle());
+    console.log('Product title:', getProductTitle());
+    console.log('Product image:', getProductImage());
+  }
+  
+})();
 </script>
