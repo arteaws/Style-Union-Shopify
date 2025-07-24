@@ -36,26 +36,30 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/8.4.7/swiper-bundle.min.css" />
 
 {%- liquid
-  # Get recently viewed products from cookie
-  assign recently_viewed_ids = ""
-  if request.cookies['recently_viewed']
-    assign recently_viewed_ids = request.cookies['recently_viewed'] | split: ',' | uniq
-  endif
+  assign recently_viewed = request.cookies['recently_viewed'] | split: ','
+  assign product_handles_to_show = recently_viewed | uniq
+  assign products_to_show = ''
   
-  # Filter out invalid/empty products
-  assign valid_products = ""
-  for product_id in recently_viewed_ids
-    assign product = all_products[product_id]
-    if product != blank
-      if valid_products != ""
-        assign valid_products = valid_products | append: ','
-      endif
-      assign valid_products = valid_products | append: product.id
+  for handle in product_handles_to_show
+    assign product = all_products[handle]
+    if product != blank and product.available
+      capture products_to_show
+        echo products_to_show
+        unless forloop.first
+          echo ','
+        endunless
+        echo product.handle
+      endcapture
     endif
   endfor
 -%}
 
-{%- if valid_products != "" -%}
+{%- comment -%}Debug: Show what we have{%- endcomment -%}
+{%- if recently_viewed.size > 0 -%}
+  <!-- Debug: Recently viewed handles: {{ recently_viewed | join: ', ' }} -->
+{%- endif -%}
+
+{%- if products_to_show != blank -%}
   <div class="recently-viewed-slider-section" data-section-id="{{ section.id }}">
     <div class="page-width">
       <h2 class="section-header">{{ section.settings.heading | default: 'Recently Viewed' }}</h2>
@@ -64,12 +68,14 @@
            data-desktop-slides="{{ section.settings.desktop_slides }}"
            data-mobile-slides="{{ section.settings.mobile_slides }}">
         <div class="swiper-wrapper">
-          {%- assign products_list = valid_products | split: ',' -%}
-          {%- for product_id in products_list -%}
-            {%- assign product = all_products[product_id] -%}
-            <div class="swiper-slide">
-              {% render 'product-listing', product: product %}
-            </div>
+          {%- assign products_list = products_to_show | split: ',' -%}
+          {%- for handle in products_list -%}
+            {%- assign product = all_products[handle] -%}
+            {%- if product != blank -%}
+              <div class="swiper-slide">
+                {% render 'product-listing', product: product %}
+              </div>
+            {%- endif -%}
           {%- endfor -%}
         </div>
         
@@ -89,35 +95,35 @@
   <script>
     document.addEventListener('DOMContentLoaded', function() {
       // Initialize swiper
-      const swiperEl = document.querySelector('.recently-viewed-swiper');
-      if (swiperEl) {
-        new Swiper(swiperEl, {
-          slidesPerView: 1,
-          spaceBetween: 20,
-          navigation: {
-            nextEl: '.swiper-button-next',
-            prevEl: '.swiper-button-prev',
+      const swiper = new Swiper('.recently-viewed-swiper', {
+        slidesPerView: 1,
+        spaceBetween: 20,
+        navigation: {
+          nextEl: '.swiper-button-next',
+          prevEl: '.swiper-button-prev',
+        },
+        pagination: {
+          el: '.swiper-pagination',
+          clickable: true,
+        },
+        breakpoints: {
+          640: {
+            slidesPerView: parseInt(document.querySelector('.recently-viewed-swiper').dataset.mobileSlides) || 2,
+            spaceBetween: 20
           },
-          pagination: {
-            el: '.swiper-pagination',
-            clickable: true,
-          },
-          breakpoints: {
-            640: {
-              slidesPerView: parseInt(swiperEl.dataset.mobileSlides) || 2,
-              spaceBetween: 20
-            },
-            1024: {
-              slidesPerView: parseInt(swiperEl.dataset.desktopSlides) || 4,
-              spaceBetween: 30
-            }
+          1024: {
+            slidesPerView: parseInt(document.querySelector('.recently-viewed-swiper').dataset.desktopSlides) || 4,
+            spaceBetween: 30
           }
-        });
-      }
-      
-      // Track product views and update cooki
+        }
+      });
     });
+  
   </script>
+{%- else -%}
+  {%- comment -%}Show debug info when no products{%- endcomment -%}
+  <!-- Debug: No recently viewed products found -->
+  <!-- Cookie value: {{ request.cookies['recently_viewed'] }} -->
 {%- endif -%}
 
 {% schema %}
