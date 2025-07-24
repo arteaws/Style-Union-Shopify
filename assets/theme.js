@@ -6926,56 +6926,17 @@ sidebarFilters: function sidebarFilters(context) {
     Shopify.theme.quickview.init();
     WAU.ProductGridVideo.init(); 
 	},
-renderSectionFromFetch: function renderSectionFromFetch(url, section) {
-  console.log("Show Infinite"); 
-  fetch(url)
-    .then(response => response.text())
-    .then((responseText) => {
-      const html = responseText;
-      this.filterData = [...this.filterData, { html, url }];
-      theme.CollectionFilters.renderProductGrid(html);
-      theme.CollectionFilters.renderFilters();
-      
-      // Reinitialize infinite scroll after filter changes
-      this.setupInfiniteScroll();
-    });
-},
-
-setupInfiniteScroll: function() {
-  // Destroy existing infinite scroll instance if it exists
-  if (this.endlessScroll) {
-    this.endlessScroll.destroy();
-  }
-  
-  // Get current filter parameters from URL
-  const currentUrl = new URL(window.location.href);
-  const searchParams = currentUrl.search;
-  
-  this.endlessScroll = new Ajaxinate({
-    container: '#main-collection-product-grid',
-    pagination: '#Huratips-Pagination',
-    loadingText: '<img class="preloader-new" src="https://cdn.shopify.com/s/files/1/0623/4754/2777/files/Iphone-spinner-2_a34e5a24-da69-4a18-b9ba-563ae9b95135.gif?v=1751544968" >',
-    callback: function() {
-      if (typeof ReloadSmartWishlist === 'function') {
-        ReloadSmartWishlist();
-      }
-    },
-    // Modify the URL to include current filters
-    getNextUrl: function(pagination) {
-      const nextUrl = pagination.querySelector('a').href;
-      // If there are filter parameters, preserve them
-      if (searchParams) {
-        return nextUrl + (nextUrl.includes('?') ? '&' : '?') + searchParams.slice(1);
-      }
-      return nextUrl;
-    }
-  });
-},
-
-// Initialize on page load
-init: function() {
-  this.setupInfiniteScroll();
-},
+	renderSectionFromFetch: function renderSectionFromFetch(url, section) {
+      console.log("Show Infinite"); 
+		fetch(url)
+			.then(response => response.text())
+			.then((responseText) => {
+				const html = responseText;
+				this.filterData = [...this.filterData, { html, url }];
+				theme.CollectionFilters.renderProductGrid(html);
+				theme.CollectionFilters.renderFilters();
+			});
+	},
 	renderSectionFromCache: function renderSectionFromCache(filterDataUrl, section) {
 		const html = this.filterData.find(filterDataUrl).html;
 		theme.CollectionFilters.renderProductGrid(html);
