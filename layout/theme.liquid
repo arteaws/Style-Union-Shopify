@@ -352,7 +352,9 @@ select.restock-alerts-country-select.selectBoxStyle {
     {% render 'magicSidecartScript' %}
     {% render 'razorpay-magic-checkout' %} 
     <script>
+  
  {%- if request.page_type == 'product' -%}
+    document.addEventListener('DOMContentLoaded', function() {
         const productId = '{{ product.id }}';
         let recentlyViewed = getCookie('recently_viewed');
         
@@ -386,6 +388,7 @@ select.restock-alerts-country-select.selectBoxStyle {
           date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
           document.cookie = `${name}=${value}; expires=${date.toUTCString()}; path=/`;
         }
+          });
       {%- endif -%}
        
     </script>
