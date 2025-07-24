@@ -6993,10 +6993,9 @@ renderSectionFromFetch: function renderSectionFromFetch(url, section) {
 	},
 	updateURLHash: function updateURLHash(searchParams) {
 		history.pushState({ searchParams }, '', `${window.location.pathname}${searchParams && '?'.concat(searchParams)}`);
-      // console.log('show infinite 2');
+        initEndlessScroll();
 	},
 	getSections: function getSections() {
-    initEndlessScroll();
     return [
       {
         id: 'main-collection-product-grid',
