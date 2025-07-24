@@ -332,19 +332,44 @@ data-collection-link="{{ collection_link }}">
 
 
 <script>
-  document.addEventListener("DOMContentLoaded", function() {
-    var endlessScroll = new Ajaxinate({
-      container: '#main-collection-product-grid',
-      pagination: '#Huratips-Pagination',
-      loadingText: '<img class="preloader-new" src="https://cdn.shopify.com/s/files/1/0623/4754/2777/files/Iphone-spinner-2_a34e5a24-da69-4a18-b9ba-563ae9b95135.gif?v=1751544968" >',
-      callback: function() {
-        // This function runs after new content is loaded
-        if (typeof ReloadSmartWishlist === 'function') {
-          ReloadSmartWishlist();
+document.addEventListener("DOMContentLoaded", function() {
+  // Initialize a flag to track if Ajaxinate is already set up
+  let isAjaxinateInitialized = false;
+  
+  // Function to initialize Ajaxinate
+  function initAjaxinate() {
+    if (!isAjaxinateInitialized) {
+      isAjaxinateInitialized = true;
+      return new Ajaxinate({
+        container: '#main-collection-product-grid',
+        pagination: '#Huratips-Pagination',
+        loadingText: '<img class="preloader-new" src="https://cdn.shopify.com/s/files/1/0623/4754/2777/files/Iphone-spinner-2_a34e5a24-da69-4a18-b9ba-563ae9b95135.gif?v=1751544968" >',
+        callback: function() {
+          if (typeof ReloadSmartWishlist === 'function') {
+            ReloadSmartWishlist();
+          }
         }
-      }
+      });
+    }
+    return null;
+  }
+  
+  // Initialize on page load
+  initAjaxinate();
+  
+  // Set up click handler for filter button
+  const filterButtons = document.querySelectorAll('.js-collection-side-filter');
+  filterButtons.forEach(button => {
+    button.addEventListener('click', function() {
+      // When filter is clicked, reinitialize Ajaxinate after a short delay
+      // (to allow for the new content to load)
+      setTimeout(() => {
+        isAjaxinateInitialized = false; // Reset flag
+        initAjaxinate();
+      }, 500); // Adjust delay as needed
     });
   });
+});
 </script>
 {% schema %}
 {
