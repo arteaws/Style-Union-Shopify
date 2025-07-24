@@ -34,7 +34,7 @@
   }
 </style>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/8.4.7/swiper-bundle.min.css" />
-
+<h2>Recently Viewed</h2>
 {%- liquid
   assign recently_viewed = request.cookies['recently_viewed'] | split: ','
   assign product_handles_to_show = recently_viewed | uniq
@@ -58,7 +58,7 @@
 {%- if recently_viewed.size > 0 -%}
   <!-- Debug: Recently viewed handles: {{ recently_viewed | join: ', ' }} -->
 {%- endif -%}
-yhi hai
+
 {%- if products_to_show != blank -%}
   <div class="recently-viewed-slider-section" data-section-id="{{ section.id }}">
     <div class="page-width">
