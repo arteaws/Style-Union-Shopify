@@ -6926,7 +6926,10 @@ sidebarFilters: function sidebarFilters(context) {
     Shopify.theme.quickview.init();
     WAU.ProductGridVideo.init(); 
 	},
-  function initEndlessScroll() {
+ 
+	renderSectionFromFetch: function renderSectionFromFetch(url, section) {
+      console.log("Show Infinite");
+      function initEndlessScroll() {
   let endlessScroll = new Ajaxinate({
     container: '#main-collection-product-grid',
     pagination: '#Huratips-Pagination',
@@ -6938,10 +6941,7 @@ sidebarFilters: function sidebarFilters(context) {
       }
     }
   });
-},
-	renderSectionFromFetch: function renderSectionFromFetch(url, section) {
-      console.log("Show Infinite");
-     initEndlessScroll();
+}
 		fetch(url)
 			.then(response => response.text())
 			.then((responseText) => {
