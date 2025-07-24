@@ -6926,17 +6926,77 @@ sidebarFilters: function sidebarFilters(context) {
     Shopify.theme.quickview.init();
     WAU.ProductGridVideo.init(); 
 	},
-	renderSectionFromFetch: function renderSectionFromFetch(url, section) {
-      console.log("Show Infinite"); 
-		fetch(url)
-			.then(response => response.text())
-			.then((responseText) => {
-				const html = responseText;
-				this.filterData = [...this.filterData, { html, url }];
-				theme.CollectionFilters.renderProductGrid(html);
-				theme.CollectionFilters.renderFilters();
-			});
-	},
+// Global variable to track infinite scroll instance
+let endlessScroll = null;
+
+// Modified renderSectionFromFetch function
+renderSectionFromFetch: function(url, section) {
+  console.log("Show Infinite");
+  fetch(url)
+    .then(response => response.text())
+    .then((responseText) => {
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(responseText, 'text/html');
+      
+      // Extract just the product grid HTML
+      const newProducts = doc.querySelector('#main-collection-product-grid').innerHTML;
+      const pagination = doc.querySelector('#Huratips-Pagination').innerHTML;
+      
+      // Append new products to existing grid
+      document.querySelector('#main-collection-product-grid').insertAdjacentHTML('beforeend', newProducts);
+      document.querySelector('#Huratips-Pagination').innerHTML = pagination;
+      
+      // Reinitialize infinite scroll
+      this.initializeInfiniteScroll();
+      
+      // Call any post-load functions
+      if (typeof ReloadSmartWishlist === 'function') {
+        ReloadSmartWishlist();
+      }
+    });
+},
+
+// Initialize or reinitialize infinite scroll
+initializeInfiniteScroll: function() {
+  // Destroy existing instance if it exists
+  if (endlessScroll) {
+    endlessScroll.destroy();
+  }
+  
+  // Create new instance with current URL parameters
+  endlessScroll = new Ajaxinate({
+    container: '#main-collection-product-grid',
+    pagination: '#Huratips-Pagination',
+    loadingText: '<img class="preloader-new" src="https://cdn.shopify.com/s/files/1/0623/4754/2777/files/Iphone-spinner-2_a34e5a24-da69-4a18-b9ba-563ae9b95135.gif?v=1751544968">',
+    callback: function() {
+      if (typeof ReloadSmartWishlist === 'function') {
+        ReloadSmartWishlist();
+      }
+    }
+  });
+},
+
+// Modify your filter handling to use AJAX
+handleFilterChange: function(url) {
+  fetch(url)
+    .then(response => response.text())
+    .then((responseText) => {
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(responseText, 'text/html');
+      
+      // Replace product grid and pagination
+      document.querySelector('#main-collection-product-grid').innerHTML = 
+        doc.querySelector('#main-collection-product-grid').innerHTML;
+      document.querySelector('#Huratips-Pagination').innerHTML = 
+        doc.querySelector('#Huratips-Pagination').innerHTML;
+      
+      // Update URL without reload
+      window.history.pushState({}, '', url);
+      
+      // Reinitialize infinite scroll
+      this.initializeInfiniteScroll();
+    });
+}
 	renderSectionFromCache: function renderSectionFromCache(filterDataUrl, section) {
 		const html = this.filterData.find(filterDataUrl).html;
 		theme.CollectionFilters.renderProductGrid(html);
