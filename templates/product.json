@@ -247,6 +247,7 @@
     },
     "custom_recently_viewed_ACymQC": {
       "type": "custom-recently-viewed",
+      "disabled": true,
       "name": "Recently Viewed Products",
       "settings": {
         "show_heading": true,
