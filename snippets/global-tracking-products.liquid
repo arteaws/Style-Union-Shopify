@@ -3,7 +3,7 @@
   document.addEventListener('DOMContentLoaded', function() {
     // Check if this is a product page
     if (window.location.pathname.includes('/products/')) {
-      // Get product data
+      // Get product data from Shopify global object
       const productData = {
         id: {{ product.id | json }},
         title: {{ product.title | json }},
@@ -12,13 +12,18 @@
       };
       
       // Get existing recent products
-      let recentProducts = JSON.parse(localStorage.getItem('recentlyViewedProducts') || [];
+      let recentProducts = JSON.parse(localStorage.getItem('recentlyViewedProducts') || '[]');
       
       // Remove if this product already exists
       recentProducts = recentProducts.filter(p => p.id !== productData.id);
       
       // Add new product to beginning of array
       recentProducts.unshift(productData);
+      
+      // Limit to 20 products
+      if (recentProducts.length > 20) {
+        recentProducts = recentProducts.slice(0, 20);
+      }
       
       // Save back to localStorage
       localStorage.setItem('recentlyViewedProducts', JSON.stringify(recentProducts));
