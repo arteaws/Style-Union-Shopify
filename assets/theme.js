@@ -6996,11 +6996,11 @@ renderSectionFromFetch: function renderSectionFromFetch(url, section) {
       console.log('show infinite 2');
 	},
 	getSections: function getSections() {
+            console.log('show infinite 3'); 
     return [
       {
         id: 'main-collection-product-grid',
         section: document.getElementById('main-collection-product-grid').dataset.id,
-        console.log('show infinite 3');
       }
     ]
   }
