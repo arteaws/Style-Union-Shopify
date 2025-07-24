@@ -6928,7 +6928,6 @@ sidebarFilters: function sidebarFilters(context) {
 	},
 	renderSectionFromFetch: function renderSectionFromFetch(url, section) {
       console.log("Show Infinite"); 
-  {{ 'https://cdn.shopify.com/s/files/1/0382/4185/files/ajaxinate.js?937' | script_tag }}
 		fetch(url)
 			.then(response => response.text())
 			.then((responseText) => {
