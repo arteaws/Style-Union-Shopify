@@ -100,7 +100,10 @@
       const recentProducts = getRecentProducts();
       const container = document.getElementById(`recent-products-container-${sectionId}`);
       
-      if (!container || recentProducts.length === 0) return;
+      if (!container || recentProducts.length === 0) {
+        container.closest('.custom-recent-products').style.display = 'none';
+        return;
+      }
       
       // Clear existing slides
       container.innerHTML = '';
@@ -115,19 +118,32 @@
         
         const link = document.createElement('a');
         link.href = product.url;
+        link.style.display = 'block';
+        link.style.width = '100%';
+        
+        const imageWrapper = document.createElement('div');
+        imageWrapper.style.position = 'relative';
+        imageWrapper.style.paddingBottom = '100%';
+        imageWrapper.style.overflow = 'hidden';
         
         const image = document.createElement('img');
         image.className = 'custom-recent-products__image';
         image.src = product.image;
-        image.alt = product.title;
+        image.alt = product.title || 'Product image';
         image.loading = 'lazy';
+        image.style.position = 'absolute';
+        image.style.top = '0';
+        image.style.left = '0';
+        image.style.width = '100%';
+        image.style.height = '100%';
+        image.style.objectFit = 'cover';
         
-        link.appendChild(image);
+        imageWrapper.appendChild(image);
+        link.appendChild(imageWrapper);
         
-        if (showName) {
-          const title = document.createElement('a');
+        if (showName && product.title) {
+          const title = document.createElement('div');
           title.className = 'custom-recent-products__title';
-          title.href = product.url;
           title.textContent = product.title;
           link.appendChild(title);
         }
