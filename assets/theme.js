@@ -1,3 +1,22 @@
+
+function initEndlessScroll() {
+  let endlessScroll = new Ajaxinate({
+    container: '#main-collection-product-grid',
+    pagination: '#Huratips-Pagination',
+    loadingText: '<img class="preloader-new" src="https://cdn.shopify.com/s/files/1/0623/4754/2777/files/Iphone-spinner-2_a34e5a24-da69-4a18-b9ba-563ae9b95135.gif?v=1751544968" >',
+    callback: function() {
+      // This function runs after new content is loaded
+      if (typeof ReloadSmartWishlist === 'function') {
+        ReloadSmartWishlist();
+      }
+    }
+  });
+  console.log('filter wala hai');
+}
+
+
+
+
 window.theme = window.theme || {};
 
 (function vendorAOS(){
@@ -6924,19 +6943,23 @@ sidebarFilters: function sidebarFilters(context) {
       }
 		}
     Shopify.theme.quickview.init();
-    WAU.ProductGridVideo.init();
+    WAU.ProductGridVideo.init(); 
 	},
-	renderSectionFromFetch: function renderSectionFromFetch(url, section) {
+  
+renderSectionFromFetch: function renderSectionFromFetch(url, section) {
+  // console.log("Show Infinite"); 
+  fetch(url)
+    .then(response => response.text())
+    .then((responseText) => {
+      const html = responseText;
+      this.filterData = [...this.filterData, { html, url }];
+      theme.CollectionFilters.renderProductGrid(html);
+      theme.CollectionFilters.renderFilters();
       
-		fetch(url)
-			.then(response => response.text())
-			.then((responseText) => {
-				const html = responseText;
-				this.filterData = [...this.filterData, { html, url }];
-				theme.CollectionFilters.renderProductGrid(html);
-				theme.CollectionFilters.renderFilters();
-			});
-	},
+      // Initialize endless scroll after new content is loaded
+      // initEndlessScroll();
+    });
+},
 	renderSectionFromCache: function renderSectionFromCache(filterDataUrl, section) {
 		const html = this.filterData.find(filterDataUrl).html;
 		theme.CollectionFilters.renderProductGrid(html);
@@ -6963,12 +6986,16 @@ sidebarFilters: function sidebarFilters(context) {
 
     document.getElementById('CollectionProductGrid').innerHTML = innerHTML;
 	},
-	onActiveFilterClick: function onActiveFilterClick(event) {
+	onActiveFilterClick: function onActiveFilterClick(event) { 
 		event.preventDefault();
 		theme.CollectionFilters.renderPage(new URL(event.currentTarget.href).searchParams.toString());
+
 	},
 	updateURLHash: function updateURLHash(searchParams) {
 		history.pushState({ searchParams }, '', `${window.location.pathname}${searchParams && '?'.concat(searchParams)}`);
+        setInterval(function() {
+    initEndlessScroll();
+}, 3000);
 	},
 	getSections: function getSections() {
     return [
