@@ -35,8 +35,6 @@
 </style>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/8.4.7/swiper-bundle.min.css" />
 
-
-
 {%- liquid
   assign recently_viewed = request.cookies['recently_viewed'] | split: ','
   assign product_handles_to_show = recently_viewed | uniq
@@ -44,17 +42,22 @@
   
   for handle in product_handles_to_show
     assign product = all_products[handle]
-    if product != blank
+    if product != blank and product.available
       capture products_to_show
         echo products_to_show
         unless forloop.first
           echo ','
         endunless
-        echo product.id
+        echo product.handle
       endcapture
     endif
   endfor
 -%}
+
+{%- comment -%}Debug: Show what we have{%- endcomment -%}
+{%- if recently_viewed.size > 0 -%}
+  <!-- Debug: Recently viewed handles: {{ recently_viewed | join: ', ' }} -->
+{%- endif -%}
 
 {%- if products_to_show != blank -%}
   <div class="recently-viewed-slider-section" data-section-id="{{ section.id }}">
@@ -66,8 +69,8 @@
            data-mobile-slides="{{ section.settings.mobile_slides }}">
         <div class="swiper-wrapper">
           {%- assign products_list = products_to_show | split: ',' -%}
-          {%- for product_id in products_list -%}
-            {%- assign product = all_products[product_id] -%}
+          {%- for handle in products_list -%}
+            {%- assign product = all_products[handle] -%}
             {%- if product != blank -%}
               <div class="swiper-slide">
                 {% render 'product-listing', product: product %}
@@ -87,7 +90,8 @@
       </div>
     </div>
   </div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/8.4.7/swiper-bundle.min.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/8.4.7/swiper-bundle.min.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', function() {
       // Initialize swiper
@@ -113,39 +117,62 @@
           }
         }
       });
+    });
+    
+    // Track product views - this should run on every page
+    (function() {
+      // Function to set cookie
+      function setCookie(name, value, days) {
+        const date = new Date();
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+        document.cookie = name + "=" + value + "; expires=" + date.toUTCString() + "; path=/; SameSite=Lax";
+      }
       
-      // Track product views and update cookie
+      // Function to get cookie
+      function getCookie(name) {
+        const cookieValue = document.cookie.split('; ').find(row => row.startsWith(name + '='));
+        return cookieValue ? cookieValue.split('=')[1] : '';
+      }
+      
+      // Only track on product pages
       {%- if request.page_type == 'product' -%}
         const productHandle = '{{ product.handle }}';
-        let recentlyViewed = [];
-        const cookieValue = document.cookie.split('; ').find(row => row.startsWith('recently_viewed='));
         
-        if (cookieValue) {
-          recentlyViewed = cookieValue.split('=')[1].split(',');
+        if (productHandle) {
+          let recentlyViewed = [];
+          const existingCookie = getCookie('recently_viewed');
+          
+          if (existingCookie) {
+            recentlyViewed = existingCookie.split(',').filter(handle => handle.trim() !== '');
+          }
+          
+          // Remove if already exists to avoid duplicates
+          recentlyViewed = recentlyViewed.filter(item => item !== productHandle);
+          
+          // Add to beginning of array
+          recentlyViewed.unshift(productHandle);
+          
+          // Keep only last 10 products
+          recentlyViewed = recentlyViewed.slice(0, 10);
+          
+          // Set cookie (expires in 30 days)
+          setCookie('recently_viewed', recentlyViewed.join(','), 30);
+          
+          // Debug log
+          console.log('Recently viewed updated:', recentlyViewed);
         }
-        
-        // Remove if already exists to avoid duplicates
-        recentlyViewed = recentlyViewed.filter(item => item !== productHandle);
-        
-        // Add to beginning of array
-        recentlyViewed.unshift(productHandle);
-        
-        // Keep only last X products
-        const maxProducts = 10;
-        recentlyViewed = recentlyViewed.slice(0, maxProducts);
-        
-        // Set cookie (expires in 30 days)
-        const date = new Date();
-        date.setTime(date.getTime() + (30 * 24 * 60 * 60 * 1000));
-        document.cookie = `recently_viewed=${recentlyViewed.join(',')}; expires=${date.toUTCString()}; path=/`;
       {%- endif -%}
-    });
+    })();
   </script>
+{%- else -%}
+  {%- comment -%}Show debug info when no products{%- endcomment -%}
+  <!-- Debug: No recently viewed products found -->
+  <!-- Cookie value: {{ request.cookies['recently_viewed'] }} -->
 {%- endif -%}
 
 {% schema %}
 {
-  "name": "custom-recently-viewed",
+  "name": "Recently Viewed Products",
   "settings": [
     {
       "type": "text",
@@ -186,7 +213,7 @@
   ],
   "presets": [
     {
-      "name": "custom-recently-viewed",
+      "name": "Recently Viewed Products",
       "category": "Products"
     }
   ]
