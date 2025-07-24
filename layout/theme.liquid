@@ -352,7 +352,6 @@ select.restock-alerts-country-select.selectBoxStyle {
     {% render 'magicSidecartScript' %}
     {% render 'razorpay-magic-checkout' %} 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
           (function() {
       // Function to set cookie
       function setCookie(name, value, days) {
@@ -396,7 +395,7 @@ select.restock-alerts-country-select.selectBoxStyle {
         }
       {%- endif -%}
     })();
-       });    
+       
     </script>
   </body>
 </html>
