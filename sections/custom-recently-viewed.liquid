@@ -1,338 +1,175 @@
-{% comment %}
-  Recently Viewed Products Section
-  This section shows products that the user has previously viewed
-  Only displays if there are recently viewed products in localStorage
-{% endcomment %}
-
 <style>
-  .recently-viewed-section {
-    padding: {{ section.settings.section_padding_top }}px 0 {{ section.settings.section_padding_bottom }}px;
-    display: none; /* Hidden by default, shown by JS when products exist */
+  .recently-viewed-slider-section {
+    margin: 40px 0;
   }
   
-  .recently-viewed-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
-  }
-  
-  .recently-viewed-title {
-    font-size: {{ section.settings.heading_size }}px;
-    font-weight: {{ section.settings.heading_weight }};
-    text-align: {{ section.settings.heading_alignment }};
+  .recently-viewed-slider-section .section-header {
+    text-align: center;
     margin-bottom: 30px;
-    color: {{ section.settings.heading_color }};
   }
   
   .recently-viewed-swiper {
-    overflow: hidden;
-    padding-bottom: 20px;
-  }
-  
-  .swiper-slide {
-    height: auto;
+    padding: 10px;
   }
   
   .swiper-button-next,
   .swiper-button-prev {
-    color: {{ section.settings.navigation_color }};
+    color: #000;
+    background: rgba(255,255,255,0.8);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .swiper-button-next:after,
+  .swiper-button-prev:after {
+    font-size: 20px;
   }
   
   .swiper-pagination-bullet-active {
-    background: {{ section.settings.navigation_color }};
-  }
-  
-  @media (max-width: 768px) {
-    .recently-viewed-container {
-      padding: 0 15px;
-    }
-    
-    .recently-viewed-title {
-      font-size: {{ section.settings.heading_size | minus: 8 }}px;
-    }
+    background: #000;
   }
 </style>
-
-<!-- Swiper CSS -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/8.4.7/swiper-bundle.min.css" />
 
-<div class="recently-viewed-section" id="recently-viewed-section">
-  <div class="recently-viewed-container">
-    {% if section.settings.show_heading %}
-      <h2 class="recently-viewed-title">{{ section.settings.heading_text }}</h2>
-    {% endif %}
-    
-    <div class="swiper recently-viewed-swiper">
-      <div class="swiper-wrapper" id="recently-viewed-products">
-        <!-- Products will be dynamically loaded here by JavaScript -->
+
+
+{%- liquid
+  assign recently_viewed = request.cookies['recently_viewed'] | split: ','
+  assign product_handles_to_show = recently_viewed | uniq
+  assign products_to_show = ''
+  
+  for handle in product_handles_to_show
+    assign product = all_products[handle]
+    if product != blank
+      capture products_to_show
+        echo products_to_show
+        unless forloop.first
+          echo ','
+        endunless
+        echo product.id
+      endcapture
+    endif
+  endfor
+-%}
+
+{%- if products_to_show != blank -%}
+  <div class="recently-viewed-slider-section" data-section-id="{{ section.id }}">
+    <div class="page-width">
+      <h2 class="section-header">{{ section.settings.heading | default: 'Recently Viewed' }}</h2>
+      
+      <div class="swiper recently-viewed-swiper"
+           data-desktop-slides="{{ section.settings.desktop_slides }}"
+           data-mobile-slides="{{ section.settings.mobile_slides }}">
+        <div class="swiper-wrapper">
+          {%- assign products_list = products_to_show | split: ',' -%}
+          {%- for product_id in products_list -%}
+            {%- assign product = all_products[product_id] -%}
+            {%- if product != blank -%}
+              <div class="swiper-slide">
+                {% render 'product-listing', product: product %}
+              </div>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+        
+        {%- if section.settings.show_navigation -%}
+          <div class="swiper-button-next"></div>
+          <div class="swiper-button-prev"></div>
+        {%- endif -%}
+        
+        {%- if section.settings.show_pagination -%}
+          <div class="swiper-pagination"></div>
+        {%- endif -%}
       </div>
-      
-      {% if section.settings.show_navigation %}
-        <div class="swiper-button-next"></div>
-        <div class="swiper-button-prev"></div>
-      {% endif %}
-      
-      {% if section.settings.show_pagination %}
-        <div class="swiper-pagination"></div>
-      {% endif %}
     </div>
   </div>
-</div>
-
-<!-- Swiper JS -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/8.4.7/swiper-bundle.min.js"></script>
-
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-  // Configuration from Liquid settings
-  const swiperConfig = {
-    slidesPerView: {{ section.settings.slides_per_view_mobile }},
-    spaceBetween: {{ section.settings.space_between }},
-    loop: {{ section.settings.enable_loop }},
-    autoplay: {{ section.settings.enable_autoplay }} ? {
-      delay: {{ section.settings.autoplay_delay }},
-      disableOnInteraction: false,
-    } : false,
-    breakpoints: {
-      768: {
-        slidesPerView: {{ section.settings.slides_per_view_desktop }},
-      }
-    },
-    {% if section.settings.show_navigation %}
-    navigation: {
-      nextEl: '.swiper-button-next',
-      prevEl: '.swiper-button-prev',
-    },
-    {% endif %}
-    {% if section.settings.show_pagination %}
-    pagination: {
-      el: '.swiper-pagination',
-      clickable: true,
-    },
-    {% endif %}
-  };
-
-  // Function to get recently viewed products from localStorage
-  function getRecentlyViewedProducts() {
-    try {
-      const viewedProducts = localStorage.getItem('recentlyViewedProducts');
-      return viewedProducts ? JSON.parse(viewedProducts) : [];
-    } catch (e) {
-      console.error('Error reading recently viewed products:', e);
-      return [];
-    }
-  }
-
-  // Function to save product to recently viewed
-  function saveRecentlyViewedProduct(product) {
-    try {
-      let viewedProducts = getRecentlyViewedProducts();
-      
-      // Remove product if it already exists (to avoid duplicates)
-      viewedProducts = viewedProducts.filter(p => p.id !== product.id);
-      
-      // Add to beginning of array
-      viewedProducts.unshift(product);
-      
-      // Keep only last {{ section.settings.max_products }} products
-      viewedProducts = viewedProducts.slice(0, {{ section.settings.max_products }});
-      
-      localStorage.setItem('recentlyViewedProducts', JSON.stringify(viewedProducts));
-    } catch (e) {
-      console.error('Error saving recently viewed product:', e);
-    }
-  }
-
-  // Function to load recently viewed products via AJAX
-  async function loadRecentlyViewedProducts() {
-    const viewedProducts = getRecentlyViewedProducts();
-    
-    if (viewedProducts.length === 0) {
-      return; // Don't show section if no products
-    }
-
-    const productContainer = document.getElementById('recently-viewed-products');
-    const section = document.getElementById('recently-viewed-section');
-    
-    try {
-      // Create promises for fetching each product
-      const productPromises = viewedProducts.map(async (product) => {
-        const response = await fetch(`/products/${product.handle}?view=card`);
-        if (response.ok) {
-          return await response.text();
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Initialize swiper
+      const swiper = new Swiper('.recently-viewed-swiper', {
+        slidesPerView: 1,
+        spaceBetween: 20,
+        navigation: {
+          nextEl: '.swiper-button-next',
+          prevEl: '.swiper-button-prev',
+        },
+        pagination: {
+          el: '.swiper-pagination',
+          clickable: true,
+        },
+        breakpoints: {
+          640: {
+            slidesPerView: parseInt(document.querySelector('.recently-viewed-swiper').dataset.mobileSlides) || 2,
+            spaceBetween: 20
+          },
+          1024: {
+            slidesPerView: parseInt(document.querySelector('.recently-viewed-swiper').dataset.desktopSlides) || 4,
+            spaceBetween: 30
+          }
         }
-        return null;
       });
-
-      // Wait for all products to load
-      const productCards = await Promise.all(productPromises);
       
-      // Filter out null responses and create slides
-      const validCards = productCards.filter(card => card !== null);
-      
-      if (validCards.length > 0) {
-        productContainer.innerHTML = validCards.map(card => 
-          `<div class="swiper-slide">${card}</div>`
-        ).join('');
+      // Track product views and update cookie
+      {%- if request.page_type == 'product' -%}
+        const productHandle = '{{ product.handle }}';
+        let recentlyViewed = [];
+        const cookieValue = document.cookie.split('; ').find(row => row.startsWith('recently_viewed='));
         
-        // Show the section
-        section.style.display = 'block';
+        if (cookieValue) {
+          recentlyViewed = cookieValue.split('=')[1].split(',');
+        }
         
-        // Initialize Swiper
-        new Swiper('.recently-viewed-swiper', swiperConfig);
-      }
-    } catch (error) {
-      console.error('Error loading recently viewed products:', error);
-    }
-  }
-
-  // Save current product if we're on a product page
-  {% if template contains 'product' %}
-  const currentProduct = {
-    id: {{ product.id }},
-    handle: '{{ product.handle }}',
-    title: '{{ product.title | escape }}',
-    url: '{{ product.url }}',
-    timestamp: Date.now()
-  };
-  saveRecentlyViewedProduct(currentProduct);
-  {% endif %}
-
-  // Load and display recently viewed products
-  loadRecentlyViewedProducts();
-});
-</script>
+        // Remove if already exists to avoid duplicates
+        recentlyViewed = recentlyViewed.filter(item => item !== productHandle);
+        
+        // Add to beginning of array
+        recentlyViewed.unshift(productHandle);
+        
+        // Keep only last X products
+        const maxProducts = 10;
+        recentlyViewed = recentlyViewed.slice(0, maxProducts);
+        
+        // Set cookie (expires in 30 days)
+        const date = new Date();
+        date.setTime(date.getTime() + (30 * 24 * 60 * 60 * 1000));
+        document.cookie = `recently_viewed=${recentlyViewed.join(',')}; expires=${date.toUTCString()}; path=/`;
+      {%- endif -%}
+    });
+  </script>
+{%- endif -%}
 
 {% schema %}
 {
   "name": "Recently Viewed Products",
-  "tag": "section",
-  "class": "recently-viewed-section-wrapper",
   "settings": [
     {
-      "type": "header",
-      "content": "Section Settings"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_heading",
-      "label": "Show section heading",
-      "default": true
-    },
-    {
       "type": "text",
-      "id": "heading_text",
-      "label": "Heading text",
-      "default": "Recently Viewed Products"
+      "id": "heading",
+      "label": "Heading",
+      "default": "Recently Viewed"
     },
     {
       "type": "range",
-      "id": "heading_size",
-      "min": 16,
-      "max": 48,
-      "step": 2,
-      "unit": "px",
-      "label": "Heading size",
-      "default": 32
-    },
-    {
-      "type": "select",
-      "id": "heading_weight",
-      "label": "Heading weight",
-      "options": [
-        {
-          "value": "300",
-          "label": "Light"
-        },
-        {
-          "value": "400",
-          "label": "Normal"
-        },
-        {
-          "value": "500",
-          "label": "Medium"
-        },
-        {
-          "value": "600",
-          "label": "Semi Bold"
-        },
-        {
-          "value": "700",
-          "label": "Bold"
-        }
-      ],
-      "default": "600"
-    },
-    {
-      "type": "select",
-      "id": "heading_alignment",
-      "label": "Heading alignment",
-      "options": [
-        {
-          "value": "left",
-          "label": "Left"
-        },
-        {
-          "value": "center",
-          "label": "Center"
-        },
-        {
-          "value": "right",
-          "label": "Right"
-        }
-      ],
-      "default": "center"
-    },
-    {
-      "type": "color",
-      "id": "heading_color",
-      "label": "Heading color",
-      "default": "#000000"
-    },
-    {
-      "type": "header",
-      "content": "Slider Settings"
-    },
-    {
-      "type": "range",
-      "id": "slides_per_view_desktop",
+      "id": "desktop_slides",
       "min": 1,
       "max": 6,
       "step": 1,
-      "label": "Slides per view (Desktop)",
+      "label": "Desktop slides per view",
       "default": 4
     },
     {
       "type": "range",
-      "id": "slides_per_view_mobile",
+      "id": "mobile_slides",
       "min": 1,
       "max": 3,
       "step": 1,
-      "label": "Slides per view (Mobile)",
+      "label": "Mobile slides per view",
       "default": 2
-    },
-    {
-      "type": "range",
-      "id": "space_between",
-      "min": 0,
-      "max": 50,
-      "step": 5,
-      "unit": "px",
-      "label": "Space between slides",
-      "default": 20
-    },
-    {
-      "type": "range",
-      "id": "max_products",
-      "min": 4,
-      "max": 20,
-      "step": 1,
-      "label": "Maximum products to remember",
-      "default": 12
-    },
-    {
-      "type": "header",
-      "content": "Navigation & Controls"
     },
     {
       "type": "checkbox",
@@ -344,68 +181,13 @@ document.addEventListener('DOMContentLoaded', function() {
       "type": "checkbox",
       "id": "show_pagination",
       "label": "Show pagination dots",
-      "default": false
-    },
-    {
-      "type": "color",
-      "id": "navigation_color",
-      "label": "Navigation color",
-      "default": "#000000"
-    },
-    {
-      "type": "checkbox",
-      "id": "enable_loop",
-      "label": "Enable infinite loop",
-      "default": false
-    },
-    {
-      "type": "header",
-      "content": "Autoplay Settings"
-    },
-    {
-      "type": "checkbox",
-      "id": "enable_autoplay",
-      "label": "Enable autoplay",
-      "default": false
-    },
-    {
-      "type": "range",
-      "id": "autoplay_delay",
-      "min": 3000,
-      "max": 9000,
-      "step": 500,
-      "unit": "ms",
-      "label": "Autoplay delay",
-      "default": 3000
-    },
-    {
-      "type": "header",
-      "content": "Spacing"
-    },
-    {
-      "type": "range",
-      "id": "section_padding_top",
-      "min": 0,
-      "max": 100,
-      "step": 5,
-      "unit": "px",
-      "label": "Section padding top",
-      "default": 50
-    },
-    {
-      "type": "range",
-      "id": "section_padding_bottom",
-      "min": 0,
-      "max": 100,
-      "step": 5,
-      "unit": "px",
-      "label": "Section padding bottom",
-      "default": 50
+      "default": true
     }
   ],
   "presets": [
     {
-      "name": "Recently Viewed Products"
+      "name": "Recently Viewed Products",
+      "category": "Products"
     }
   ]
 }
