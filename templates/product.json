@@ -168,6 +168,7 @@
     },
     "related_products_yiNFzD": {
       "type": "related-products",
+      "disabled": true,
       "name": "Recently Viewed Products",
       "settings": {
         "title": "You might like",
@@ -271,12 +272,12 @@
     "1625846216758d1de0",
     "custom_liquid_wwxdTR",
     "product-recommendations",
+    "custom_recently_viewed_eYWrxm",
     "related_products_yiNFzD",
     "173761949576689837",
     "173746604670dd2455",
     "related-products",
     "1722496108e78788ab",
-    "slideshow_jmAaDM",
-    "custom_recently_viewed_eYWrxm"
+    "slideshow_jmAaDM"
   ]
 }
