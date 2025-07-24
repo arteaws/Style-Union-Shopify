@@ -3,7 +3,7 @@ Section: Custom Recent Products
 File: sections/custom-recent-products.liquid
 {% endcomment %}
 
-{{ 'swiper-bundle.min.css' | asset_url | stylesheet_tag }}
+
 
 <div class="recent-products-section" id="recent-products-{{ section.id }}">
   <div class="container">
@@ -33,7 +33,8 @@ File: sections/custom-recent-products.liquid
     </div>
   </div>
 </div>
-
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js" defer></script>
 <style>
   .recent-products-section {
     padding: {{ section.settings.section_padding_top }}px 0 {{ section.settings.section_padding_bottom }}px;
@@ -119,7 +120,7 @@ File: sections/custom-recent-products.liquid
   }
 </style>
 
-<script src="{{ 'swiper-bundle.min.js' | asset_url }}"></script>
+
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
