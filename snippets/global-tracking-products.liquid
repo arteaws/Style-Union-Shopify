@@ -1,5 +1,15 @@
-<script>
-/**
+// Clear all recent products
+  function clearRecentProducts() {
+    try {
+      localStorage.removeItem(STORAGE_KEY);
+      window.dispatchEvent(new CustomEvent('recentProductsUpdated', {
+        detail: { products: [] }
+      }));
+      console.log('All recent products cleared from storage');
+    } catch (e) {
+      console.error('Error clearing recent products:', e);
+    }
+  }/**
  * Global Recent Products Tracker
  * File: assets/recent-products-global.js
  * 
@@ -12,7 +22,7 @@
   
   // Configuration
   const STORAGE_KEY = 'recentlyViewedProducts';
-  const MAX_RECENT_PRODUCTS = 20; // Maximum number of products to store
+  const MAX_RECENT_PRODUCTS = 15; // Maximum number of products to keep (deletes oldest when 16th is added)
   
   // Product data structure
   function createProductData(handle, title, image, url) {
@@ -55,19 +65,33 @@
   function addRecentProduct(productData) {
     let products = getStoredProducts();
     
-    // Remove existing product if it's already in the list
+    // Remove existing product if it's already in the list (to avoid duplicates)
     products = products.filter(p => p.handle !== productData.handle);
     
     // Add new product to the beginning
     products.unshift(productData);
     
-    // Limit the number of stored products
+    // When we reach 16 products, delete the oldest one (keep only 15)
     if (products.length > MAX_RECENT_PRODUCTS) {
-      products = products.slice(0, MAX_RECENT_PRODUCTS);
+      const deletedProducts = products.splice(MAX_RECENT_PRODUCTS);
+      console.log(`Deleted ${deletedProducts.length} oldest product(s) from recent products storage:`, deletedProducts.map(p => p.title));
     }
+    
+    console.log(`Recent products count: ${products.length}/${MAX_RECENT_PRODUCTS}`);
     
     // Save updated list
     saveProducts(products);
+    
+    // Dispatch event with deletion info if products were removed
+    if (products.length === MAX_RECENT_PRODUCTS) {
+      window.dispatchEvent(new CustomEvent('recentProductsLimitReached', {
+        detail: { 
+          totalProducts: products.length,
+          maxLimit: MAX_RECENT_PRODUCTS,
+          latestProduct: productData
+        }
+      }));
+    }
   }
   
   // Remove product from recent list
@@ -77,16 +101,28 @@
     saveProducts(products);
   }
   
-  // Clear all recent products
-  function clearRecentProducts() {
-    try {
-      localStorage.removeItem(STORAGE_KEY);
-      window.dispatchEvent(new CustomEvent('recentProductsUpdated', {
-        detail: { products: [] }
-      }));
-    } catch (e) {
-      console.error('Error clearing recent products:', e);
+  // Get product statistics
+  function getProductStats() {
+    const products = getStoredProducts();
+    return {
+      total: products.length,
+      maxLimit: MAX_RECENT_PRODUCTS,
+      remaining: MAX_RECENT_PRODUCTS - products.length,
+      oldestProduct: products.length > 0 ? products[products.length - 1] : null,
+      newestProduct: products.length > 0 ? products[0] : null
+    };
+  }
+  
+  // Clean up old products manually (for maintenance)
+  function cleanupOldProducts(keepCount = MAX_RECENT_PRODUCTS) {
+    let products = getStoredProducts();
+    if (products.length > keepCount) {
+      const deletedProducts = products.splice(keepCount);
+      saveProducts(products);
+      console.log(`Cleaned up ${deletedProducts.length} old products`);
+      return deletedProducts;
     }
+    return [];
   }
   
   // Get product image URL (with multiple fallback methods)
@@ -338,7 +374,10 @@
     remove: removeRecentProduct,
     clear: clearRecentProducts,
     get: getStoredProducts,
-    track: trackCurrentProduct
+    track: trackCurrentProduct,
+    stats: getProductStats,
+    cleanup: cleanupOldProducts,
+    maxLimit: MAX_RECENT_PRODUCTS
   };
   
   // Initialize when page loads
@@ -352,11 +391,12 @@
   if (window.location.search.includes('debug=recent')) {
     console.log('Recent Products Debug Mode');
     console.log('Stored products:', getStoredProducts());
+    console.log('Product stats:', getProductStats());
     console.log('Current page is product:', isProductPage());
     console.log('Product handle:', getProductHandle());
     console.log('Product title:', getProductTitle());
     console.log('Product image:', getProductImage());
+    console.log('Max limit:', MAX_RECENT_PRODUCTS);
   }
   
 })();
-</script>
