@@ -34,6 +34,7 @@
     background: #000;
   }
 </style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/8.4.7/swiper-bundle.min.css" />
 {%- liquid
   assign recently_viewed = request.cookies['recently_viewed'] | split: ','
   assign product_handles_to_show = recently_viewed | uniq
@@ -139,7 +140,7 @@
     });
   </script>
 {%- endif -%}
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/8.4.7/swiper-bundle.min.js"></script>
 {% schema %}
 {
   "name": "Recently Viewed Products",
