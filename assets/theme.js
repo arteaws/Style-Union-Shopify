@@ -6926,10 +6926,23 @@ sidebarFilters: function sidebarFilters(context) {
     Shopify.theme.quickview.init();
     WAU.ProductGridVideo.init(); 
 	},
- 
-	renderSectionFromFetch: function renderSectionFromFetch(url, section) {
-      console.log("Show Infinite");
-      function initEndlessScroll() {
+  
+renderSectionFromFetch: function renderSectionFromFetch(url, section) {
+  console.log("Show Infinite"); 
+  fetch(url)
+    .then(response => response.text())
+    .then((responseText) => {
+      const html = responseText;
+      this.filterData = [...this.filterData, { html, url }];
+      theme.CollectionFilters.renderProductGrid(html);
+      theme.CollectionFilters.renderFilters();
+      
+      // Initialize endless scroll after new content is loaded
+      initEndlessScroll();
+    });
+},
+
+function initEndlessScroll() {
   let endlessScroll = new Ajaxinate({
     container: '#main-collection-product-grid',
     pagination: '#Huratips-Pagination',
@@ -6941,16 +6954,7 @@ sidebarFilters: function sidebarFilters(context) {
       }
     }
   });
-}
-		fetch(url)
-			.then(response => response.text())
-			.then((responseText) => {
-				const html = responseText;
-				this.filterData = [...this.filterData, { html, url }];
-				theme.CollectionFilters.renderProductGrid(html);
-				theme.CollectionFilters.renderFilters();
-			});
-	},
+},
 	renderSectionFromCache: function renderSectionFromCache(filterDataUrl, section) {
 		const html = this.filterData.find(filterDataUrl).html;
 		theme.CollectionFilters.renderProductGrid(html);
