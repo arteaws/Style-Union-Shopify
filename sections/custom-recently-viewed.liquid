@@ -6,7 +6,6 @@
   assign text_color = section.settings.text_color
   assign heading_size = section.settings.heading_size
   assign max_products = section.settings.max_products
-  assign show_product_name = section.settings.show_product_name
 -%}
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
@@ -35,39 +34,8 @@
   }
   
   .custom-recent-products__slide {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
     height: auto;
     width: calc((100% - ({{ desktop_slides | minus: 1 }} * 30px)) / {{ desktop_slides }});
-  }
-  
-  .custom-recent-products__image-container {
-    position: relative;
-    width: 100%;
-    padding-bottom: 100%;
-    overflow: hidden;
-    border-radius: 8px;
-    margin-bottom: 10px;
-  }
-  
-  .custom-recent-products__image {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.3s ease;
-  }
-  
-  .custom-recent-products__title {
-    font-size: 16px;
-    text-align: center;
-    color: {{ text_color }};
-    text-decoration: none;
-    padding: 0 10px;
-    word-break: break-word;
   }
   
   .swiper-button-next,
@@ -113,15 +81,13 @@
     }
   }
 
-  /* Special case for single product */
-  .swiper-slide.swiper-slide-single {
-    width: calc((100% - ({{ desktop_slides | minus: 1 }} * 30px)) / {{ desktop_slides }});
-  }
-
-  @media (max-width: 749px) {
-    .swiper-slide.swiper-slide-single {
-      width: calc((100% - ({{ mobile_slides | minus: 1 }} * 15px)) / {{ mobile_slides }});
-    }
+  /* Debug styles */
+  .debug-info {
+    background: #f0f0f0;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    font-size: 12px;
   }
 </style>
 
@@ -130,10 +96,15 @@
     <h2 class="custom-recent-products__heading">{{ heading }}</h2>
   {% endif %}
   
+  <!-- Debug info -->
+  <div class="debug-info" id="debug-info-{{ section.id }}">
+    Loading recent products...
+  </div>
+  
   <div class="custom-recent-products__slider-container">
     <div class="swiper custom-recent-products__slider">
       <div class="swiper-wrapper" id="recent-products-container-{{ section.id }}">
-        <!-- Products will be loaded via JavaScript -->
+        <!-- Products will be loaded here -->
       </div>
       
       <div class="swiper-button-next"></div>
@@ -144,125 +115,174 @@
 
 <script>
   document.addEventListener('DOMContentLoaded', function() {
-    // Function to safely get recent products
+    const sectionId = '{{ section.id }}';
+    const debugInfo = document.getElementById(`debug-info-${sectionId}`);
+    
+    function log(message) {
+      console.log('Recent Products:', message);
+      debugInfo.innerHTML += '<br>' + message;
+    }
+    
+    // Function to get recent products from localStorage
     function getRecentProducts() {
       try {
         const storedData = localStorage.getItem('recentlyViewedProducts') || '[]';
         const products = JSON.parse(storedData);
+        log(`Found ${products.length} products in localStorage`);
         
-        // Basic validation - ensure each product has at least a URL
-        return products.filter(p => p && p.url);
+        // Filter valid products
+        const validProducts = products.filter(p => p && p.handle && p.id);
+        log(`${validProducts.length} valid products after filtering`);
+        
+        return validProducts;
       } catch (e) {
-        console.error('Error loading recent products:', e);
+        log('Error loading recent products: ' + e.message);
         return [];
       }
     }
 
-    function initializeSlider(products, sectionId, showName) {
-      const container = document.getElementById(`recent-products-container-${sectionId}`);
-      const section = container?.closest('.custom-recent-products');
+    // Function to create simple product card
+    function createSimpleProductCard(product, shopifyData = null) {
+      const slide = document.createElement('div');
+      slide.className = 'swiper-slide custom-recent-products__slide';
       
-      if (!container || !section) return;
+      // Use shopify data if available, otherwise use stored data
+      const productData = shopifyData || product;
+      const imageUrl = productData.featured_image || product.image || '{{ "product-1.png" | asset_img_url: "400x" }}';
+      const price = shopifyData ? (shopifyData.price / 100).toFixed(2) : 'Loading...';
       
-      // Always show section (even if empty)
-      section.style.display = 'block';
-      container.innerHTML = '';
-      
-      // Display message if no products
-      if (products.length === 0) {
-        container.innerHTML = `
-          <div class="swiper-slide" style="width: 100%; text-align: center;">
-            <p>No recently viewed products yet</p>
+      slide.innerHTML = `
+        <div class="prod-container">
+          <div class="prod-image">
+            <a href="${product.url}" title="${product.title}">
+              <div class="reveal">
+                <img src="${imageUrl}" alt="${product.title}" loading="lazy" style="width: 100%; height: 200px; object-fit: cover;">
+              </div>
+            </a>
           </div>
-        `;
+          <div class="product-info">
+            <a href="${product.url}">
+              <h2 style="font-size: 14px; margin: 10px 0;">${product.title}</h2>
+            </a>
+            <div class="product-price">
+              <span class="price">$${price}</span>
+            </div>
+          </div>
+        </div>
+      `;
+      
+      return slide;
+    }
+
+    // Function to fetch product data from Shopify
+    async function fetchProductData(handle) {
+      try {
+        log(`Fetching data for product: ${handle}`);
+        const response = await fetch(`/products/${handle}.js`);
+        
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}`);
+        }
+        
+        const data = await response.json();
+        log(`Successfully fetched data for: ${handle}`);
+        return data;
+      } catch (e) {
+        log(`Error fetching ${handle}: ${e.message}`);
+        return null;
+      }
+    }
+
+    async function loadRecentProducts() {
+      const container = document.getElementById(`recent-products-container-${sectionId}`);
+      
+      if (!container) {
+        log('Container not found!');
         return;
       }
       
-      // Create slides for each product
-      products.forEach(product => {
-        const slide = document.createElement('div');
-        slide.className = products.length === 1 ? 
-          'swiper-slide custom-recent-products__slide swiper-slide-single' : 
-          'swiper-slide custom-recent-products__slide';
-        
-        const link = document.createElement('a');
-        link.href = product.url;
-        link.style.display = 'block';
-        link.style.width = '100%';
-        
-        // Image container
-        const imgContainer = document.createElement('div');
-        imgContainer.className = 'custom-recent-products__image-container';
-        
-        const img = document.createElement('img');
-        img.className = 'custom-recent-products__image';
-        img.src = product.image || '{{ "image-placeholder.png" | asset_img_url: "400x" }}';
-        img.alt = product.title || 'Product image';
-        img.loading = 'lazy';
-        img.onerror = function() {
-          this.src = '{{ "image-placeholder.png" | asset_img_url: "400x" }}';
-        };
-        
-        imgContainer.appendChild(img);
-        link.appendChild(imgContainer);
-        
-        // Product title
-        if (showName) {
-          const title = document.createElement('div');
-          title.className = 'custom-recent-products__title';
-          title.textContent = product.title || 'Product';
-          link.appendChild(title);
-        }
-        
-        slide.appendChild(link);
-        container.appendChild(slide);
-      });
+      // Get recent products from localStorage
+      const recentProducts = getRecentProducts();
       
-      // Initialize Swiper (destroy old instance if exists)
-      const sliderEl = container.closest('.swiper');
+      if (recentProducts.length === 0) {
+        container.innerHTML = '<div class="swiper-slide"><p>No recent products found</p></div>';
+        log('No recent products to display');
+        return;
+      }
+      
+      // Limit products
+      const limitedProducts = recentProducts.slice(0, {{ max_products }});
+      log(`Displaying ${limitedProducts.length} products`);
+      
+      // Clear container
+      container.innerHTML = '';
+      
+      // Create cards for each product
+      for (let i = 0; i < limitedProducts.length; i++) {
+        const product = limitedProducts[i];
+        log(`Processing product ${i + 1}: ${product.title}`);
+        
+        // Create initial card with stored data
+        const card = createSimpleProductCard(product);
+        container.appendChild(card);
+        
+        // Fetch fresh data from Shopify and update card
+        try {
+          const shopifyData = await fetchProductData(product.handle);
+          if (shopifyData) {
+            // Update card with fresh data
+            const updatedCard = createSimpleProductCard(product, shopifyData);
+            container.replaceChild(updatedCard, card);
+            log(`Updated card for: ${product.title}`);
+          }
+        } catch (e) {
+          log(`Failed to update ${product.title}: ${e.message}`);
+        }
+      }
+      
+      // Initialize Swiper
+      initializeSwiper();
+    }
+    
+    function initializeSwiper() {
+      const sliderEl = document.querySelector(`[data-section-id="${sectionId}"] .swiper`);
+      
       if (window.recentProductsSwiper) {
         window.recentProductsSwiper.destroy(true, true);
       }
       
       window.recentProductsSwiper = new Swiper(sliderEl, {
         slidesPerView: 'auto',
-        centeredSlides: false,
         spaceBetween: 20,
-        watchOverflow: true,
         navigation: {
           nextEl: '.swiper-button-next',
           prevEl: '.swiper-button-prev',
         },
         breakpoints: {
           320: {
-            slidesPerView: 'auto',
+            slidesPerView: 1,
             spaceBetween: 15
           },
-          750: {
-            slidesPerView: 'auto',
+          640: {
+            slidesPerView: 2,
+            spaceBetween: 20
+          },
+          1024: {
+            slidesPerView: {{ desktop_slides }},
             spaceBetween: 30
           }
         }
       });
       
-      // Hide arrows if only one product
-      if (products.length === 1) {
-        const arrows = sliderEl.querySelectorAll('.swiper-button-next, .swiper-button-prev');
-        arrows.forEach(arrow => arrow.style.display = 'none');
-      }
+      log('Swiper initialized successfully');
     }
     
-    // Load and display products
-    function updateSlider() {
-      const products = getRecentProducts().slice(0, {{ max_products }});
-      initializeSlider(products, '{{ section.id }}', {{ show_product_name }});
-    }
+    // Start loading
+    log('Starting to load recent products...');
+    loadRecentProducts();
     
-    // Initial load
-    updateSlider();
-    
-    // Update when storage changes
-    window.addEventListener('storage', updateSlider);
+    // Listen for storage changes
+    window.addEventListener('storage', loadRecentProducts);
   });
 </script>
 
@@ -312,12 +332,6 @@
       "step": 1,
       "label": "Maximum products to show",
       "default": 10
-    },
-    {
-      "type": "checkbox",
-      "id": "show_product_name",
-      "label": "Show product name",
-      "default": true
     },
     {
       "type": "color",
