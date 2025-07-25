@@ -40,6 +40,7 @@
     align-items: center;
     height: auto;
     width: calc((100% - ({{ desktop_slides | minus: 1 }} * 30px)) / {{ desktop_slides }});
+    position: relative;
   }
   
   .custom-recent-products__image-container {
@@ -60,15 +61,113 @@
     object-fit: cover;
     transition: transform 0.3s ease;
   }
+
+  /* Wishlist styling */
+  .recent-product-wishlist {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    z-index: 10;
+    width: 32px;
+    height: 32px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .recent-product-wishlist:hover {
+    background: rgba(255, 255, 255, 1);
+    transform: scale(1.1);
+  }
+
+  /* Quick view button */
+  .recent-product-quickview {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-size: 12px;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 5;
+  }
+
+  .custom-recent-products__slide:hover .recent-product-quickview {
+    opacity: 1;
+  }
   
   .custom-recent-products__title {
-    font-size: 16px;
+    font-size: 14px;
     text-align: center;
     color: {{ text_color }};
     text-decoration: none;
     padding: 0 10px;
     word-break: break-word;
     margin-bottom: 8px;
+    line-height: 1.3;
+  }
+
+  /* Price styling */
+  .recent-product-price {
+    font-size: 14px;
+    font-weight: bold;
+    color: {{ text_color }};
+    text-align: center;
+    margin-bottom: 10px;
+  }
+
+  .recent-product-price .price-compare {
+    text-decoration: line-through;
+    color: #999;
+    margin-right: 5px;
+  }
+
+  .recent-product-price .price-sale {
+    color: #e74c3c;
+  }
+
+  /* Color swatches */
+  .recent-product-swatches {
+    display: flex;
+    justify-content: center;
+    gap: 4px;
+    flex-wrap: wrap;
+    margin-top: 8px;
+  }
+
+  .recent-product-swatch {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    box-shadow: 0 0 0 1px #ddd;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    overflow: hidden;
+    background-size: cover;
+    background-position: center;
+  }
+
+  .recent-product-swatch:hover {
+    transform: scale(1.2);
+    box-shadow: 0 0 0 2px #333;
+  }
+
+  .recent-product-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    width: 100%;
   }
   
   .swiper-button-next,
@@ -94,90 +193,6 @@
     font-size: 20px;
   }
 
-  /* Product card styles */
-  .prod-container {
-    position: relative;
-    width: 100%;
-  }
-  
-  .custom-badges-collection-card {
-    color: #151414;
-    width: fit-content;
-    position: absolute;
-    z-index: 9;
-    top: 6px;
-    left: 6px;
-    background: #fff;
-    padding: 0px 10px;
-    font-size: 8px;
-    font-weight: 900;
-    text-transform: uppercase;
-  }
-  
-  .product-info {
-    padding: 0 10px;
-    width: 100%;
-  }
-  
-  .product-price {
-    margin-bottom: 10px;
-    text-align: center;
-  }
-  
-  /* Color swatches */
-  .color-swatches-container {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 5px;
-    margin-top: 8px;
-  }
-  
-  .color-swatch {
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    border: 1px solid #e0e0e0;
-    overflow: hidden;
-    position: relative;
-    cursor: pointer;
-  }
-  
-  .color-swatch img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-  
-  /* Wishlist */
-  #custom-smart-wishlist {
-    z-index: 999;
-    position: absolute;
-    width: fit-content;
-    right: 12px;
-    top: 6px;
-  }
-  
-  /* Quick view */
-  .product-listing__quickview-trigger {
-    position: absolute;
-    bottom: 10px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: #fff;
-    padding: 8px 15px;
-    border-radius: 20px;
-    font-size: 12px;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    z-index: 10;
-    white-space: nowrap;
-  }
-  
-  .custom-recent-products__slide:hover .product-listing__quickview-trigger {
-    opacity: 1;
-  }
-
   /* Mobile styles */
   @media (max-width: 749px) {
     .custom-recent-products__slider {
@@ -196,9 +211,10 @@
     .swiper-button-prev {
       display: none;
     }
-    
-    .product-listing__quickview-trigger {
-      display: none;
+
+    .recent-product-swatch {
+      width: 16px;
+      height: 16px;
     }
   }
 
@@ -247,7 +263,83 @@
       }
     }
 
-    function initializeSlider(products, sectionId, showName) {
+    // Function to fetch product details including variants
+    async function fetchProductDetails(productUrl) {
+      try {
+        const response = await fetch(productUrl + '.js');
+        if (!response.ok) throw new Error('Failed to fetch product');
+        return await response.json();
+      } catch (error) {
+        console.error('Error fetching product details:', error);
+        return null;
+      }
+    }
+
+    // Function to format price
+    function formatPrice(price) {
+      return (price / 100).toFixed(2);
+    }
+
+    // Function to create price HTML
+    function createPriceHTML(product) {
+      const price = product.price;
+      const comparePrice = product.compare_at_price;
+      
+      if (comparePrice && comparePrice > price) {
+        return `
+          <div class="recent-product-price">
+            <span class="price-compare">$${formatPrice(comparePrice)}</span>
+            <span class="price-sale">$${formatPrice(price)}</span>
+          </div>
+        `;
+      } else {
+        return `
+          <div class="recent-product-price">
+            $${formatPrice(price)}
+          </div>
+        `;
+      }
+    }
+
+    // Function to create color swatches
+    function createColorSwatches(product) {
+      if (!product.variants || product.variants.length <= 1) return '';
+      
+      const colorVariants = new Map();
+      const colorOptionIndex = product.options.findIndex(option => 
+        option.name.toLowerCase().includes('color') || 
+        option.name.toLowerCase().includes('colour')
+      );
+      
+      if (colorOptionIndex === -1) return '';
+      
+      // Group variants by color and get their featured images
+      product.variants.forEach(variant => {
+        const colorValue = variant[`option${colorOptionIndex + 1}`];
+        if (colorValue && variant.featured_image && !colorVariants.has(colorValue)) {
+          colorVariants.set(colorValue, {
+            image: variant.featured_image.src,
+            url: `${product.url}?variant=${variant.id}`
+          });
+        }
+      });
+      
+      if (colorVariants.size <= 1) return '';
+      
+      let swatchesHTML = '<div class="recent-product-swatches">';
+      colorVariants.forEach((variantData, colorName) => {
+        swatchesHTML += `
+          <a href="${variantData.url}" class="recent-product-swatch" 
+             style="background-image: url(${variantData.image})" 
+             title="${colorName}"></a>
+        `;
+      });
+      swatchesHTML += '</div>';
+      
+      return swatchesHTML;
+    }
+
+    async function initializeSlider(products, sectionId, showName) {
       const container = document.getElementById(`recent-products-container-${sectionId}`);
       const section = container?.closest('.custom-recent-products');
       
@@ -268,130 +360,81 @@
       }
       
       // Create slides for each product
-      products.forEach(product => {
-        const slide = document.createElement('div');
-        slide.className = products.length === 1 ? 
-          'swiper-slide custom-recent-products__slide swiper-slide-single' : 
-          'swiper-slide custom-recent-products__slide';
-        
-        const prodContainer = document.createElement('div');
-        prodContainer.className = 'prod-container';
-        
-        // Badges
-        if (product.badge) {
-          const badge = document.createElement('div');
-          badge.className = 'custom-badges-collection-card';
-          badge.innerHTML = `<span class="product-badge">${product.badge}</span>`;
-          prodContainer.appendChild(badge);
-        }
-        
-        // Wishlist
-        const wishlist = document.createElement('div');
-        wishlist.id = 'custom-smart-wishlist';
-        wishlist.innerHTML = `<span class="smartwishlist" data-product="${product.id}" data-variant="${product.variants ? product.variants[0].id : ''}"></span>`;
-        prodContainer.appendChild(wishlist);
-        
-        // Image container
-        const imgContainer = document.createElement('div');
-        imgContainer.className = 'custom-recent-products__image-container';
-        
-        const imgLink = document.createElement('a');
-        imgLink.href = product.url;
-        
-        const img = document.createElement('img');
-        img.className = 'custom-recent-products__image';
-        img.src = product.image || '{{ "image-placeholder.png" | asset_img_url: "400x" }}';
-        img.alt = product.title || 'Product image';
-        img.loading = 'lazy';
-        img.onerror = function() {
-          this.src = '{{ "image-placeholder.png" | asset_img_url: "400x" }}';
-        };
-        
-        imgLink.appendChild(img);
-        imgContainer.appendChild(imgLink);
-        prodContainer.appendChild(imgContainer);
-        
-        // Quick view button
-        const quickView = document.createElement('button');
-        quickView.className = `quick-view-${product.id} product-listing__quickview-trigger js-modal-open js-quickview-trigger`;
-        quickView.setAttribute('type', 'button');
-        quickView.setAttribute('data-wau-modal-target', 'quickview');
-        quickView.setAttribute('data-product-url', `${product.url}?view=quick`);
-        quickView.textContent = '{{ "products.general.quick_view" | t }}';
-        prodContainer.appendChild(quickView);
-        
-        // Product info container
-        const productInfo = document.createElement('div');
-        productInfo.className = 'product-info';
-        
-        // Title
-        if (showName) {
-          const titleLink = document.createElement('a');
-          titleLink.href = product.url;
+      for (const product of products) {
+        try {
+          // Fetch detailed product information
+          const productDetails = await fetchProductDetails(product.url);
+          if (!productDetails) continue;
           
-          const title = document.createElement('h2');
-          title.className = 'custom-recent-products__title';
-          title.textContent = product.title || 'Product';
+          const slide = document.createElement('div');
+          slide.className = products.length === 1 ? 
+            'swiper-slide custom-recent-products__slide swiper-slide-single' : 
+            'swiper-slide custom-recent-products__slide';
           
-          titleLink.appendChild(title);
-          productInfo.appendChild(titleLink);
-        }
-        
-        // Price
-        const priceDiv = document.createElement('div');
-        priceDiv.className = 'product-price';
-        
-        if (product.price && product.compare_at_price) {
-          if (product.price < product.compare_at_price) {
-            priceDiv.innerHTML = `
-              <span class="price-item price-item--sale">${formatMoney(product.price)}</span>
-              <span class="price-item price-item--regular" style="text-decoration: line-through; opacity: 0.7; margin-left: 5px;">${formatMoney(product.compare_at_price)}</span>
-            `;
-          } else {
-            priceDiv.innerHTML = `<span class="price-item">${formatMoney(product.price)}</span>`;
+          // Create the main product link
+          const link = document.createElement('a');
+          link.href = product.url;
+          link.className = 'recent-product-link';
+          
+          // Image container with wishlist and quick view
+          const imgContainer = document.createElement('div');
+          imgContainer.className = 'custom-recent-products__image-container';
+          
+          const img = document.createElement('img');
+          img.className = 'custom-recent-products__image';
+          img.src = product.image || productDetails.featured_image || '{{ "image-placeholder.png" | asset_img_url: "400x" }}';
+          img.alt = product.title || productDetails.title || 'Product image';
+          img.loading = 'lazy';
+          img.onerror = function() {
+            this.src = '{{ "image-placeholder.png" | asset_img_url: "400x" }}';
+          };
+          
+          // Wishlist button
+          const wishlistBtn = document.createElement('div');
+          wishlistBtn.className = 'recent-product-wishlist';
+          wishlistBtn.innerHTML = `<span class="smartwishlist" data-product="${productDetails.id}" data-variant="${productDetails.variants[0].id}">♡</span>`;
+          
+          // Quick view button
+          const quickViewBtn = document.createElement('button');
+          quickViewBtn.className = 'recent-product-quickview js-modal-open js-quickview-trigger';
+          quickViewBtn.setAttribute('data-wau-modal-target', 'quickview');
+          quickViewBtn.setAttribute('data-product-url', product.url + '?view=quick');
+          quickViewBtn.textContent = 'Quick View';
+          
+          imgContainer.appendChild(img);
+          imgContainer.appendChild(wishlistBtn);
+          imgContainer.appendChild(quickViewBtn);
+          link.appendChild(imgContainer);
+          
+          // Product info container
+          const infoContainer = document.createElement('div');
+          
+          // Product title
+          if (showName) {
+            const title = document.createElement('div');
+            title.className = 'custom-recent-products__title';
+            title.textContent = product.title || productDetails.title || 'Product';
+            infoContainer.appendChild(title);
           }
-        } else if (product.price) {
-          priceDiv.innerHTML = `<span class="price-item">${formatMoney(product.price)}</span>`;
+          
+          // Price
+          infoContainer.innerHTML += createPriceHTML(productDetails);
+          
+          // Color swatches
+          const swatchesHTML = createColorSwatches(productDetails);
+          if (swatchesHTML) {
+            infoContainer.innerHTML += swatchesHTML;
+          }
+          
+          link.appendChild(infoContainer);
+          slide.appendChild(link);
+          container.appendChild(slide);
+          
+        } catch (error) {
+          console.error('Error processing product:', error);
+          continue;
         }
-        
-        productInfo.appendChild(priceDiv);
-        
-        // Color swatches
-        if (product.variants && product.variants.length > 1) {
-          const swatchesContainer = document.createElement('div');
-          swatchesContainer.className = 'color-swatches-container';
-          
-          // Create a set to avoid duplicate colors
-          const uniqueColors = new Set();
-          
-          product.variants.forEach(variant => {
-            if (variant.featured_image && variant.option1 && !uniqueColors.has(variant.option1)) {
-              uniqueColors.add(variant.option1);
-              
-              const swatchLink = document.createElement('a');
-              swatchLink.href = `${product.url}?variant=${variant.id}`;
-              
-              const swatch = document.createElement('div');
-              swatch.className = 'color-swatch';
-              
-              const swatchImg = document.createElement('img');
-              swatchImg.src = variant.featured_image.src;
-              swatchImg.alt = variant.option1;
-              swatchImg.loading = 'lazy';
-              
-              swatch.appendChild(swatchImg);
-              swatchLink.appendChild(swatch);
-              swatchesContainer.appendChild(swatchLink);
-            }
-          });
-          
-          productInfo.appendChild(swatchesContainer);
-        }
-        
-        slide.appendChild(prodContainer);
-        slide.appendChild(productInfo);
-        container.appendChild(slide);
-      });
+      }
       
       // Initialize Swiper (destroy old instance if exists)
       const sliderEl = container.closest('.swiper');
@@ -425,63 +468,12 @@
         const arrows = sliderEl.querySelectorAll('.swiper-button-next, .swiper-button-prev');
         arrows.forEach(arrow => arrow.style.display = 'none');
       }
-      
-      // Initialize quick view
-      if (typeof window.initQuickView === 'function') {
-        window.initQuickView();
-      }
-    }
-    
-    // Helper function to format money
-    function formatMoney(cents) {
-      if (typeof cents === 'string') cents = parseInt(cents);
-      return '$' + (cents / 100).toFixed(2);
     }
     
     // Load and display products
     function updateSlider() {
-      const rawProducts = getRecentProducts().slice(0, {{ max_products }});
-      
-      // Enhance product data with variants if available
-      const enhancedProducts = rawProducts.map(product => {
-        // Try to parse variants if they exist as a string
-        if (product.variants && typeof product.variants === 'string') {
-          try {
-            product.variants = JSON.parse(product.variants);
-          } catch (e) {
-            console.error('Error parsing variants:', e);
-            product.variants = [];
-          }
-        }
-        
-        // Determine badge
-        if (product.collections) {
-          const collections = Array.isArray(product.collections) ? 
-            product.collections : 
-            (typeof product.collections === 'string' ? product.collections.split(',') : []);
-          
-          if (collections.includes('Bestseller New')) {
-            product.badge = 'Most loved';
-          } else if (collections.includes('Must Haves')) {
-            product.badge = 'Must Have';
-          } else if (collections.includes('Last Few')) {
-            product.badge = 'Few Left';
-          } else if (collections.includes('Store Bestseller')) {
-            product.badge = 'Selling Fast';
-          } else if (collections.includes('New In')) {
-            const thirtyDaysAgo = new Date();
-            thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-            
-            if (new Date(product.created_at) > thirtyDaysAgo) {
-              product.badge = 'New In';
-            }
-          }
-        }
-        
-        return product;
-      });
-      
-      initializeSlider(enhancedProducts, '{{ section.id }}', {{ show_product_name }});
+      const products = getRecentProducts().slice(0, {{ max_products }});
+      initializeSlider(products, '{{ section.id }}', {{ show_product_name }});
     }
     
     // Initial load
