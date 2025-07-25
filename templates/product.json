@@ -168,7 +168,6 @@
     },
     "custom_recently_viewed_c84JA9": {
       "type": "custom-recently-viewed",
-      "disabled": true,
       "name": "Custom Recent Products",
       "settings": {
         "heading": "Recently Viewed Products",
