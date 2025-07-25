@@ -6,8 +6,7 @@
   assign text_color = section.settings.text_color
   assign heading_size = section.settings.heading_size
   assign max_products = section.settings.max_products
-  assign show_swatches = section.settings.show_swatches
-  assign show_sizes = section.settings.show_sizes
+  assign show_product_name = section.settings.show_product_name
 -%}
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
@@ -36,8 +35,39 @@
   }
   
   .custom-recent-products__slide {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     height: auto;
     width: calc((100% - ({{ desktop_slides | minus: 1 }} * 30px)) / {{ desktop_slides }});
+  }
+  
+  .custom-recent-products__image-container {
+    position: relative;
+    width: 100%;
+    padding-bottom: 100%;
+    overflow: hidden;
+    border-radius: 8px;
+    margin-bottom: 10px;
+  }
+  
+  .custom-recent-products__image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+  
+  .custom-recent-products__title {
+    font-size: 16px;
+    text-align: center;
+    color: {{ text_color }};
+    text-decoration: none;
+    padding: 0 10px;
+    word-break: break-word;
   }
   
   .swiper-button-next,
@@ -63,29 +93,6 @@
     font-size: 20px;
   }
 
-  /* Swatch styles */
-  .custom-recent-products .swatches__container {
-    margin-top: 10px;
-  }
-  
-  .custom-recent-products .swatches__option-name {
-    display: none;
-  }
-  
-  .custom-recent-products .swatches__swatch--color {
-    margin: 2px;
-  }
-  
-  .custom-recent-products .swatches__form--label {
-    min-width: 20px;
-    height: 20px;
-    margin: 0;
-  }
-  
-  .custom-recent-products .swatches__color-name {
-    display: none;
-  }
-
   /* Mobile styles */
   @media (max-width: 749px) {
     .custom-recent-products__slider {
@@ -105,6 +112,17 @@
       display: none;
     }
   }
+
+  /* Special case for single product */
+  .swiper-slide.swiper-slide-single {
+    width: calc((100% - ({{ desktop_slides | minus: 1 }} * 30px)) / {{ desktop_slides }});
+  }
+
+  @media (max-width: 749px) {
+    .swiper-slide.swiper-slide-single {
+      width: calc((100% - ({{ mobile_slides | minus: 1 }} * 15px)) / {{ mobile_slides }});
+    }
+  }
 </style>
 
 <div class="custom-recent-products" data-section-id="{{ section.id }}">
@@ -115,7 +133,7 @@
   <div class="custom-recent-products__slider-container">
     <div class="swiper custom-recent-products__slider">
       <div class="swiper-wrapper" id="recent-products-container-{{ section.id }}">
-        <!-- Products will be loaded here -->
+        <!-- Products will be loaded via JavaScript -->
       </div>
       
       <div class="swiper-button-next"></div>
@@ -126,223 +144,125 @@
 
 <script>
   document.addEventListener('DOMContentLoaded', function() {
-    const sectionId = '{{ section.id }}';
-    
-    // Function to get recent products from localStorage
+    // Function to safely get recent products
     function getRecentProducts() {
       try {
         const storedData = localStorage.getItem('recentlyViewedProducts') || '[]';
         const products = JSON.parse(storedData);
         
-        // Filter valid products
-        const validProducts = products.filter(p => p && p.handle && p.id);
-        return validProducts;
+        // Basic validation - ensure each product has at least a URL
+        return products.filter(p => p && p.url);
       } catch (e) {
         console.error('Error loading recent products:', e);
         return [];
       }
     }
 
-    // Function to create product card with swatches
-    function createProductCard(product, shopifyData = null) {
-      const slide = document.createElement('div');
-      slide.className = 'swiper-slide custom-recent-products__slide';
+    function initializeSlider(products, sectionId, showName) {
+      const container = document.getElementById(`recent-products-container-${sectionId}`);
+      const section = container?.closest('.custom-recent-products');
       
-      // Use shopify data if available, otherwise use stored data
-      const productData = shopifyData || product;
-      const imageUrl = productData.featured_image?.src || product.image || '{{ "product-1.png" | asset_img_url: "400x" }}';
-      const price = shopifyData ? (shopifyData.price / 100).toFixed(2) : 'Loading...';
-      const variants = shopifyData?.variants || [];
+      if (!container || !section) return;
       
-      // Create swatches HTML if enabled
-      let swatchesHTML = '';
-      if ({{ show_swatches }} || {{ show_sizes }}) {
-        swatchesHTML = `
-          <div class="swatches__container" data-product-id="${product.id}">
-            ${generateSwatchesHTML(productData, variants)}
+      // Always show section (even if empty)
+      section.style.display = 'block';
+      container.innerHTML = '';
+      
+      // Display message if no products
+      if (products.length === 0) {
+        container.innerHTML = `
+          <div class="swiper-slide" style="width: 100%; text-align: center;">
+            <p>No recently viewed products yet</p>
           </div>
         `;
-      }
-      
-      slide.innerHTML = `
-        <div class="prod-container">
-          <div class="prod-image">
-            <a href="${product.url}" title="${product.title}">
-              <div class="reveal">
-                <img src="${imageUrl}" alt="${product.title}" loading="lazy" style="width: 100%; height: 200px; object-fit: cover;">
-              </div>
-            </a>
-          </div>
-          <div class="product-info">
-            <a href="${product.url}">
-              <h2 style="font-size: 14px; margin: 10px 0;">${product.title}</h2>
-            </a>
-            <div class="product-price">
-              <span class="price">$${price}</span>
-            </div>
-            ${swatchesHTML}
-          </div>
-        </div>
-      `;
-      
-      return slide;
-    }
-    
-    // Function to generate swatches HTML
-    function generateSwatchesHTML(product, variants) {
-      let html = '';
-      const options = product.options || [];
-      const colorOptionNames = ['color', 'colour', 'Color', 'Colour'];
-      
-      options.forEach((option, index) => {
-        const optionName = option.name?.toLowerCase() || '';
-        const isColorOption = colorOptionNames.includes(optionName);
-        
-        // Only show swatches if enabled in settings
-        if ((isColorOption && {{ show_swatches }}) || (!isColorOption && {{ show_sizes }})) {
-          html += `<div class="swatches__option" data-option-index="${index + 1}">`;
-          option.values.forEach(value => {
-            const variantForOption = variants.find(v => 
-              v.option1 === value || v.option2 === value || v.option3 === value
-            );
-            
-            const available = variantForOption?.available || false;
-            const soldOutClass = available ? '' : 'soldout';
-            
-            if (isColorOption) {
-              // Color swatch
-              html += `
-                <div class="swatches__swatch--color swatch-element ${soldOutClass}" 
-                  data-value="${value}" 
-                  data-available="${available}">
-                  <span class="swatches__form--label" 
-                    style="background-color: ${getColorValue(value)}"
-                    title="${value}">
-                  </span>
-                </div>
-              `;
-            } else {
-              // Size swatch
-              html += `
-                <div class="swatches__swatch--regular swatch-element ${soldOutClass}" 
-                  data-value="${value}" 
-                  data-available="${available}">
-                  <span class="swatches__form--label">${value}</span>
-                </div>
-              `;
-            }
-          });
-          html += `</div>`;
-        }
-      });
-      
-      return html;
-    }
-    
-    // Helper function to get color value for swatch
-    function getColorValue(colorName) {
-      // This is a simplified version - you might want to expand this
-      // to match your actual color swatch implementation
-      const colorMap = {
-        'red': '#ff0000',
-        'blue': '#0000ff',
-        'green': '#00ff00',
-        'black': '#000000',
-        'white': '#ffffff'
-        // Add more color mappings as needed
-      };
-      
-      return colorMap[colorName.toLowerCase()] || '#cccccc';
-    }
-
-    // Function to fetch product data from Shopify
-    async function fetchProductData(handle) {
-      try {
-        const response = await fetch(`/products/${handle}.js`);
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
-        return await response.json();
-      } catch (e) {
-        console.error(`Error fetching ${handle}:`, e);
-        return null;
-      }
-    }
-
-    async function loadRecentProducts() {
-      const container = document.getElementById(`recent-products-container-${sectionId}`);
-      if (!container) return;
-      
-      // Get recent products from localStorage
-      const recentProducts = getRecentProducts();
-      if (recentProducts.length === 0) {
-        container.innerHTML = '<div class="swiper-slide"><p>No recent products found</p></div>';
         return;
       }
       
-      // Limit products
-      const limitedProducts = recentProducts.slice(0, {{ max_products }});
-      
-      // Clear container
-      container.innerHTML = '';
-      
-      // Create cards for each product
-      for (const product of limitedProducts) {
-        // Create initial card with stored data
-        const card = createProductCard(product);
-        container.appendChild(card);
+      // Create slides for each product
+      products.forEach(product => {
+        const slide = document.createElement('div');
+        slide.className = products.length === 1 ? 
+          'swiper-slide custom-recent-products__slide swiper-slide-single' : 
+          'swiper-slide custom-recent-products__slide';
         
-        // Fetch fresh data from Shopify and update card
-        try {
-          const shopifyData = await fetchProductData(product.handle);
-          if (shopifyData) {
-            // Update card with fresh data
-            const updatedCard = createProductCard(product, shopifyData);
-            container.replaceChild(updatedCard, card);
-          }
-        } catch (e) {
-          console.error(`Failed to update ${product.title}:`, e);
+        const link = document.createElement('a');
+        link.href = product.url;
+        link.style.display = 'block';
+        link.style.width = '100%';
+        
+        // Image container
+        const imgContainer = document.createElement('div');
+        imgContainer.className = 'custom-recent-products__image-container';
+        
+        const img = document.createElement('img');
+        img.className = 'custom-recent-products__image';
+        img.src = product.image || '{{ "image-placeholder.png" | asset_img_url: "400x" }}';
+        img.alt = product.title || 'Product image';
+        img.loading = 'lazy';
+        img.onerror = function() {
+          this.src = '{{ "image-placeholder.png" | asset_img_url: "400x" }}';
+        };
+        
+        imgContainer.appendChild(img);
+        link.appendChild(imgContainer);
+        
+        // Product title
+        if (showName) {
+          const title = document.createElement('div');
+          title.className = 'custom-recent-products__title';
+          title.textContent = product.title || 'Product';
+          link.appendChild(title);
         }
-      }
+        
+        slide.appendChild(link);
+        container.appendChild(slide);
+      });
       
-      // Initialize Swiper
-      initializeSwiper();
-    }
-    
-    function initializeSwiper() {
-      const sliderEl = document.querySelector(`[data-section-id="${sectionId}"] .swiper`);
-      
+      // Initialize Swiper (destroy old instance if exists)
+      const sliderEl = container.closest('.swiper');
       if (window.recentProductsSwiper) {
         window.recentProductsSwiper.destroy(true, true);
       }
       
       window.recentProductsSwiper = new Swiper(sliderEl, {
         slidesPerView: 'auto',
+        centeredSlides: false,
         spaceBetween: 20,
+        watchOverflow: true,
         navigation: {
           nextEl: '.swiper-button-next',
           prevEl: '.swiper-button-prev',
         },
         breakpoints: {
           320: {
-            slidesPerView: 1,
+            slidesPerView: 'auto',
             spaceBetween: 15
           },
-          640: {
-            slidesPerView: 2,
-            spaceBetween: 20
-          },
-          1024: {
-            slidesPerView: {{ desktop_slides }},
+          750: {
+            slidesPerView: 'auto',
             spaceBetween: 30
           }
         }
       });
+      
+      // Hide arrows if only one product
+      if (products.length === 1) {
+        const arrows = sliderEl.querySelectorAll('.swiper-button-next, .swiper-button-prev');
+        arrows.forEach(arrow => arrow.style.display = 'none');
+      }
     }
     
-    // Start loading
-    loadRecentProducts();
+    // Load and display products
+    function updateSlider() {
+      const products = getRecentProducts().slice(0, {{ max_products }});
+      initializeSlider(products, '{{ section.id }}', {{ show_product_name }});
+    }
     
-    // Listen for storage changes
-    window.addEventListener('storage', loadRecentProducts);
+    // Initial load
+    updateSlider();
+    
+    // Update when storage changes
+    window.addEventListener('storage', updateSlider);
   });
 </script>
 
@@ -394,6 +314,12 @@
       "default": 10
     },
     {
+      "type": "checkbox",
+      "id": "show_product_name",
+      "label": "Show product name",
+      "default": true
+    },
+    {
       "type": "color",
       "id": "bg_color",
       "label": "Background color",
@@ -404,18 +330,6 @@
       "id": "text_color",
       "label": "Text color",
       "default": "#333333"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_swatches",
-      "label": "Show color swatches",
-      "default": true
-    },
-    {
-      "type": "checkbox",
-      "id": "show_sizes",
-      "label": "Show size swatches",
-      "default": true
     }
   ],
   "presets": [
