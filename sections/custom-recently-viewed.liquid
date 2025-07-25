@@ -6,7 +6,6 @@
   assign text_color = section.settings.text_color
   assign heading_size = section.settings.heading_size
   assign max_products = section.settings.max_products
-  assign show_product_name = section.settings.show_product_name
 -%}
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
@@ -35,39 +34,8 @@
   }
   
   .custom-recent-products__slide {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
     height: auto;
     width: calc((100% - ({{ desktop_slides | minus: 1 }} * 30px)) / {{ desktop_slides }});
-  }
-  
-  .custom-recent-products__image-container {
-    position: relative;
-    width: 100%;
-    padding-bottom: 100%;
-    overflow: hidden;
-    border-radius: 8px;
-    margin-bottom: 10px;
-  }
-  
-  .custom-recent-products__image {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.3s ease;
-  }
-  
-  .custom-recent-products__title {
-    font-size: 16px;
-    text-align: center;
-    color: {{ text_color }};
-    text-decoration: none;
-    padding: 0 10px;
-    word-break: break-word;
   }
   
   .swiper-button-next,
@@ -123,6 +91,14 @@
       width: calc((100% - ({{ mobile_slides | minus: 1 }} * 15px)) / {{ mobile_slides }});
     }
   }
+
+  /* No products message */
+  .custom-recent-products__no-products {
+    text-align: center;
+    padding: 40px 20px;
+    color: {{ text_color }};
+    font-size: 16px;
+  }
 </style>
 
 <div class="custom-recent-products" data-section-id="{{ section.id }}">
@@ -139,6 +115,11 @@
       <div class="swiper-button-next"></div>
       <div class="swiper-button-prev"></div>
     </div>
+    
+    <!-- No products message (initially hidden) -->
+    <div class="custom-recent-products__no-products" id="no-products-message-{{ section.id }}" style="display: none;">
+      <p>No recently viewed products yet</p>
+    </div>
   </div>
 </div>
 
@@ -150,71 +131,88 @@
         const storedData = localStorage.getItem('recentlyViewedProducts') || '[]';
         const products = JSON.parse(storedData);
         
-        // Basic validation - ensure each product has at least a URL
-        return products.filter(p => p && p.url);
+        // Basic validation - ensure each product has at least a handle and ID
+        return products.filter(p => p && p.handle && p.id);
       } catch (e) {
         console.error('Error loading recent products:', e);
         return [];
       }
     }
 
-    function initializeSlider(products, sectionId, showName) {
+    // Function to fetch product data from Shopify
+    async function fetchProductData(handle) {
+      try {
+        const response = await fetch(`/products/${handle}.js`);
+        if (!response.ok) throw new Error('Product not found');
+        return await response.json();
+      } catch (e) {
+        console.error(`Error fetching product ${handle}:`, e);
+        return null;
+      }
+    }
+
+    // Function to render product card using Shopify's liquid template
+    async function renderProductCard(productHandle) {
+      try {
+        const response = await fetch(`/products/${productHandle}?view=card`);
+        if (!response.ok) throw new Error('Failed to fetch product card');
+        return await response.text();
+      } catch (e) {
+        console.error(`Error rendering product card for ${productHandle}:`, e);
+        return null;
+      }
+    }
+
+    async function initializeSlider(products, sectionId) {
       const container = document.getElementById(`recent-products-container-${sectionId}`);
       const section = container?.closest('.custom-recent-products');
+      const noProductsMessage = document.getElementById(`no-products-message-${sectionId}`);
+      const sliderContainer = container?.closest('.custom-recent-products__slider-container');
       
       if (!container || !section) return;
       
-      // Always show section (even if empty)
-      section.style.display = 'block';
+      // Clear existing content
       container.innerHTML = '';
       
-      // Display message if no products
+      // Handle empty state
       if (products.length === 0) {
-        container.innerHTML = `
-          <div class="swiper-slide" style="width: 100%; text-align: center;">
-            <p>No recently viewed products yet</p>
-          </div>
-        `;
+        sliderContainer.style.display = 'none';
+        noProductsMessage.style.display = 'block';
         return;
       }
       
-      // Create slides for each product
-      products.forEach(product => {
+      // Show slider and hide no products message
+      sliderContainer.style.display = 'block';
+      noProductsMessage.style.display = 'none';
+      
+      // Limit products based on max_products setting
+      const limitedProducts = products.slice(0, {{ max_products }});
+      
+      // Load product cards
+      const productCards = await Promise.all(
+        limitedProducts.map(async (product) => {
+          const cardHtml = await renderProductCard(product.handle);
+          return cardHtml ? { html: cardHtml, handle: product.handle } : null;
+        })
+      );
+      
+      // Filter out failed requests
+      const validCards = productCards.filter(card => card !== null);
+      
+      if (validCards.length === 0) {
+        sliderContainer.style.display = 'none';
+        noProductsMessage.style.display = 'block';
+        return;
+      }
+      
+      // Create slides for each product card
+      validCards.forEach(card => {
         const slide = document.createElement('div');
-        slide.className = products.length === 1 ? 
+        slide.className = validCards.length === 1 ? 
           'swiper-slide custom-recent-products__slide swiper-slide-single' : 
           'swiper-slide custom-recent-products__slide';
         
-        const link = document.createElement('a');
-        link.href = product.url;
-        link.style.display = 'block';
-        link.style.width = '100%';
-        
-        // Image container
-        const imgContainer = document.createElement('div');
-        imgContainer.className = 'custom-recent-products__image-container';
-        
-        const img = document.createElement('img');
-        img.className = 'custom-recent-products__image';
-        img.src = product.image || '{{ "image-placeholder.png" | asset_img_url: "400x" }}';
-        img.alt = product.title || 'Product image';
-        img.loading = 'lazy';
-        img.onerror = function() {
-          this.src = '{{ "image-placeholder.png" | asset_img_url: "400x" }}';
-        };
-        
-        imgContainer.appendChild(img);
-        link.appendChild(imgContainer);
-        
-        // Product title
-        if (showName) {
-          const title = document.createElement('div');
-          title.className = 'custom-recent-products__title';
-          title.textContent = product.title || 'Product';
-          link.appendChild(title);
-        }
-        
-        slide.appendChild(link);
+        slide.innerHTML = card.html;
         container.appendChild(slide);
       });
       
@@ -246,16 +244,16 @@
       });
       
       // Hide arrows if only one product
-      if (products.length === 1) {
+      if (validCards.length === 1) {
         const arrows = sliderEl.querySelectorAll('.swiper-button-next, .swiper-button-prev');
         arrows.forEach(arrow => arrow.style.display = 'none');
       }
     }
     
     // Load and display products
-    function updateSlider() {
-      const products = getRecentProducts().slice(0, {{ max_products }});
-      initializeSlider(products, '{{ section.id }}', {{ show_product_name }});
+    async function updateSlider() {
+      const products = getRecentProducts();
+      await initializeSlider(products, '{{ section.id }}');
     }
     
     // Initial load
@@ -312,12 +310,6 @@
       "step": 1,
       "label": "Maximum products to show",
       "default": 10
-    },
-    {
-      "type": "checkbox",
-      "id": "show_product_name",
-      "label": "Show product name",
-      "default": true
     },
     {
       "type": "color",
