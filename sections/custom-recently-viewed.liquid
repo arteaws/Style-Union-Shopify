@@ -288,8 +288,8 @@
       if (comparePrice && comparePrice > price) {
         return `
           <div class="recent-product-price">
-            <span class="price-compare">$${formatPrice(comparePrice)}</span>
-            <span class="price-sale">$${formatPrice(price)}</span>
+            <span class="price-compare">$₹{formatPrice(comparePrice)}</span>
+            <span class="price-sale">$₹{formatPrice(price)}</span>
           </div>
         `;
       } else {
