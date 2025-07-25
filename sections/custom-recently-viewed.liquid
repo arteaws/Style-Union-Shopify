@@ -6,6 +6,7 @@
   assign text_color = section.settings.text_color
   assign heading_size = section.settings.heading_size
   assign max_products = section.settings.max_products
+  assign show_product_name = section.settings.show_product_name
 -%}
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
@@ -34,8 +35,39 @@
   }
   
   .custom-recent-products__slide {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     height: auto;
     width: calc((100% - ({{ desktop_slides | minus: 1 }} * 30px)) / {{ desktop_slides }});
+  }
+  
+  .custom-recent-products__image-container {
+    position: relative;
+    width: 100%;
+    padding-bottom: 100%;
+    overflow: hidden;
+    border-radius: 8px;
+    margin-bottom: 10px;
+  }
+  
+  .custom-recent-products__image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+  
+  .custom-recent-products__title {
+    font-size: 16px;
+    text-align: center;
+    color: {{ text_color }};
+    text-decoration: none;
+    padding: 0 10px;
+    word-break: break-word;
   }
   
   .swiper-button-next,
@@ -91,22 +123,9 @@
       width: calc((100% - ({{ mobile_slides | minus: 1 }} * 15px)) / {{ mobile_slides }});
     }
   }
-
-  /* No products message */
-  .custom-recent-products__no-products {
-    text-align: center;
-    padding: 40px 20px;
-    color: {{ text_color }};
-    font-size: 16px;
-  }
-
-  /* Hide section initially until products are loaded */
-  .custom-recent-products[data-loading="true"] {
-    display: none;
-  }
 </style>
 
-<div class="custom-recent-products" data-section-id="{{ section.id }}" data-loading="true">
+<div class="custom-recent-products" data-section-id="{{ section.id }}">
   {% if heading != blank %}
     <h2 class="custom-recent-products__heading">{{ heading }}</h2>
   {% endif %}
@@ -120,237 +139,86 @@
       <div class="swiper-button-next"></div>
       <div class="swiper-button-prev"></div>
     </div>
-    
-    <!-- No products message (initially hidden) -->
-    <div class="custom-recent-products__no-products" id="no-products-message-{{ section.id }}" style="display: none;">
-      <p>No recently viewed products yet</p>
-    </div>
   </div>
 </div>
 
-<!-- Hidden template for product cards -->
-<script type="text/template" id="product-card-template-{{ section.id }}">
-  <div class="swiper-slide custom-recent-products__slide" data-product-id="{{PRODUCT_ID}}">
-    <div class="prod-container">
-      <div class="custom-badges-collection-card" id="badges-{{PRODUCT_ID}}">
-        <!-- Badges will be populated by JavaScript -->
-      </div>
-      
-      <div class="sale-item sale-item--icon icn" id="sale-badge-{{PRODUCT_ID}}" style="display: none;">
-        Sale
-      </div>
-      
-      <div class="so icn" id="soldout-badge-{{PRODUCT_ID}}" style="display: none;">
-        {{ 'products.general.sold' | t }}
-      </div>
-
-      <div class="prod-image image_{{ settings.product_image_size | default: 'square' }} js-product-image">
-        <a href="{{PRODUCT_URL}}" title="{{PRODUCT_TITLE_ESCAPED}}">
-          <div class="reveal">
-            <img src="{{PRODUCT_IMAGE}}" alt="{{PRODUCT_TITLE_ESCAPED}}" loading="lazy" />
-          </div>
-        </a>
-      </div>
-
-      {% if settings.quickview_type != 'none' %}
-        {%- liquid
-          if settings.quickview_type == 'modal'
-            assign quickview_classes = 'js-modal-open'
-            assign quickview_settings = 'data-wau-modal-target="quickview"'
-          else
-            assign quickview_classes = 'js-slideout-open'
-            assign quickview_settings = 'data-wau-slideout-target="quickview" data-slideout-direction="right"'
-          endif
-        -%}
-        <button class="quick-view-{{PRODUCT_ID}} product-listing__quickview-trigger {{ quickview_classes }} js-quickview-trigger"
-          type="button"
-          name="button"
-          {{ quickview_settings }}
-          data-product-url="{{PRODUCT_URL}}?view=quick">{{ 'products.general.quick_view' | t }}</button>
-      {% endif %}
-
-      <div id="custom-smart-wishlist">
-        <span class="smartwishlist" data-product="{{PRODUCT_ID}}" data-variant="{{FIRST_VARIANT_ID}}"></span>
-      </div>
-    </div>
-
-    <div class="product-info">
-      <a href="{{PRODUCT_URL}}">
-        {% if settings.vendor %}
-          <p class="product__vendor">{{VENDOR}}</p>
-        {% endif %}
-        <h2>{{PRODUCT_TITLE}}</h2>
-      </a>
-
-      <div class="product-price" id="price-{{PRODUCT_ID}}">
-        <!-- Price will be populated by JavaScript -->
-      </div>
-    </div>
-  </div>
-</script>
-
 <script>
   document.addEventListener('DOMContentLoaded', function() {
-    const sectionId = '{{ section.id }}';
-    const maxProducts = {{ max_products }};
-    
     // Function to safely get recent products
     function getRecentProducts() {
       try {
         const storedData = localStorage.getItem('recentlyViewedProducts') || '[]';
         const products = JSON.parse(storedData);
-        return products.filter(p => p && p.handle && p.id);
+        
+        // Basic validation - ensure each product has at least a URL
+        return products.filter(p => p && p.url);
       } catch (e) {
         console.error('Error loading recent products:', e);
         return [];
       }
     }
 
-    // Function to fetch product data from Shopify
-    async function fetchProductData(handle) {
-      try {
-        const response = await fetch(`/products/${handle}.js`);
-        if (!response.ok) throw new Error('Product not found');
-        return await response.json();
-      } catch (e) {
-        console.error(`Error fetching product ${handle}:`, e);
-        return null;
-      }
-    }
-
-    // Function to format money
-    function formatMoney(cents) {
-      return '{{ shop.money_format }}'.replace('{{amount}}', (cents / 100).toFixed(2));
-    }
-
-    // Function to create product card HTML
-    function createProductCard(product, shopifyProduct) {
-      const template = document.getElementById(`product-card-template-${sectionId}`).innerHTML;
-      
-      // Get product image
-      let productImage = product.image;
-      if (!productImage && shopifyProduct && shopifyProduct.featured_image) {
-        productImage = shopifyProduct.featured_image;
-      }
-      if (!productImage) {
-        productImage = '{{ "product-placeholder.png" | asset_img_url: "400x" }}';
-      }
-
-      // Replace template variables
-      let cardHtml = template
-        .replace(/\{\{PRODUCT_ID\}\}/g, product.id)
-        .replace(/\{\{PRODUCT_URL\}\}/g, product.url)
-        .replace(/\{\{PRODUCT_TITLE\}\}/g, product.title)
-        .replace(/\{\{PRODUCT_TITLE_ESCAPED\}\}/g, product.title.replace(/"/g, '&quot;'))
-        .replace(/\{\{PRODUCT_IMAGE\}\}/g, productImage)
-        .replace(/\{\{FIRST_VARIANT_ID\}\}/g, shopifyProduct ? shopifyProduct.variants[0].id : product.id)
-        .replace(/\{\{VENDOR\}\}/g, shopifyProduct ? shopifyProduct.vendor : '');
-
-      return cardHtml;
-    }
-
-    // Function to update product pricing and badges
-    function updateProductDetails(productElement, shopifyProduct) {
-      if (!shopifyProduct) return;
-
-      const productId = shopifyProduct.id;
-      
-      // Update pricing
-      const priceElement = productElement.querySelector(`#price-${productId}`);
-      if (priceElement && shopifyProduct.variants && shopifyProduct.variants.length > 0) {
-        const variant = shopifyProduct.variants[0];
-        let priceHtml = `<span class="price">${formatMoney(variant.price)}</span>`;
-        
-        if (variant.compare_at_price && variant.compare_at_price > variant.price) {
-          priceHtml = `<span class="price sale">${formatMoney(variant.price)}</span> ` +
-                     `<span class="compare-price">${formatMoney(variant.compare_at_price)}</span>`;
-          
-          // Show sale badge
-          const saleBadge = productElement.querySelector(`#sale-badge-${productId}`);
-          if (saleBadge) saleBadge.style.display = 'block';
-        }
-        
-        priceElement.innerHTML = priceHtml;
-      }
-
-      // Update availability
-      if (!shopifyProduct.available) {
-        const soldoutBadge = productElement.querySelector(`#soldout-badge-${productId}`);
-        if (soldoutBadge) soldoutBadge.style.display = 'block';
-      }
-
-      // Update badges based on tags/collections (simplified)
-      const badgesElement = productElement.querySelector(`#badges-${productId}`);
-      if (badgesElement && shopifyProduct.tags) {
-        let badgeHtml = '';
-        
-        if (shopifyProduct.tags.includes('bestseller')) {
-          badgeHtml = '<span class="product-badge">Most loved</span>';
-        } else if (shopifyProduct.tags.includes('new')) {
-          badgeHtml = '<span class="product-badge">New In</span>';
-        } else if (shopifyProduct.tags.includes('few-left')) {
-          badgeHtml = '<span class="product-badge">Few Left</span>';
-        }
-        
-        badgesElement.innerHTML = badgeHtml;
-      }
-    }
-
-    async function initializeSlider(products) {
+    function initializeSlider(products, sectionId, showName) {
       const container = document.getElementById(`recent-products-container-${sectionId}`);
       const section = container?.closest('.custom-recent-products');
-      const noProductsMessage = document.getElementById(`no-products-message-${sectionId}`);
-      const sliderContainer = container?.closest('.custom-recent-products__slider-container');
       
       if (!container || !section) return;
       
-      // Clear existing content
+      // Always show section (even if empty)
+      section.style.display = 'block';
       container.innerHTML = '';
       
-      // Handle empty state
+      // Display message if no products
       if (products.length === 0) {
-        sliderContainer.style.display = 'none';
-        noProductsMessage.style.display = 'block';
-        section.setAttribute('data-loading', 'false');
-        section.style.display = 'block';
+        container.innerHTML = `
+          <div class="swiper-slide" style="width: 100%; text-align: center;">
+            <p>No recently viewed products yet</p>
+          </div>
+        `;
         return;
       }
       
-      // Show slider and hide no products message
-      sliderContainer.style.display = 'block';
-      noProductsMessage.style.display = 'none';
-      
-      // Limit products
-      const limitedProducts = products.slice(0, maxProducts);
-      
-      // Create cards and fetch detailed product data
-      const productPromises = limitedProducts.map(async (product) => {
-        const shopifyProduct = await fetchProductData(product.handle);
-        const cardHtml = createProductCard(product, shopifyProduct);
+      // Create slides for each product
+      products.forEach(product => {
+        const slide = document.createElement('div');
+        slide.className = products.length === 1 ? 
+          'swiper-slide custom-recent-products__slide swiper-slide-single' : 
+          'swiper-slide custom-recent-products__slide';
         
-        // Create DOM element
-        const tempDiv = document.createElement('div');
-        tempDiv.innerHTML = cardHtml;
-        const slideElement = tempDiv.firstElementChild;
+        const link = document.createElement('a');
+        link.href = product.url;
+        link.style.display = 'block';
+        link.style.width = '100%';
         
-        // Update product details with Shopify data
-        updateProductDetails(slideElement, shopifyProduct);
+        // Image container
+        const imgContainer = document.createElement('div');
+        imgContainer.className = 'custom-recent-products__image-container';
         
-        return slideElement;
+        const img = document.createElement('img');
+        img.className = 'custom-recent-products__image';
+        img.src = product.image || '{{ "image-placeholder.png" | asset_img_url: "400x" }}';
+        img.alt = product.title || 'Product image';
+        img.loading = 'lazy';
+        img.onerror = function() {
+          this.src = '{{ "image-placeholder.png" | asset_img_url: "400x" }}';
+        };
+        
+        imgContainer.appendChild(img);
+        link.appendChild(imgContainer);
+        
+        // Product title
+        if (showName) {
+          const title = document.createElement('div');
+          title.className = 'custom-recent-products__title';
+          title.textContent = product.title || 'Product';
+          link.appendChild(title);
+        }
+        
+        slide.appendChild(link);
+        container.appendChild(slide);
       });
       
-      const productElements = await Promise.all(productPromises);
-      
-      // Add all product cards to container
-      productElements.forEach(element => {
-        if (element) container.appendChild(element);
-      });
-      
-      // Show section
-      section.setAttribute('data-loading', 'false');
-      section.style.display = 'block';
-      
-      // Initialize Swiper
+      // Initialize Swiper (destroy old instance if exists)
       const sliderEl = container.closest('.swiper');
       if (window.recentProductsSwiper) {
         window.recentProductsSwiper.destroy(true, true);
@@ -378,21 +246,16 @@
       });
       
       // Hide arrows if only one product
-      if (productElements.filter(el => el).length === 1) {
+      if (products.length === 1) {
         const arrows = sliderEl.querySelectorAll('.swiper-button-next, .swiper-button-prev');
         arrows.forEach(arrow => arrow.style.display = 'none');
-      }
-
-      // Initialize wishlist functionality if available
-      if (typeof window.smartWishlist !== 'undefined') {
-        window.smartWishlist.init();
       }
     }
     
     // Load and display products
-    async function updateSlider() {
-      const products = getRecentProducts();
-      await initializeSlider(products);
+    function updateSlider() {
+      const products = getRecentProducts().slice(0, {{ max_products }});
+      initializeSlider(products, '{{ section.id }}', {{ show_product_name }});
     }
     
     // Initial load
@@ -449,6 +312,12 @@
       "step": 1,
       "label": "Maximum products to show",
       "default": 10
+    },
+    {
+      "type": "checkbox",
+      "id": "show_product_name",
+      "label": "Show product name",
+      "default": true
     },
     {
       "type": "color",
