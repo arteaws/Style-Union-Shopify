@@ -171,7 +171,7 @@
       "name": "Custom Recent Products",
       "settings": {
         "heading": "Recently Viewed Products",
-        "heading_size": 24,
+        "heading_size": 18,
         "desktop_slides": 4,
         "mobile_slides": 2,
         "max_products": 10,
