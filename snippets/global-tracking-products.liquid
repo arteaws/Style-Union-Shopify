@@ -1,0 +1,79 @@
+<script>
+  // Universal product tracker that works with all product templates
+  (function() {
+    // Check if this is a product page
+    const isProductPage = window.location.pathname.match(/\/products\/[^\/]+/);
+    if (!isProductPage) return;
+
+    // Get product data with multiple fallback methods
+    const productData = {
+      id: {{ product.id | default: 'null' | json }},
+      title: {{ product.title | default: 'Untitled Product' | json }},
+      url: window.location.pathname,
+      image: getProductImage(),
+      handle: {{ product.handle | default: 'null' | json }}
+    };
+
+    // Helper function to get product image with multiple fallbacks
+    function getProductImage() {
+      // Try Shopify product object first
+      {% if product.featured_image %}
+        return {{ product.featured_image | img_url: '400x' | json }};
+      {% endif %}
+      
+      // Fallback to meta tags
+      const metaImage = document.querySelector('meta[property="og:image"]');
+      if (metaImage) return metaImage.content;
+      
+      // Final fallback
+      return '';
+    }
+
+    // Only proceed if we have minimum required data
+    if (!productData.id || productData.id === 'null') {
+      console.warn('Product tracking skipped - missing ID');
+      return;
+    }
+
+    // Get or initialize recent products array
+    let recentProducts = [];
+    try {
+      const storedData = localStorage.getItem('recentlyViewedProducts') || '[]';
+      recentProducts = JSON.parse(storedData);
+      
+      // Clean existing data
+      recentProducts = recentProducts.filter(item => 
+        item && item.id && item.url && (item.image || item.title)
+      );
+    } catch (e) {
+      console.error('Error parsing recent products:', e);
+      recentProducts = [];
+    }
+
+    // Remove duplicates (check by both ID and handle)
+    recentProducts = recentProducts.filter(p => 
+      p.id !== productData.id && p.handle !== productData.handle
+    );
+
+    // Add current product to beginning
+    recentProducts.unshift(productData);
+
+    // Maintain maximum of 16 products
+    const MAX_PRODUCTS = 16;
+    if (recentProducts.length > MAX_PRODUCTS) {
+      recentProducts = recentProducts.slice(0, MAX_PRODUCTS);
+    }
+
+    // Save to localStorage with error handling
+    try {
+      localStorage.setItem('recentlyViewedProducts', JSON.stringify(recentProducts));
+    } catch (e) {
+      console.error('LocalStorage error:', e);
+      // If storage is full, try removing older items
+      if (e.name === 'QuotaExceededError') {
+        localStorage.setItem('recentlyViewedProducts', 
+          JSON.stringify(recentProducts.slice(0, MAX_PRODUCTS - 3)));
+      }
+    }
+  })();
+</script>

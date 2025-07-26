@@ -1,0 +1,576 @@
+{%- liquid
+  assign desktop_slides = section.settings.desktop_slides
+  assign mobile_slides = section.settings.mobile_slides
+  assign heading = section.settings.heading
+  assign bg_color = section.settings.bg_color
+  assign text_color = section.settings.text_color
+  assign heading_size = section.settings.heading_size
+  assign max_products = section.settings.max_products
+  assign show_product_name = section.settings.show_product_name
+-%}
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js" defer></script>
+
+<style>
+  .custom-recent-products {
+    background-color: {{ bg_color }};
+    color: {{ text_color }};
+    padding: 40px 0;
+    position: relative;
+    z-index: 0;
+  }
+
+  .custom-recent-products__heading {
+    font-size: {{ heading_size }}px;
+    text-align: center;
+    margin-bottom: 30px;
+  }
+  
+  .custom-recent-products__slider {
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 0 20px;
+    overflow: hidden;
+  }
+  
+  .custom-recent-products__slide {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: auto;
+    width: calc((100% - ({{ desktop_slides | minus: 1 }} * 30px)) / {{ desktop_slides }});
+    position: relative;
+  }
+  
+  .custom-recent-products__image-container {
+    position: relative;
+    width: 100%;
+    padding-bottom: 100%;
+    overflow: hidden;
+    /* border-radius: 8px; */
+    margin-bottom: 10px;
+  }
+  
+  .custom-recent-products__image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+
+  /* Wishlist styling */
+  .recent-product-wishlist {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    z-index: 999;
+    width: 28px;
+    height: 28px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .recent-product-wishlist:hover {
+    background: rgba(255, 255, 255, 1);
+    transform: scale(1.1);
+  }
+
+  /* Quick view button */
+ .recent-product-quickview {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    text-transform: capitalize;
+    border: none;
+    padding: 0px 16px;
+    display: flex;
+    justify-content: center;
+    width: 40%;
+    align-items: center;
+    /* border-radius: 4px; */
+    font-size: 12px;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 5;
+}
+
+  .custom-recent-products__slide:hover .recent-product-quickview {
+    opacity: 1;
+  }
+  
+  .custom-recent-products__title {
+    font-size: 14px;
+    text-align: center;
+    color: {{ text_color }};
+    text-decoration: none;
+    padding: 0 10px;
+    word-break: break-word;
+    margin-bottom: 8px;
+    line-height: 1.3;
+  }
+
+  /* Price styling */
+  .recent-product-price {
+    font-size: 14px;
+    font-weight: 300;
+    color: {{ text_color }};
+    text-align: center;
+    margin-bottom: 10px;
+  }
+
+  .recent-product-price .price-compare {
+    text-decoration: line-through;
+    color: #999;
+    margin-right: 5px;
+  }
+
+  .recent-product-price .price-sale {
+    color: #e74c3c;
+  }
+
+  /* Color swatches */
+  .recent-product-swatches {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 8px;
+    z-index:999;
+  }
+
+  .recent-product-swatch {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    /* border: 2px solid #fff; */
+    box-shadow: 0 0 0 1px #ddd;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    overflow: hidden;
+    background-size: cover;
+    background-position: center;
+  }
+
+  /* .recent-product-swatch:hover {
+    transform: scale(1.2);
+    box-shadow: 0 0 0 2px #333;
+  } */
+
+  .recent-product-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    width: 100%;
+  }
+  
+  .swiper-button-next,
+  .swiper-button-prev {
+    color: {{ text_color }};
+    background: rgba(255,255,255,0.5);
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+  }
+  
+  .swiper-button-next:hover,
+  .swiper-button-prev:hover {
+    background: rgba(255,255,255,0.8);
+  }
+  
+  .swiper-button-next::after,
+  .swiper-button-prev::after {
+    font-size: 20px;
+  }
+
+  @media only screen and (min-width: 1000px) and (max-width: 2560px)  {
+.custom-recent-products__image-container {
+    height: 400px;
+} 
+  }
+  @media (max-width: 749px) {
+.recent-product-quickview.js-modal-open.js-quickview-trigger {
+    display: none;
+}
+    .custom-recent-products__slider {
+      padding: 0 15px;
+    }
+    
+    .custom-recent-products__heading {
+      font-size: calc({{ heading_size }}px * 0.8);
+    }
+    
+    .custom-recent-products__slide {
+      width: calc((100% - ({{ mobile_slides | minus: 1 }} * 15px)) / {{ mobile_slides }});
+    }
+    
+    .swiper-button-next,
+    .swiper-button-prev {
+      display: none;
+    }
+
+    .recent-product-swatch {
+      width: 20px;
+      height: 20px;
+    }
+  }
+
+  /* Special case for single product */
+  .swiper-slide.swiper-slide-single {
+    width: calc((100% - ({{ desktop_slides | minus: 1 }} * 30px)) / {{ desktop_slides }});
+  }
+
+  @media (max-width: 749px) {
+    .swiper-slide.swiper-slide-single {
+      width: calc((100% - ({{ mobile_slides | minus: 1 }} * 15px)) / {{ mobile_slides }});
+    }
+  }
+</style>
+
+<div class="custom-recent-products" data-section-id="{{ section.id }}">
+  {% if heading != blank %}
+    <h2 class="custom-recent-products__heading">{{ heading }}</h2>
+  {% endif %}
+  
+  <div class="custom-recent-products__slider-container">
+    <div class="swiper custom-recent-products__slider">
+      <div class="swiper-wrapper" id="recent-products-container-{{ section.id }}">
+        <!-- Products will be loaded via JavaScript -->
+      </div>
+      
+      <div class="swiper-button-next"></div>
+      <div class="swiper-button-prev"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Function to safely get recent products
+    function getRecentProducts() {
+      try {
+        const storedData = localStorage.getItem('recentlyViewedProducts') || '[]';
+        const products = JSON.parse(storedData);
+        
+        // Basic validation - ensure each product has at least a URL
+        return products.filter(p => p && p.url);
+      } catch (e) {
+        console.error('Error loading recent products:', e);
+        return [];
+      }
+    }
+
+    // Function to fetch product details including variants
+    async function fetchProductDetails(productUrl) {
+      try {
+        const response = await fetch(productUrl + '.js');
+        if (!response.ok) throw new Error('Failed to fetch product');
+        return await response.json();
+      } catch (error) {
+        console.error('Error fetching product details:', error);
+        return null;
+      }
+    }
+
+    // Function to format price
+    function formatPrice(price) {
+      return (price / 100).toFixed(2);
+    }
+
+    // Function to create price HTML
+    function createPriceHTML(product) {
+      const price = product.price;
+      const comparePrice = product.compare_at_price;
+      
+      if (comparePrice && comparePrice > price) {
+        return `
+          <div class="recent-product-price">
+            <span class="price-compare">$₹{formatPrice(comparePrice)}</span>
+            <span class="price-sale">$₹{formatPrice(price)}</span>
+          </div>
+        `;
+      } else {
+        return `
+          <div class="recent-product-price">
+           ₹${formatPrice(price)}
+          </div>
+        `;
+      }
+    }
+
+    // Function to create color swatches
+    function createColorSwatches(product) {
+      if (!product.variants || product.variants.length <= 1) return '';
+      
+      const colorVariants = new Map();
+      const colorOptionIndex = product.options.findIndex(option => 
+        option.name.toLowerCase().includes('color') || 
+        option.name.toLowerCase().includes('colour')
+      );
+      
+      if (colorOptionIndex === -1) return '';
+      
+      // Group variants by color and get their featured images
+      product.variants.forEach(variant => {
+        const colorValue = variant[`option${colorOptionIndex + 1}`];
+        if (colorValue && variant.featured_image && !colorVariants.has(colorValue)) {
+          colorVariants.set(colorValue, {
+            image: variant.featured_image.src,
+            url: `${product.url}?variant=${variant.id}`
+          });
+        }
+      });
+      
+      if (colorVariants.size <= 1) return '';
+      
+      let swatchesHTML = '<div class="recent-product-swatches">';
+      colorVariants.forEach((variantData, colorName) => {
+        swatchesHTML += `
+          <a href="${variantData.url}" class="recent-product-swatch" 
+             style="background-image: url(${variantData.image})" 
+             title="${colorName}"></a>
+        `;
+      });
+      swatchesHTML += '</div>';
+      
+      return swatchesHTML;
+    }
+
+    async function initializeSlider(products, sectionId, showName) {
+      const container = document.getElementById(`recent-products-container-${sectionId}`);
+      const section = container?.closest('.custom-recent-products');
+      
+      if (!container || !section) return;
+      
+      // Always show section (even if empty)
+      section.style.display = 'block';
+      container.innerHTML = '';
+      
+      // Display message if no products
+      if (products.length === 0) {
+        container.innerHTML = `
+          <div class="swiper-slide" style="width: 100%; text-align: center;">
+            <p>No recently viewed products yet</p>
+          </div>
+        `;
+        return;
+      }
+      
+      // Create slides for each product
+      for (const product of products) {
+        try {
+          // Fetch detailed product information
+          const productDetails = await fetchProductDetails(product.url);
+          if (!productDetails) continue;
+          
+          const slide = document.createElement('div');
+          slide.className = products.length === 1 ? 
+            'swiper-slide custom-recent-products__slide swiper-slide-single' : 
+            'swiper-slide custom-recent-products__slide';
+          
+          // Create the main product link
+          const link = document.createElement('a');
+          link.href = product.url;
+          link.className = 'recent-product-link';
+          
+          // Image container with wishlist and quick view
+          const imgContainer = document.createElement('div');
+          imgContainer.className = 'custom-recent-products__image-container';
+          
+          const img = document.createElement('img');
+          img.className = 'custom-recent-products__image';
+          img.src = product.image || productDetails.featured_image || '{{ "image-placeholder.png" | asset_img_url: "400x" }}';
+          img.alt = product.title || productDetails.title || 'Product image';
+          img.loading = 'lazy';
+          img.onerror = function() {
+            this.src = '{{ "image-placeholder.png" | asset_img_url: "400x" }}';
+          };
+          
+          // Wishlist button
+          const wishlistBtn = document.createElement('div');
+          wishlistBtn.className = 'recent-product-wishlist';
+          wishlistBtn.innerHTML = `<span class="smartwishlist" data-product="${productDetails.id}" data-variant="${productDetails.variants[0].id}">♡</span>`;
+          
+          // Quick view button
+          const quickViewBtn = document.createElement('button');
+          quickViewBtn.className = 'recent-product-quickview js-modal-open js-quickview-trigger';
+          quickViewBtn.setAttribute('data-wau-modal-target', 'quickview');
+          quickViewBtn.setAttribute('data-product-url', product.url + '?view=quick');
+          quickViewBtn.textContent = 'Quick Shop';
+          
+          imgContainer.appendChild(img);
+          imgContainer.appendChild(wishlistBtn);
+          imgContainer.appendChild(quickViewBtn);
+          link.appendChild(imgContainer);
+          
+          // Product info container
+          const infoContainer = document.createElement('div');
+          
+          // Product title
+          if (showName) {
+            const title = document.createElement('div');
+            title.className = 'custom-recent-products__title';
+            title.textContent = product.title || productDetails.title || 'Product';
+            infoContainer.appendChild(title);
+          }
+          
+          // Price
+          infoContainer.innerHTML += createPriceHTML(productDetails);
+          
+          // Color swatches
+          const swatchesHTML = createColorSwatches(productDetails);
+          if (swatchesHTML) {
+            infoContainer.innerHTML += swatchesHTML;
+          }
+          
+          link.appendChild(infoContainer);
+          slide.appendChild(link);
+          container.appendChild(slide);
+          
+        } catch (error) {
+          console.error('Error processing product:', error);
+          continue;
+        }
+      }
+      
+      // Initialize Swiper (destroy old instance if exists)
+      const sliderEl = container.closest('.swiper');
+      if (window.recentProductsSwiper) {
+        window.recentProductsSwiper.destroy(true, true);
+      }
+      
+      window.recentProductsSwiper = new Swiper(sliderEl, {
+        slidesPerView: 4,
+        centeredSlides: false,
+        spaceBetween: 20,
+        watchOverflow: true,
+        navigation: {
+          nextEl: '.swiper-button-next',
+          prevEl: '.swiper-button-prev',
+        },
+        breakpoints: {
+          320: {
+            slidesPerView: 1.5,
+            spaceBetween: 15
+          },
+          750: {
+            slidesPerView: 4,
+            spaceBetween: 30
+          }
+        }
+      });
+      
+      // Hide arrows if only one product
+      if (products.length === 1) {
+        const arrows = sliderEl.querySelectorAll('.swiper-button-next, .swiper-button-prev');
+        arrows.forEach(arrow => arrow.style.display = 'none');
+      }
+    }
+    
+    // Load and display products
+    function updateSlider() {
+      const products = getRecentProducts().slice(0, {{ max_products }});
+      initializeSlider(products, '{{ section.id }}', {{ show_product_name }});
+      setInterval(function() {
+    ReloadSmartWishlist();
+}, 3000);
+    }
+    
+    // Initial load
+    updateSlider();
+    
+    // Update when storage changes
+    window.addEventListener('storage', updateSlider);
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Custom Recent Products",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Recently Viewed Products"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "min": 12,
+      "max": 36,
+      "step": 1,
+      "unit": "px",
+      "label": "Heading size",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "desktop_slides",
+      "min": 1,
+      "max": 6,
+      "step": 1,
+      "label": "Number of slides on desktop",
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "mobile_slides",
+      "min": 1,
+      "max": 3,
+      "step": 1,
+      "label": "Number of slides on mobile",
+      "default": 2
+    },
+    {
+      "type": "range",
+      "id": "max_products",
+      "min": 3,
+      "max": 20,
+      "step": 1,
+      "label": "Maximum products to show",
+      "default": 10
+    },
+    {
+      "type": "checkbox",
+      "id": "show_product_name",
+      "label": "Show product name",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background color",
+      "default": "#f5f5f5"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#333333"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Custom Recent Products",
+      "category": "Products"
+    }
+  ]
+}
+{% endschema %}
