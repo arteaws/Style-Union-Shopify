@@ -483,6 +483,9 @@
     function updateSlider() {
       const products = getRecentProducts().slice(0, {{ max_products }});
       initializeSlider(products, '{{ section.id }}', {{ show_product_name }});
+      setInterval(function() {
+    ReloadSmartWishlist();
+}, 3000);
     }
     
     // Initial load
