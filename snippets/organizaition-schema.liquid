@@ -42,14 +42,7 @@
 {%- endif -%}
 
 
-
-
 {% if template contains 'collection' %}
-{% comment %}
-  Generate complete schema with all products for SEO,
-  but don't interfere with the page display logic
-{% endcomment %}
-
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -59,40 +52,32 @@
   "description": "{{ collection.description | strip_html | escape }}",
   "mainEntity": {
     "@type": "ItemList",
-    "numberOfItems": {{ collection.products_count }},
     "itemListElement": [
-      {% comment %}
-        This captures ALL products in the collection for schema
-        We use a separate loop that doesn't affect page display
-      {% endcomment %}
-      {% assign schema_products = collection.products %}
-      {% for product in schema_products %}
-      {
-        "@type": "ListItem",
-        "position": {{ forloop.index }},
-        "item": {
-          "@type": "Product",
-          "name": "{{ product.title | strip_html | escape }}",
-          "url": "{{ shop.url }}{{ product.url }}",
-          "image": "{% if product.featured_image %}{{ product.featured_image | image_url: width: 1024 }}{% endif %}",
-          "description": "{{ product.description | strip_html | truncate: 160 | escape }}",
-          {% if product.selected_or_first_available_variant.sku != blank %}
-          "sku": "{{ product.selected_or_first_available_variant.sku }}",
-          {% endif %}
-          "brand": {
-            "@type": "Brand",
-            "name": {{ product.vendor | json }}
-          },
-          "offers": {
-            "@type": "Offer",
-            "price": "{{ product.price | money_without_currency | remove: ',' }}",
-            "priceCurrency": "{{ cart.currency.iso_code }}",
-            "availability": "http://schema.org/{% if product.available %}InStock{% else %}OutOfStock{% endif %}",
-            "priceValidUntil": "2030-01-01"
+      {% paginate collection.products by 1000 %}
+        {% for product in collection.products %}
+        {
+          "@type": "ListItem",
+          "position": {{ forloop.index }},
+          "item": {
+            "@type": "Product",
+            "name": "{{ product.title | strip_html | escape }}",
+            "url": "{{ shop.url }}{{ product.url }}",
+            "image": "{{ product.featured_image | image_url: width: 1024 }}",
+            "brand": {
+              "@type": "Brand",
+              "name": {{ product.vendor | json }}
+            },
+            "offers": {
+              "@type": "Offer",
+              "price": "{{ product.price | money_without_currency | remove: ',' }}",
+              "priceCurrency": "{{ cart.currency.iso_code }}",
+              "availability": "http://schema.org/{% if product.available %}InStock{% else %}OutOfStock{% endif %}",
+              "priceValidUntil": "2030-01-01"
+            }
           }
-        }
-      }{% unless forloop.last %},{% endunless %}
-      {% endfor %}
+        }{% unless forloop.last %},{% endunless %}
+        {% endfor %}
+      {% endpaginate %}
     ]
   }{% if collection.image %},
   "image": "{{ collection.image | image_url: width: 1024 }}"{% endif %},
