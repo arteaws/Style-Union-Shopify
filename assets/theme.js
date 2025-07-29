@@ -1,4 +1,8 @@
 
+// Add this at the top of your JS file, outside any object
+let currentEndlessScroll = null;
+
+// Updated infinite scroll function (place this outside your theme object)
 function initEndlessScroll() {
     // Destroy existing instance if it exists
     if (currentEndlessScroll) {
@@ -55,8 +59,6 @@ function initEndlessScroll() {
         console.error('Error initializing infinite scroll:', error);
     }
 }
-
-// Function to completely stop infinite scroll (call this when applying filters)
 function stopEndlessScroll() {
     if (currentEndlessScroll) {
         try {
@@ -7006,6 +7008,31 @@ renderFilters: function renderFilters() {
     initEndlessScroll();
 },
 
+renderFilters: function renderFilters() {
+    if ( document.querySelector("[data-collection-filters-hz]") || document.querySelector("[data-collection-sort-by]") ) {
+        theme.CollectionFilters.horizontalFilters();
+        theme.CollectionFilters.currentFilters();
+    }
+    if ( document.querySelector("[data-collection-filters-price-range]") ) {
+        theme.CollectionFilters.priceRange();
+        theme.CollectionFilters.priceSlider();
+    }
+    if ( document.querySelector("[data-collection-sidebar-filters]") ) {
+        theme.CollectionFilters.sidebarFilters();
+    }
+    if ( document.querySelector("[data-collection-sort-by]") ) {
+        if ( document.querySelector("[data-collection-sort-by]").querySelector('.current') ) {
+            const placeholder = document.querySelector("[data-collection-sort-by]").querySelector('.current').dataset.placeholder;
+            document.querySelector("[data-collection-sort-by]").querySelector('.js-hz-filter-input').placeholder = placeholder;
+        }
+    }
+    Shopify.theme.quickview.init();
+    WAU.ProductGridVideo.init(); 
+    
+    // Initialize infinite scroll after rendering filters
+    initEndlessScroll();
+},
+
 renderSectionFromFetch: function renderSectionFromFetch(url, section) {
     fetch(url)
         .then(response => response.text())
@@ -7059,7 +7086,6 @@ getSections: function getSections() {
         }
     ]
 }
-
 /*======================================================
   Search Section
 ========================================================*/
