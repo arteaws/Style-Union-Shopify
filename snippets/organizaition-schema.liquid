@@ -46,7 +46,8 @@
 
 {% if template contains 'collection' %}
 {% comment %}
-  This approach generates schema for all products while keeping infinite scroll for UI
+  Generate complete schema with all products for SEO,
+  but don't interfere with the page display logic
 {% endcomment %}
 
 <script type="application/ld+json">
@@ -59,7 +60,40 @@
   "mainEntity": {
     "@type": "ItemList",
     "numberOfItems": {{ collection.products_count }},
-    "itemListElement": "PLACEHOLDER_FOR_ALL_PRODUCTS"
+    "itemListElement": [
+      {% comment %}
+        This captures ALL products in the collection for schema
+        We use a separate loop that doesn't affect page display
+      {% endcomment %}
+      {% assign schema_products = collection.products %}
+      {% for product in schema_products %}
+      {
+        "@type": "ListItem",
+        "position": {{ forloop.index }},
+        "item": {
+          "@type": "Product",
+          "name": "{{ product.title | strip_html | escape }}",
+          "url": "{{ shop.url }}{{ product.url }}",
+          "image": "{% if product.featured_image %}{{ product.featured_image | image_url: width: 1024 }}{% endif %}",
+          "description": "{{ product.description | strip_html | truncate: 160 | escape }}",
+          {% if product.selected_or_first_available_variant.sku != blank %}
+          "sku": "{{ product.selected_or_first_available_variant.sku }}",
+          {% endif %}
+          "brand": {
+            "@type": "Brand",
+            "name": {{ product.vendor | json }}
+          },
+          "offers": {
+            "@type": "Offer",
+            "price": "{{ product.price | money_without_currency | remove: ',' }}",
+            "priceCurrency": "{{ cart.currency.iso_code }}",
+            "availability": "http://schema.org/{% if product.available %}InStock{% else %}OutOfStock{% endif %}",
+            "priceValidUntil": "2030-01-01"
+          }
+        }
+      }{% unless forloop.last %},{% endunless %}
+      {% endfor %}
+    ]
   }{% if collection.image %},
   "image": "{{ collection.image | image_url: width: 1024 }}"{% endif %},
   "publisher": {
@@ -69,98 +103,6 @@
       "@type": "ImageObject",
       "url": "{{ settings.logo | image_url: width: 300 }}"
     }{% endif %}
-  }
-}
-</script>
-
-<script>
-document.addEventListener('DOMContentLoaded', async function() {
-  const collectionHandle = '{{ collection.handle }}';
-  const shopUrl = '{{ shop.permanent_domain }}';
-  
-  try {
-    // Fetch all products from the collection
-    const allProducts = await fetchAllCollectionProducts(collectionHandle);
-    
-    // Update the schema with all products
-    updateSchemaWithAllProducts(allProducts);
-    
-  } catch (error) {
-    console.error('Error loading all products for schema:', error);
-  }
-});
-
-async function fetchAllCollectionProducts(collectionHandle) {
-  const allProducts = [];
-  let page = 1;
-  let hasMore = true;
-  
-  while (hasMore) {
-    try {
-      const response = await fetch(`/collections/${collectionHandle}/products.json?limit=250&page=${page}`);
-      const data = await response.json();
-      
-      if (data.products && data.products.length > 0) {
-        allProducts.push(...data.products);
-        page++;
-        
-        // Check if we got fewer products than requested (last page)
-        if (data.products.length < 250) {
-          hasMore = false;
-        }
-      } else {
-        hasMore = false;
-      }
-    } catch (error) {
-      console.error(`Error fetching page ${page}:`, error);
-      hasMore = false;
-    }
-  }
-  
-  return allProducts;
-}
-
-function updateSchemaWithAllProducts(products) {
-  const schemaScript = document.querySelector('script[type="application/ld+json"]');
-  if (!schemaScript) return;
-  
-  try {
-    const schema = JSON.parse(schemaScript.textContent);
-    
-    // Build the item list
-    const itemListElements = products.map((product, index) => ({
-      "@type": "ListItem",
-      "position": index + 1,
-      "item": {
-        "@type": "Product",
-        "name": product.title,
-        "url": `${window.location.origin}${product.handle}`,
-        "image": product.images[0] || "",
-        "description": product.body_html?.replace(/<[^>]*>/g, '').substring(0, 160) || "",
-        "sku": product.variants[0]?.sku || "",
-        "brand": {
-          "@type": "Brand",
-          "name": product.vendor
-        },
-        "offers": {
-          "@type": "Offer",
-          "price": (product.variants[0]?.price / 100).toFixed(2),
-          "priceCurrency": "{{ cart.currency.iso_code }}",
-          "availability": `http://schema.org/${product.available ? 'InStock' : 'OutOfStock'}`,
-          "priceValidUntil": "2030-01-01"
-        }
-      }
-    }));
-    
-    // Update the schema
-    schema.mainEntity.itemListElement = itemListElements;
-    schema.mainEntity.numberOfItems = products.length;
-    
-    // Replace the script content
-    schemaScript.textContent = JSON.stringify(schema, null, 2);
-    
-  } catch (error) {
-    console.error('Error updating schema:', error);
   }
 }
 </script>
