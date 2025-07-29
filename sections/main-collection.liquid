@@ -2,6 +2,7 @@
 .custom-flex-pagination{
   text-align:center;
   margin-top:1rem;
+  display: none; /* Hide pagination by default */
 }  
 .preloader-new{
   width:40px;
@@ -126,7 +127,7 @@ data-collection-link="{{ collection_link }}">
       {%- endif -%}
 
       {%- if horizontal_filtering_enabled or horizontal_sort -%}
-        <form id="CollectionFiltersForm" class="span-12 md-span-12 auto" data-collection-filters data-ajax-filtering>
+        <form id="CollectionFiltersForm" class="span-12 md-span-12 auto" data-collection-filters>
           {% render 'collection-horizontal-toolbar',
             collection: collection,
             horizontal_filtering_enabled: horizontal_filtering_enabled,
@@ -280,9 +281,9 @@ data-collection-link="{{ collection_link }}">
           }
         </style>
       </div>
-          <div id="Huratips-Pagination" class="custom-flex-pagination">
+          <div id="Huratips-Pagination" class="custom-flex-pagination" {% if paginate.next %}style="display:block"{% endif %}>
           {% if paginate.next %}
-          <a href="{{ paginate.next.url }}">Loading More </a>
+          <a href="{{ paginate.next.url }}" data-next-url="{{ paginate.next.url }}">Loading More</a>
           {% endif %}  
           </div>
 
@@ -292,9 +293,9 @@ data-collection-link="{{ collection_link }}">
           data-id="{{ section.id }}">
             <span class="rte">{{ 'collections.filters.use_fewer_filters_html' | t: link: collection.url, class: "underline" }}</span>
           </div>
-          <div id="Huratips-Pagination">
+          <div id="Huratips-Pagination" {% if paginate.next %}style="display:block"{% endif %}>
           {% if paginate.next %}
-          <a href="{{ paginate.next.url }}">Loading More </a>
+          <a href="{{ paginate.next.url }}" data-next-url="{{ paginate.next.url }}">Loading More</a>
           {% endif %}  
           </div>
         {%- endif -%}
@@ -313,47 +314,132 @@ data-collection-link="{{ collection_link }}">
 </section>
 
 <script>
-// Store the Ajaxinate instance
-let endlessScroll = null;
-
-function initEndlessScroll() {
-  // Destroy existing instance if it exists
-  if (endlessScroll) {
-    endlessScroll.destroy();
+// Improved Infinite Scroll Implementation
+document.addEventListener('DOMContentLoaded', function() {
+  let isLoading = false;
+  let nextPageUrl = '';
+  const loadingSpinner = '<img class="preloader-new" src="https://cdn.shopify.com/s/files/1/0623/4754/2777/files/Iphone-spinner-2_a34e5a24-da69-4a18-b9ba-563ae9b95135.gif?v=1751544968">';
+  
+  // Initialize the infinite scroll
+  function initInfiniteScroll() {
+    const paginationElement = document.getElementById('Huratips-Pagination');
+    if (!paginationElement) return;
+    
+    nextPageUrl = paginationElement.querySelector('a')?.getAttribute('data-next-url');
+    if (!nextPageUrl) return;
+    
+    // Hide the pagination element initially
+    paginationElement.style.display = 'none';
+    
+    // Set up intersection observer for infinite scroll
+    const observer = new IntersectionObserver(handleIntersection, {
+      root: null,
+      rootMargin: '0px',
+      threshold: 0.1
+    });
+    
+    // Observe a small element at the bottom of the page
+    const sentinel = document.createElement('div');
+    sentinel.style.height = '1px';
+    sentinel.style.width = '100%';
+    document.querySelector('#main-collection-product-grid').appendChild(sentinel);
+    observer.observe(sentinel);
   }
   
-  // Initialize new instance
-  endlessScroll = new Ajaxinate({
-    container: '#main-collection-product-grid',
-    pagination: '#Huratips-Pagination',
-    loadingText: '<img class="preloader-new" src="https://cdn.shopify.com/s/files/1/0623/4754/2777/files/Iphone-spinner-2_a34e5a24-da69-4a18-b9ba-563ae9b95135.gif?v=1751544968" >',
-    callback: function() {
-      if (typeof ReloadSmartWishlist === 'function') {
-        ReloadSmartWishlist();
+  // Handle intersection callback
+  function handleIntersection(entries) {
+    if (isLoading || !nextPageUrl) return;
+    
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        loadMoreProducts();
       }
-    }
-  });
-}
-
-// Initial load
-document.addEventListener("DOMContentLoaded", initEndlessScroll);
-
-// Reinitialize when filters/sort change
-document.addEventListener("shopify:section:load", initEndlessScroll);
-
-// Listen for Shopify's collection update events
-document.addEventListener("shopify:collection:updated", function() {
-  // Small delay to ensure DOM is fully updated
-  setTimeout(initEndlessScroll, 300);
-});
-
-// Fallback for AJAX filtering if standard events don't work
-document.addEventListener("click", function(e) {
-  if (e.target.closest('[data-collection-filters] a, [data-collection-sidebar-filters] a')) {
-    setTimeout(initEndlessScroll, 1000);
+    });
   }
+  
+  // Load more products function
+  function loadMoreProducts() {
+    if (isLoading || !nextPageUrl) return;
+    
+    isLoading = true;
+    const paginationElement = document.getElementById('Huratips-Pagination');
+    if (paginationElement) {
+      paginationElement.innerHTML = loadingSpinner;
+      paginationElement.style.display = 'block';
+    }
+    
+    fetch(nextPageUrl)
+      .then(response => response.text())
+      .then(text => {
+        const parser = new DOMParser();
+        const html = parser.parseFromString(text, 'text/html');
+        
+        // Extract products and next page URL
+        const newProducts = html.querySelector('#main-collection-product-grid').innerHTML;
+        const newNextUrl = html.querySelector('#Huratips-Pagination a')?.getAttribute('data-next-url');
+        
+        // Append new products
+        document.querySelector('#main-collection-product-grid').insertAdjacentHTML('beforeend', newProducts);
+        
+        // Update next page URL
+        nextPageUrl = newNextUrl;
+        
+        // Reload any necessary scripts (like wishlist)
+        if (typeof ReloadSmartWishlist === 'function') {
+          ReloadSmartWishlist();
+        }
+      })
+      .catch(error => {
+        console.error('Error loading more products:', error);
+      })
+      .finally(() => {
+        isLoading = false;
+        const paginationElement = document.getElementById('Huratips-Pagination');
+        if (paginationElement) {
+          paginationElement.style.display = nextPageUrl ? 'block' : 'none';
+          if (nextPageUrl) {
+            paginationElement.innerHTML = `<a href="${nextPageUrl}" data-next-url="${nextPageUrl}">Loading More</a>`;
+          } else {
+            paginationElement.style.display = 'none';
+          }
+        }
+      });
+  }
+  
+  // Reinitialize when filters change
+  function handleFilterChange() {
+    // Reset state
+    isLoading = false;
+    nextPageUrl = '';
+    
+    // Find the new pagination element
+    const newPaginationElement = document.getElementById('Huratips-Pagination');
+    if (newPaginationElement) {
+      nextPageUrl = newPaginationElement.querySelector('a')?.getAttribute('data-next-url');
+      newPaginationElement.style.display = nextPageUrl ? 'block' : 'none';
+    }
+  }
+  
+  // Initialize on load
+  initInfiniteScroll();
+  
+  // Reinitialize when filters are applied (both AJAX and full page reloads)
+  document.addEventListener('shopify:collection:updated', handleFilterChange);
+  document.addEventListener('shopify:section:load', handleFilterChange);
+  
+  // Fallback for filter changes that don't trigger the above events
+  const filterForms = document.querySelectorAll('[data-collection-filters], [data-collection-sidebar-filters]');
+  filterForms.forEach(form => {
+    form.addEventListener('change', function() {
+      setTimeout(handleFilterChange, 1000);
+    });
+  });
 });
 </script>
+
+
+
+
 {% schema %}
 {
   "name": "Collection page",
@@ -370,6 +456,10 @@ document.addEventListener("click", function(e) {
     {
       "type": "range",
       "id": "grid",
+
+
+
+      
       "min": 2,
       "max": 4,
       "step": 1,
