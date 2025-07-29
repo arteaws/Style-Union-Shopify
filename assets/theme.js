@@ -1,69 +1,87 @@
+// Place this at the very top of your JS file
+window.currentEndlessScroll = null;
 
-// Add this at the top of your JS file, outside any object
-let currentEndlessScroll = null;
-
-// Updated infinite scroll function (place this outside your theme object)
+// Safe infinite scroll initialization function
 function initEndlessScroll() {
     // Destroy existing instance if it exists
-    if (currentEndlessScroll) {
+    if (window.currentEndlessScroll) {
         try {
-            currentEndlessScroll.destroy();
+            if (typeof window.currentEndlessScroll.destroy === 'function') {
+                window.currentEndlessScroll.destroy();
+            }
         } catch (e) {
             console.log('Error destroying previous scroll instance:', e);
         }
-        currentEndlessScroll = null;
+        window.currentEndlessScroll = null;
     }
 
-    // Check if pagination element exists before initializing
-    const paginationElement = document.querySelector('#Huratips-Pagination');
-    const containerElement = document.querySelector('#main-collection-product-grid');
-    
-    if (!paginationElement || !containerElement) {
-        console.log('Pagination or container not found, infinite scroll not initialized');
-        return;
-    }
+    // Small delay to ensure DOM is ready
+    setTimeout(function() {
+        // Check if Ajaxinate is available
+        if (typeof Ajaxinate === 'undefined') {
+            console.log('Ajaxinate not loaded');
+            return;
+        }
 
-    // Check if there are more pages to load
-    const nextPageLink = paginationElement.querySelector('a[rel="next"]');
-    if (!nextPageLink) {
-        console.log('No more pages to load, infinite scroll stopped');
-        return;
-    }
+        // Check if pagination element exists
+        const paginationElement = document.querySelector('#Huratips-Pagination');
+        const containerElement = document.querySelector('#main-collection-product-grid');
+        
+        if (!paginationElement || !containerElement) {
+            console.log('Pagination or container not found');
+            return;
+        }
 
-    try {
-        currentEndlessScroll = new Ajaxinate({
-            container: '#main-collection-product-grid',
-            pagination: '#Huratips-Pagination',
-            loadingText: '<img class="preloader-new" src="https://cdn.shopify.com/s/files/1/0623/4754/2777/files/Iphone-spinner-2_a34e5a24-da69-4a18-b9ba-563ae9b95135.gif?v=1751544968" >',
-            callback: function() {
-                // This function runs after new content is loaded
-                if (typeof ReloadSmartWishlist === 'function') {
-                    ReloadSmartWishlist();
-                }
-                
-                // Check if this was the last page
-                const updatedPagination = document.querySelector('#Huratips-Pagination');
-                const updatedNextLink = updatedPagination ? updatedPagination.querySelector('a[rel="next"]') : null;
-                
-                if (!updatedNextLink) {
-                    console.log('Last page reached, stopping infinite scroll');
-                    if (currentEndlessScroll) {
-                        currentEndlessScroll.destroy();
-                        currentEndlessScroll = null;
-                    }
-                }
-            }
-        });
-        console.log('Infinite scroll initialized');
-    } catch (error) {
-        console.error('Error initializing infinite scroll:', error);
-    }
-}
-function stopEndlessScroll() {
-    if (currentEndlessScroll) {
+        // Check if there are more pages to load
+        const nextPageLink = paginationElement.querySelector('a[rel="next"]');
+        if (!nextPageLink) {
+            console.log('No more pages to load');
+            return;
+        }
+
         try {
-            currentEndlessScroll.destroy();
-            currentEndlessScroll = null;
+            window.currentEndlessScroll = new Ajaxinate({
+                container: '#main-collection-product-grid',
+                pagination: '#Huratips-Pagination',
+                loadingText: '<img class="preloader-new" src="https://cdn.shopify.com/s/files/1/0623/4754/2777/files/Iphone-spinner-2_a34e5a24-da69-4a18-b9ba-563ae9b95135.gif?v=1751544968" >',
+                callback: function() {
+                    console.log('New content loaded');
+                    
+                    // Reload wishlist if function exists
+                    if (typeof ReloadSmartWishlist === 'function') {
+                        ReloadSmartWishlist();
+                    }
+                    
+                    // Check if this was the last page
+                    setTimeout(function() {
+                        const updatedPagination = document.querySelector('#Huratips-Pagination');
+                        const updatedNextLink = updatedPagination ? updatedPagination.querySelector('a[rel="next"]') : null;
+                        
+                        if (!updatedNextLink) {
+                            console.log('Last page reached');
+                            if (window.currentEndlessScroll && typeof window.currentEndlessScroll.destroy === 'function') {
+                                window.currentEndlessScroll.destroy();
+                                window.currentEndlessScroll = null;
+                            }
+                        }
+                    }, 100);
+                }
+            });
+            console.log('Infinite scroll initialized successfully');
+        } catch (error) {
+            console.error('Error initializing infinite scroll:', error);
+        }
+    }, 500);
+}
+
+// Function to stop infinite scroll
+function stopEndlessScroll() {
+    if (window.currentEndlessScroll) {
+        try {
+            if (typeof window.currentEndlessScroll.destroy === 'function') {
+                window.currentEndlessScroll.destroy();
+            }
+            window.currentEndlessScroll = null;
             console.log('Infinite scroll stopped');
         } catch (e) {
             console.log('Error stopping infinite scroll:', e);
@@ -71,6 +89,38 @@ function stopEndlessScroll() {
     }
 }
 
+// Your updated theme methods - replace your existing methods with these:
+
+renderFilters: function renderFilters() {
+    if (document.querySelector("[data-collection-filters-hz]") || document.querySelector("[data-collection-sort-by]")) {
+        theme.CollectionFilters.horizontalFilters();
+        theme.CollectionFilters.currentFilters();
+    }
+    if (document.querySelector("[data-collection-filters-price-range]")) {
+        theme.CollectionFilters.priceRange();
+        theme.CollectionFilters.priceSlider();
+    }
+    if (document.querySelector("[data-collection-sidebar-filters]")) {
+        theme.CollectionFilters.sidebarFilters();
+    }
+    if (document.querySelector("[data-collection-sort-by]")) {
+        if (document.querySelector("[data-collection-sort-by]").querySelector('.current')) {
+            const placeholder = document.querySelector("[data-collection-sort-by]").querySelector('.current').dataset.placeholder;
+            document.querySelector("[data-collection-sort-by]").querySelector('.js-hz-filter-input').placeholder = placeholder;
+        }
+    }
+    
+    if (typeof Shopify !== 'undefined' && Shopify.theme && Shopify.theme.quickview) {
+        Shopify.theme.quickview.init();
+    }
+    
+    if (typeof WAU !== 'undefined' && WAU.ProductGridVideo) {
+        WAU.ProductGridVideo.init();
+    }
+    
+    // Initialize infinite scroll
+    initEndlessScroll();
+}
 
 
 window.theme = window.theme || {};
@@ -6980,59 +7030,6 @@ sidebarFilters: function sidebarFilters(context) {
         }
     });
 },
-let currentEndlessScroll = null;
-
-// Updated renderFilters function
-renderFilters: function renderFilters() {
-    if ( document.querySelector("[data-collection-filters-hz]") || document.querySelector("[data-collection-sort-by]") ) {
-        theme.CollectionFilters.horizontalFilters();
-        theme.CollectionFilters.currentFilters();
-    }
-    if ( document.querySelector("[data-collection-filters-price-range]") ) {
-        theme.CollectionFilters.priceRange();
-        theme.CollectionFilters.priceSlider();
-    }
-    if ( document.querySelector("[data-collection-sidebar-filters]") ) {
-        theme.CollectionFilters.sidebarFilters();
-    }
-    if ( document.querySelector("[data-collection-sort-by]") ) {
-        if ( document.querySelector("[data-collection-sort-by]").querySelector('.current') ) {
-            const placeholder = document.querySelector("[data-collection-sort-by]").querySelector('.current').dataset.placeholder;
-            document.querySelector("[data-collection-sort-by]").querySelector('.js-hz-filter-input').placeholder = placeholder;
-        }
-    }
-    Shopify.theme.quickview.init();
-    WAU.ProductGridVideo.init(); 
-    
-    // Initialize infinite scroll after rendering filters
-    initEndlessScroll();
-},
-
-renderFilters: function renderFilters() {
-    if ( document.querySelector("[data-collection-filters-hz]") || document.querySelector("[data-collection-sort-by]") ) {
-        theme.CollectionFilters.horizontalFilters();
-        theme.CollectionFilters.currentFilters();
-    }
-    if ( document.querySelector("[data-collection-filters-price-range]") ) {
-        theme.CollectionFilters.priceRange();
-        theme.CollectionFilters.priceSlider();
-    }
-    if ( document.querySelector("[data-collection-sidebar-filters]") ) {
-        theme.CollectionFilters.sidebarFilters();
-    }
-    if ( document.querySelector("[data-collection-sort-by]") ) {
-        if ( document.querySelector("[data-collection-sort-by]").querySelector('.current') ) {
-            const placeholder = document.querySelector("[data-collection-sort-by]").querySelector('.current').dataset.placeholder;
-            document.querySelector("[data-collection-sort-by]").querySelector('.js-hz-filter-input').placeholder = placeholder;
-        }
-    }
-    Shopify.theme.quickview.init();
-    WAU.ProductGridVideo.init(); 
-    
-    // Initialize infinite scroll after rendering filters
-    initEndlessScroll();
-},
-
 renderSectionFromFetch: function renderSectionFromFetch(url, section) {
     fetch(url)
         .then(response => response.text())
@@ -7041,6 +7038,9 @@ renderSectionFromFetch: function renderSectionFromFetch(url, section) {
             this.filterData = [...this.filterData, { html, url }];
             theme.CollectionFilters.renderProductGrid(html);
             theme.CollectionFilters.renderFilters();
+        })
+        .catch(error => {
+            console.error('Error fetching section:', error);
         });
 },
 
@@ -7051,6 +7051,9 @@ renderSectionFromCache: function renderSectionFromCache(filterDataUrl, section) 
 },
 
 renderPage: function renderPage(searchParams, updateURLHash = true) {
+    // Stop current infinite scroll before rendering new page
+    stopEndlessScroll();
+    
     const sections = theme.CollectionFilters.getSections();
     sections.forEach((section) => {
         const url = `${window.location.pathname}?section_id=${section.section}&${searchParams}`;
@@ -7063,13 +7066,16 @@ renderPage: function renderPage(searchParams, updateURLHash = true) {
 },
 
 renderProductGrid: function renderProductGrid(html) {
-    const innerHTML = new DOMParser()
-        .parseFromString(html, 'text/html')
-        .getElementById('CollectionProductGrid').innerHTML;
-    document.getElementById('CollectionProductGrid').innerHTML = innerHTML;
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, 'text/html');
+    const newContent = doc.getElementById('CollectionProductGrid');
+    
+    if (newContent) {
+        document.getElementById('CollectionProductGrid').innerHTML = newContent.innerHTML;
+    }
 },
 
-onActiveFilterClick: function onActiveFilterClick(event) { 
+onActiveFilterClick: function onActiveFilterClick(event) {
     event.preventDefault();
     theme.CollectionFilters.renderPage(new URL(event.currentTarget.href).searchParams.toString());
 },
