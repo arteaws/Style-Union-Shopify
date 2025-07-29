@@ -331,123 +331,23 @@ data-collection-link="{{ collection_link }}">
 </section>
 
 
-let endlessScrollInstance = null;
-let loadedProductIds = new Set();
-
+<script>
 function initEndlessScroll() {
-  // Destroy existing instance to prevent multiple instances
-  if (endlessScrollInstance) {
-    endlessScrollInstance.destroy();
-    endlessScrollInstance = null;
-  }
-
-  // Clear the product IDs set for fresh start
-  loadedProductIds.clear();
-
-  // Check if pagination exists
-  const paginationElement = document.querySelector('#Huratips-Pagination a');
-  if (!paginationElement) {
-    console.log('No pagination found - infinite scroll not needed');
-    return;
-  }
-
-  // Collect existing product IDs from current page
-  const existingProducts = document.querySelectorAll('#main-collection-product-grid .js-product-listing[data-product-id]');
-  existingProducts.forEach(product => {
-    const productId = product.getAttribute('data-product-id');
-    if (productId) {
-      loadedProductIds.add(productId);
-    }
-  });
-
-  console.log('Existing products loaded:', loadedProductIds.size);
-
-  endlessScrollInstance = new Ajaxinate({
+  let endlessScroll = new Ajaxinate({
     container: '#main-collection-product-grid',
     pagination: '#Huratips-Pagination',
     loadingText: '<img class="preloader-new" src="https://cdn.shopify.com/s/files/1/0623/4754/2777/files/Iphone-spinner-2_a34e5a24-da69-4a18-b9ba-563ae9b95135.gif?v=1751544968" >',
     callback: function() {
-      console.log('New content loaded via infinite scroll');
-
-      // Get all product cards after new content is loaded
-      const allProducts = document.querySelectorAll('#main-collection-product-grid .js-product-listing[data-product-id]');
-      let duplicatesRemoved = 0;
-      let newProductsAdded = 0;
-
-      allProducts.forEach(product => {
-        const productId = product.getAttribute('data-product-id');
-        if (productId) {
-          if (loadedProductIds.has(productId)) {
-            // This is a duplicate, remove it
-            product.remove();
-            duplicatesRemoved++;
-            console.log('Removed duplicate product:', productId);
-          } else {
-            // This is a new product, add to our set
-            loadedProductIds.add(productId);
-            newProductsAdded++;
-          }
-        }
-      });
-
-      console.log('New products added:', newProductsAdded, 'Duplicates removed:', duplicatesRemoved);
-
-      // Check if no more pages available
-      const nextPageLink = document.querySelector('#Huratips-Pagination a[href]');
-      if (!nextPageLink) {
-        console.log('No more pages available - stopping infinite scroll');
-        if (endlessScrollInstance) {
-          endlessScrollInstance.destroy();
-          endlessScrollInstance = null;
-        }
-      }
-
-      // Reload wishlist functionality
+      // This function runs after new content is loaded
       if (typeof ReloadSmartWishlist === 'function') {
         ReloadSmartWishlist();
       }
-
-      // Reinitialize any other functionality that might be needed
-      if (typeof initProductCardEvents === 'function') {
-        initProductCardEvents();
-      }
     }
   });
-
-  console.log('Infinite scroll initialized');
 }
 
-// Initialize on page load
-document.addEventListener("DOMContentLoaded", function() {
-  initEndlessScroll();
-});
-
-// Reinitialize when filters or sorting is applied
-document.addEventListener('collection:updated', function() {
-  console.log('Collection updated - reinitializing infinite scroll');
-  setTimeout(initEndlessScroll, 100); // Small delay to ensure DOM is updated
-});
-
-// If you have filter forms, add event listeners
-document.addEventListener('DOMContentLoaded', function() {
-  const filterForms = document.querySelectorAll('#CollectionFiltersForm, #CollectionSidebarFiltersForm');
-  
-  filterForms.forEach(form => {
-    form.addEventListener('change', function() {
-      console.log('Filter changed - will reinitialize infinite scroll');
-      setTimeout(initEndlessScroll, 500); // Wait for AJAX filter to complete
-    });
-  });
-
-  // Listen for sort changes
-  const sortSelects = document.querySelectorAll('select[name="sort_by"]');
-  sortSelects.forEach(select => {
-    select.addEventListener('change', function() {
-      console.log('Sort changed - will reinitialize infinite scroll');
-      setTimeout(initEndlessScroll, 500); // Wait for sort to complete
-    });
-  });
-});
+document.addEventListener("DOMContentLoaded", initEndlessScroll);
+</script>
 {% schema %}
 {
   "name": "Collection page",
