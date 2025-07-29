@@ -6993,7 +6993,13 @@ renderSectionFromFetch: function renderSectionFromFetch(url, section) {
 	},
 	updateURLHash: function updateURLHash(searchParams) {
 		history.pushState({ searchParams }, '', `${window.location.pathname}${searchParams && '?'.concat(searchParams)}`);
+        function initEndlessScrollWithTimeout() {
     initEndlessScroll();
+    setTimeout(initEndlessScrollWithTimeout, 1000);
+}
+
+// Start the initial call
+setTimeout(initEndlessScrollWithTimeout, 1000);
 	},
 	getSections: function getSections() {
     return [
