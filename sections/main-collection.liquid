@@ -1,5 +1,3 @@
-
-
 <style>
 .custom-flex-pagination{
   text-align:center;
@@ -10,13 +8,7 @@
   margin:auto;
   height:40px;
 }
-/* @media only screen and (min-width: 1000px) and (max-width: 2560px)  {
-.mobile-sticky-filter .collection__page-sidebar{
-  position: fixed;
-  width: 280px;
-  z-index: 99999999;
-}  
-} */
+
 @media only screen and (max-width: 768px) {
 .mobile-sticky-filter {
         position: sticky;
@@ -25,7 +17,6 @@
         z-index: 99;
         background: white;
         left: 0;
-        /* width: 100% !important; */
         margin: auto !important;
   }
   .custom-relative-btn{
@@ -45,12 +36,10 @@
 .custom-relative-btn.cs-open .custom-accordion-svg {
     rotate: 0deg;
 }
-  
 }
-  
 </style>
-{%- liquid
 
+{%- liquid
   assign collection_link = ''
   if collection.handle
     assign collection_link = '/collections/' | append: collection.handle
@@ -107,7 +96,6 @@
   endif
 
   assign aos_mod = section.settings.grid | plus: 0
-
 -%}
 
 <section class="collection__page row grid__wrapper section-{{ section.id }} global__section"
@@ -138,7 +126,7 @@ data-collection-link="{{ collection_link }}">
       {%- endif -%}
 
       {%- if horizontal_filtering_enabled or horizontal_sort -%}
-        <form id="CollectionFiltersForm" class="span-12 md-span-12 auto" data-collection-filters>
+        <form id="CollectionFiltersForm" class="span-12 md-span-12 auto" data-collection-filters data-ajax-filtering>
           {% render 'collection-horizontal-toolbar',
             collection: collection,
             horizontal_filtering_enabled: horizontal_filtering_enabled,
@@ -215,7 +203,7 @@ data-collection-link="{{ collection_link }}">
               {%- assign product_counter = product_counter | plus: 1 -%}
               {%- assign has_products = true -%}
               
-              <div id="product-listing-{{ product.id }} yhi hai" 
+              <div id="product-listing-{{ product.id }}" 
                 class="item product-index collection__page-product js-product-listing"
                 data-alpha="{{ product.title }}" 
                 data-product-id="{{ product.id }}" 
@@ -309,7 +297,6 @@ data-collection-link="{{ collection_link }}">
           <a href="{{ paginate.next.url }}">Loading More </a>
           {% endif %}  
           </div>
-
         {%- endif -%}
 
       {% if show_sidebar %}</div>{% endif %}
@@ -321,24 +308,26 @@ data-collection-link="{{ collection_link }}">
           </div>
         </div>
       {%- endif -%}
-{% comment %}
-      {% unless collection.products_count <= product_limit %}
-        {% render 'pagination', paginate: paginate %}
-      {% endunless %}
-    {% endcomment %}
     </div>
   {% endpaginate %}
 </section>
 
-
 <script>
+// Store the Ajaxinate instance
+let endlessScroll = null;
+
 function initEndlessScroll() {
-  let endlessScroll = new Ajaxinate({
+  // Destroy existing instance if it exists
+  if (endlessScroll) {
+    endlessScroll.destroy();
+  }
+  
+  // Initialize new instance
+  endlessScroll = new Ajaxinate({
     container: '#main-collection-product-grid',
     pagination: '#Huratips-Pagination',
     loadingText: '<img class="preloader-new" src="https://cdn.shopify.com/s/files/1/0623/4754/2777/files/Iphone-spinner-2_a34e5a24-da69-4a18-b9ba-563ae9b95135.gif?v=1751544968" >',
     callback: function() {
-      // This function runs after new content is loaded
       if (typeof ReloadSmartWishlist === 'function') {
         ReloadSmartWishlist();
       }
@@ -346,7 +335,24 @@ function initEndlessScroll() {
   });
 }
 
+// Initial load
 document.addEventListener("DOMContentLoaded", initEndlessScroll);
+
+// Reinitialize when filters/sort change
+document.addEventListener("shopify:section:load", initEndlessScroll);
+
+// Listen for Shopify's collection update events
+document.addEventListener("shopify:collection:updated", function() {
+  // Small delay to ensure DOM is fully updated
+  setTimeout(initEndlessScroll, 300);
+});
+
+// Fallback for AJAX filtering if standard events don't work
+document.addEventListener("click", function(e) {
+  if (e.target.closest('[data-collection-filters] a, [data-collection-sidebar-filters] a')) {
+    setTimeout(initEndlessScroll, 1000);
+  }
+});
 </script>
 {% schema %}
 {
