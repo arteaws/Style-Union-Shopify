@@ -314,129 +314,126 @@ data-collection-link="{{ collection_link }}">
 </section>
 
 <script>
-// Improved Infinite Scroll Implementation
 document.addEventListener('DOMContentLoaded', function() {
+  // State variables
   let isLoading = false;
-  let nextPageUrl = '';
+  let nextPageUrl = document.querySelector('#Huratips-Pagination a')?.getAttribute('data-next-url');
+  const productGrid = document.getElementById('main-collection-product-grid');
   const loadingSpinner = '<img class="preloader-new" src="https://cdn.shopify.com/s/files/1/0623/4754/2777/files/Iphone-spinner-2_a34e5a24-da69-4a18-b9ba-563ae9b95135.gif?v=1751544968">';
-  
-  // Initialize the infinite scroll
+
+  // 1. Initialize Intersection Observer for infinite scroll
   function initInfiniteScroll() {
+    if (!nextPageUrl) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting && !isLoading) {
+            loadMoreProducts();
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    // Create and observe a sentinel element
+    const sentinel = document.createElement('div');
+    sentinel.id = 'infinite-scroll-sentinel';
+    sentinel.style.height = '1px';
+    productGrid.appendChild(sentinel);
+    observer.observe(sentinel);
+  }
+
+  // 2. Load more products function
+  async function loadMoreProducts() {
+    if (!nextPageUrl || isLoading) return;
+    
+    isLoading = true;
+    updatePaginationUI(true);
+    
+    try {
+      const response = await fetch(nextPageUrl);
+      const text = await response.text();
+      const parser = new DOMParser();
+      const html = parser.parseFromString(text, 'text/html');
+      
+      // Extract new products
+      const newProducts = html.querySelector('#main-collection-product-grid').innerHTML;
+      const newNextUrl = html.querySelector('#Huratips-Pagination a')?.getAttribute('data-next-url');
+      
+      // Append new products
+      productGrid.insertAdjacentHTML('beforeend', newProducts);
+      
+      // Update next page URL
+      nextPageUrl = newNextUrl;
+      
+      // Reinitialize any necessary scripts
+      if (typeof ReloadSmartWishlist === 'function') {
+        ReloadSmartWishlist();
+      }
+      
+    } catch (error) {
+      console.error('Error loading more products:', error);
+    } finally {
+      isLoading = false;
+      updatePaginationUI(false);
+    }
+  }
+
+  // 3. Update pagination UI
+  function updatePaginationUI(isLoading) {
     const paginationElement = document.getElementById('Huratips-Pagination');
     if (!paginationElement) return;
     
-    nextPageUrl = paginationElement.querySelector('a')?.getAttribute('data-next-url');
-    if (!nextPageUrl) return;
-    
-    // Hide the pagination element initially
-    paginationElement.style.display = 'none';
-    
-    // Set up intersection observer for infinite scroll
-    const observer = new IntersectionObserver(handleIntersection, {
-      root: null,
-      rootMargin: '0px',
-      threshold: 0.1
-    });
-    
-    // Observe a small element at the bottom of the page
-    const sentinel = document.createElement('div');
-    sentinel.style.height = '1px';
-    sentinel.style.width = '100%';
-    document.querySelector('#main-collection-product-grid').appendChild(sentinel);
-    observer.observe(sentinel);
-  }
-  
-  // Handle intersection callback
-  function handleIntersection(entries) {
-    if (isLoading || !nextPageUrl) return;
-    
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        loadMoreProducts();
-      }
-    });
-  }
-  
-  // Load more products function
-  function loadMoreProducts() {
-    if (isLoading || !nextPageUrl) return;
-    
-    isLoading = true;
-    const paginationElement = document.getElementById('Huratips-Pagination');
-    if (paginationElement) {
+    if (isLoading) {
       paginationElement.innerHTML = loadingSpinner;
-      paginationElement.style.display = 'block';
+    } else {
+      if (nextPageUrl) {
+        paginationElement.innerHTML = `<a href="${nextPageUrl}" data-next-url="${nextPageUrl}">Loading More</a>`;
+        paginationElement.style.display = 'block';
+      } else {
+        paginationElement.style.display = 'none';
+      }
     }
-    
-    fetch(nextPageUrl)
-      .then(response => response.text())
-      .then(text => {
-        const parser = new DOMParser();
-        const html = parser.parseFromString(text, 'text/html');
-        
-        // Extract products and next page URL
-        const newProducts = html.querySelector('#main-collection-product-grid').innerHTML;
-        const newNextUrl = html.querySelector('#Huratips-Pagination a')?.getAttribute('data-next-url');
-        
-        // Append new products
-        document.querySelector('#main-collection-product-grid').insertAdjacentHTML('beforeend', newProducts);
-        
-        // Update next page URL
-        nextPageUrl = newNextUrl;
-        
-        // Reload any necessary scripts (like wishlist)
-        if (typeof ReloadSmartWishlist === 'function') {
-          ReloadSmartWishlist();
-        }
-      })
-      .catch(error => {
-        console.error('Error loading more products:', error);
-      })
-      .finally(() => {
-        isLoading = false;
-        const paginationElement = document.getElementById('Huratips-Pagination');
-        if (paginationElement) {
-          paginationElement.style.display = nextPageUrl ? 'block' : 'none';
-          if (nextPageUrl) {
-            paginationElement.innerHTML = `<a href="${nextPageUrl}" data-next-url="${nextPageUrl}">Loading More</a>`;
-          } else {
-            paginationElement.style.display = 'none';
-          }
-        }
-      });
   }
-  
-  // Reinitialize when filters change
-  function handleFilterChange() {
+
+  // 4. Reset infinite scroll when filters/sort change
+  function resetInfiniteScroll() {
+    // Remove existing sentinel
+    const oldSentinel = document.getElementById('infinite-scroll-sentinel');
+    if (oldSentinel) oldSentinel.remove();
+    
     // Reset state
     isLoading = false;
-    nextPageUrl = '';
+    nextPageUrl = document.querySelector('#Huratips-Pagination a')?.getAttribute('data-next-url');
     
-    // Find the new pagination element
-    const newPaginationElement = document.getElementById('Huratips-Pagination');
-    if (newPaginationElement) {
-      nextPageUrl = newPaginationElement.querySelector('a')?.getAttribute('data-next-url');
-      newPaginationElement.style.display = nextPageUrl ? 'block' : 'none';
-    }
+    // Reinitialize
+    initInfiniteScroll();
+    updatePaginationUI(false);
   }
-  
-  // Initialize on load
-  initInfiniteScroll();
-  
-  // Reinitialize when filters are applied (both AJAX and full page reloads)
-  document.addEventListener('shopify:collection:updated', handleFilterChange);
-  document.addEventListener('shopify:section:load', handleFilterChange);
-  
-  // Fallback for filter changes that don't trigger the above events
-  const filterForms = document.querySelectorAll('[data-collection-filters], [data-collection-sidebar-filters]');
-  filterForms.forEach(form => {
-    form.addEventListener('change', function() {
-      setTimeout(handleFilterChange, 1000);
+
+  // 5. Event listeners for filter/sort changes
+  function setupEventListeners() {
+    // Shopify AJAX filtering events
+    document.addEventListener('shopify:collection:updated', resetInfiniteScroll);
+    document.addEventListener('shopify:section:load', resetInfiniteScroll);
+    
+    // Manual fallback for filter forms
+    document.querySelectorAll('[data-collection-filters] input, [data-collection-sidebar-filters] input').forEach(input => {
+      input.addEventListener('change', () => setTimeout(resetInfiniteScroll, 500));
     });
-  });
+    
+    // Manual fallback for sort changes
+    document.querySelectorAll('[data-sort-by]').forEach(select => {
+      select.addEventListener('change', () => setTimeout(resetInfiniteScroll, 500));
+    });
+  }
+
+  // Initial setup
+  initInfiniteScroll();
+  setupEventListeners();
 });
 </script>
-
 
 
 
