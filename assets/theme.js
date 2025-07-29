@@ -4545,36 +4545,27 @@ document.addEventListener("DOMContentLoaded", function(){
   (function initPredictiveSearch() {
 
     class PredictiveSearch extends HTMLElement {
-     constructor() {
-    super();
+      constructor() {
+        super();
 
-    this.featureDetections();
+        this.featureDetections();
 
-    this.routesPredictiveSearchURL = this.dataset.routes;
-    this.inputSelector = this.dataset.inputSelector;
-    this.resultsSelector = this.dataset.resultsSelector;
+        this.routesPredictiveSearchURL = this.dataset.routes;
+        this.inputSelector = this.dataset.inputSelector;
+        this.resultsSelector = this.dataset.resultsSelector;
 
-    // Fallback to default selectors if custom ones don't exist or don't match
-    this.input = this.querySelector(this.inputSelector) || 
-                 this.querySelector('input[type="search"]');
-    
-    this.predictiveSearchResults = this.querySelector(this.resultsSelector) || 
-                                   this.querySelector('#predictive-search');
+        // this.input = this.querySelector('input[type="search"]');
+        this.input = this.querySelector(this.inputSelector) ? this.querySelector(this.inputSelector) : this.querySelector('input[type="search"]');
 
-    // Add null check before adding event listener
-    if (!this.input) {
-        console.error('Predictive search input element not found');
-        return;
-    }
+        // this.predictiveSearchResults = this.querySelector('#predictive-search');
+        this.predictiveSearchResults = this.querySelector(this.resultsSelector) ? this.querySelector(this.resultsSelector) : this.querySelector('#predictive-search');
 
-    if (!this.predictiveSearchResults) {
-        console.warn('Predictive search results container not found');
-    }
+        this.input.addEventListener('input', theme.Helpers.debounce((event) => {
+          this.onChange(event);
+        }, 300).bind(this));
 
-    this.input.addEventListener('input', theme.Helpers.debounce((event) => {
-        this.onChange(event);
-    }, 300).bind(this));
-}
+
+      }
 
       featureDetections() {
         if (
