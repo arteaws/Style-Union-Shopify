@@ -45,7 +45,7 @@
 
 
 {% if template contains 'collection' %}
-<script type="application/ld+json" id="CollectionStructuredData">
+<script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "CollectionPage",
@@ -54,7 +54,33 @@
   "description": "{{ collection.description | strip_html | escape }}",
   "mainEntity": {
     "@type": "ItemList",
-    "itemListElement": []
+    "itemListElement": [
+      {% paginate collection.products by 1000 %}
+        {% for product in collection.products %}
+        {
+          "@type": "ListItem",
+          "position": {{ forloop.index }},
+          "item": {
+            "@type": "Product",
+            "name": "{{ product.title | strip_html | escape }}",
+            "url": "{{ shop.url }}{{ product.url }}",
+            "image": "{{ product.featured_image | image_url: width: 1024 }}",
+            "brand": {
+              "@type": "Brand",
+              "name": {{ product.vendor | json }}
+            },
+            "offers": {
+              "@type": "Offer",
+              "price": "{{ product.price | money_without_currency | remove: ',' }}",
+              "priceCurrency": "{{ cart.currency.iso_code }}",
+              "availability": "http://schema.org/{% if product.available %}InStock{% else %}OutOfStock{% endif %}",
+              "priceValidUntil": "2030-01-01"
+            }
+          }
+        }{% unless forloop.last %},{% endunless %}
+        {% endfor %}
+      {% endpaginate %}
+    ]
   }{% if collection.image %},
   "image": "{{ collection.image | image_url: width: 1024 }}"{% endif %},
   "publisher": {
@@ -66,53 +92,5 @@
     }{% endif %}
   }
 }
-</script>
-
-<script>
-// Function to update structured data when new products load
-function updateCollectionStructuredData(products) {
-  const scriptTag = document.getElementById('CollectionStructuredData');
-  if (!scriptTag) return;
-  
-  try {
-    const structuredData = JSON.parse(scriptTag.textContent);
-    
-    products.forEach((product, index) => {
-      const position = structuredData.mainEntity.itemListElement.length + 1;
-      structuredData.mainEntity.itemListElement.push({
-        "@type": "ListItem",
-        "position": position,
-        "item": {
-          "@type": "Product",
-          "name": product.title,
-          "url": `${window.location.origin}${product.url}`,
-          "image": product.featured_image?.src || '',
-          "brand": {
-            "@type": "Brand",
-            "name": product.vendor
-          },
-          "offers": {
-            "@type": "Offer",
-            "price": product.price.toString(),
-            "priceCurrency": "{{ cart.currency.iso_code }}",
-            "availability": `http://schema.org/${product.available ? 'InStock' : 'OutOfStock'}`,
-            "priceValidUntil": "2030-01-01"
-          }
-        }
-      });
-    });
-    
-    scriptTag.textContent = JSON.stringify(structuredData);
-  } catch (e) {
-    console.error('Error updating structured data:', e);
-  }
-}
-
-// Call this function whenever new products are loaded via infinite scroll
-// You'll need to hook this into your infinite scroll implementation
-// Example:
-// document.addEventListener('infiniteScrollLoaded', (event) => {
-//   updateCollectionStructuredData(event.detail.products);
-// });
 </script>
 {% endif %}
