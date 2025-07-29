@@ -55,29 +55,31 @@
   "mainEntity": {
     "@type": "ItemList",
     "itemListElement": [
-      {% for product in collection.products limit: 20 %}
-      {
-        "@type": "ListItem",
-        "position": {{ forloop.index }},
-        "item": {
-          "@type": "Product",
-          "name": "{{ product.title | strip_html | escape }}",
-          "url": "{{ shop.url }}{{ product.url }}",
-          "image": "{{ product.featured_image | image_url: width: 1024 }}",
-          "brand": {
-            "@type": "Brand",
-            "name": {{ product.vendor | json }}
-          },
-          "offers": {
-            "@type": "Offer",
-            "price": "{{ product.price | money_without_currency | remove: ',' }}",
-            "priceCurrency": "{{ cart.currency.iso_code }}",
-            "availability": "http://schema.org/{% if product.available %}InStock{% else %}OutOfStock{% endif %}",
-            "priceValidUntil": "2030-01-01"
+      {% paginate collection.products by 1000 %}
+        {% for product in collection.products %}
+        {
+          "@type": "ListItem",
+          "position": {{ forloop.index }},
+          "item": {
+            "@type": "Product",
+            "name": "{{ product.title | strip_html | escape }}",
+            "url": "{{ shop.url }}{{ product.url }}",
+            "image": "{{ product.featured_image | image_url: width: 1024 }}",
+            "brand": {
+              "@type": "Brand",
+              "name": {{ product.vendor | json }}
+            },
+            "offers": {
+              "@type": "Offer",
+              "price": "{{ product.price | money_without_currency | remove: ',' }}",
+              "priceCurrency": "{{ cart.currency.iso_code }}",
+              "availability": "http://schema.org/{% if product.available %}InStock{% else %}OutOfStock{% endif %}",
+              "priceValidUntil": "2030-01-01"
+            }
           }
-        }
-      }{% unless forloop.last %},{% endunless %}
-      {% endfor %}
+        }{% unless forloop.last %},{% endunless %}
+        {% endfor %}
+      {% endpaginate %}
     ]
   }{% if collection.image %},
   "image": "{{ collection.image | image_url: width: 1024 }}"{% endif %},
