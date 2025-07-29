@@ -1,22 +1,16 @@
 
-
 <style>
 .custom-flex-pagination{
   text-align:center;
   margin-top:1rem;
+  display: none; /* Hidden by default */
 }  
 .preloader-new{
   width:40px;
   margin:auto;
   height:40px;
 }
-/* @media only screen and (min-width: 1000px) and (max-width: 2560px)  {
-.mobile-sticky-filter .collection__page-sidebar{
-  position: fixed;
-  width: 280px;
-  z-index: 99999999;
-}  
-} */
+
 @media only screen and (max-width: 768px) {
 .mobile-sticky-filter {
         position: sticky;
@@ -25,7 +19,6 @@
         z-index: 99;
         background: white;
         left: 0;
-        /* width: 100% !important; */
         margin: auto !important;
   }
   .custom-relative-btn{
@@ -45,12 +38,10 @@
 .custom-relative-btn.cs-open .custom-accordion-svg {
     rotate: 0deg;
 }
-  
 }
-  
 </style>
-{%- liquid
 
+{%- liquid
   assign collection_link = ''
   if collection.handle
     assign collection_link = '/collections/' | append: collection.handle
@@ -107,7 +98,6 @@
   endif
 
   assign aos_mod = section.settings.grid | plus: 0
-
 -%}
 
 <section class="collection__page row grid__wrapper section-{{ section.id }} global__section"
@@ -292,9 +282,9 @@ data-collection-link="{{ collection_link }}">
           }
         </style>
       </div>
-          <div id="Huratips-Pagination" class="custom-flex-pagination">
+          <div id="Huratips-Pagination" class="custom-flex-pagination" {% if paginate.next %}style="display:block"{% endif %}>
           {% if paginate.next %}
-          <a href="{{ paginate.next.url }}">Loading More </a>
+          <a href="{{ paginate.next.url }}" data-next-url="{{ paginate.next.url }}">Loading More</a>
           {% endif %}  
           </div>
 
@@ -304,12 +294,11 @@ data-collection-link="{{ collection_link }}">
           data-id="{{ section.id }}">
             <span class="rte">{{ 'collections.filters.use_fewer_filters_html' | t: link: collection.url, class: "underline" }}</span>
           </div>
-          <div id="Huratips-Pagination">
+          <div id="Huratips-Pagination" {% if paginate.next %}style="display:block"{% endif %}>
           {% if paginate.next %}
-          <a href="{{ paginate.next.url }}">Loading More </a>
+          <a href="{{ paginate.next.url }}" data-next-url="{{ paginate.next.url }}">Loading More</a>
           {% endif %}  
           </div>
-
         {%- endif -%}
 
       {% if show_sidebar %}</div>{% endif %}
@@ -321,33 +310,162 @@ data-collection-link="{{ collection_link }}">
           </div>
         </div>
       {%- endif -%}
-{% comment %}
-      {% unless collection.products_count <= product_limit %}
-        {% render 'pagination', paginate: paginate %}
-      {% endunless %}
-    {% endcomment %}
     </div>
   {% endpaginate %}
 </section>
 
-
 <script>
-function initEndlessScroll() {
-  let endlessScroll = new Ajaxinate({
-    container: '#main-collection-product-grid',
-    pagination: '#Huratips-Pagination',
-    loadingText: '<img class="preloader-new" src="https://cdn.shopify.com/s/files/1/0623/4754/2777/files/Iphone-spinner-2_a34e5a24-da69-4a18-b9ba-563ae9b95135.gif?v=1751544968" >',
-    callback: function() {
-      // This function runs after new content is loaded
-      if (typeof ReloadSmartWishlist === 'function') {
-        ReloadSmartWishlist();
+// Enhanced Infinite Scroll with Filter/Sort Support
+document.addEventListener('DOMContentLoaded', function() {
+  // State management
+  const state = {
+    isLoading: false,
+    nextPageUrl: null,
+    observer: null,
+    sentinel: null
+  };
+
+  // DOM elements
+  const elements = {
+    productGrid: document.getElementById('main-collection-product-grid'),
+    pagination: document.getElementById('Huratips-Pagination'),
+    loadingSpinner: '<img class="preloader-new" src="https://cdn.shopify.com/s/files/1/0623/4754/2777/files/Iphone-spinner-2_a34e5a24-da69-4a18-b9ba-563ae9b95135.gif?v=1751544968">'
+  };
+
+  // Initialize infinite scroll
+  function initInfiniteScroll() {
+    // Get current next page URL
+    state.nextPageUrl = elements.pagination?.querySelector('a')?.dataset.nextUrl;
+    
+    // If no more pages, hide pagination
+    if (!state.nextPageUrl) {
+      if (elements.pagination) elements.pagination.style.display = 'none';
+      return;
+    }
+
+    // Create sentinel element for intersection observer
+    state.sentinel = document.createElement('div');
+    state.sentinel.id = 'infinite-scroll-sentinel';
+    state.sentinel.style.height = '1px';
+    elements.productGrid.appendChild(state.sentinel);
+
+    // Initialize intersection observer
+    state.observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting && !state.isLoading && state.nextPageUrl) {
+            loadMoreProducts();
+          }
+        });
+      },
+      { root: null, rootMargin: '0px', threshold: 0.1 }
+    );
+
+    // Start observing
+    state.observer.observe(state.sentinel);
+  }
+
+  // Load more products
+  async function loadMoreProducts() {
+    if (state.isLoading || !state.nextPageUrl) return;
+    
+    state.isLoading = true;
+    updatePaginationUI(true);
+    
+    try {
+      const response = await fetch(state.nextPageUrl);
+      const text = await response.text();
+      const parser = new DOMParser();
+      const html = parser.parseFromString(text, 'text/html');
+      
+      // Extract new products
+      const newProducts = html.getElementById('main-collection-product-grid')?.innerHTML;
+      const newNextUrl = html.getElementById('Huratips-Pagination')?.querySelector('a')?.dataset.nextUrl;
+      
+      if (newProducts) {
+        // Append new products
+        elements.productGrid.insertAdjacentHTML('beforeend', newProducts);
+        
+        // Update next page URL
+        state.nextPageUrl = newNextUrl;
+        
+        // Reinitialize any necessary scripts
+        if (typeof ReloadSmartWishlist === 'function') {
+          ReloadSmartWishlist();
+        }
+      }
+      
+    } catch (error) {
+      console.error('Error loading more products:', error);
+    } finally {
+      state.isLoading = false;
+      updatePaginationUI(false);
+    }
+  }
+
+  // Update pagination UI
+  function updatePaginationUI(isLoading) {
+    if (!elements.pagination) return;
+    
+    if (isLoading) {
+      elements.pagination.innerHTML = elements.loadingSpinner;
+    } else {
+      if (state.nextPageUrl) {
+        elements.pagination.innerHTML = `<a href="${state.nextPageUrl}" data-next-url="${state.nextPageUrl}">Loading More</a>`;
+        elements.pagination.style.display = 'block';
+      } else {
+        elements.pagination.style.display = 'none';
       }
     }
-  });
-}
+  }
 
-document.addEventListener("DOMContentLoaded", initEndlessScroll);
+  // Reset infinite scroll when filters/sort change
+  function resetInfiniteScroll() {
+    // Clean up existing observer
+    if (state.observer && state.sentinel) {
+      state.observer.unobserve(state.sentinel);
+      state.observer.disconnect();
+    }
+    
+    // Remove sentinel if exists
+    if (state.sentinel && state.sentinel.parentNode) {
+      state.sentinel.parentNode.removeChild(state.sentinel);
+    }
+    
+    // Reset state
+    state.isLoading = false;
+    state.nextPageUrl = document.querySelector('#Huratips-Pagination a')?.dataset.nextUrl;
+    
+    // Reinitialize
+    initInfiniteScroll();
+    updatePaginationUI(false);
+  }
+
+  // Setup event listeners for filter/sort changes
+  function setupEventListeners() {
+    // Shopify AJAX filtering events
+    document.addEventListener('shopify:collection:updated', resetInfiniteScroll);
+    document.addEventListener('shopify:section:load', resetInfiniteScroll);
+    
+    // Manual fallback for filter forms
+    document.querySelectorAll('[data-collection-filters] input, [data-collection-sidebar-filters] input').forEach(input => {
+      input.addEventListener('change', () => setTimeout(resetInfiniteScroll, 500));
+    });
+    
+    // Manual fallback for sort changes
+    document.querySelectorAll('[data-sort-by]').forEach(select => {
+      select.addEventListener('change', () => setTimeout(resetInfiniteScroll, 500));
+    });
+  }
+
+  // Initial setup
+  initInfiniteScroll();
+  setupEventListeners();
+});
 </script>
+
+
+
 {% schema %}
 {
   "name": "Collection page",
@@ -364,6 +482,10 @@ document.addEventListener("DOMContentLoaded", initEndlessScroll);
     {
       "type": "range",
       "id": "grid",
+
+
+
+      
       "min": 2,
       "max": 4,
       "step": 1,
