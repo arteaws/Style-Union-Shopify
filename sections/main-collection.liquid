@@ -1,8 +1,9 @@
+
 <style>
 .custom-flex-pagination{
   text-align:center;
   margin-top:1rem;
-  display: none; /* Hide pagination by default */
+  display: none; /* Hidden by default */
 }  
 .preloader-new{
   width:40px;
@@ -314,105 +315,133 @@ data-collection-link="{{ collection_link }}">
 </section>
 
 <script>
+// Enhanced Infinite Scroll with Filter/Sort Support
 document.addEventListener('DOMContentLoaded', function() {
-  // State variables
-  let isLoading = false;
-  let nextPageUrl = document.querySelector('#Huratips-Pagination a')?.getAttribute('data-next-url');
-  const productGrid = document.getElementById('main-collection-product-grid');
-  const loadingSpinner = '<img class="preloader-new" src="https://cdn.shopify.com/s/files/1/0623/4754/2777/files/Iphone-spinner-2_a34e5a24-da69-4a18-b9ba-563ae9b95135.gif?v=1751544968">';
+  // State management
+  const state = {
+    isLoading: false,
+    nextPageUrl: null,
+    observer: null,
+    sentinel: null
+  };
 
-  // 1. Initialize Intersection Observer for infinite scroll
+  // DOM elements
+  const elements = {
+    productGrid: document.getElementById('main-collection-product-grid'),
+    pagination: document.getElementById('Huratips-Pagination'),
+    loadingSpinner: '<img class="preloader-new" src="https://cdn.shopify.com/s/files/1/0623/4754/2777/files/Iphone-spinner-2_a34e5a24-da69-4a18-b9ba-563ae9b95135.gif?v=1751544968">'
+  };
+
+  // Initialize infinite scroll
   function initInfiniteScroll() {
-    if (!nextPageUrl) return;
+    // Get current next page URL
+    state.nextPageUrl = elements.pagination?.querySelector('a')?.dataset.nextUrl;
+    
+    // If no more pages, hide pagination
+    if (!state.nextPageUrl) {
+      if (elements.pagination) elements.pagination.style.display = 'none';
+      return;
+    }
 
-    const observer = new IntersectionObserver(
+    // Create sentinel element for intersection observer
+    state.sentinel = document.createElement('div');
+    state.sentinel.id = 'infinite-scroll-sentinel';
+    state.sentinel.style.height = '1px';
+    elements.productGrid.appendChild(state.sentinel);
+
+    // Initialize intersection observer
+    state.observer = new IntersectionObserver(
       (entries) => {
         entries.forEach(entry => {
-          if (entry.isIntersecting && !isLoading) {
+          if (entry.isIntersecting && !state.isLoading && state.nextPageUrl) {
             loadMoreProducts();
           }
         });
       },
-      { threshold: 0.1 }
+      { root: null, rootMargin: '0px', threshold: 0.1 }
     );
 
-    // Create and observe a sentinel element
-    const sentinel = document.createElement('div');
-    sentinel.id = 'infinite-scroll-sentinel';
-    sentinel.style.height = '1px';
-    productGrid.appendChild(sentinel);
-    observer.observe(sentinel);
+    // Start observing
+    state.observer.observe(state.sentinel);
   }
 
-  // 2. Load more products function
+  // Load more products
   async function loadMoreProducts() {
-    if (!nextPageUrl || isLoading) return;
+    if (state.isLoading || !state.nextPageUrl) return;
     
-    isLoading = true;
+    state.isLoading = true;
     updatePaginationUI(true);
     
     try {
-      const response = await fetch(nextPageUrl);
+      const response = await fetch(state.nextPageUrl);
       const text = await response.text();
       const parser = new DOMParser();
       const html = parser.parseFromString(text, 'text/html');
       
       // Extract new products
-      const newProducts = html.querySelector('#main-collection-product-grid').innerHTML;
-      const newNextUrl = html.querySelector('#Huratips-Pagination a')?.getAttribute('data-next-url');
+      const newProducts = html.getElementById('main-collection-product-grid')?.innerHTML;
+      const newNextUrl = html.getElementById('Huratips-Pagination')?.querySelector('a')?.dataset.nextUrl;
       
-      // Append new products
-      productGrid.insertAdjacentHTML('beforeend', newProducts);
-      
-      // Update next page URL
-      nextPageUrl = newNextUrl;
-      
-      // Reinitialize any necessary scripts
-      if (typeof ReloadSmartWishlist === 'function') {
-        ReloadSmartWishlist();
+      if (newProducts) {
+        // Append new products
+        elements.productGrid.insertAdjacentHTML('beforeend', newProducts);
+        
+        // Update next page URL
+        state.nextPageUrl = newNextUrl;
+        
+        // Reinitialize any necessary scripts
+        if (typeof ReloadSmartWishlist === 'function') {
+          ReloadSmartWishlist();
+        }
       }
       
     } catch (error) {
       console.error('Error loading more products:', error);
     } finally {
-      isLoading = false;
+      state.isLoading = false;
       updatePaginationUI(false);
     }
   }
 
-  // 3. Update pagination UI
+  // Update pagination UI
   function updatePaginationUI(isLoading) {
-    const paginationElement = document.getElementById('Huratips-Pagination');
-    if (!paginationElement) return;
+    if (!elements.pagination) return;
     
     if (isLoading) {
-      paginationElement.innerHTML = loadingSpinner;
+      elements.pagination.innerHTML = elements.loadingSpinner;
     } else {
-      if (nextPageUrl) {
-        paginationElement.innerHTML = `<a href="${nextPageUrl}" data-next-url="${nextPageUrl}">Loading More</a>`;
-        paginationElement.style.display = 'block';
+      if (state.nextPageUrl) {
+        elements.pagination.innerHTML = `<a href="${state.nextPageUrl}" data-next-url="${state.nextPageUrl}">Loading More</a>`;
+        elements.pagination.style.display = 'block';
       } else {
-        paginationElement.style.display = 'none';
+        elements.pagination.style.display = 'none';
       }
     }
   }
 
-  // 4. Reset infinite scroll when filters/sort change
+  // Reset infinite scroll when filters/sort change
   function resetInfiniteScroll() {
-    // Remove existing sentinel
-    const oldSentinel = document.getElementById('infinite-scroll-sentinel');
-    if (oldSentinel) oldSentinel.remove();
+    // Clean up existing observer
+    if (state.observer && state.sentinel) {
+      state.observer.unobserve(state.sentinel);
+      state.observer.disconnect();
+    }
+    
+    // Remove sentinel if exists
+    if (state.sentinel && state.sentinel.parentNode) {
+      state.sentinel.parentNode.removeChild(state.sentinel);
+    }
     
     // Reset state
-    isLoading = false;
-    nextPageUrl = document.querySelector('#Huratips-Pagination a')?.getAttribute('data-next-url');
+    state.isLoading = false;
+    state.nextPageUrl = document.querySelector('#Huratips-Pagination a')?.dataset.nextUrl;
     
     // Reinitialize
     initInfiniteScroll();
     updatePaginationUI(false);
   }
 
-  // 5. Event listeners for filter/sort changes
+  // Setup event listeners for filter/sort changes
   function setupEventListeners() {
     // Shopify AJAX filtering events
     document.addEventListener('shopify:collection:updated', resetInfiniteScroll);
