@@ -252,6 +252,7 @@
       "block_order": [
         "image_TVPDT3"
       ],
+      "disabled": true,
       "settings": {
         "full_width": true,
         "slideshow_size": "fixed_height",
