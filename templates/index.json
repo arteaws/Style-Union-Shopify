@@ -697,6 +697,7 @@
       "blocks": {
         "image_zPVKkH": {
           "type": "image",
+          "disabled": true,
           "settings": {
             "image": "shopify://shop_images/Her_world_endless_styles_3.png",
             "overlay_color": "#000000",
