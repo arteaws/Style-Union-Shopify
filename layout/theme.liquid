@@ -18,6 +18,9 @@
     {%- assign main_font_bold = main_font | font_modify: 'weight', 'bolder' -%}
     {%- assign main_font_italic = main_font | font_modify: 'style', 'italic' -%}
     {%- assign main_font_bold_italic = main_font_bold | font_modify: 'style', 'italic' -%}
+
+
+
 {% if template.name == 'order' and request.path contains '/account/orders/' %}
   <!-- Google Tag Manager -->
   <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -26,14 +29,15 @@
   'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
   })(window,document,'script','dataLayer','GTM-PM7WZHF');</script>
   <!-- End Google Tag Manager -->
-{% endif %}
 
-{% if template.name == 'order' and request.path contains '/account/orders/' %}
   <!-- Google Tag Manager (noscript) -->
   <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PM7WZHF"
   height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <!-- End Google Tag Manager (noscript) -->
 {% endif %}
+
+
+
         <!-- Google Tag Manager -->
     <script>
       (function(w,d,s,l,i){
