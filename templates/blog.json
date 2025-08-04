@@ -18,10 +18,9 @@
       "blocks": {
         "d8daa176-308f-4aea-a55e-f53d51249821": {
           "type": "newsletter",
-          "disabled": true,
           "settings": {
             "heading": "Subscribe",
-            "text": "<p>Explain the benefits of subscribing</p>"
+            "text": ""
           }
         }
       },
