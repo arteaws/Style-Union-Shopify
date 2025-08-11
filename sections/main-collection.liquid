@@ -192,7 +192,7 @@ data-collection-link="{{ collection_link }}">
         {%- assign sold_out_products = "" -%}
         
         {%- comment -%}First collect all sold-out products for later use{%- endcomment -%}
-        {% comment %} {% for product in collection.products %}
+        {% for product in collection.products %}
           {% unless product.tags contains 'gift-with-purchase' %}
             {%- unless product.available -%}
               {%- capture sold_out_product -%}
@@ -205,16 +205,16 @@ data-collection-link="{{ collection_link }}">
               {%- endif -%}
             {%- endunless -%}
           {% endunless %}
-        {% endfor %} {% endcomment %}
+        {% endfor %}
         
         {%- comment -%}Process available products normally{%- endcomment -%}
-        {% for product in collection.products %}
+        {% comment %} {% for product in collection.products %}
           {% unless product.tags contains 'gift-with-purchase' %}
             
             {%- if product.available -%}
               {%- assign product_counter = product_counter | plus: 1 -%}
               {%- assign has_products = true -%}
-              
+               {% endcomment %}
               <div id="product-listing-{{ product.id }}" 
                 class="item product-index collection__page-product js-product-listing"
                 data-alpha="{{ product.title }}" 
@@ -236,10 +236,10 @@ data-collection-link="{{ collection_link }}">
                   loading: loading,
                   fetchpriority: fetch_priority %}
               </div>
-            {%- endif -%}
+            {% comment %} {%- endif -%}
             
           {% endunless %}
-        {% endfor %}
+        {% endfor %} {% endcomment %}
         
         {%- comment -%}Add sold-out products only on the last page{%- endcomment -%}
         {%- if paginate.current_page == paginate.pages and sold_out_products != "" -%}
