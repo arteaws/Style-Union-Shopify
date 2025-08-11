@@ -189,10 +189,10 @@ data-collection-link="{{ collection_link }}">
         
         {%- assign has_products = false -%}
         {%- assign product_counter = 0 -%}
-        {% comment %} {%- assign sold_out_products = "" -%} {% endcomment %}
+        {%- assign sold_out_products = "" -%}
         
         {%- comment -%}First collect all sold-out products for later use{%- endcomment -%}
-        {% for product in collection.products %}
+        {% comment %} {% for product in collection.products %}
           {% unless product.tags contains 'gift-with-purchase' %}
             {%- unless product.available -%}
               {%- capture sold_out_product -%}
@@ -201,11 +201,11 @@ data-collection-link="{{ collection_link }}">
               {%- if sold_out_products == "" -%}
                 {%- assign sold_out_products = sold_out_product -%}
               {%- else -%}
-                {% comment %} {%- assign sold_out_products = sold_out_products | append: "," | append: sold_out_product -%} {% endcomment %}
+                {%- assign sold_out_products = sold_out_products | append: "," | append: sold_out_product -%}
               {%- endif -%}
             {%- endunless -%}
           {% endunless %}
-        {% endfor %}
+        {% endfor %} {% endcomment %}
         
         {%- comment -%}Process available products normally{%- endcomment -%}
         {% for product in collection.products %}
