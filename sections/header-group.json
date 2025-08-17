@@ -14,6 +14,12 @@
     "header": {
       "type": "header",
       "blocks": {
+        "1e59e03d-9427-448e-a770-8b003cab5cc9": {
+          "type": "announcement_text",
+          "settings": {
+            "announcement_text": "<p>Free Shipping for all orders above Rs.1699!</p>"
+          }
+        },
         "announcement_text_ywPcyg": {
           "type": "announcement_text",
           "settings": {
@@ -25,12 +31,6 @@
           "disabled": true,
           "settings": {
             "announcement_text": "<p>Order deliveries may experience delays due to unforeseen circumstances</p>"
-          }
-        },
-        "1e59e03d-9427-448e-a770-8b003cab5cc9": {
-          "type": "announcement_text",
-          "settings": {
-            "announcement_text": "<p>Independence Day Special Offer : Free Shipping for all orders above Rs.999!</p>"
           }
         },
         "announcement_text_reCKak": {
@@ -54,9 +54,9 @@
         }
       },
       "block_order": [
+        "1e59e03d-9427-448e-a770-8b003cab5cc9",
         "announcement_text_ywPcyg",
         "announcement_text_VgTGgD",
-        "1e59e03d-9427-448e-a770-8b003cab5cc9",
         "announcement_text_reCKak",
         "62c8964e-4410-45cb-8165-df58ef83a1fd",
         "announcement_text_6rckWQ"
