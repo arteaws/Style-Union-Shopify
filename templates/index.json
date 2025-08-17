@@ -81,6 +81,7 @@
       "blocks": {
         "image_TB6JN4": {
           "type": "image",
+          "disabled": true,
           "settings": {
             "image": "shopify://shop_images/Final_Website_Banner.png",
             "overlay_color": "#000000",
