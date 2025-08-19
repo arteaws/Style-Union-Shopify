@@ -104,15 +104,36 @@
         "image_6zdbji": {
           "type": "image",
           "settings": {
-            "image": "shopify://shop_images/MAN_800_x_1200_px_1800_x_800_px_4.png",
+            "image": "shopify://shop_images/Women_Ethnic_Own_The_Spark.jpg",
             "overlay_color": "#000000",
             "overlay_opacity": 0,
             "caption_position": "middle_center",
-            "mobile_image": "shopify://shop_images/MAN_800_x_1200_px_5.png",
+            "mobile_image": "shopify://shop_images/Women_Ethnic_Own_The_Spark_a8b06050-e0a9-45b3-a067-433eb73e472c.jpg",
             "hide_caption_background": false,
             "heading": "",
             "subheading": "",
-            "link": "shopify://pages/summer-like-you",
+            "link": "shopify://collections/women-ethnic-wear",
+            "button_text": "",
+            "second_link": "",
+            "second_button_text": "Button 2 text",
+            "text_color": "#ffffff",
+            "button_color": "#ffffff",
+            "button_background": "#000000",
+            "caption_background": "rgba(0,0,0,0)"
+          }
+        },
+        "image_P9rDbb": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/Men_Women_Western_Own_The_Spark.jpg",
+            "overlay_color": "#000000",
+            "overlay_opacity": 0,
+            "caption_position": "middle_center",
+            "mobile_image": "shopify://shop_images/Men_Women_Western_Own_The_Spark_b5ba8cb5-6c23-4d73-8af8-79f240a8b256.jpg",
+            "hide_caption_background": false,
+            "heading": "",
+            "subheading": "",
+            "link": "shopify://collections/all",
             "button_text": "",
             "second_link": "",
             "second_button_text": "Button 2 text",
@@ -163,35 +184,14 @@
             "button_background": "#000000",
             "caption_background": "rgba(0,0,0,0)"
           }
-        },
-        "image_P9rDbb": {
-          "type": "image",
-          "settings": {
-            "image": "shopify://shop_images/holiday_mens_banner-2_16888da9-bc90-4780-bf68-99446dd85636.png",
-            "overlay_color": "#000000",
-            "overlay_opacity": 0,
-            "caption_position": "middle_center",
-            "mobile_image": "shopify://shop_images/Copy_of_holiday_mens_banner_800_x_1200_px.png",
-            "hide_caption_background": false,
-            "heading": "",
-            "subheading": "",
-            "link": "shopify://collections/kids-holiday-wear",
-            "button_text": "",
-            "second_link": "",
-            "second_button_text": "Button 2 text",
-            "text_color": "#ffffff",
-            "button_color": "#ffffff",
-            "button_background": "#000000",
-            "caption_background": "rgba(0,0,0,0)"
-          }
         }
       },
       "block_order": [
         "image_TB6JN4",
         "image_6zdbji",
+        "image_P9rDbb",
         "d3250875-f7c1-40bb-aec9-87edb0224b73",
-        "image_rCYnhj",
-        "image_P9rDbb"
+        "image_rCYnhj"
       ],
       "settings": {
         "full_width": true,
