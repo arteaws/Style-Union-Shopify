@@ -1,1 +1,373 @@
-{"sections":{"banner":{"type":"main-collection-banner","disabled":true,"settings":{"banner_image_type":"collection"}},"promo":{"type":"promotional-banner","disabled":true,"settings":{"background_color":"#f5f5f5","link":"","text_align":"center","heading":"Heading","subheading":"<p>Add a short sentence to your banner<\/p>","button_text":"Button","heading_font_size":26,"subheading_font_size":16,"text_color":"#000000","button_text_color":"#ffffff","button_color":"#000000","section_padding":"none"}},"main":{"type":"main-collection","blocks":{"bef67807-6de8-4afa-b1fe-bc0a46351382":{"type":"side_sortby","settings":{}},"cea9f996-51a8-4b3a-8837-6975c0590a9c":{"type":"side_filter","settings":{"show_color_swatches":true,"show_filter_count":true}}},"block_order":["bef67807-6de8-4afa-b1fe-bc0a46351382","cea9f996-51a8-4b3a-8837-6975c0590a9c"],"disabled":true,"settings":{"rows":4,"grid":3,"show_image":false,"description_position":"bottom"}},"slideshow_RJ9iyi":{"type":"slideshow","blocks":{"image_kFN7DB":{"type":"image","settings":{"image":"shopify:\/\/shop_images\/MEN_ETHNIC_1_1.png","overlay_color":"#000000","overlay_opacity":0,"caption_position":"middle_center","mobile_image":"shopify:\/\/shop_images\/MEN_ETHNIC_WEAR_1.png","hide_caption_background":false,"heading":"","subheading":"","link":"shopify:\/\/collections\/mens-casual-wear","button_text":"","second_link":"","second_button_text":"Button 2 text","text_color":"#ffffff","button_color":"#ffffff","button_background":"#000000","caption_background":"rgba(0,0,0,0)"}}},"block_order":["image_kFN7DB"],"settings":{"full_width":true,"slideshow_size":"fixed_height","desktop_height":400,"mobile_height":400,"caption_below":false,"pager":"dots","show_animation":false,"transition":"fade","slider_speed":5,"enable_stop_pause_on_mobile":true,"slide_heading_size":22,"subheading_size":14,"section_padding":"both"}},"featured_collection_KrgerX":{"type":"featured-collection","settings":{"heading":"Casual Bestsellers","collection":"mens-casual-wear","carousel":true,"show_view_all":true,"reduce_width":false,"grid":5,"limit":20,"section_padding":"none"}},"collection_list_HmVFbc":{"type":"collection-list","blocks":{"featured_collection_QAP94B":{"type":"featured_collection","settings":{"collection":"men-linen-shirts","collection_image":"shopify:\/\/shop_images\/style_union_women_s_ethin_explore_card-4.png"}},"featured_collection_AUMTki":{"type":"featured_collection","settings":{"collection":"mens-shorts","collection_image":"shopify:\/\/shop_images\/style_union_women_s_ethin_explore_card-2.png"}},"featured_collection_JDnzdR":{"type":"featured_collection","settings":{"collection":"denim-fest","collection_image":"shopify:\/\/shop_images\/17_7.png"}},"featured_collection_CBC76L":{"type":"featured_collection","settings":{"collection":"mens-casual-trousers","collection_image":"shopify:\/\/shop_images\/19_6.png"}}},"block_order":["featured_collection_QAP94B","featured_collection_AUMTki","featured_collection_JDnzdR","featured_collection_CBC76L"],"settings":{"title":"Elevate your Wardrobe","grid":4,"carousel":false,"collection_count":false,"bold_titles":true,"title_position":"below_image","image_ratio":"vertical","section_padding":"none"}},"featured_collection_xr9FzC":{"type":"featured-collection","settings":{"heading":"Men's Essentials","collection":"bestseller-new-men","carousel":true,"show_view_all":true,"reduce_width":false,"grid":5,"limit":20,"section_padding":"none"}},"featured_collection_EHqFDi":{"type":"featured-collection","name":"Featured collection","settings":{"heading":"Men's Athleisure","collection":"mens-athleisure-wear","carousel":true,"show_view_all":true,"reduce_width":false,"grid":5,"limit":20,"section_padding":"both"}},"slideshow_b9bFmN":{"type":"slideshow","blocks":{"image_H8eAq6":{"type":"image","settings":{"image":"shopify:\/\/shop_images\/style_union_updated_ethnic_1.png","overlay_color":"#000000","overlay_opacity":0,"caption_position":"middle_center","mobile_image":"shopify:\/\/shop_images\/MEN_ETHNIC_WEAR.png","hide_caption_background":false,"heading":"","subheading":"","link":"shopify:\/\/collections\/men-ethnic-wear","button_text":"","second_link":"","second_button_text":"Button 2 text","text_color":"#ffffff","button_color":"#ffffff","button_background":"#000000","caption_background":"rgba(0,0,0,0)"}}},"block_order":["image_H8eAq6"],"settings":{"full_width":true,"slideshow_size":"fixed_height","desktop_height":400,"mobile_height":400,"caption_below":false,"pager":"dots","show_animation":false,"transition":"fade","slider_speed":5,"enable_stop_pause_on_mobile":true,"slide_heading_size":22,"subheading_size":14,"section_padding":"both"}},"featured_collection_7FQ3a4":{"type":"featured-collection","settings":{"heading":"Ethnic Wear","collection":"men-ethnic-wear","carousel":true,"show_view_all":true,"reduce_width":false,"grid":5,"limit":20,"section_padding":"none"}},"collection_list_GCifJ7":{"type":"collection-list","blocks":{"featured_collection_Q3n3iD":{"type":"featured_collection","settings":{"collection":"mens-ethnic-shirts","collection_image":"shopify:\/\/shop_images\/9_21.png"}},"featured_collection_cbiNyB":{"type":"featured_collection","settings":{"collection":"men-ethnic-kurtas","collection_image":"shopify:\/\/shop_images\/7_20.png"}},"featured_collection_aqH39j":{"type":"featured_collection","settings":{"collection":"mens-ethnic-bottom-wear","collection_image":"shopify:\/\/shop_images\/8_20.png"}},"featured_collection_WbDUBy":{"type":"featured_collection","settings":{"collection":"mens-ethnic-jacket","collection_image":"shopify:\/\/shop_images\/style_union_women_s_ethin_explore_card.png"}}},"block_order":["featured_collection_Q3n3iD","featured_collection_cbiNyB","featured_collection_aqH39j","featured_collection_WbDUBy"],"settings":{"title":"Elevate your Wardrobe","grid":4,"carousel":false,"collection_count":false,"bold_titles":true,"title_position":"below_image","image_ratio":"vertical","section_padding":"none"}},"featured_collection_EycGVJ":{"type":"featured-collection","settings":{"heading":"Shop Men Collection","collection":"men","carousel":false,"show_view_all":true,"reduce_width":false,"grid":5,"limit":20,"section_padding":"none"}},"rich_text_ATdxNh":{"type":"rich-text","settings":{"heading":"","rich_text":"<p>Explore a wide range of men's fashion with Style Union, starting at ₹199. Find a variety of categories in Men Ethnic Wear- Ethnic Kurtas for Men, Ethnic Shirts, Ethnic Jackets and Ethnic Bottoms. Men Casual Wear includes tshirts for men, jeans for men, mens shirts, mens pants, chinos and more.<\/p><p>Shop the latest fashion trends for men only on Style Union!<\/p><p>Your one-stop fashion destination for all men's clothing. Online shopping for mens fashion made easy with Style Union<\/p><p><strong>POPULAR SEARCHES<\/strong><\/p><p><a href=\"\/collections\/mens-casual-wear\" title=\"Men's Casual Wear\">Men Casual Wear<\/a> | <a href=\"\/collections\/mens-t-shirts\" title=\"Men's T-Shirts\">T-Shirts for Men<\/a> | <a href=\"\/collections\/mens-t-shirts\" title=\"Men's T-Shirts\">Men's T-Shirts<\/a> | <a href=\"\/collections\/mens-t-shirts\" title=\"Men's T-Shirts\">White T-Shirts<\/a> | <a href=\"\/collections\/mens-jeans-1\" title=\"Men's Jeans\">Men's Jeans<\/a> | <a href=\"\/collections\/casual-shirts\" title=\"Men's Casual Shirts\">Casual Shirts<\/a> | <a href=\"\/collections\/mens-formal-shirts\" title=\"Men's Formal Shirts\">Formal Shirts<\/a> | <a href=\"\/collections\/mens-trousers\" title=\"Men's Formal Trousers\">Pants for Men<\/a> | <a href=\"\/collections\/fluidx-1\" title=\"FluidX\">Stretch Pants<\/a> | <a href=\"\/collections\/men-ethnic-wear\" title=\"Men Ethnic Wear\">Ethnic Wear Men<\/a> | <a href=\"\/collections\/men-ethnic-kurtas\" title=\"Men Ethnic Kurtas\">Ethnic Kurtas for Men<\/a> | <a href=\"\/collections\/mens-ethnic-bottom-wear\" title=\"Men's Ethnic Bottom Wear\">Ethnic Bottoms for Men<\/a> | <a href=\"\/collections\/mens-ethnic-shirts\" title=\"Men's Ethnic Shirts\">Ethnic Shirts for Men<\/a><\/p><p><\/p><p><\/p>","page":"","link":"","link_text":"","background":"#ffffff","color":"#000000","width":60,"align_text":"center","section_padding":"top"}}},"order":["banner","promo","main","slideshow_RJ9iyi","featured_collection_KrgerX","collection_list_HmVFbc","featured_collection_xr9FzC","featured_collection_EHqFDi","slideshow_b9bFmN","featured_collection_7FQ3a4","collection_list_GCifJ7","featured_collection_EycGVJ","rich_text_ATdxNh"]}
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "banner": {
+      "type": "main-collection-banner",
+      "disabled": true,
+      "settings": {
+        "banner_image_type": "collection"
+      }
+    },
+    "promo": {
+      "type": "promotional-banner",
+      "disabled": true,
+      "settings": {
+        "background_color": "#f5f5f5",
+        "link": "",
+        "text_align": "center",
+        "heading": "Heading",
+        "subheading": "<p>Add a short sentence to your banner</p>",
+        "button_text": "Button",
+        "heading_font_size": 26,
+        "subheading_font_size": 16,
+        "text_color": "#000000",
+        "button_text_color": "#ffffff",
+        "button_color": "#000000",
+        "section_padding": "none"
+      }
+    },
+    "main": {
+      "type": "main-collection",
+      "blocks": {
+        "bef67807-6de8-4afa-b1fe-bc0a46351382": {
+          "type": "side_sortby",
+          "settings": {}
+        },
+        "cea9f996-51a8-4b3a-8837-6975c0590a9c": {
+          "type": "side_filter",
+          "settings": {
+            "show_color_swatches": true,
+            "show_filter_count": true
+          }
+        }
+      },
+      "block_order": [
+        "bef67807-6de8-4afa-b1fe-bc0a46351382",
+        "cea9f996-51a8-4b3a-8837-6975c0590a9c"
+      ],
+      "disabled": true,
+      "settings": {
+        "rows": 4,
+        "grid": 3,
+        "show_image": false,
+        "description_position": "bottom"
+      }
+    },
+    "slideshow_RJ9iyi": {
+      "type": "slideshow",
+      "blocks": {
+        "image_aj439J": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/Men_Ethnic_Own_The_Spark.jpg",
+            "overlay_color": "#000000",
+            "overlay_opacity": 0,
+            "caption_position": "middle_center",
+            "mobile_image": "shopify://shop_images/Men_Ethnic_Own_The_Spark_d4a2a600-541e-48f7-bd35-fffe17f1c16f.jpg",
+            "hide_caption_background": false,
+            "heading": "",
+            "subheading": "",
+            "link": "",
+            "button_text": "",
+            "second_link": "",
+            "second_button_text": "",
+            "text_color": "#ffffff",
+            "button_color": "#ffffff",
+            "button_background": "#000000",
+            "caption_background": "rgba(0,0,0,0)"
+          }
+        },
+        "image_kFN7DB": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/MEN_ETHNIC_1_1.png",
+            "overlay_color": "#000000",
+            "overlay_opacity": 0,
+            "caption_position": "middle_center",
+            "mobile_image": "shopify://shop_images/MEN_ETHNIC_WEAR_1.png",
+            "hide_caption_background": false,
+            "heading": "",
+            "subheading": "",
+            "link": "shopify://collections/mens-casual-wear",
+            "button_text": "",
+            "second_link": "",
+            "second_button_text": "Button 2 text",
+            "text_color": "#ffffff",
+            "button_color": "#ffffff",
+            "button_background": "#000000",
+            "caption_background": "rgba(0,0,0,0)"
+          }
+        }
+      },
+      "block_order": [
+        "image_aj439J",
+        "image_kFN7DB"
+      ],
+      "settings": {
+        "full_width": true,
+        "slideshow_size": "fixed_height",
+        "desktop_height": 400,
+        "mobile_height": 400,
+        "caption_below": false,
+        "pager": "dots",
+        "show_animation": false,
+        "transition": "fade",
+        "slider_speed": 5,
+        "enable_stop_pause_on_mobile": true,
+        "slide_heading_size": 22,
+        "subheading_size": 14,
+        "section_padding": "both"
+      }
+    },
+    "featured_collection_KrgerX": {
+      "type": "featured-collection",
+      "settings": {
+        "heading": "Casual Bestsellers",
+        "collection": "mens-casual-wear",
+        "carousel": true,
+        "show_view_all": true,
+        "reduce_width": false,
+        "grid": 5,
+        "limit": 20,
+        "section_padding": "none"
+      }
+    },
+    "collection_list_HmVFbc": {
+      "type": "collection-list",
+      "blocks": {
+        "featured_collection_QAP94B": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "men-linen-shirts",
+            "collection_image": "shopify://shop_images/style_union_women_s_ethin_explore_card-4.png"
+          }
+        },
+        "featured_collection_AUMTki": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "mens-shorts",
+            "collection_image": "shopify://shop_images/style_union_women_s_ethin_explore_card-2.png"
+          }
+        },
+        "featured_collection_JDnzdR": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "denim-fest",
+            "collection_image": "shopify://shop_images/17_7.png"
+          }
+        },
+        "featured_collection_CBC76L": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "mens-casual-trousers",
+            "collection_image": "shopify://shop_images/19_6.png"
+          }
+        }
+      },
+      "block_order": [
+        "featured_collection_QAP94B",
+        "featured_collection_AUMTki",
+        "featured_collection_JDnzdR",
+        "featured_collection_CBC76L"
+      ],
+      "settings": {
+        "title": "Elevate your Wardrobe",
+        "grid": 4,
+        "mobile_grid": 2,
+        "carousel": false,
+        "show_mobile_arrows": true,
+        "collection_count": false,
+        "bold_titles": true,
+        "title_position": "below_image",
+        "image_ratio": "vertical",
+        "section_padding": "none"
+      }
+    },
+    "featured_collection_xr9FzC": {
+      "type": "featured-collection",
+      "settings": {
+        "heading": "Men's Essentials",
+        "collection": "bestseller-new-men",
+        "carousel": true,
+        "show_view_all": true,
+        "reduce_width": false,
+        "grid": 5,
+        "limit": 20,
+        "section_padding": "none"
+      }
+    },
+    "featured_collection_EHqFDi": {
+      "type": "featured-collection",
+      "name": "Featured collection",
+      "settings": {
+        "heading": "Men's Athleisure",
+        "collection": "mens-athleisure-wear",
+        "carousel": true,
+        "show_view_all": true,
+        "reduce_width": false,
+        "grid": 5,
+        "limit": 20,
+        "section_padding": "both"
+      }
+    },
+    "slideshow_b9bFmN": {
+      "type": "slideshow",
+      "blocks": {
+        "image_H8eAq6": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/style_union_updated_ethnic_1.png",
+            "overlay_color": "#000000",
+            "overlay_opacity": 0,
+            "caption_position": "middle_center",
+            "mobile_image": "shopify://shop_images/MEN_ETHNIC_WEAR.png",
+            "hide_caption_background": false,
+            "heading": "",
+            "subheading": "",
+            "link": "shopify://collections/men-ethnic-wear",
+            "button_text": "",
+            "second_link": "",
+            "second_button_text": "Button 2 text",
+            "text_color": "#ffffff",
+            "button_color": "#ffffff",
+            "button_background": "#000000",
+            "caption_background": "rgba(0,0,0,0)"
+          }
+        }
+      },
+      "block_order": [
+        "image_H8eAq6"
+      ],
+      "settings": {
+        "full_width": true,
+        "slideshow_size": "fixed_height",
+        "desktop_height": 400,
+        "mobile_height": 400,
+        "caption_below": false,
+        "pager": "dots",
+        "show_animation": false,
+        "transition": "fade",
+        "slider_speed": 5,
+        "enable_stop_pause_on_mobile": true,
+        "slide_heading_size": 22,
+        "subheading_size": 14,
+        "section_padding": "both"
+      }
+    },
+    "featured_collection_7FQ3a4": {
+      "type": "featured-collection",
+      "settings": {
+        "heading": "Ethnic Wear",
+        "collection": "men-ethnic-wear",
+        "carousel": true,
+        "show_view_all": true,
+        "reduce_width": false,
+        "grid": 5,
+        "limit": 20,
+        "section_padding": "none"
+      }
+    },
+    "collection_list_GCifJ7": {
+      "type": "collection-list",
+      "blocks": {
+        "featured_collection_Q3n3iD": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "mens-ethnic-shirts",
+            "collection_image": "shopify://shop_images/9_21.png"
+          }
+        },
+        "featured_collection_cbiNyB": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "men-ethnic-kurtas",
+            "collection_image": "shopify://shop_images/7_20.png"
+          }
+        },
+        "featured_collection_aqH39j": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "mens-ethnic-bottom-wear",
+            "collection_image": "shopify://shop_images/8_20.png"
+          }
+        },
+        "featured_collection_WbDUBy": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "mens-ethnic-jacket",
+            "collection_image": "shopify://shop_images/style_union_women_s_ethin_explore_card.png"
+          }
+        }
+      },
+      "block_order": [
+        "featured_collection_Q3n3iD",
+        "featured_collection_cbiNyB",
+        "featured_collection_aqH39j",
+        "featured_collection_WbDUBy"
+      ],
+      "settings": {
+        "title": "Elevate your Wardrobe",
+        "grid": 4,
+        "mobile_grid": 2,
+        "carousel": false,
+        "show_mobile_arrows": true,
+        "collection_count": false,
+        "bold_titles": true,
+        "title_position": "below_image",
+        "image_ratio": "vertical",
+        "section_padding": "none"
+      }
+    },
+    "featured_collection_EycGVJ": {
+      "type": "featured-collection",
+      "settings": {
+        "heading": "Shop Men Collection",
+        "collection": "men",
+        "carousel": false,
+        "show_view_all": true,
+        "reduce_width": false,
+        "grid": 5,
+        "limit": 20,
+        "section_padding": "none"
+      }
+    },
+    "rich_text_ATdxNh": {
+      "type": "rich-text",
+      "settings": {
+        "heading": "",
+        "rich_text": "<p>Explore a wide range of men's fashion with Style Union, starting at ₹199. Find a variety of categories in Men Ethnic Wear- Ethnic Kurtas for Men, Ethnic Shirts, Ethnic Jackets and Ethnic Bottoms. Men Casual Wear includes tshirts for men, jeans for men, mens shirts, mens pants, chinos and more.</p><p>Shop the latest fashion trends for men only on Style Union!</p><p>Your one-stop fashion destination for all men's clothing. Online shopping for mens fashion made easy with Style Union</p><p><strong>POPULAR SEARCHES</strong></p><p><a href=\"/collections/mens-casual-wear\" title=\"Men's Casual Wear\">Men Casual Wear</a> | <a href=\"/collections/mens-t-shirts\" title=\"Men's T-Shirts\">T-Shirts for Men</a> | <a href=\"/collections/mens-t-shirts\" title=\"Men's T-Shirts\">Men's T-Shirts</a> | <a href=\"/collections/mens-t-shirts\" title=\"Men's T-Shirts\">White T-Shirts</a> | <a href=\"/collections/mens-jeans-1\" title=\"Men's Jeans\">Men's Jeans</a> | <a href=\"/collections/casual-shirts\" title=\"Men's Casual Shirts\">Casual Shirts</a> | <a href=\"/collections/mens-formal-shirts\" title=\"Men's Formal Shirts\">Formal Shirts</a> | <a href=\"/collections/mens-trousers\" title=\"Men's Formal Trousers\">Pants for Men</a> | <a href=\"/collections/fluidx-1\" title=\"FluidX\">Stretch Pants</a> | <a href=\"/collections/men-ethnic-wear\" title=\"Men Ethnic Wear\">Ethnic Wear Men</a> | <a href=\"/collections/men-ethnic-kurtas\" title=\"Men Ethnic Kurtas\">Ethnic Kurtas for Men</a> | <a href=\"/collections/mens-ethnic-bottom-wear\" title=\"Men's Ethnic Bottom Wear\">Ethnic Bottoms for Men</a> | <a href=\"/collections/mens-ethnic-shirts\" title=\"Men's Ethnic Shirts\">Ethnic Shirts for Men</a></p><p></p><p></p>",
+        "page": "",
+        "link": "",
+        "link_text": "",
+        "background": "#ffffff",
+        "color": "#000000",
+        "width": 60,
+        "align_text": "center",
+        "section_padding": "top"
+      }
+    }
+  },
+  "order": [
+    "banner",
+    "promo",
+    "main",
+    "slideshow_RJ9iyi",
+    "featured_collection_KrgerX",
+    "collection_list_HmVFbc",
+    "featured_collection_xr9FzC",
+    "featured_collection_EHqFDi",
+    "slideshow_b9bFmN",
+    "featured_collection_7FQ3a4",
+    "collection_list_GCifJ7",
+    "featured_collection_EycGVJ",
+    "rich_text_ATdxNh"
+  ]
+}
