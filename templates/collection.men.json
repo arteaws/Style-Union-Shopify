@@ -114,7 +114,7 @@
       "settings": {
         "full_width": true,
         "slideshow_size": "fixed_height",
-        "desktop_height": 400,
+        "desktop_height": 300,
         "mobile_height": 400,
         "caption_below": false,
         "pager": "dots",
