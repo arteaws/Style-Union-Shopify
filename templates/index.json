@@ -251,21 +251,21 @@
           "type": "featured_collection",
           "settings": {
             "collection": "women",
-            "collection_image": "shopify://shop_images/WOMENS.png"
+            "collection_image": "shopify://shop_images/women_s_wear.jpg"
           }
         },
         "featured_collection_rkDDcb": {
           "type": "featured_collection",
           "settings": {
             "collection": "men",
-            "collection_image": "shopify://shop_images/MENS_0079f1ff-8c1b-48ff-985b-443fd0e0f46e.png"
+            "collection_image": "shopify://shop_images/men_s_wear.jpg"
           }
         },
         "featured_collection_QQfxie": {
           "type": "featured_collection",
           "settings": {
             "collection": "kids",
-            "collection_image": "shopify://shop_images/KIDS_a05fe448-e07f-4c21-bd31-1674955e2455.png"
+            "collection_image": "shopify://shop_images/kids__wear.jpg"
           }
         }
       },
