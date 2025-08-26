@@ -72,7 +72,7 @@
         "collection_count": false,
         "bold_titles": false,
         "title_position": "below_image",
-        "image_ratio": "hexagon",
+        "image_ratio": "natural",
         "section_padding": "none"
       }
     },
