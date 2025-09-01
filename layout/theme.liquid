@@ -106,7 +106,7 @@
   <meta property="og:image" content="http:{{ 'logo.png' | asset_url }}">
   <meta property="og:site_name" content="{{ shop.name }}">
 
-    {% render 'social-media-meta-tags' %}
+    {% comment %} {% render 'social-media-meta-tags' %} {% endcomment %}
     {% render 'structured-data' %}
     {% render 'css-variables' %}
 
