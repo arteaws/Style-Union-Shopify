@@ -97,9 +97,10 @@
     >
       skip to content
     </div>
-    {% comment %} {% if page_description %}<meta name="description" content="{{ page_description | escape }}">{% endif %} {% endcomment %}
+    {% if page_description %}<meta name="description" content="{{ page_description | escape }}">{% endif %}
     
 
+   
     {% render 'structured-data' %}
     {% render 'css-variables' %}
 
