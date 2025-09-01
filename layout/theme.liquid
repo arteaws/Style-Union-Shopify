@@ -97,7 +97,15 @@
     >
       skip to content
     </div>
-    
+    {% comment %} {% if page_description %}<meta name="description" content="{{ page_description | escape }}">{% endif %} {% endcomment %}
+          <meta property="og:type" content="website">
+  <meta property="og:title" content="{{ page_title | escape }}">
+  <meta property="og:url" content="{{ canonical_url }}">
+    <meta property="og:description" content="{{ page_description | escape }}">
+    <meta property="og:image" content="http:{{ 'logo.png' | asset_url }}">
+    <meta property="og:image:secure_url" content="https:{{ 'logo.png' | asset_url }}">
+<meta property="og:site_name" content="{{ shop.name }}">
+
 
     {% render 'social-media-meta-tags' %}
     {% render 'structured-data' %}
@@ -372,14 +380,5 @@ select.restock-alerts-country-select.selectBoxStyle {
     {% render 'razorpay-magic-checkout' %} 
     {% render 'global-tracking-products' %}
     
-
-      <meta property="og:type" content="website">
-  <meta property="og:title" content="{{ page_title | escape }}">
-  <meta property="og:url" content="{{ canonical_url }}">
-    <meta property="og:description" content="{{ page_description | escape }}">
-    <meta property="og:image" content="http:{{ 'logo.png' | asset_url }}">
-    <meta property="og:image:secure_url" content="https:{{ 'logo.png' | asset_url }}">
-<meta property="og:site_name" content="{{ shop.name }}">
-
   </body>
 </html>
