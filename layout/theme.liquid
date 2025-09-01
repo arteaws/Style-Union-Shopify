@@ -98,12 +98,13 @@
       skip to content
     </div>
     {% comment %} {% if page_description %}<meta name="description" content="{{ page_description | escape }}">{% endif %} {% endcomment %}
-     
+     {% assign og_image = product.featured_image | img_url: '1200x630' %}
   <meta property="og:type" content="website">
   <meta property="og:title" content="{{ page_title | escape }}">
   <meta property="og:url" content="{{ canonical_url }}">
   <meta property="og:description" content="{{ page_description | escape }}">
   <meta property="og:image" content="http:{{ 'logo.png' | asset_url }}">
+  {% assign og_image = product.featured_image | img_url: '1200x630' %}
   <meta property="og:site_name" content="{{ shop.name }}">
     {% comment %} <meta property="og:image:secure_url" content="https:{{ 'logo.png' | asset_url }}">
     <meta property="og:url" content="{{ canonical_url }}"> {% endcomment %}
