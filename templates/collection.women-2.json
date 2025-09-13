@@ -85,6 +85,27 @@
             "caption_background": "rgba(0,0,0,0)"
           }
         },
+        "image_GtEVJt": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/WA.jpg",
+            "overlay_color": "#000000",
+            "overlay_opacity": 0,
+            "caption_position": "middle_center",
+            "mobile_image": "shopify://shop_images/athleisure_women.jpg",
+            "hide_caption_background": false,
+            "heading": "Slide image title",
+            "subheading": "",
+            "link": "",
+            "button_text": "",
+            "second_link": "",
+            "second_button_text": "",
+            "text_color": "#ffffff",
+            "button_color": "#ffffff",
+            "button_background": "#000000",
+            "caption_background": "rgba(0,0,0,0)"
+          }
+        },
         "image_kFN7DB": {
           "type": "image",
           "settings": {
@@ -109,6 +130,7 @@
       },
       "block_order": [
         "image_Rmm6AQ",
+        "image_GtEVJt",
         "image_kFN7DB"
       ],
       "settings": {
