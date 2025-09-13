@@ -146,29 +146,29 @@
         "featured_collection_QAP94B": {
           "type": "featured_collection",
           "settings": {
-            "collection": "men-linen-shirts",
-            "collection_image": "shopify://shop_images/style_union_women_s_ethin_explore_card-4.png"
+            "collection": "casual-shirts",
+            "collection_image": "shopify://shop_images/Casual_shirts_225ff153-cadc-46fc-81bc-2d577ad0189f.jpg"
           }
         },
         "featured_collection_AUMTki": {
           "type": "featured_collection",
           "settings": {
-            "collection": "mens-shorts",
-            "collection_image": "shopify://shop_images/style_union_women_s_ethin_explore_card-2.png"
+            "collection": "graphic-tees",
+            "collection_image": "shopify://shop_images/graphic_tees.jpg"
           }
         },
         "featured_collection_JDnzdR": {
           "type": "featured_collection",
           "settings": {
             "collection": "denim-fest",
-            "collection_image": "shopify://shop_images/17_7.png"
+            "collection_image": "shopify://shop_images/UOD.jpg"
           }
         },
         "featured_collection_CBC76L": {
           "type": "featured_collection",
           "settings": {
             "collection": "mens-casual-trousers",
-            "collection_image": "shopify://shop_images/19_6.png"
+            "collection_image": "shopify://shop_images/ct.jpg"
           }
         }
       },
