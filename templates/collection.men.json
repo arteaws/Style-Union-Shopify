@@ -278,39 +278,39 @@
     "collection_list_GCifJ7": {
       "type": "collection-list",
       "blocks": {
-        "featured_collection_Q3n3iD": {
+        "featured_collection_aqH39j": {
           "type": "featured_collection",
           "settings": {
-            "collection": "mens-ethnic-shirts",
-            "collection_image": "shopify://shop_images/9_21.png"
+            "collection": "mens-ethnic-bottom-wear",
+            "collection_image": "shopify://shop_images/Artistry_Shirts.png"
           }
         },
         "featured_collection_cbiNyB": {
           "type": "featured_collection",
           "settings": {
             "collection": "men-ethnic-kurtas",
-            "collection_image": "shopify://shop_images/7_20.png"
+            "collection_image": "shopify://shop_images/jackets.png"
           }
         },
-        "featured_collection_aqH39j": {
+        "featured_collection_Q3n3iD": {
           "type": "featured_collection",
           "settings": {
-            "collection": "mens-ethnic-bottom-wear",
-            "collection_image": "shopify://shop_images/8_20.png"
+            "collection": "ethnic-jackets",
+            "collection_image": "shopify://shop_images/Ethnis_Bottoms.png"
           }
         },
         "featured_collection_WbDUBy": {
           "type": "featured_collection",
           "settings": {
-            "collection": "mens-ethnic-jacket",
-            "collection_image": "shopify://shop_images/style_union_women_s_ethin_explore_card.png"
+            "collection": "mens-ethnic-shirts",
+            "collection_image": "shopify://shop_images/Kurta.png"
           }
         }
       },
       "block_order": [
-        "featured_collection_Q3n3iD",
-        "featured_collection_cbiNyB",
         "featured_collection_aqH39j",
+        "featured_collection_cbiNyB",
+        "featured_collection_Q3n3iD",
         "featured_collection_WbDUBy"
       ],
       "settings": {
