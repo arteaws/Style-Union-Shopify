@@ -191,29 +191,29 @@
         "featured_collection_Q3n3iD": {
           "type": "featured_collection",
           "settings": {
-            "collection": "boys-graphic-t-shirts",
-            "collection_image": "shopify://shop_images/category_su.png"
+            "collection": "boys-shorts",
+            "collection_image": "shopify://shop_images/Tracks_and_Shorts.png"
           }
         },
         "featured_collection_cbiNyB": {
           "type": "featured_collection",
           "settings": {
             "collection": "boys-denims",
-            "collection_image": "shopify://shop_images/category_su-2.png"
+            "collection_image": "shopify://shop_images/Jeans_3cc39b76-24e0-4151-a85b-f5bc585f6a43.png"
           }
         },
         "featured_collection_aqH39j": {
           "type": "featured_collection",
           "settings": {
             "collection": "boys-casual-shirts",
-            "collection_image": "shopify://shop_images/category_su-3.png"
+            "collection_image": "shopify://shop_images/Shirts_e35bf8c2-50b9-4fcd-a800-4dadf9af8d2a.png"
           }
         },
         "featured_collection_WbDUBy": {
           "type": "featured_collection",
           "settings": {
             "collection": "boys-night-set",
-            "collection_image": "shopify://shop_images/category_su-4.png"
+            "collection_image": "shopify://shop_images/Night_Wear.png"
           }
         }
       },
