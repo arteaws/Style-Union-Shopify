@@ -64,27 +64,6 @@
     "slideshow_RJ9iyi": {
       "type": "slideshow",
       "blocks": {
-        "image_Rmm6AQ": {
-          "type": "image",
-          "settings": {
-            "image": "shopify://shop_images/Women_Ethnic_Own_The_Spark_52a14f97-f8b3-4a60-a143-0d99df80b08e.jpg",
-            "overlay_color": "#000000",
-            "overlay_opacity": 0,
-            "caption_position": "middle_center",
-            "mobile_image": "shopify://shop_images/Women_Ethnic_Own_The_Spark_99dd089b-c6b9-423f-88cd-ca4f90fb67c9.jpg",
-            "hide_caption_background": false,
-            "heading": "",
-            "subheading": "",
-            "link": "",
-            "button_text": "",
-            "second_link": "",
-            "second_button_text": "",
-            "text_color": "#ffffff",
-            "button_color": "#ffffff",
-            "button_background": "#000000",
-            "caption_background": "rgba(0,0,0,0)"
-          }
-        },
         "image_GtEVJt": {
           "type": "image",
           "settings": {
@@ -126,12 +105,33 @@
             "button_background": "#000000",
             "caption_background": "rgba(0,0,0,0)"
           }
+        },
+        "image_Rmm6AQ": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/Women_Ethnic_Own_The_Spark_52a14f97-f8b3-4a60-a143-0d99df80b08e.jpg",
+            "overlay_color": "#000000",
+            "overlay_opacity": 0,
+            "caption_position": "middle_center",
+            "mobile_image": "shopify://shop_images/Women_Ethnic_Own_The_Spark_99dd089b-c6b9-423f-88cd-ca4f90fb67c9.jpg",
+            "hide_caption_background": false,
+            "heading": "",
+            "subheading": "",
+            "link": "",
+            "button_text": "",
+            "second_link": "",
+            "second_button_text": "",
+            "text_color": "#ffffff",
+            "button_color": "#ffffff",
+            "button_background": "#000000",
+            "caption_background": "rgba(0,0,0,0)"
+          }
         }
       },
       "block_order": [
-        "image_Rmm6AQ",
         "image_GtEVJt",
-        "image_kFN7DB"
+        "image_kFN7DB",
+        "image_Rmm6AQ"
       ],
       "settings": {
         "full_width": true,
