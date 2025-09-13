@@ -275,28 +275,28 @@
           "type": "featured_collection",
           "settings": {
             "collection": "girls-dress",
-            "collection_image": "shopify://shop_images/category_su-5.png"
+            "collection_image": "shopify://shop_images/Dresses1.png"
           }
         },
         "featured_collection_AUMTki": {
           "type": "featured_collection",
           "settings": {
             "collection": "girls-bottomwear",
-            "collection_image": "shopify://shop_images/category_su-2_031c6c52-fffc-49fb-8fd6-b3da939b7e5f.png"
+            "collection_image": "shopify://shop_images/Bottomwear.png"
           }
         },
         "featured_collection_JDnzdR": {
           "type": "featured_collection",
           "settings": {
             "collection": "girls-graphic-t-shirts",
-            "collection_image": "shopify://shop_images/category_su-7.png"
+            "collection_image": "shopify://shop_images/Tops_241058d9-1b8d-4f15-9ef6-4c1da4f08999.png"
           }
         },
         "featured_collection_CBC76L": {
           "type": "featured_collection",
           "settings": {
             "collection": "girls-night-set",
-            "collection_image": "shopify://shop_images/category_su_48a1e4f5-bd7e-4b03-8af4-80b141683afe.png"
+            "collection_image": "shopify://shop_images/Night_Wear_c17f260e-a73e-40b1-9d2d-9e6e5af7aa99.png"
           }
         }
       },
