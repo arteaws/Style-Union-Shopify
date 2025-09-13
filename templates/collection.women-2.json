@@ -169,28 +169,28 @@
           "type": "featured_collection",
           "settings": {
             "collection": "womens-dresses",
-            "collection_image": "shopify://shop_images/summer-dresses.png"
+            "collection_image": "shopify://shop_images/dresses.jpg"
           }
         },
         "featured_collection_AUMTki": {
           "type": "featured_collection",
           "settings": {
-            "collection": "women-western-co-ords",
-            "collection_image": "shopify://shop_images/coord.png"
+            "collection": "chic-styles-in-your-summer-wardrobe",
+            "collection_image": "shopify://shop_images/formals.jpg"
           }
         },
         "featured_collection_JDnzdR": {
           "type": "featured_collection",
           "settings": {
             "collection": "womens-athleisure-wear",
-            "collection_image": "shopify://shop_images/athleisure_d7ae3b94-8585-4d58-94f8-72ec900f0f53.png"
+            "collection_image": "shopify://shop_images/athleisure.jpg"
           }
         },
         "featured_collection_CBC76L": {
           "type": "featured_collection",
           "settings": {
             "collection": "bettys-world",
-            "collection_image": "shopify://shop_images/Betty.png"
+            "collection_image": "shopify://shop_images/betty.jpg"
           }
         }
       },
@@ -385,28 +385,28 @@
           "type": "featured_collection",
           "settings": {
             "collection": "sleepwear-t-shirt",
-            "collection_image": "shopify://shop_images/sleepwear.png"
+            "collection_image": "shopify://shop_images/T-shirts_short_box.png"
           }
         },
         "featured_collection_rdDmgd": {
           "type": "featured_collection",
           "settings": {
             "collection": "womens-sleepwear-sets",
-            "collection_image": "shopify://shop_images/sleepwear-sets.png"
+            "collection_image": "shopify://shop_images/Sleepwear_Set_Short_box.png"
           }
         },
         "featured_collection_qHgwbk": {
           "type": "featured_collection",
           "settings": {
             "collection": "short-nighty-for-women",
-            "collection_image": "shopify://shop_images/gown.png"
+            "collection_image": "shopify://shop_images/Gowns_short_box.png"
           }
         },
         "featured_collection_AgCbDq": {
           "type": "featured_collection",
           "settings": {
             "collection": "sleepwear-shorts",
-            "collection_image": "shopify://shop_images/shorts_d6c9ed83-dc92-4d38-a447-c6bfae4588ad.png"
+            "collection_image": "shopify://shop_images/Shorts_Short_box.png"
           }
         }
       },
