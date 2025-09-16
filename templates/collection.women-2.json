@@ -277,28 +277,28 @@
           "type": "featured_collection",
           "settings": {
             "collection": "tops-tunics-and-kurtis",
-            "collection_image": "shopify://shop_images/4_23.png"
+            "collection_image": "shopify://shop_images/kurtis.jpg"
           }
         },
         "featured_collection_cbiNyB": {
           "type": "featured_collection",
           "settings": {
             "collection": "womens-kurta",
-            "collection_image": "shopify://shop_images/3_25.png"
+            "collection_image": "shopify://shop_images/suits.jpg"
           }
         },
         "featured_collection_aqH39j": {
           "type": "featured_collection",
           "settings": {
             "collection": "co-ord-sets",
-            "collection_image": "shopify://shop_images/5_16.png"
+            "collection_image": "shopify://shop_images/coords.jpg"
           }
         },
         "featured_collection_WbDUBy": {
           "type": "featured_collection",
           "settings": {
             "collection": "womens-ethnic-bottom",
-            "collection_image": "shopify://shop_images/style_union_women_s_ethin_explore_card_df228909-9342-4c09-8c59-0af2476f9fee.png"
+            "collection_image": "shopify://shop_images/option_1.jpg"
           }
         }
       },
