@@ -81,17 +81,16 @@
       "blocks": {
         "image_TB6JN4": {
           "type": "image",
-          "disabled": true,
           "settings": {
-            "image": "shopify://shop_images/Final_Website_Banner.png",
+            "image": "shopify://shop_images/MW_Blog_Banner_v4_1920x853_5896a195-a13c-4a91-a583-5cd844c9448a.png",
             "overlay_color": "#000000",
             "overlay_opacity": 0,
             "caption_position": "middle_center",
-            "mobile_image": "shopify://shop_images/Mobile_Banner.png",
+            "mobile_image": "shopify://shop_images/SU_Blog_Banner_Navratri_MW_800x1200_v3_f47a7bf5-18f7-456c-bfe1-91d0ab4ffda3.png",
             "hide_caption_background": false,
             "heading": "",
             "subheading": "",
-            "link": "shopify://collections/all",
+            "link": "shopify://collections/navratri-special",
             "button_text": "",
             "second_link": "",
             "second_button_text": "",
