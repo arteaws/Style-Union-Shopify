@@ -268,6 +268,33 @@
         "show_image": false,
         "description_position": "bottom"
       }
+    },
+    "seo_explore_FLGdm4": {
+      "type": "seo-explore",
+      "name": "custom-seo-content",
+      "settings": {
+        "fontCustomH2": 20,
+        "fontCustomH3": 17,
+        "fontCustomMobileH2": 16,
+        "fontCustomMobileH3": 17
+      }
+    },
+    "seo_accordion_q4J8Y7": {
+      "type": "seo-accordion",
+      "name": "FAQ Accordion",
+      "settings": {
+        "heading": "Frequently Asked Questions",
+        "csheadinfaqDesk": 20,
+        "heading_color": "#000000",
+        "heading_alignment": "center",
+        "question_color": "#333333",
+        "csQueinfaqDesk": 17,
+        "answer_color": "#666666",
+        "csAnsinfaqDesk": 16,
+        "csHeadinfaqMobile": 16,
+        "csQueinfaqMobile": 15,
+        "csAnsinfaqMobile": 14
+      }
     }
   },
   "order": [
@@ -278,6 +305,8 @@
     "collection_list_mK9AUA",
     "featured_collection_daCJWA",
     "collection_list_8Y3Fn7",
-    "main"
+    "main",
+    "seo_explore_FLGdm4",
+    "seo_accordion_q4J8Y7"
   ]
 }
