@@ -1,0 +1,176 @@
+{% if collection.description != blank %}
+<style>
+  .custom-seo.container {
+    margin-bottom: 4rem;
+  }
+  
+  .seo-content {
+    display: -webkit-box;
+    -webkit-line-clamp: 7; 
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align:left;
+  }
+  
+  .seo-content.expanded {
+    -webkit-line-clamp: unset;
+  }
+  
+  .custom-seo > .seo-content > h1 {
+    text-align: left !important;
+}
+
+
+ .seo-toggle-btn {
+    border: none;
+    text-decoration: underline;
+    text-align: left;
+    border-radius: 30px;
+    color: #fff;
+    width: fit-content;
+    height: 2rem;
+    text-transform: uppercase;
+    font-size: 12px;
+    cursor: pointer;
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+}
+  
+  /* Standard list styling with !important */
+  .seo-content ul {
+    list-style-type: disc !important;
+    padding-left: 2rem !important;
+    margin: 1rem 0 !important;
+  }
+  
+  .seo-content li {
+    display: list-item !important;
+    list-style-position: outside !important;
+    margin-bottom: 0.5rem !important;
+    padding-left: 0.5rem !important;
+  }
+  .seo-content > h2{
+    font-size:{{ section.settings.fontCustomH2 }}px;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+  }
+ .seo-content > h3{
+    font-size:{{ section.settings.fontCustomH3 }}px;
+  }
+  .seo-content > ul > li > h3{
+    font-size:{{ section.settings.fontCustomH3 }}px;
+  }
+  .seo-content > ol > li > h3{
+font-size:{{ section.settings.fontCustomH3 }}px;
+  }
+@media (max-width: 768px) {
+.seo-content div > table > tbody> tr > td {
+padding:0.5em ;
+} 
+
+.seo-content div > table > tbody> tr > td > p {
+font-size:13px;
+} 
+.seo-content > h2{
+    font-size:{{ section.settings.fontCustomMobileH2 }}px;
+    margin-top: 0.8rem;
+    margin-bottom: 0.8rem;
+  }
+
+  .seo-content > ul > li > h3{
+    font-size:{{ section.settings.fontCustomMobileH3 }}px;
+  }
+
+  .seo-content > ol > li > h3{
+font-size:{{ section.settings.fontCustomMobileH3 }}px;
+ }
+.seo-content > h3{
+    font-size:{{ section.settings.fontCustomMobileH3 }}px;
+  }
+}  
+</style>
+  
+<div class="custom-seo container gridlock row">
+  <div class="seo-content">
+    {{ collection.description }}
+  </div>
+  
+  {% assign word_count = collection.description | split: ' ' | size %}
+  {% if word_count > 70 %} {% comment %} Adjust word count threshold as needed {% endcomment %}
+    <div class="upperbtnbox">
+      <button class="seo-toggle-btn" onclick="toggleSeoContent(this)">
+        Show More
+      </button>
+    </div>
+  {% endif %}
+</div>
+
+
+<script>
+  function toggleSeoContent(btn) {
+    const content = btn.closest('.custom-seo').querySelector('.seo-content');
+    content.classList.toggle('expanded');
+    
+    if (content.classList.contains('expanded')) {
+      btn.textContent = 'Show Less';
+    } else {
+      btn.textContent = 'Show More';
+    }
+  }
+</script>
+{% endif %}
+
+{% schema %}
+{
+  "name": "custom-seo-content",
+  "settings": [
+  {
+      "type": "range",
+      "id": "fontCustomH2",
+      "min": 0,
+      "max": 60,
+      "step": 1,
+      "unit": "px",
+      "label": "H2 (Desktop)",
+      "default": 20
+    },
+     {
+      "type": "range",
+      "id": "fontCustomH3",
+      "min": 0,
+      "max": 60,
+      "step": 1,
+      "unit": "px",
+      "label": "H3 (Desktop)",
+      "default": 17
+    },
+  {
+      "type": "range",
+      "id": "fontCustomMobileH2",
+      "min": 0,
+      "max": 60,
+      "step": 1,
+      "unit": "px",
+      "label": "H2 (Mobile)",
+      "default": 16
+    },
+     {
+      "type": "range",
+      "id": "fontCustomMobileH3",
+      "min": 0,
+      "max": 60,
+      "step": 1,
+      "unit": "px",
+      "label": "H3 (Mobile)",
+      "default": 17
+    }   
+  ],
+  "presets": [
+    {
+      "name": "custom-seo-content"
+    }
+  ]
+}
+{% endschema %}
