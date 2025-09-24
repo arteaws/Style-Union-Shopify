@@ -107,13 +107,14 @@ data-collection-link="{{ collection_link }}">
 
   {% paginate collection.products by product_limit %}
     <div id="CollectionProductGrid" class="span-12 auto grid__wrapper grid__wrapper-nest gr0">
-
+{%- if section.settings.hide_description != blank-%}
       {%- if section.settings.description_position == 'top' -%}
         <div class="collection__page-description {{ desc_width }} sm-span-12 auto">
           <div class="rte">
             {{ collection.description | remove: "[banner]" }}
           </div>
         </div>
+      {% endif %} 
         {%- if collection_image -%}
           <div class="collection__page-image span-3 sm-span-12 auto">
             {%
@@ -508,6 +509,12 @@ document.addEventListener('DOMContentLoaded', function() {
       "step": 1,
       "label": "Products per row",
       "default": 3
+    },
+     {
+      "type": "checkbox",
+      "id": "hide_description",
+      "label": "Hide Collection Description",
+      "default": false
     },
     {
       "type": "checkbox",
