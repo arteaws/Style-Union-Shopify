@@ -303,7 +303,7 @@ data-collection-link="{{ collection_link }}">
         {%- endif -%}
 
       {% if show_sidebar %}</div>{% endif %}
-
+{%- if section.settings.hide_description != blank-%}
       {%- if section.settings.description_position == 'bottom' -%}
         <div class="collection__page-description span-12 auto">
           <div class="rte">
@@ -311,6 +311,7 @@ data-collection-link="{{ collection_link }}">
           </div>
         </div>
       {%- endif -%}
+       {%- endif -%}
     </div>
   {% endpaginate %}
 </section>
