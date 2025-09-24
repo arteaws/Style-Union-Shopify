@@ -485,6 +485,23 @@
         "fontCustomMobileH2": 16,
         "fontCustomMobileH3": 17
       }
+    },
+    "seo_accordion_tHX8NU": {
+      "type": "seo-accordion",
+      "name": "FAQ Accordion",
+      "settings": {
+        "heading": "Frequently Asked Questions",
+        "csheadinfaqDesk": 20,
+        "heading_color": "#000000",
+        "heading_alignment": "center",
+        "question_color": "#333333",
+        "csQueinfaqDesk": 17,
+        "answer_color": "#666666",
+        "csAnsinfaqDesk": 16,
+        "csHeadinfaqMobile": 16,
+        "csQueinfaqMobile": 15,
+        "csAnsinfaqMobile": 14
+      }
     }
   },
   "order": [
@@ -505,6 +522,7 @@
     "featured_collection_GGDPaD",
     "section_heading_W68myJ",
     "image_with_text_CBTUcp",
-    "seo_explore_eYHz4c"
+    "seo_explore_eYHz4c",
+    "seo_accordion_tHX8NU"
   ]
 }

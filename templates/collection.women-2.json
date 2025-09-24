@@ -456,6 +456,16 @@
         "align_text": "center",
         "section_padding": "top"
       }
+    },
+    "seo_explore_BrXHY7": {
+      "type": "seo-explore",
+      "name": "custom-seo-content",
+      "settings": {
+        "fontCustomH2": 20,
+        "fontCustomH3": 17,
+        "fontCustomMobileH2": 16,
+        "fontCustomMobileH3": 17
+      }
     }
   },
   "order": [
@@ -472,6 +482,7 @@
     "featured_collection_EycGVJ",
     "collection_list_fHFBC7",
     "featured_collection_iYgnYh",
-    "rich_text_ATdxNh"
+    "rich_text_ATdxNh",
+    "seo_explore_BrXHY7"
   ]
 }
