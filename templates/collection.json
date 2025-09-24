@@ -266,7 +266,7 @@
       "settings": {
         "rows": 4,
         "grid": 4,
-        "hide_description": true,
+        "hide_description": false,
         "show_image": false,
         "description_position": "bottom"
       }
