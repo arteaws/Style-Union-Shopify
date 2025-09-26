@@ -832,11 +832,11 @@
         "image_LTwwnj": {
           "type": "image",
           "settings": {
-            "image": "shopify://shop_images/STORE_BANNER_9.png",
+            "image": "shopify://shop_images/Desktop_Adapt.png",
             "overlay_color": "#000000",
             "overlay_opacity": 0,
             "caption_position": "middle_center",
-            "mobile_image": "shopify://shop_images/STORE_BANNER_600_x_800_px_5.png",
+            "mobile_image": "shopify://shop_images/Mobile_Adapt.png",
             "hide_caption_background": false,
             "heading": "",
             "subheading": "",
