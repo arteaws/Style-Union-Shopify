@@ -261,7 +261,7 @@
         "featured_collection_cbiNyB": {
           "type": "featured_collection",
           "settings": {
-            "collection": "womens-kurta",
+            "collection": "womens-kurta-sets",
             "collection_image": "shopify://shop_images/3_25.png"
           }
         },
