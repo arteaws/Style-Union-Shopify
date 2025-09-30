@@ -1,5 +1,3 @@
-
-
 <style>
 .swatch-sold-out .color_dflex {
     opacity: 0.6;
@@ -168,8 +166,10 @@ background-color: #fff;
       endfor
     -%}
 
-    <!-- Building Variant Image -->
+    <!-- Building Variant Image with Custom Metafield Check -->
     {%- liquid
+      assign custom_variant_image_url = nil
+      
       for variant in product.variants
         unless variant[current_option] == value
           continue
@@ -183,11 +183,19 @@ background-color: #fff;
           continue
         endunless
 
-        if variant.image
+        # Check for custom metafield image first
+        if variant.metafields.custom.custom_variant_image
+          assign custom_variant_image_url = variant.metafields.custom.custom_variant_image | image_url: width: 100, height: 100, crop: 'center'
+        elsif variant.image
           assign variant_image_url = variant.image | image_url: width: 100, height: 100, crop: 'center'
         endif
         break
       endfor
+
+      # Use custom metafield image if available, otherwise use variant image
+      if custom_variant_image_url
+        assign variant_image_url = custom_variant_image_url
+      endif
 
       assign checked = ""
       if current_variant[current_option] == value
@@ -232,7 +240,7 @@ background-color: #fff;
         <div class="color_dflex">
         {{ radio_button }}
         {% if variant_image_url %}
-          <!-- Show variant image if available -->
+          <!-- Show custom metafield image or variant image if available -->
           <label class="swatches__form--label"
             for="{{ section.id }}-{{ option.name }}-{{ forloop.index0 }}"
             tabindex="0"
