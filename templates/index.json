@@ -81,6 +81,7 @@
       "blocks": {
         "image_TB6JN4": {
           "type": "image",
+          "disabled": true,
           "settings": {
             "image": "shopify://shop_images/MW_Banner_v5b_1920x853_3c98dd0d-1d71-4bf3-bf21-3c7eb4f7d12f.png",
             "overlay_color": "#000000",
