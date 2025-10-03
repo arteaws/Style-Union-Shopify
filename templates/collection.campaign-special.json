@@ -40,11 +40,11 @@
         "image_qChq3N": {
           "type": "image",
           "settings": {
-            "image": "shopify://shop_images/SU_Blog_Banner_Navratri_MW_v3b.png",
+            "image": "shopify://shop_images/Desktop_Adapt_1.png",
             "overlay_color": "#000000",
             "overlay_opacity": 0,
             "caption_position": "middle_center",
-            "mobile_image": "shopify://shop_images/SU_Blog_Banner_Navratri_MW_800x1200_v3.png",
+            "mobile_image": "shopify://shop_images/Mobile_Adapt_1.png",
             "hide_caption_background": false,
             "heading": "",
             "subheading": "",
@@ -265,6 +265,7 @@
       "settings": {
         "rows": 4,
         "grid": 4,
+        "hide_description": false,
         "show_image": false,
         "description_position": "bottom"
       }
