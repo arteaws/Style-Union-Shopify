@@ -40,11 +40,11 @@
         "image_qChq3N": {
           "type": "image",
           "settings": {
-            "image": "shopify://shop_images/Desktop_Adapt_1.png",
+            "image": "shopify://shop_images/MW_Banner_v5b_1920x640_fadb2589-6729-40f3-aac5-26be47a3392e.png",
             "overlay_color": "#000000",
             "overlay_opacity": 0,
             "caption_position": "middle_center",
-            "mobile_image": "shopify://shop_images/Mobile_Adapt_1.png",
+            "mobile_image": "shopify://shop_images/MW_Banner_v5b_800x1200_01.png",
             "hide_caption_background": false,
             "heading": "",
             "subheading": "",
