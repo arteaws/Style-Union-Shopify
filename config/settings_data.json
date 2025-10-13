@@ -575,6 +575,11 @@
         "type": "shopify://apps/simplify-my-login/blocks/sml_account/d8cea981-d551-4842-a6a1-d02bd1530222",
         "disabled": false,
         "settings": {}
+      },
+      "3557650678667880288": {
+        "type": "shopify://apps/razorpay-cod-magic-checkout/blocks/magicx-script/c13c688d-5c45-4054-b95f-1edd63faa705",
+        "disabled": true,
+        "settings": {}
       }
     }
   },
