@@ -2,7 +2,12 @@
 .customer-account .content {
     padding-left: 0;
 }
-
+.cs-return-btn{
+background: #000;
+color: #fff;
+padding: 8px 26px;
+border-radius: 8px;
+}
 @media (max-width: 740px) {
   #order-history{
     overflow: auto;
@@ -67,7 +72,7 @@
       {% assign delivered_timestamp = order.delivered_at | date: '%s' | plus: 0 %}
     
       
-        <a href="https://styleunion.ecoreturns.ai/apps/ecoreturnsai/?customer_id={{customer.id}}&order_id={{ order.name }}">Return   </a>
+        <a class="cs-return-btn" href="https://styleunion.ecoreturns.ai/apps/ecoreturnsai/?customer_id={{customer.id}}&order_id={{ order.name }}">Return   </a>
     
     {% endif %}
   </span>
