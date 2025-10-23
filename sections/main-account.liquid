@@ -45,6 +45,7 @@
               <td class="status"><span>{{ order.financial_status }}</span></td>
               <td class="status"><span>{{ order.fulfillment_status }}</span></td>
               <td class="total"><span>{{ order.total_price | money }}</span></td>
+              <td class="total"><span>Return</span></td>
             </tr>
             {{ paginate | default_pagination }}
             {% endfor %}
