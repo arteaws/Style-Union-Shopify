@@ -67,9 +67,9 @@
       {% assign delivered_timestamp = order.delivered_at | date: '%s' | plus: 0 %}
     
       {% if delivered_timestamp > fifteen_days_ago %}
-        <a href="https://styleunion.ecoreturns.ai/apps/ecoreturnsai/?customer_id={{customer.id}}&order_id={{ order.name }}">Return   {{ delivered_timestamp }}</a>
+        <a href="https://styleunion.ecoreturns.ai/apps/ecoreturnsai/?customer_id={{customer.id}}&order_id={{ order.name }}">Return   </a>
       {% else %}
-        -
+        -{{ delivered_timestamp }}
       {% endif %}
     {% else %}
       -
