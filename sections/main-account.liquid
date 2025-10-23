@@ -62,7 +62,7 @@
               <td class="total"><span>{{ order.total_price | money }}</span></td>            
 <td class="total">
   <span>
-    {% if order.fulfillment_status == 'fulfilled' and order.delivered_at %}
+    {% if order.fulfillment_status == 'fulfilled' %}
       {% assign fifteen_days_ago = 'now' | date: '%s' | minus: 1296000 %}
       {% assign delivered_timestamp = order.delivered_at | date: '%s' | plus: 0 %}
     
