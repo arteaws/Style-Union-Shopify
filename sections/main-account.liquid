@@ -48,7 +48,7 @@
               <th class="payment_status status">{{ 'customer.orders.payment_status' | t }}</th>
               <th class="fulfillment_status status">{{ 'customer.orders.fulfillment_status' | t }}</th>
               <th class="total">{{ 'customer.orders.total' | t }}</th>
-               <th class="total">Return Status</th>
+               <th class="total">Status</th>
             </tr>
           </thead>
           <tbody>
@@ -59,9 +59,25 @@
               <td class="date"><span>{{ order.created_at | date: "%b %d, %Y" }}</span></td>
               <td class="status"><span>{{ order.financial_status }}</span></td>
               <td class="status"><span>{{ order.fulfillment_status }}</span></td>
-              <td class="total"><span>{{ order.total_price | money }}</span></td>
+              <td class="total"><span>{{ order.total_price | money }}</span></td>            
+            {% if order.fulfillment_status == 'fulfilled' %}
+            {% assign delivery_date = order.fulfilled_at %}
+            {% assign current_date = 'now' | date: '%s' %}
+            {% assign delivery_timestamp = delivery_date | date: '%s' %}
+            {% assign days_difference = current_date | minus: delivery_timestamp | divided_by: 86400 %}
             
-              <td class="total"><span><a href="Https://styleunion.ecoreturns.ai/apps/ecoreturnsai/?customer_id={{customer.id}}&order_id={{ order.name }}">Return {{ order.fulfillment_status }}</a></span></td>
+            {% if days_difference <= 15 %}
+              <td class="total">
+                <span>
+                  <a href="https://styleunion.ecoreturns.ai/apps/ecoreturnsai/?customer_id={{customer.id}}&order_id={{ order.name }}">Return</a>
+                </span>
+              </td>
+            {% else %}
+              <td class="total"><span>-</span></td>
+            {% endif %}
+          {% else %}
+            <td class="total"><span>-</span></td>
+          {% endif %}
             </tr>
             {{ paginate | default_pagination }}
             {% endfor %}
