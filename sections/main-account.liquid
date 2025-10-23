@@ -68,11 +68,9 @@
       {% assign seconds_in_15_days = 1296000 %}
       {% assign time_diff = current_date | minus: delivered_date %}
       {{time_diff }}
-      {% if time_diff < seconds_in_15_days %}
+      
         <a href="https://styleunion.ecoreturns.ai/apps/ecoreturnsai/?customer_id={{customer.id}}&order_id={{ order.name }}">Return</a>
-      {% else %}
-        -
-      {% endif %}
+
     {% else %}
       -
     {% endif %}
