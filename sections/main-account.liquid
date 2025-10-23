@@ -67,20 +67,14 @@ border-radius: 8px;
               <td class="total"><span>{{ order.total_price | money }}</span></td>            
               <td class="total">
               
-
-      <p>Delivered on: 
-   {{order.delivered_at}}</p>
-   
-
-
                 <span>
                   {% if order.fulfillment_status == 'fulfilled' %}
                     {% assign current_timestamp = 'now' | date: '%s' | plus: 0 %}
-                    {% assign delivered_timestamp = order.delivered_at | date: '%s' | plus: 0 %}
+                    {% assign delivered_timestamp = order.created_at | date: '%s' | plus: 0 %}
                     {% assign seconds_difference = current_timestamp | minus: delivered_timestamp %}
                     {% assign days_difference = seconds_difference | divided_by: 86400 %}
                  
-                    {{order.delivered_at }}
+                    {{days_difference }}
                     {% if days_difference <= 15 %}
                       <a class="cs-return-btn" href="https://styleunion.ecoreturns.ai/apps/ecoreturnsai/?customer_id={{customer.id}}&order_id={{ order.name }}">Return</a>
                     {% endif %}
