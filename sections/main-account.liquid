@@ -60,8 +60,8 @@
               <td class="status"><span>{{ order.financial_status }}</span></td>
               <td class="status"><span>{{ order.fulfillment_status }}</span></td>
               <td class="total"><span>{{ order.total_price | money }}</span></td>
-              {{order.status }}
-              <td class="total"><span><a href="Https://styleunion.ecoreturns.ai/apps/ecoreturnsai/?customer_id={{customer.id}}&order_id={{ order.name }}">Return</a></span></td>
+            
+              <td class="total"><span><a href="Https://styleunion.ecoreturns.ai/apps/ecoreturnsai/?customer_id={{customer.id}}&order_id={{ order.name }}">Return {{ order.fulfillment_status }}</a></span></td>
             </tr>
             {{ paginate | default_pagination }}
             {% endfor %}
