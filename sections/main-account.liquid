@@ -66,6 +66,13 @@ border-radius: 8px;
               <td class="status"><span>{{ order.fulfillment_status }}</span></td>
               <td class="total"><span>{{ order.total_price | money }}</span></td>            
               <td class="total">
+                {% if order.fulfillments.size > 0 %}
+  {% for fulfillment in order.fulfillments %}
+    {% if fulfillment.status == 'success' %}
+      <p>Delivered on: {{ fulfillment.updated_at | date: "%B %d, %Y" }}</p>
+    {% endif %}
+  {% endfor %}
+{% endif %}
                 <span>
                   {% if order.fulfillment_status == 'fulfilled' %}
                     {% assign current_timestamp = 'now' | date: '%s' | plus: 0 %}
