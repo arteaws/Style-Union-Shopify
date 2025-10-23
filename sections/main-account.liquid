@@ -68,8 +68,8 @@ border-radius: 8px;
               <td class="total">
               
 
-   
-      <p>Delivered on: {{ fulfillment.updated_at | date: "%B %d, %Y" }}</p>
+      <p>Delivered on: 
+   {{order.created_at }}</p>
    
 
 
@@ -79,7 +79,7 @@ border-radius: 8px;
                     {% assign delivered_timestamp = order.delivered_at | date: '%s' | plus: 0 %}
                     {% assign seconds_difference = current_timestamp | minus: delivered_timestamp %}
                     {% assign days_difference = seconds_difference | divided_by: 86400 %}
-                    {{ days_difference }}
+                 
                     {{order.delivered_at }}
                     {% if days_difference <= 15 %}
                       <a class="cs-return-btn" href="https://styleunion.ecoreturns.ai/apps/ecoreturnsai/?customer_id={{customer.id}}&order_id={{ order.name }}">Return</a>
