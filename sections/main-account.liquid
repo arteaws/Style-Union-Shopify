@@ -65,7 +65,7 @@
             {% assign current_date = 'now' | date: '%s' %}
             {% assign delivery_timestamp = delivery_date | date: '%s' %}
             {% assign days_difference = current_date | minus: delivery_timestamp | divided_by: 86400 %}
-            
+            {{days_difference }}
             {% if days_difference <= 15 %}
               <td class="total">
                 <span>
