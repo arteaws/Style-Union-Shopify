@@ -65,7 +65,7 @@
         {% assign delivery_date = order.fulfilled_at | date: '%s' | plus: 0 %}
         {% assign seconds_difference = current_date | minus: delivery_date %}
         {% assign days_difference = seconds_difference | divided_by: 86400.0 | floor %}
-        
+        {{  days_difference }}
         {% if days_difference >= 0 and days_difference <= 15 %}
           <td class="total">
             <span>
