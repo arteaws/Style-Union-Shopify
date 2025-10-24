@@ -81,6 +81,7 @@
       "blocks": {
         "image_TB6JN4": {
           "type": "image",
+          "disabled": true,
           "settings": {
             "image": "shopify://shop_images/Desktop_Adapt_1.png",
             "overlay_color": "#000000",
