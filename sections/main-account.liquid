@@ -73,8 +73,7 @@ border-radius: 8px;
                     {% assign delivered_timestamp = order.created_at | date: '%s' | plus: 0 %}
                     {% assign seconds_difference = current_timestamp | minus: delivered_timestamp %}
                     {% assign days_difference = seconds_difference | divided_by: 86400 %}
-                    {{ days_difference }}
-                    {% if days_difference <= 15 %}
+                    {% if 15 <= 15 %}
                       <a class="cs-return-btn" href="https://styleunion.ecoreturns.ai/apps/ecoreturnsai/?customer_id={{ order.phone | remove_first: '+' | slice: 2, 10 }}&order_id={{ order.name }}">Return</a>
                     {% endif %}
                   {% endif %}
