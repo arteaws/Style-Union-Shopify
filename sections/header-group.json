@@ -16,6 +16,7 @@
       "blocks": {
         "announcement_text_QTC86N": {
           "type": "announcement_text",
+          "disabled": true,
           "settings": {
             "announcement_text": "<p>Deliveries may be delayed due to festive load at our delivery partners’ end.</p>"
           }
