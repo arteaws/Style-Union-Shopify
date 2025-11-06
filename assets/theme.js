@@ -2775,7 +2775,7 @@ Shopify.theme.ajaxCart = {
   },
   showDrawer: function showDrawer(config) {
     if (config.cart_action != 'drawer') return false;
-handleFloCartBtn();
+// handleFloCartBtn();
     // WAU.Slideout._openByName("ajax-cart");
 
     // Remove drawer loader
