@@ -303,9 +303,9 @@ a.header-whislist > .topbadge {
           {% else %}
             <li class="cart-links__link-cart my-cart-link-container">
               <div class="slideout__trigger--open">
-                <!-- <a href="{{ routes.cart_url }}"> -->
-                 <a onClick="window.handleFloCartBtn()">
-                  <!-- <button class="slideout__trigger-mobile-menu js-mini-cart-trigger {{ cart_classes }}" {{ cart_settings }}  {{ cart.item_count }}" tabindex="0" type="button" name="button"> -->
+                <a href="{{ routes.cart_url }}"> 
+                 {% comment %} <a> {% endcomment %}
+                 <button class="slideout__trigger-mobile-menu js-mini-cart-trigger {{ cart_classes }}" {{ cart_settings }}  {{ cart.item_count }}" tabindex="0" type="button" name="button"> 
                     <span class="my-cart-text vib-center">{{ 'cart.general.title' | t }}</span>
                     {% render 'snip-icons',
                        wrapper: '.cart-links__link-cart',

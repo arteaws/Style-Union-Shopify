@@ -310,8 +310,8 @@
       </div>
     </div>
     <div class="ajax-cart__buttons">
-      <a class="ajax-cart__button-view_cart button secondary-button" style="width:100%" href="{{ routes.cart_url }}">{{ 'products.product.view_cart' | t }}</a>
-      <input class="ajax-cart__button-submit" type="submit" name="checkout" id="checkout" value="{{ 'cart.general.checkout' | t }}" /> 
+      {% comment %} <a class="ajax-cart__button-view_cart button secondary-button" style="width:100%" href="{{ routes.cart_url }}">{{ 'products.product.view_cart' | t }}</a> {% endcomment %}
+      <input style="width:100%;" class="ajax-cart__button-submit" type="submit" name="checkout" id="checkout" value="{{ 'cart.general.checkout' | t }}" /> 
       <!-- <button type="button" id="checkout2" onclick="handleFloCheckoutBtn()" class="cart__checkout-button button" name="checkout2" style="width:100%">
 		{{ 'Checkout' }}
 </button>-->
