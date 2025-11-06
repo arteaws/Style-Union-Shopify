@@ -81,7 +81,6 @@
       "blocks": {
         "image_TB6JN4": {
           "type": "image",
-          "disabled": true,
           "settings": {
             "image": "shopify://shop_images/Turn_it_up_Women.png",
             "overlay_color": "#000000",
@@ -91,7 +90,7 @@
             "hide_caption_background": false,
             "heading": "",
             "subheading": "",
-            "link": "shopify://collections/bestseller-new-women",
+            "link": "https://styleunion.in/collections/new-collection-2?filter.p.m.custom.gender=Women&filter.v.price.gte=&filter.v.price.lte=",
             "button_text": "",
             "second_link": "",
             "second_button_text": "",
@@ -104,15 +103,15 @@
         "image_6zdbji": {
           "type": "image",
           "settings": {
-            "image": "shopify://shop_images/Women_Ethnic_Own_The_Spark.jpg",
+            "image": "shopify://shop_images/Turn_it_up_Men.png",
             "overlay_color": "#000000",
             "overlay_opacity": 0,
             "caption_position": "middle_center",
-            "mobile_image": "shopify://shop_images/Women_Ethnic_Own_The_Spark_a8b06050-e0a9-45b3-a067-433eb73e472c.jpg",
+            "mobile_image": "shopify://shop_images/mobile_adapt_men.png",
             "hide_caption_background": false,
             "heading": "",
             "subheading": "",
-            "link": "shopify://collections/women-ethnic-wear",
+            "link": "https://styleunion.in/collections/new-collection-2?filter.p.m.custom.gender=Men&filter.v.price.gte=&filter.v.price.lte=",
             "button_text": "",
             "second_link": "",
             "second_button_text": "Button 2 text",
@@ -124,6 +123,7 @@
         },
         "image_P9rDbb": {
           "type": "image",
+          "disabled": true,
           "settings": {
             "image": "shopify://shop_images/Men_Women_Western_Own_The_Spark.jpg",
             "overlay_color": "#000000",
@@ -145,6 +145,7 @@
         },
         "d3250875-f7c1-40bb-aec9-87edb0224b73": {
           "type": "image",
+          "disabled": true,
           "settings": {
             "image": "shopify://shop_images/holiday_mens_banner-3.png",
             "overlay_color": "#000000",
@@ -166,6 +167,7 @@
         },
         "image_rCYnhj": {
           "type": "image",
+          "disabled": true,
           "settings": {
             "image": "shopify://shop_images/holiday_mens_banner-4.png",
             "overlay_color": "#000000",
