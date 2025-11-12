@@ -430,6 +430,7 @@
     "cart_type": "drawer",
     "cart_featured_collection": "bestsellers",
     "show_cart_giftwrap": false,
+    "show_tax_note": true,
     "show_shipping_note": false,
     "show_cart_notes": false,
     "shipping_calculator_default_country": "India",
