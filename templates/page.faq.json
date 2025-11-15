@@ -230,43 +230,43 @@
         "accordion_pane_XYr9n9": {
           "type": "accordion_pane",
           "settings": {
-            "title": "1) Shipping Charges",
-            "content": "<p>A standard shipping charge of Rs. 99 is applicable on all orders which do not qualify for free shipping. Enjoy complimentary shipping for orders above Rs. 1699/-</p>"
+            "title": "1) SHIPPING CHARGES?",
+            "content": "<p>A standard shipping charge of Rs. 99 is applicable on all orders which do not qualify for free shipping. Enjoy complimentary shipping for orders above Rs. 1699/- </p>"
           }
         },
         "16269718764d64ee8b-0": {
           "type": "accordion_pane",
           "settings": {
-            "title": "2) Payment got debited but my order is not yet confirmed",
-            "content": "<p>If your most recent order does not show up after successful payment, please refresh the page after some time. If you are still facing the same issue, please reach out to us on +91 9429692121 or email us at <a href=\"mailto:sharewithus@styleunion.in\">sharewithus@styleunion.in</a> </p>"
+            "title": "2) PAYMENT GOT DEBITED BUT MY ORDER IS NOT YET CONFIRMED",
+            "content": "<p>If your most recent order does not show up after successful payment, please refresh the page after some time. If you are still facing the same issue, please reach out to us on +91 9429692121 or email us at <a href=\"mailto:sharewithus@styleunion.in\" target=\"_blank\" title=\"mailto:sharewithus@styleunion.in\"><span style=\"text-decoration:underline\">sharewithus@styleunion.in</span></a></p>"
           }
         },
         "16269718764d64ee8b-1": {
           "type": "accordion_pane",
           "settings": {
-            "title": "3) Duplicate Payment",
-            "content": "<p>If you have processed the transaction twice for the same order, please send in the proof of both transactions to +91 9429692121 or email us at <a href=\"mailto:sharewithus@styleunion.in\">sharewithus@styleunion.in</a> and our support team will coordinate with the accounts team to resolve this for you. Please note that for 3rd party payment issues, you will have to take it up with the service provider or the vendor through whom you have made the payment/purchase.</p>"
+            "title": "3) DUPLICATE PAYMENT",
+            "content": "<p>If you have processed the transaction twice for the same order, please send in the proof of both transactions to +91 9429692121 or email us at <a href=\"mailto:sharewithus@styleunion.in\" target=\"_blank\" title=\"mailto:sharewithus@styleunion.in\"><span style=\"text-decoration:underline\">sharewithus@styleunion.in</span></a> and our support team will coordinate with the accounts team to resolve this for you. Please note that for 3rd party payment issues, you will have to take it up with the service provider or the vendor through whom you have made the payment/purchase. </p>"
           }
         },
         "16269718764d64ee8b-2": {
           "type": "accordion_pane",
           "settings": {
-            "title": "4) Is there an EMI option",
+            "title": "4) IS THERE ANY EMI OPTION?",
             "content": "<p>No, we currently do not provide EMI based payment services.</p>"
           }
         },
         "accordion_pane_3FgbqE": {
           "type": "accordion_pane",
           "settings": {
-            "title": "5) Facing payment issues",
-            "content": "<p>For any payment related concerns, reach out to us on +91 9429692121 or email us at <a href=\"mailto:sharewithus@styleunion.in\">sharewithus@styleunion.in</a> mentioning the payment details, issue you are facing and any additional relevant information which could help us resolve the issue. </p>"
+            "title": "5) FACING PAYMENT ISSUES",
+            "content": "<p>For any payment related concerns, reach out to us on +91 9429692121 or email us at <a href=\"mailto:sharewithus@styleunion.in\" target=\"_blank\" title=\"mailto:sharewithus@styleunion.in\"><span style=\"text-decoration:underline\">sharewithus@styleunion.in</span></a> mentioning the payment details, issue you are facing and any additional relevant information which could help us resolve the issue. </p>"
           }
         },
         "accordion_pane_ErzpHJ": {
           "type": "accordion_pane",
           "settings": {
-            "title": "6) The refund amount processed is not correct",
-            "content": "<p>If you have received an incorrect refund amount, reach out to us on +91 9429692121 or email us at <a href=\"mailto:sharewithus@styleunion.in\">sharewithus@styleunion.in</a> </p>"
+            "title": "6) THE REFUND AMOUNT PROCESSED IS INCORRECT.",
+            "content": "<p>If you have received an incorrect refund amount, reach out to us on +91 9429692121 or email us at <a href=\"mailto:sharewithus@styleunion.in\" target=\"_blank\" title=\"mailto:sharewithus@styleunion.in\"><span style=\"text-decoration:underline\">sharewithus@styleunion.in</span></a></p>"
           }
         }
       },
@@ -280,7 +280,7 @@
       ],
       "settings": {
         "title": "Payment Related",
-        "max_width": 80,
+        "max_width": 100,
         "allow_multiple": false
       }
     },
