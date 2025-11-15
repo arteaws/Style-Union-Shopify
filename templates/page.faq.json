@@ -68,29 +68,29 @@
         "accordion_pane_Vwtgni": {
           "type": "accordion_pane",
           "settings": {
-            "title": "7) I want to change the size/colour of an item I ordered",
-            "content": "<p>Once order has been placed on the website, no changes can be made. You may cancel your order but it may not be possible if your order has already been packed for dispatch. In such case, you may refer to our return policy.</p>"
+            "title": "7) I WANT TO CHANGE THE SIZE/COLOUR OF AN ITEM I ORDERED.",
+            "content": "<p>Once an order has been placed, it cannot be changed. You may cancel your order; however, if it has already been packed for dispatch, cancellation may not be possible. In such cases, please refer to our <strong>Return Policy</strong> for assistance.</p>"
           }
         },
         "accordion_pane_pzp9rF": {
           "type": "accordion_pane",
           "settings": {
-            "title": "8) What can I do my order dispatch is delayed",
-            "content": "<p>The estimated delivery times are indicative, and, on some occasions, there could be scenarios of delays beyond our reasonable control. We will keep you informed in case of any delays. In case of any query, please reach out to us on +91 9429692121 or <a href=\"mailto:sharewithus@styleunion.in\">sharewithus@styleunion.in</a> and we will resolve your issue regarding the delay.</p>"
+            "title": "8) WHAT CAN I DO IF MY ORDER DISPATCH IS DELAYED?",
+            "content": "<p>Estimated delivery times are indicative, and delays may occasionally occur due to circumstances beyond our control. We will keep you informed of any such delays.</p><p>For any questions or concerns, please contact us at <strong>+91 9429692121</strong> or <a href=\"mailto:sharewithus@styleunion.in\" target=\"_blank\" title=\"mailto:sharewithus@styleunion.in\"><strong>sharewithus@styleunion.in</strong></a>, and we will assist you promptly.</p>"
           }
         },
         "accordion_pane_D79VX3": {
           "type": "accordion_pane",
           "settings": {
-            "title": "9) Can I modify the details regarding my order",
-            "content": "<p>You shall not be able to change the email address, shipping address, mobile number or any other details provided at the time of checkout once order has been placed on the website.</p>"
+            "title": "9) CAN I MODIFY THE DETAILS REGARDING MY ORDER?",
+            "content": "<p>Once an order has been placed, you will not be able to change the email address, shipping address, mobile number, or any other details provided at the time of checkout.</p>"
           }
         },
         "accordion_pane_6BnFHQ": {
           "type": "accordion_pane",
           "settings": {
-            "title": "10) I did not receive the invoice for my order",
-            "content": "<p>If you haven't received an invoice for any of your order, please reach out to us on +91 9429692121 or <a href=\"mailto:sharewithus@styleunion.in\">sharewithus@styleunion.in</a></p>"
+            "title": "10) I DID NOT RECEIVE INVOICE FOR MY ORDER.",
+            "content": "<p>If you have not received an invoice for your order, please don't hesitate to contact our support team at <a href=\"mailto:sharewithus@styleunion.in\" target=\"_blank\" title=\"mailto:sharewithus@styleunion.in\"><strong>sharewithus@styleunion.in</strong></a> or by phone at <strong>+91 9429692121</strong>, Monday to Friday, from 10:30 a.m. to 6:30 p.m</p>"
           }
         }
       },
