@@ -40,29 +40,29 @@
         "16269717761ea06eb7-2": {
           "type": "accordion_pane",
           "settings": {
-            "title": "3) How long will it take for my order to reach me?",
-            "content": "<p>We aim to dispatch orders placed on our website within 2-3 business days upon confirmation of order to addresses within India only, subject to product availability. You may also refer to the product page of the item purchased for knowing the estimated delivery time. The delivery timelines may vary depending on the delivery location. Please note that for orders with multiple items, your item may arrive in multiple shipments based on the delivery dates. </p>"
+            "title": "3) HOW LONG WILL IT TAKE FOR MY ORDER TO REACH ME?",
+            "content": "<p>We aim to dispatch orders within <strong>2 business days</strong> of confirmation, subject to product availability, for deliveries within India. Delivery times may vary by location, and for orders with multiple items, shipments may arrive separately. You can also check the product page for the estimated delivery time.</p>"
           }
         },
         "accordion_pane_UnpD3P": {
           "type": "accordion_pane",
           "settings": {
-            "title": "4) An item is missing from my order",
-            "content": "<p>Our shipments go through rigorous check processes before they are dispatched. However, in the rare case of a missing item in your order, please contact our support team immediately at +91 9429692121 or <a href=\"mailto:sharewithus@styleunion.in\">sharewithus@styleunion.in</a></p><p>Provide us with your order ID details and elaborate your concern about the missing product. Once your request is received, we will resolve your issue within 72 business hours.</p>"
+            "title": "4) AN ITEM IS MISSING FROM MY ORDER.",
+            "content": "<p>All shipments are carefully checked before dispatch. If any item is missing from your order, please contact our support team immediately at <strong>+91 9429692121</strong> or <strong>sharewithus@styleunion.in</strong>. </p><p>Provide your <strong>order ID</strong> and details of the missing item, and we will resolve the issue within <strong>72 business hours</strong>.</p>"
           }
         },
         "accordion_pane_38yrGp": {
           "type": "accordion_pane",
           "settings": {
-            "title": "5) The order I received is damaged",
-            "content": "<p>In the rare case that your product is damaged during shipment or transit, you must notify us by email within 48 hours of the product being delivered and immediately initiate a return request on the website. Nexon will not be responsible for any requests post 48 hours of the delivery. Kindly share videographic evidence (a complete video recording of unpacking the order) and an image of the invoice for our reference. We will investigate the damage from our end and provide with resolutions accordingly. Once your request is approved, we will be responsible to pick the item from you and arrange for a refund.</p>"
+            "title": "5) THE ORDER I RECEIVED IS DAMAGED.",
+            "content": "<p>In the rare event that your product is damaged during shipment or transit, please notify us by email within 72 hours of delivery and immediately initiate a return request on our website. Nexon will not be responsible for any requests post 72 hours of the delivery. </p><p>Kindly provide videographic evidence (a complete video of unboxing) and an image of the invoice for our reference. Once we receive and approve your request, we will arrange to pick up the item and process your refund.</p>"
           }
         },
         "accordion_pane_MW8VTC": {
           "type": "accordion_pane",
           "settings": {
-            "title": "6) Wasn't available to collect my order",
-            "content": "<p>If you were not available to collect your order, please reach out to us on +91 9429692121 or <a href=\"mailto:sharewithus@styleunion.in\">sharewithus@styleunion.in</a>to reschedule delivery. Please note that only 3 attempts will be made to deliver your order after which your order will be cancelled automatically and the refund shall be made after deducting the applicable delivery charges or any other fees</p>"
+            "title": "6) I WAS NOT AVAILABLE TO COLLECT MY ORDER.",
+            "content": "<p>If you were not available to receive your order, please contact us at <strong>+91 9429692121</strong> or <a href=\"mailto:sharewithus@styleunion.in\" target=\"_blank\" title=\"mailto:sharewithus@styleunion.in\"><strong>sharewithus@styleunion.in</strong></a> to reschedule delivery.</p><p>Please note that only 3 attempts will be made to deliver your order after which your order will be cancelled automatically, and the refund will be processed <strong>after deducting applicable delivery charges or other fees</strong>.</p>"
           }
         },
         "accordion_pane_Vwtgni": {
