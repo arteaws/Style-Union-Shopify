@@ -26,15 +26,15 @@
         "16269717761ea06eb7-0": {
           "type": "accordion_pane",
           "settings": {
-            "title": "1) How do I track my order",
+            "title": "1) HOW DO I TRACK MY ORDER?",
             "content": "<p>Once your order has been dispatched, a tracking link will be sent to you via email and SMS, along with your order ID, details of the products ordered, and the expected delivery time.</p><p>You can also track your order anytime through the “Track Your Order/Return” tab on our website.</p>"
           }
         },
         "16269717761ea06eb7-1": {
           "type": "accordion_pane",
           "settings": {
-            "title": "2) I'm unsure if the order I placed was successful",
-            "content": "<p>You can review the status of your order and other tracking related queries through <em>Track your Order/Return</em>. In case your order history doesn’t show your recent order, please recheck after 30 minutes or contact us at +91 9429692121 or <a href=\"mailto:sharewithus@styleunion.in\">sharewithus@styleunion.in</a></p>"
+            "title": "2) I'M UNSURE THAT THE ORDER WAS SUCCESSFULLY PLACED.",
+            "content": "<p>You can check the status of your order and other tracking-related queries through <strong>Order History</strong> on the application or via the <strong>Returns</strong> section on our website.</p><p>If your recent order does not appear in your order history, please check again after <strong>30 minutes</strong>, or contact us at <strong>+91 9429692121</strong> or <strong>sharewithus@styleunion.in</strong> for assistance.</p>"
           }
         },
         "16269717761ea06eb7-2": {
