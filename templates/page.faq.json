@@ -194,22 +194,22 @@
         "16269718683f95cb9e-0": {
           "type": "accordion_pane",
           "settings": {
-            "title": "1) I want to deactivate my account",
-            "content": "<p>To deactivate your account, please contact us via email at <a href=\"mailto:sharewithus@styleunion.in\">sharewithus@styleunion.in</a> Our team will respond with a confirmation within 24 to 48 business hours.</p>"
+            "title": "1) I WANT TO DEACTIVATE MY ACCOUNT",
+            "content": "<p>To deactivate your account, please contact us via email at <span style=\"text-decoration:underline\">s</span><a href=\"mailto:harewithus@styleunion.in\" target=\"_blank\" title=\"mailto:harewithus@styleunion.in\"><span style=\"text-decoration:underline\">harewithus@styleunion.in</span></a> Our team will respond with a confirmation within 24 to 48 business hours. </p>"
           }
         },
         "16269718683f95cb9e-1": {
           "type": "accordion_pane",
           "settings": {
-            "title": "2) How do I add items to my wishlist",
-            "content": "<p>To add an item to your wishlist, click on the heart icon next to the cart button. Once you have added items to the wishlist, you can check them by clicking the wishlist icon next to your profile on the top right of the website. </p>"
+            "title": "2) HOW DO I ADD ITEMS TO MY WISHLIST?",
+            "content": "<p>To add an item to your Wishlist, click on the heart icon next to the cart button. Once you have added items to the wishlist, you can check them by clicking the wishlist icon next to your profile on the top right of the website. </p>"
           }
         },
         "16269718683f95cb9e-2": {
           "type": "accordion_pane",
           "settings": {
-            "title": "3) I am unable to add products to the wishlist",
-            "content": "<p>To add an item to your wishlist, click on the heart icon on the top right corner of the product image. If you encounter any issues while trying to add a product to your wishlist, please feel free to get in touch with us via email at <a href=\"mailto:sharewithus@styleunion.in\">sharewithus@styleunion.in</a></p>"
+            "title": "3) I AM UNABLE TO ADD PRODUCTS TO THE WISHLIST.",
+            "content": "<p>To add an item to your wishlist, click on the heart icon on the top right corner of the product image. If you encounter any issues while trying to add a product to your wishlist, please feel free to get in touch with us via email at <a href=\"mailto:sharewithus@styleunion.in\" target=\"_blank\" title=\"mailto:sharewithus@styleunion.in\"><span style=\"text-decoration:underline\">sharewithus@styleunion.in</span></a></p>"
           }
         }
       },
@@ -220,7 +220,7 @@
       ],
       "settings": {
         "title": "Account Related",
-        "max_width": 80,
+        "max_width": 100,
         "allow_multiple": false
       }
     },
