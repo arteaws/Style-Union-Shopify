@@ -184,7 +184,7 @@
       ],
       "settings": {
         "title": "Cancellation & Return",
-        "max_width": 80,
+        "max_width": 100,
         "allow_multiple": false
       }
     },
