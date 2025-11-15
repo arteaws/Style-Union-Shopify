@@ -118,57 +118,57 @@
         "1626971780f8294dca-0": {
           "type": "accordion_pane",
           "settings": {
-            "title": "1) How do I cancel or return my order",
-            "content": "<p>To cancel an order, please contact our support team as soon as possible. Please provide your order number and relevant details to expedite the cancellation process. We will do our best to accommodate your request, but orders that have been already packed for dispatch cannot be cancelled. In this case, you may refer to our Return Policy. In case you want to return any item, you shall initiate a request on the <em>Track your Order/Return </em>Tab subject to the Terms & Conditions under Return Policy.</p>"
+            "title": "1) HOW DO I CANCEL OR RETURN MY ORDER",
+            "content": "<p>You can cancel your order directly through our app by going to the Order History section, or via the Returns section on our website.</p><p>If you face any issues while canceling, please contact our support team immediately. Please note that once an order has been placed, no changes can be made. Additionally, if your order has already been packed for shipment, it cannot be canceled. In such cases, you may refer to our Return Policy for assistance.</p>"
           }
         },
         "1626971780f8294dca-1": {
           "type": "accordion_pane",
           "settings": {
-            "title": "2) How long does it take to receive a refund for a cancelled order or returned product",
-            "content": "<p>In case your return request is approved or your order is eligible for cancellation, the liable amount will be processed to the original method of payment within 5-7 business days, subject to the Terms & Conditions mentioned in the respective policy. Please note that it may take additional time for the refund to reflect in your account, depending on your bank or payment provider.</p><p>In case of any delays, please reach out to us on +91 9429692121 or email us at <a href=\"mailto:sharewithus@styleunion.in\">sharewithus@styleunion.in</a>  </p>"
+            "title": "2) HOW LONG DOES IT TAKE TO RECEIVE A REFUND FOR A CANCELLED ORDER OR RETURNED PRODUCT?",
+            "content": "<p>If your return request is approved or your order is eligible for cancellation, the refund will be processed to your original payment method, subject to the Terms & Conditions mentioned in the respective policy.</p><p>The refund is expected to reflect in your bank account within 3–5 business days once it has been initiated from our end. The time taken for the refund to appear in your account may vary depending on your bank or payment provider. In case of any delays, please contact us at <strong>+91 9429692121</strong> or <a href=\"mailto:sharewithus@styleunion.in\"><span style=\"text-decoration:underline\"><strong>sharewithus@styleunion.in</strong></span></a>.</p>"
           }
         },
         "1626971780f8294dca-2": {
           "type": "accordion_pane",
           "settings": {
-            "title": "3) Will shipping charges get refunded if I cancel or return my order",
+            "title": "3) WILL SHIPPING CHARGES BE REFUNDED IF I CANCEL OR RETURN MY ORDER?",
             "content": "<p>Please note that the delivery charges or any other charges/fees paid are non- refundable.</p>"
           }
         },
         "accordion_pane_r7tgjw": {
           "type": "accordion_pane",
           "settings": {
-            "title": "4) My request for cancallation/return has not processed or has got declined",
-            "content": "<p>Please reach out to us on +91 9429692121 or email us at <a href=\"mailto:sharewithus@styleunion.in\">sharewithus@styleunion.in</a>   </p>"
+            "title": "4) MY REQUEST FOR CANCELLATION / RETURN HAS NOT BEEN PROCESSED OR GOT DECLINED",
+            "content": "<p>Please contact our support team at <a href=\"mailto:sharewithus@styleunion.in\" target=\"_blank\" title=\"mailto:sharewithus@styleunion.in\"><strong>sharewithus@styleunion.in</strong></a> or by phone at <strong>+91 9429692121</strong>, Monday to Friday, from 10:30 a.m. to 6:30 p.m.</p>"
           }
         },
         "accordion_pane_jDXWLc": {
           "type": "accordion_pane",
           "settings": {
-            "title": "5) The farment does not fit me, what can I do",
-            "content": "<p>If the product does not fit and you would like a new size, please initiate a return request on the website within 15 business days of receiving the product. </p>"
+            "title": "5) THE GARMENT DOES NOT FIT ME, WHAT CAN I DO?",
+            "content": "<p>If the product does not fit and you would like a new size, please initiate a return request on the website within 15 business days of receiving the product.</p>"
           }
         },
         "accordion_pane_mewLB9": {
           "type": "accordion_pane",
           "settings": {
-            "title": "6) How are returns processed",
-            "content": "<p>Once you initiate a return request under Track your order/return section, a pick up is scheduled for the item. Our courier partner will come to pick up the item within 3-5 business days after your return request has been approved subject to the Terms & Conditions under Return Policy. Please note that the product should be unused along with tags and invoice intact. During pick up, our delivery agent may do a quality check on the return item. If the item passes the quality check, it is picked up by our courier partner and refund is initiated after deducting the applicable charges and fees. It can take 5- 7 business days to reflect into your bank account as per the bank timelines. You can track your return status from Track your order/return section.</p>"
+            "title": "6) HOW ARE RETURNS PROCESSED?",
+            "content": "<p>After initiating a return in the <strong>Track Your Order/Return</strong> section, our courier partner will pick up the product within <strong>3–5 business days</strong>, subject to our <strong>Return Policy</strong>. Please ensure the product is <strong>unused, with tags and invoice intact</strong>.</p><p>The refund will be processed <strong>after deducting applicable charges</strong> and may take <strong>3–5 business days</strong> to reflect in your bank account once the quality check has been completed.</p>"
           }
         },
         "accordion_pane_TQz3dr": {
           "type": "accordion_pane",
           "settings": {
-            "title": "7) Why wasn't my order picked up",
+            "title": "7) WHY WASN'T MY PRODUCT PICKED UP?",
             "content": "<p>Once you have initiated a return request, our field executives will pick-up the order within 3-5 business days. They will make 3 attempts to pick up the order, post which the pickup automatically gets cancelled. If our courier partner faces any issue in picking up the order, we will keep you informed.</p>"
           }
         },
         "accordion_pane_H9zNkm": {
           "type": "accordion_pane",
           "settings": {
-            "title": "8) Until when an I return my order",
-            "content": "<p>Subject to the Terms & Conditions under the Return policy, you can return any item of the order or the entire order within 15 business days of receiving the product. Please note that separate pickup may be scheduled for each item in case return request is initiated for multiple items.</p>"
+            "title": "8) UNTIL WHEN CAN I RETURN MY ORDER?",
+            "content": "<p>Subject to the Terms & Conditions under the Return policy, you can return any item of the order or the entire order within 15 business days of receiving the product. Please note that separate pickup may be scheduled for each item in case a return request is initiated for multiple items. </p>"
           }
         }
       },
