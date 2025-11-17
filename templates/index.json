@@ -79,6 +79,27 @@
     "slideshow": {
       "type": "slideshow",
       "blocks": {
+        "image_P9rDbb": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/Banner_HeatX_Thermowear_Desktop_Adapt.jpg",
+            "overlay_color": "#000000",
+            "overlay_opacity": 0,
+            "caption_position": "middle_center",
+            "mobile_image": "shopify://shop_images/Banner_HeatX_Thermowear_Mobile_Adapt.jpg",
+            "hide_caption_background": false,
+            "heading": "",
+            "subheading": "",
+            "link": "shopify://collections/heat-x",
+            "button_text": "",
+            "second_link": "",
+            "second_button_text": "",
+            "text_color": "#ffffff",
+            "button_color": "#ffffff",
+            "button_background": "#000000",
+            "caption_background": "rgba(0,0,0,0)"
+          }
+        },
         "image_TB6JN4": {
           "type": "image",
           "settings": {
@@ -115,28 +136,6 @@
             "button_text": "",
             "second_link": "",
             "second_button_text": "Button 2 text",
-            "text_color": "#ffffff",
-            "button_color": "#ffffff",
-            "button_background": "#000000",
-            "caption_background": "rgba(0,0,0,0)"
-          }
-        },
-        "image_P9rDbb": {
-          "type": "image",
-          "disabled": true,
-          "settings": {
-            "image": "shopify://shop_images/Men_Women_Western_Own_The_Spark.jpg",
-            "overlay_color": "#000000",
-            "overlay_opacity": 0,
-            "caption_position": "middle_center",
-            "mobile_image": "shopify://shop_images/Men_Women_Western_Own_The_Spark_b5ba8cb5-6c23-4d73-8af8-79f240a8b256.jpg",
-            "hide_caption_background": false,
-            "heading": "",
-            "subheading": "",
-            "link": "shopify://collections/men-and-women-western",
-            "button_text": "",
-            "second_link": "",
-            "second_button_text": "",
             "text_color": "#ffffff",
             "button_color": "#ffffff",
             "button_background": "#000000",
@@ -189,9 +188,9 @@
         }
       },
       "block_order": [
+        "image_P9rDbb",
         "image_TB6JN4",
         "image_6zdbji",
-        "image_P9rDbb",
         "d3250875-f7c1-40bb-aec9-87edb0224b73",
         "image_rCYnhj"
       ],
