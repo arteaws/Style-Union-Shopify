@@ -1,1 +1,69 @@
-{"name":"Footer","type":"footer","sections":{"footer":{"type":"footer","blocks":{"1480972996114":{"type":"menu","settings":{"footer_nav":"about-us","heading":"About Us"}},"menu_x7AHaj":{"type":"menu","settings":{"footer_nav":"policies","heading":"Policies"}},"menu_rpbx8g":{"type":"menu","settings":{"footer_nav":"customer-service","heading":"Customer Service"}},"text_VQGijD":{"type":"text","settings":{"heading":"Contact Us","footer_text":"<p><strong>Customer care<\/strong> <a href=\"tel:9429692121\" title=\"tel:9429692121\">+91 9429692121<\/a><\/p><p><strong>Customer care email id – <\/strong><a href=\"mailto:sharewithus@styleunion.in\" title=\"mailto:sharewithus@styleunion.in\">sharewithus@styleunion.in<\/a><\/p><p>10:30 am to 6:30 pm from Monday to Friday<\/p><p><strong>Legal:<\/strong> <a href=\"mailto:compliance@nexonomniverse.com\" title=\"mailto:compliance@nexonomniverse.com\">compliance@nexonomniverse.com<\/a><\/p><p><a href=\"\/pages\/franchise-enquiry\" title=\"Franchise Enquiry\">Franchise Enquiry<\/a><\/p><p><a href=\"\/pages\/business-partner-form\" title=\"Business Partner Form\">Business Partner Form<\/a><\/p>"}}},"block_order":["1480972996114","menu_x7AHaj","menu_rpbx8g","text_VQGijD"],"settings":{"footer_text_align":"left","footer_title_transform":"uppercase","footer_title_size":14,"show_credit_cards":true,"show_social_icons":true,"enable_follow_on_shop":true,"show_copyright":true,"show_locale_selector":false,"show_country_selector":false,"show_flag":false}}},"order":["footer"]}
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "name": "Footer",
+  "type": "footer",
+  "sections": {
+    "footer": {
+      "type": "footer",
+      "blocks": {
+        "1480972996114": {
+          "type": "menu",
+          "settings": {
+            "footer_nav": "about-us",
+            "heading": "About Us"
+          }
+        },
+        "menu_x7AHaj": {
+          "type": "menu",
+          "settings": {
+            "footer_nav": "policies",
+            "heading": "Policies"
+          }
+        },
+        "menu_rpbx8g": {
+          "type": "menu",
+          "settings": {
+            "footer_nav": "customer-service",
+            "heading": "Customer Service"
+          }
+        },
+        "text_VQGijD": {
+          "type": "text",
+          "settings": {
+            "heading": "Contact Us",
+            "footer_text": "<p><strong>Customer care</strong> <a href=\"tel:7304053032\" target=\"_blank\" title=\"tel:7304053032\">+91 7304053032 </a></p><p><strong>Customer care email id – </strong><a href=\"mailto:sharewithus@styleunion.in\" title=\"mailto:sharewithus@styleunion.in\">sharewithus@styleunion.in</a></p><p>10:30 am to 6:30 pm from Monday to Friday</p><p><strong>Legal:</strong> <a href=\"mailto:compliance@nexonomniverse.com\" title=\"mailto:compliance@nexonomniverse.com\">compliance@nexonomniverse.com</a></p><p><a href=\"/pages/franchise-enquiry\" title=\"Franchise Enquiry\">Franchise Enquiry</a></p><p><a href=\"/pages/business-partner-form\" title=\"Business Partner Form\">Business Partner Form</a></p>"
+          }
+        }
+      },
+      "block_order": [
+        "1480972996114",
+        "menu_x7AHaj",
+        "menu_rpbx8g",
+        "text_VQGijD"
+      ],
+      "settings": {
+        "footer_text_align": "left",
+        "footer_title_transform": "uppercase",
+        "footer_title_size": 14,
+        "show_credit_cards": true,
+        "show_social_icons": true,
+        "enable_follow_on_shop": true,
+        "show_copyright": true,
+        "show_locale_selector": false,
+        "show_country_selector": false,
+        "show_flag": false
+      }
+    }
+  },
+  "order": [
+    "footer"
+  ]
+}
