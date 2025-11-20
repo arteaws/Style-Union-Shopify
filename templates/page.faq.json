@@ -119,14 +119,14 @@
           "type": "accordion_pane",
           "settings": {
             "title": "1) HOW DO I CANCEL OR RETURN MY ORDER",
-            "content": "<p>You can cancel your order directly through our app by going to the Order History section, or via the Returns section on our website.</p><p>If you face any issues while canceling, please contact our support team immediately. Please note that once an order has been placed, no changes can be made. Additionally, if your order has already been packed for shipment, it cannot be canceled. In such cases, you may refer to our Return Policy for assistance.</p>"
+            "content": "<p>You can cancel or return your order directly through our app or website by going to the Order History section.</p><p>If you face any issues while canceling, please contact our support team immediately. Please note that once an order has been placed, no changes can be made. Additionally, if your order has already been packed for shipment, it cannot be canceled. In such cases, you may refer to our Return Policy for assistance.</p>"
           }
         },
         "1626971780f8294dca-1": {
           "type": "accordion_pane",
           "settings": {
             "title": "2) HOW LONG DOES IT TAKE TO RECEIVE A REFUND FOR A CANCELLED ORDER OR RETURNED PRODUCT?",
-            "content": "<p>If your return request is approved or your order is eligible for cancellation, the refund will be processed to your original payment method, subject to the Terms & Conditions mentioned in the respective policy.</p><p>The refund is expected to reflect in your bank account within 3–5 business days once it has been initiated from our end. The time taken for the refund to appear in your account may vary depending on your bank or payment provider. In case of any delays, please contact us at <strong>+91 9429692121</strong> or <a href=\"mailto:sharewithus@styleunion.in\"><span style=\"text-decoration:underline\"><strong>sharewithus@styleunion.in</strong></span></a>.</p>"
+            "content": "<p>If your return request is approved or your order is eligible for cancellation, the refund will be processed to your original payment method, subject to the Terms & Conditions mentioned in the respective policy.</p><p>The refund is expected to reflect in your bank account within 3–5 business days once it has been initiated from our end. The time taken for the refund to appear in your account may vary depending on your bank or payment provider. In case of any delays, please contact us at <strong>+91 7304053032</strong> or <a href=\"mailto:sharewithus@styleunion.in\"><span style=\"text-decoration:underline\"><strong>sharewithus@styleunion.in</strong></span></a>.<br/></p>"
           }
         },
         "1626971780f8294dca-2": {
@@ -140,7 +140,7 @@
           "type": "accordion_pane",
           "settings": {
             "title": "4) MY REQUEST FOR CANCELLATION / RETURN HAS NOT BEEN PROCESSED OR GOT DECLINED",
-            "content": "<p>Please contact our support team at <a href=\"mailto:sharewithus@styleunion.in\" target=\"_blank\" title=\"mailto:sharewithus@styleunion.in\"><strong>sharewithus@styleunion.in</strong></a> or by phone at <strong>+91 9429692121</strong>, Monday to Friday, from 10:30 a.m. to 6:30 p.m.</p>"
+            "content": "<p>Please contact our support team at <a href=\"mailto:sharewithus@styleunion.in\" target=\"_blank\" title=\"mailto:sharewithus@styleunion.in\"><strong>sharewithus@styleunion.in</strong></a> or by phone at <a href=\"tel:+91 7304053032\" target=\"_blank\" title=\"tel:7304053032\"><strong>+91 7304053032</strong></a>, Monday to Friday, from 10:30 a.m. to 6:30 p.m.</p>"
           }
         },
         "accordion_pane_jDXWLc": {
@@ -154,7 +154,7 @@
           "type": "accordion_pane",
           "settings": {
             "title": "6) HOW ARE RETURNS PROCESSED?",
-            "content": "<p>After initiating a return in the <strong>Track Your Order/Return</strong> section, our courier partner will pick up the product within <strong>3–5 business days</strong>, subject to our <strong>Return Policy</strong>. Please ensure the product is <strong>unused, with tags and invoice intact</strong>.</p><p>The refund will be processed <strong>after deducting applicable charges</strong> and may take <strong>3–5 business days</strong> to reflect in your bank account once the quality check has been completed.</p>"
+            "content": "<p>After initiating a return, our courier partner will pick up the product within <strong>3–5 business days</strong>, subject to our <strong>Return Policy</strong>. Please ensure the product is <strong>unused, with tags and invoice intact</strong>.</p><p>The refund will be processed <strong>after deducting applicable charges</strong> and may take <strong>3–5 business days</strong> to reflect in your bank account once the quality check has been completed.</p>"
           }
         },
         "accordion_pane_TQz3dr": {
