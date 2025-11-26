@@ -87,7 +87,7 @@
       "type": "collection-carousel",
       "settings": {
         "full_width": false,
-        "collection": "fluidx-1",
+        "collection": "fluidx",
         "grid": 2,
         "limit": 2,
         "image": "shopify://shop_images/colourstyleunionfluidx2-ezgif.com-optimize.gif",
