@@ -212,7 +212,7 @@
       "type": "featured-collection",
       "settings": {
         "heading": "Men Bestsellers You Can't Miss",
-        "collection": "bestseller-new-men",
+        "collection": "mens-bestseller",
         "carousel": true,
         "show_view_all": true,
         "reduce_width": false,
