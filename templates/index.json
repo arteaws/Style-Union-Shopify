@@ -50,7 +50,7 @@
         "featured_collection_amN9fK": {
           "type": "featured_collection",
           "settings": {
-            "collection": "mens-jeans",
+            "collection": "union-of-denims",
             "collection_image": "shopify://shop_images/Union_of_Denim_eef89667-7fc1-4c40-bbe9-42bacb8195be.png"
           }
         }
@@ -527,7 +527,7 @@
       "type": "featured-collection",
       "settings": {
         "heading": "Men's Jeans",
-        "collection": "mens-jeans-1",
+        "collection": "mens-jeans",
         "carousel": true,
         "show_view_all": true,
         "reduce_width": false,
