@@ -221,7 +221,7 @@
       "type": "featured-collection",
       "settings": {
         "heading": "Women Bestsellers You Can't Miss",
-        "collection": "bestseller-new-women",
+        "collection": "womens-bestsellers",
         "carousel": true,
         "show_view_all": true,
         "reduce_width": false,
