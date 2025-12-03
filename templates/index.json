@@ -503,7 +503,7 @@
       "type": "featured-collection",
       "settings": {
         "heading": "Men's Jeans",
-        "collection": "mens-jeans-1",
+        "collection": "mens-jeans",
         "carousel": true,
         "show_view_all": true,
         "reduce_width": false,
