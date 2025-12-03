@@ -1,1 +1,497 @@
-{"sections":{"banner":{"type":"main-collection-banner","disabled":true,"settings":{"banner_image_type":"collection"}},"promo":{"type":"promotional-banner","disabled":true,"settings":{"background_color":"#f5f5f5","link":"","text_align":"center","heading":"Heading","subheading":"<p>Add a short sentence to your banner<\/p>","button_text":"Button","heading_font_size":26,"subheading_font_size":16,"text_color":"#000000","button_text_color":"#ffffff","button_color":"#000000","section_padding":"none"}},"main":{"type":"main-collection","blocks":{"bef67807-6de8-4afa-b1fe-bc0a46351382":{"type":"side_sortby","settings":{}},"cea9f996-51a8-4b3a-8837-6975c0590a9c":{"type":"side_filter","settings":{"show_color_swatches":true,"show_filter_count":true}}},"block_order":["bef67807-6de8-4afa-b1fe-bc0a46351382","cea9f996-51a8-4b3a-8837-6975c0590a9c"],"disabled":true,"settings":{"rows":4,"grid":3,"show_image":false,"description_position":"bottom"}},"slideshow_9zXFb6":{"type":"slideshow","blocks":{"image_N8bH6w":{"type":"image","settings":{"image":"shopify:\/\/shop_images\/graphic_banner_700_x_200_px_1.png","overlay_color":"#000000","overlay_opacity":0,"caption_position":"middle_center","mobile_image":"shopify:\/\/shop_images\/graphic_banner_4f002c07-3029-4fd6-8889-6275d3956ad8.png","hide_caption_background":false,"heading":"","subheading":"","link":"","button_text":"","second_link":"","second_button_text":"Button 2 text","text_color":"#ffffff","button_color":"#ffffff","button_background":"#000000","caption_background":"rgba(0,0,0,0)"}}},"block_order":["image_N8bH6w"],"settings":{"full_width":true,"slideshow_size":"fixed_height","desktop_height":400,"mobile_height":400,"caption_below":false,"pager":"dots","show_animation":false,"transition":"fade","slider_speed":5,"enable_stop_pause_on_mobile":true,"slide_heading_size":22,"subheading_size":14,"section_padding":"none"}},"rich_text_9LfXC9":{"type":"rich-text","settings":{"heading":"","rich_text":"<h2><strong>Tee Up Your Style<\/strong><\/h2><p><\/p><p>Discover your perfect tee in our collection of Women's Graphic T-shirts. Explore a variety of fits and choose from our range of eye-catching graphics to express your unique personality. From classic to bold, we've got a style for every mood and occasion.<\/p><h3>Life is too short for boring tees.<br\/>Let the power of print take over!<\/h3>","page":"","link":"shopify:\/\/collections\/womens-graphic-t-shirts","link_text":"SHOP COLLECTION","background":"#ffffff","color":"#000000","width":60,"align_text":"center","section_padding":"top"}},"collection_list_xacPxR":{"type":"collection-list","blocks":{"featured_collection_AfR83X":{"type":"featured_collection","settings":{"collection":"women-regular-graphic-tee","collection_image":"shopify:\/\/shop_images\/Untitled_900_x_1300_px_1.png"}},"featured_collection_DJwbLW":{"type":"featured_collection","settings":{"collection":"women-oversized-graphic-tee","collection_image":"shopify:\/\/shop_images\/Untitled_900_x_1300_px_2.png"}},"featured_collection_JKP4P4":{"type":"featured_collection","settings":{"collection":"women-short-graphic-tee","collection_image":"shopify:\/\/shop_images\/Untitled_900_x_1300_px_5.png"}},"featured_collection_cdM3T8":{"type":"featured_collection","settings":{"collection":"women-crop-boxy-graphic-tee","collection_image":"shopify:\/\/shop_images\/Untitled_900_x_1300_px_3.png"}},"featured_collection_Tp3NPe":{"type":"featured_collection","settings":{"collection":"women-slim-fit-graphic-tee","collection_image":"shopify:\/\/shop_images\/Untitled_900_x_1300_px_4.png"}},"featured_collection_9HqALe":{"type":"featured_collection","settings":{"collection":"women-fitted-graphic-tee","collection_image":"shopify:\/\/shop_images\/Untitled_900_x_1300_px_7.png"}}},"block_order":["featured_collection_AfR83X","featured_collection_DJwbLW","featured_collection_JKP4P4","featured_collection_cdM3T8","featured_collection_Tp3NPe","featured_collection_9HqALe"],"settings":{"title":"Explore the Fits","grid":6,"carousel":false,"collection_count":false,"bold_titles":true,"title_position":"below_image","image_ratio":"vertical","section_padding":"none"}},"featured_collection_Dgjt8B":{"type":"featured-collection","settings":{"heading":"Shop Bestsellers","collection":"womens-graphic-t-shirts-bestsellers","carousel":true,"show_view_all":true,"reduce_width":false,"grid":5,"limit":12,"section_padding":"both"}},"rich_text_TF8Eky":{"type":"rich-text","settings":{"heading":"","rich_text":"<h2><strong>Style Meets Savings<\/strong><\/h2><p><\/p><p>Prices so low, you can easily purchase<br\/>new, stylish tees regularly without breaking the bank.<br\/><\/p>","page":"","link":"","link_text":"","background":"#ffffff","color":"#000000","width":60,"align_text":"center","section_padding":"top"}},"logo_list_LA8zXn":{"type":"logo-list","blocks":{"image_QF3ic4":{"type":"image","settings":{"image":"shopify:\/\/shop_images\/1_bc084e53-eea8-444b-b354-8f33ec3c283a.png","link":"shopify:\/\/collections\/womens-graphic-t-shirts-under-199"}},"image_TfkFkT":{"type":"image","settings":{"image":"shopify:\/\/shop_images\/2_c53ee589-c7d3-4720-9bee-89b03ccc1610.png","link":"shopify:\/\/collections\/womens-graphic-t-shirts-under-399"}},"image_GYbUB7":{"type":"image","settings":{"image":"shopify:\/\/shop_images\/3_fbca9cc1-13a2-4179-a8a5-60d198895dd9.png","link":"shopify:\/\/collections\/womens-graphic-t-shirts-under-599"}}},"block_order":["image_QF3ic4","image_TfkFkT","image_GYbUB7"],"settings":{"full_width":false,"section_padding":"none","heading":"","images_per_row":3}},"featured_product_Kjmbi3":{"type":"featured-product","blocks":{"product_variants_ziUEbH":{"type":"product_variants","settings":{}},"product_quantity_yxHmjR":{"type":"product_quantity","settings":{}},"product_buttons_c74TKk":{"type":"product_buttons","settings":{"show_gift_card_recipient":false}}},"block_order":["product_variants_ziUEbH","product_quantity_yxHmjR","product_buttons_c74TKk"],"settings":{"product_background":"","title":"Spotlight of the Day","featured_product":"boxy-fit-printed-t-shirt-ywgt00012","thumbnail_position":"bottom","click_to_enlarge":true,"enable_video_looping":false,"show_tax_information":false}},"text_with_icons_Fiq88R":{"type":"text-with-icons","blocks":{"text_block_NJnDdR":{"type":"text_block","settings":{"icon":"verified","rich_text":"<p>Premium fabrics, lasting style.<\/p>","link":""}},"text_block_dqL7z3":{"type":"text_block","settings":{"icon":"hanger","rich_text":"<p>Soft to the touch, perfect fit, all-day wear<\/p>","link":""}},"text_block_tDQijw":{"type":"text_block","settings":{"icon":"sale-tag","rich_text":"<p>Affordable fashion without compromise<\/p>","link":""}}},"block_order":["text_block_NJnDdR","text_block_dqL7z3","text_block_tDQijw"],"settings":{"heading":"Refresh Your Wardrobe Responsibly","icon_height":20,"appearance":"icon_above","background":"#e5e5e5","color":"#000000","section_padding":"bottom"}},"section_heading_VjHB3j":{"type":"section-heading","settings":{"title":"Your Personal Style Guide","title_size":"h2","title_alignment":"center","title_border":true,"section_padding":"top"}},"image_gallery_zdp3QW":{"type":"image-gallery","blocks":{"image_tnrg3A":{"type":"image","settings":{"image":"shopify:\/\/shop_images\/PERSONAL_LOOK.png","image_width":"33%","link":"shopify:\/\/collections\/women-regular-graphic-tee","heading":"","subheading":"","button_text":"","caption_position":"middle_center","hover_caption":false,"caption_background":"rgba(0,0,0,0)","text_color":"#ffffff","overlay_color":"#000000","overlay_opacity":0}},"image_GeFke4":{"type":"image","settings":{"image":"shopify:\/\/shop_images\/PERSONAL_LOOK_1.png","image_width":"33%","link":"shopify:\/\/collections\/women-crop-boxy-graphic-tee","heading":"","subheading":"","button_text":"","caption_position":"middle_center","hover_caption":false,"caption_background":"rgba(0,0,0,0)","text_color":"#ffffff","overlay_color":"#000000","overlay_opacity":0}},"image_cfJTMA":{"type":"image","settings":{"image":"shopify:\/\/shop_images\/PERSONAL_LOOK_2.png","image_width":"33%","link":"shopify:\/\/collections\/women-oversized-graphic-tee","heading":"","subheading":"","button_text":"","caption_position":"middle_center","hover_caption":false,"caption_background":"rgba(0,0,0,0)","text_color":"#ffffff","overlay_color":"#000000","overlay_opacity":0}}},"block_order":["image_tnrg3A","image_GeFke4","image_cfJTMA"],"settings":{"full_width":false,"image_height":"fixed_height","desktop_height":600,"mobile_height":400,"swipe":true,"images_touching":false,"heading_size":22,"subheading_size":14,"section_padding":"both"}},"featured_collection_xqhhMn":{"type":"featured-collection","settings":{"heading":"Pair your T-shirt with the right Denim","collection":"womens-jeans","carousel":true,"show_view_all":true,"reduce_width":false,"grid":5,"limit":20,"section_padding":"none"}},"featured_collection_GGDPaD":{"type":"featured-collection","settings":{"heading":"Shop All Graphic T-Shirts","collection":"womens-graphic-t-shirts","carousel":false,"show_view_all":true,"reduce_width":false,"grid":5,"limit":20,"section_padding":"both"}},"section_heading_W68myJ":{"type":"section-heading","disabled":true,"settings":{"title":"Find Your Perfect Fit","title_size":"h2","title_alignment":"center","title_border":true,"section_padding":"top"}},"image_with_text_CBTUcp":{"type":"image-with-text","blocks":{"image_dE3DhX":{"type":"image","settings":{}}},"block_order":["image_dE3DhX"],"disabled":true,"settings":{"full_width":false,"section_padding":"both","appearance":"overlap","layout":"left","image_width":"50%","image_height":"fixed_height","desktop_height":200,"mobile_height":200,"text_align":"center","heading":"Regular Graphic Tee","text":"<p>Our Regular Graphic Tee is your everyday essential. Crafted from premium cotton, it offers a comfortable, classic fit. Perfect for pairing with jeans, shorts, or skirts, this tee is a wardrobe staple with a bold twist.<\/p><h3><\/h3>","button":"SHOP REGULAR GRAPHIC TEES","link":"shopify:\/\/collections\/women-regular-graphic-tee","background":"#ffffff","color":"#000000"}}},"order":["banner","promo","main","slideshow_9zXFb6","rich_text_9LfXC9","collection_list_xacPxR","featured_collection_Dgjt8B","rich_text_TF8Eky","logo_list_LA8zXn","featured_product_Kjmbi3","text_with_icons_Fiq88R","section_heading_VjHB3j","image_gallery_zdp3QW","featured_collection_xqhhMn","featured_collection_GGDPaD","section_heading_W68myJ","image_with_text_CBTUcp"]}
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "banner": {
+      "type": "main-collection-banner",
+      "disabled": true,
+      "settings": {
+        "banner_image_type": "collection"
+      }
+    },
+    "promo": {
+      "type": "promotional-banner",
+      "disabled": true,
+      "settings": {
+        "background_color": "#f5f5f5",
+        "link": "",
+        "text_align": "center",
+        "heading": "Heading",
+        "subheading": "<p>Add a short sentence to your banner</p>",
+        "button_text": "Button",
+        "heading_font_size": 26,
+        "subheading_font_size": 16,
+        "text_color": "#000000",
+        "button_text_color": "#ffffff",
+        "button_color": "#000000",
+        "section_padding": "none"
+      }
+    },
+    "main": {
+      "type": "main-collection",
+      "blocks": {
+        "bef67807-6de8-4afa-b1fe-bc0a46351382": {
+          "type": "side_sortby",
+          "settings": {}
+        },
+        "cea9f996-51a8-4b3a-8837-6975c0590a9c": {
+          "type": "side_filter",
+          "settings": {
+            "show_color_swatches": true,
+            "show_filter_count": true
+          }
+        }
+      },
+      "block_order": [
+        "bef67807-6de8-4afa-b1fe-bc0a46351382",
+        "cea9f996-51a8-4b3a-8837-6975c0590a9c"
+      ],
+      "disabled": true,
+      "settings": {
+        "rows": 4,
+        "grid": 3,
+        "show_image": false,
+        "description_position": "bottom"
+      }
+    },
+    "slideshow_9zXFb6": {
+      "type": "slideshow",
+      "blocks": {
+        "image_N8bH6w": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/graphic_banner_700_x_200_px_1.png",
+            "overlay_color": "#000000",
+            "overlay_opacity": 0,
+            "caption_position": "middle_center",
+            "mobile_image": "shopify://shop_images/graphic_banner_4f002c07-3029-4fd6-8889-6275d3956ad8.png",
+            "hide_caption_background": false,
+            "heading": "",
+            "subheading": "",
+            "link": "",
+            "button_text": "",
+            "second_link": "",
+            "second_button_text": "Button 2 text",
+            "text_color": "#ffffff",
+            "button_color": "#ffffff",
+            "button_background": "#000000",
+            "caption_background": "rgba(0,0,0,0)"
+          }
+        }
+      },
+      "block_order": [
+        "image_N8bH6w"
+      ],
+      "settings": {
+        "full_width": true,
+        "slideshow_size": "fixed_height",
+        "desktop_height": 400,
+        "mobile_height": 400,
+        "caption_below": false,
+        "pager": "dots",
+        "show_animation": false,
+        "transition": "fade",
+        "slider_speed": 5,
+        "enable_stop_pause_on_mobile": true,
+        "slide_heading_size": 22,
+        "subheading_size": 14,
+        "section_padding": "none"
+      }
+    },
+    "rich_text_9LfXC9": {
+      "type": "rich-text",
+      "settings": {
+        "heading": "",
+        "rich_text": "<h2><strong>Tee Up Your Style</strong></h2><p></p><p>Discover your perfect tee in our collection of Women's Graphic T-shirts. Explore a variety of fits and choose from our range of eye-catching graphics to express your unique personality. From classic to bold, we've got a style for every mood and occasion.</p><h3>Life is too short for boring tees.<br/>Let the power of print take over!</h3>",
+        "page": "",
+        "link": "shopify://collections/womens-graphic-t-shirts",
+        "link_text": "SHOP COLLECTION",
+        "background": "#ffffff",
+        "color": "#000000",
+        "width": 60,
+        "align_text": "center",
+        "section_padding": "top"
+      }
+    },
+    "collection_list_xacPxR": {
+      "type": "collection-list",
+      "blocks": {
+        "featured_collection_AfR83X": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "women-regular-graphic-tee",
+            "collection_image": "shopify://shop_images/Untitled_900_x_1300_px_1.png"
+          }
+        },
+        "featured_collection_DJwbLW": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "women-oversized-graphic-tee",
+            "collection_image": "shopify://shop_images/Untitled_900_x_1300_px_2.png"
+          }
+        },
+        "featured_collection_JKP4P4": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "women-short-graphic-tee",
+            "collection_image": "shopify://shop_images/Untitled_900_x_1300_px_5.png"
+          }
+        },
+        "featured_collection_cdM3T8": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "women-crop-boxy-graphic-tee",
+            "collection_image": "shopify://shop_images/Untitled_900_x_1300_px_3.png"
+          }
+        },
+        "featured_collection_Tp3NPe": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "women-slim-fit-graphic-tee",
+            "collection_image": "shopify://shop_images/Untitled_900_x_1300_px_4.png"
+          }
+        },
+        "featured_collection_9HqALe": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "women-fitted-graphic-tee",
+            "collection_image": "shopify://shop_images/Untitled_900_x_1300_px_7.png"
+          }
+        }
+      },
+      "block_order": [
+        "featured_collection_AfR83X",
+        "featured_collection_DJwbLW",
+        "featured_collection_JKP4P4",
+        "featured_collection_cdM3T8",
+        "featured_collection_Tp3NPe",
+        "featured_collection_9HqALe"
+      ],
+      "settings": {
+        "title": "Explore the Fits",
+        "grid": 6,
+        "carousel": false,
+        "collection_count": false,
+        "bold_titles": true,
+        "title_position": "below_image",
+        "image_ratio": "vertical",
+        "section_padding": "none"
+      }
+    },
+    "featured_collection_Dgjt8B": {
+      "type": "featured-collection",
+      "settings": {
+        "heading": "Shop Bestsellers",
+        "collection": "womens-graphic-t-shirts-bestsellers",
+        "carousel": true,
+        "show_view_all": true,
+        "reduce_width": false,
+        "grid": 5,
+        "limit": 12,
+        "section_padding": "both"
+      }
+    },
+    "rich_text_TF8Eky": {
+      "type": "rich-text",
+      "settings": {
+        "heading": "",
+        "rich_text": "<h2><strong>Style Meets Savings</strong></h2><p></p><p>Prices so low, you can easily purchase<br/>new, stylish tees regularly without breaking the bank.<br/></p>",
+        "page": "",
+        "link": "",
+        "link_text": "",
+        "background": "#ffffff",
+        "color": "#000000",
+        "width": 60,
+        "align_text": "center",
+        "section_padding": "top"
+      }
+    },
+    "logo_list_LA8zXn": {
+      "type": "logo-list",
+      "blocks": {
+        "image_QF3ic4": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/1_bc084e53-eea8-444b-b354-8f33ec3c283a.png",
+            "link": "shopify://collections/womens-graphic-t-shirts-under-199"
+          }
+        },
+        "image_TfkFkT": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/2_c53ee589-c7d3-4720-9bee-89b03ccc1610.png",
+            "link": "shopify://collections/womens-graphic-t-shirts-under-399"
+          }
+        },
+        "image_GYbUB7": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/3_fbca9cc1-13a2-4179-a8a5-60d198895dd9.png",
+            "link": "shopify://collections/womens-graphic-t-shirts-under-599"
+          }
+        }
+      },
+      "block_order": [
+        "image_QF3ic4",
+        "image_TfkFkT",
+        "image_GYbUB7"
+      ],
+      "settings": {
+        "full_width": false,
+        "section_padding": "none",
+        "heading": "",
+        "images_per_row": 3
+      }
+    },
+    "featured_product_Kjmbi3": {
+      "type": "featured-product",
+      "blocks": {
+        "product_variants_ziUEbH": {
+          "type": "product_variants",
+          "settings": {}
+        },
+        "product_quantity_yxHmjR": {
+          "type": "product_quantity",
+          "settings": {}
+        },
+        "product_buttons_c74TKk": {
+          "type": "product_buttons",
+          "settings": {
+            "show_gift_card_recipient": false
+          }
+        }
+      },
+      "block_order": [
+        "product_variants_ziUEbH",
+        "product_quantity_yxHmjR",
+        "product_buttons_c74TKk"
+      ],
+      "settings": {
+        "product_background": "",
+        "title": "Spotlight of the Day",
+        "featured_product": "boxy-fit-printed-t-shirt-ywgt00012",
+        "thumbnail_position": "bottom",
+        "click_to_enlarge": true,
+        "enable_video_looping": false,
+        "show_tax_information": false
+      }
+    },
+    "text_with_icons_Fiq88R": {
+      "type": "text-with-icons",
+      "blocks": {
+        "text_block_NJnDdR": {
+          "type": "text_block",
+          "settings": {
+            "icon": "verified",
+            "rich_text": "<p>Premium fabrics, lasting style.</p>",
+            "link": ""
+          }
+        },
+        "text_block_dqL7z3": {
+          "type": "text_block",
+          "settings": {
+            "icon": "hanger",
+            "rich_text": "<p>Soft to the touch, perfect fit, all-day wear</p>",
+            "link": ""
+          }
+        },
+        "text_block_tDQijw": {
+          "type": "text_block",
+          "settings": {
+            "icon": "sale-tag",
+            "rich_text": "<p>Affordable fashion without compromise</p>",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "text_block_NJnDdR",
+        "text_block_dqL7z3",
+        "text_block_tDQijw"
+      ],
+      "settings": {
+        "heading": "Refresh Your Wardrobe Responsibly",
+        "icon_height": 20,
+        "appearance": "icon_above",
+        "background": "#e5e5e5",
+        "color": "#000000",
+        "section_padding": "bottom"
+      }
+    },
+    "section_heading_VjHB3j": {
+      "type": "section-heading",
+      "settings": {
+        "title": "Your Personal Style Guide",
+        "title_size": "h2",
+        "title_alignment": "center",
+        "title_border": true,
+        "section_padding": "top"
+      }
+    },
+    "image_gallery_zdp3QW": {
+      "type": "image-gallery",
+      "blocks": {
+        "image_tnrg3A": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/PERSONAL_LOOK.png",
+            "image_width": "33%",
+            "link": "shopify://collections/women-regular-graphic-tee",
+            "heading": "",
+            "subheading": "",
+            "button_text": "",
+            "caption_position": "middle_center",
+            "hover_caption": false,
+            "caption_background": "rgba(0,0,0,0)",
+            "text_color": "#ffffff",
+            "overlay_color": "#000000",
+            "overlay_opacity": 0
+          }
+        },
+        "image_GeFke4": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/PERSONAL_LOOK_1.png",
+            "image_width": "33%",
+            "link": "shopify://collections/women-crop-boxy-graphic-tee",
+            "heading": "",
+            "subheading": "",
+            "button_text": "",
+            "caption_position": "middle_center",
+            "hover_caption": false,
+            "caption_background": "rgba(0,0,0,0)",
+            "text_color": "#ffffff",
+            "overlay_color": "#000000",
+            "overlay_opacity": 0
+          }
+        },
+        "image_cfJTMA": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/PERSONAL_LOOK_2.png",
+            "image_width": "33%",
+            "link": "shopify://collections/women-oversized-graphic-tee",
+            "heading": "",
+            "subheading": "",
+            "button_text": "",
+            "caption_position": "middle_center",
+            "hover_caption": false,
+            "caption_background": "rgba(0,0,0,0)",
+            "text_color": "#ffffff",
+            "overlay_color": "#000000",
+            "overlay_opacity": 0
+          }
+        }
+      },
+      "block_order": [
+        "image_tnrg3A",
+        "image_GeFke4",
+        "image_cfJTMA"
+      ],
+      "settings": {
+        "full_width": false,
+        "image_height": "fixed_height",
+        "desktop_height": 600,
+        "mobile_height": 400,
+        "swipe": true,
+        "images_touching": false,
+        "heading_size": 22,
+        "subheading_size": 14,
+        "section_padding": "both"
+      }
+    },
+    "featured_collection_xqhhMn": {
+      "type": "featured-collection",
+      "settings": {
+        "heading": "Pair your T-shirt with the right Denim",
+        "collection": "union-of-denim-women",
+        "carousel": true,
+        "show_view_all": true,
+        "reduce_width": false,
+        "grid": 5,
+        "limit": 20,
+        "section_padding": "none"
+      }
+    },
+    "featured_collection_GGDPaD": {
+      "type": "featured-collection",
+      "settings": {
+        "heading": "Shop All Graphic T-Shirts",
+        "collection": "womens-graphic-t-shirts",
+        "carousel": false,
+        "show_view_all": true,
+        "reduce_width": false,
+        "grid": 5,
+        "limit": 20,
+        "section_padding": "both"
+      }
+    },
+    "section_heading_W68myJ": {
+      "type": "section-heading",
+      "disabled": true,
+      "settings": {
+        "title": "Find Your Perfect Fit",
+        "title_size": "h2",
+        "title_alignment": "center",
+        "title_border": true,
+        "section_padding": "top"
+      }
+    },
+    "image_with_text_CBTUcp": {
+      "type": "image-with-text",
+      "blocks": {
+        "image_dE3DhX": {
+          "type": "image",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "image_dE3DhX"
+      ],
+      "disabled": true,
+      "settings": {
+        "full_width": false,
+        "section_padding": "both",
+        "appearance": "overlap",
+        "layout": "left",
+        "image_width": "50%",
+        "image_height": "fixed_height",
+        "desktop_height": 200,
+        "mobile_height": 200,
+        "text_align": "center",
+        "heading": "Regular Graphic Tee",
+        "text": "<p>Our Regular Graphic Tee is your everyday essential. Crafted from premium cotton, it offers a comfortable, classic fit. Perfect for pairing with jeans, shorts, or skirts, this tee is a wardrobe staple with a bold twist.</p><h3></h3>",
+        "button": "SHOP REGULAR GRAPHIC TEES",
+        "link": "shopify://collections/women-regular-graphic-tee",
+        "background": "#ffffff",
+        "color": "#000000"
+      }
+    }
+  },
+  "order": [
+    "banner",
+    "promo",
+    "main",
+    "slideshow_9zXFb6",
+    "rich_text_9LfXC9",
+    "collection_list_xacPxR",
+    "featured_collection_Dgjt8B",
+    "rich_text_TF8Eky",
+    "logo_list_LA8zXn",
+    "featured_product_Kjmbi3",
+    "text_with_icons_Fiq88R",
+    "section_heading_VjHB3j",
+    "image_gallery_zdp3QW",
+    "featured_collection_xqhhMn",
+    "featured_collection_GGDPaD",
+    "section_heading_W68myJ",
+    "image_with_text_CBTUcp"
+  ]
+}
