@@ -1,1 +1,280 @@
-{"sections":{"banner":{"type":"main-collection-banner","disabled":true,"settings":{"banner_image_type":"collection"}},"promo":{"type":"promotional-banner","disabled":true,"settings":{"background_color":"#f5f5f5","link":"","text_align":"center","heading":"Heading","subheading":"<p>Add a short sentence to your banner<\/p>","button_text":"Button","heading_font_size":26,"subheading_font_size":16,"text_color":"#000000","button_text_color":"#ffffff","button_color":"#000000","section_padding":"none"}},"slideshow_gHXfiw":{"type":"slideshow","blocks":{"image_qChq3N":{"type":"image","settings":{"image":"shopify:\/\/shop_images\/3_646643ba-9d0c-41f0-a87a-3795cb303f74.png","overlay_color":"#000000","overlay_opacity":0,"caption_position":"middle_center","mobile_image":"shopify:\/\/shop_images\/Copy_of_holiday_mens_banner_800_x_1200_px_-2.png","hide_caption_background":false,"heading":"","subheading":"","link":"https:\/\/styleunionindia.myshopify.com\/collections\/kids-holiday-wear","button_text":"","second_link":"","second_button_text":"Button 2 text","text_color":"#ffffff","button_color":"#ffffff","button_background":"#000000","caption_background":"rgba(0,0,0,0)"}},"image_BmEYHp":{"type":"image","disabled":true,"settings":{"overlay_color":"#000000","overlay_opacity":0,"caption_position":"middle_center","hide_caption_background":false,"heading":"Slide image title","subheading":"<p>Slide image subheading<\/p>","link":"","button_text":"Add a button","second_link":"","second_button_text":"Button 2 text","text_color":"#ffffff","button_color":"#ffffff","button_background":"#000000","caption_background":"rgba(0,0,0,0)"}}},"block_order":["image_qChq3N","image_BmEYHp"],"disabled":true,"name":"Slideshow","settings":{"full_width":true,"slideshow_size":"fixed_height","desktop_height":400,"mobile_height":400,"caption_below":false,"pager":"dots","show_animation":true,"transition":"fade","slider_speed":5,"enable_stop_pause_on_mobile":true,"slide_heading_size":22,"subheading_size":14,"section_padding":"both"}},"featured_collection_eN43CB":{"type":"featured-collection","disabled":true,"name":"Featured collection","settings":{"heading":"Boys Bestsellers","collection":"boys-bestsellers","carousel":true,"show_view_all":true,"reduce_width":false,"grid":5,"limit":20,"section_padding":"both"}},"collection_list_mK9AUA":{"type":"collection-list","blocks":{"featured_collection_DBDTga":{"type":"featured_collection","settings":{"collection":"boys-graphic-t-shirts","collection_image":"shopify:\/\/shop_images\/category_su.png"}},"featured_collection_L7JmYk":{"type":"featured_collection","settings":{"collection":"boys-denims","collection_image":"shopify:\/\/shop_images\/category_su-2.png"}},"featured_collection_gaggjR":{"type":"featured_collection","settings":{"collection":"boys-casual-shirts","collection_image":"shopify:\/\/shop_images\/category_su-3.png"}},"featured_collection_yPBYYk":{"type":"featured_collection","settings":{"collection":""}},"featured_collection_XmxPA6":{"type":"featured_collection","settings":{"collection":"boys-night-set","collection_image":"shopify:\/\/shop_images\/category_su-4.png"}}},"block_order":["featured_collection_DBDTga","featured_collection_L7JmYk","featured_collection_gaggjR","featured_collection_yPBYYk","featured_collection_XmxPA6"],"disabled":true,"name":"Collection list","settings":{"title":"Grab These Now!","grid":4,"carousel":true,"collection_count":false,"bold_titles":true,"title_position":"floating","image_ratio":"square","section_padding":"none"}},"featured_collection_daCJWA":{"type":"featured-collection","disabled":true,"name":"Featured collection","settings":{"heading":"Girls Bestsellers","collection":"girls-bestsellers","carousel":true,"show_view_all":true,"reduce_width":false,"grid":5,"limit":20,"section_padding":"both"}},"collection_list_8Y3Fn7":{"type":"collection-list","blocks":{"featured_collection_VGFzrk":{"type":"featured_collection","settings":{"collection":"girls-dress","collection_image":"shopify:\/\/shop_images\/category_su-5.png"}},"featured_collection_VeiDxp":{"type":"featured_collection","settings":{"collection":"girls-bottomwear","collection_image":"shopify:\/\/shop_images\/category_su-8.png"}},"featured_collection_b7gzhk":{"type":"featured_collection","settings":{"collection":"girls-graphic-t-shirts","collection_image":"shopify:\/\/shop_images\/category_su-7.png"}},"featured_collection_xAMG4D":{"type":"featured_collection","settings":{"collection":"girls-night-set","collection_image":"shopify:\/\/shop_images\/category_su-9.png"}}},"block_order":["featured_collection_VGFzrk","featured_collection_VeiDxp","featured_collection_b7gzhk","featured_collection_xAMG4D"],"disabled":true,"name":"Collection list","settings":{"title":"Must-Have Favs","grid":4,"carousel":false,"collection_count":false,"bold_titles":true,"title_position":"floating","image_ratio":"square","section_padding":"none"}},"main":{"type":"main-collection","blocks":{"bef67807-6de8-4afa-b1fe-bc0a46351382":{"type":"side_sortby","settings":{}},"cea9f996-51a8-4b3a-8837-6975c0590a9c":{"type":"side_filter","settings":{"show_color_swatches":true,"show_filter_count":true}}},"block_order":["bef67807-6de8-4afa-b1fe-bc0a46351382","cea9f996-51a8-4b3a-8837-6975c0590a9c"],"settings":{"rows":10,"grid":4,"show_image":false,"description_position":"bottom"}}},"order":["banner","promo","slideshow_gHXfiw","featured_collection_eN43CB","collection_list_mK9AUA","featured_collection_daCJWA","collection_list_8Y3Fn7","main"]}
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "banner": {
+      "type": "main-collection-banner",
+      "disabled": true,
+      "settings": {
+        "banner_image_type": "collection"
+      }
+    },
+    "promo": {
+      "type": "promotional-banner",
+      "disabled": true,
+      "settings": {
+        "background_color": "#f5f5f5",
+        "link": "",
+        "text_align": "center",
+        "heading": "Heading",
+        "subheading": "<p>Add a short sentence to your banner</p>",
+        "button_text": "Button",
+        "heading_font_size": 26,
+        "subheading_font_size": 16,
+        "text_color": "#000000",
+        "button_text_color": "#ffffff",
+        "button_color": "#000000",
+        "section_padding": "none"
+      }
+    },
+    "slideshow_gHXfiw": {
+      "type": "slideshow",
+      "blocks": {
+        "image_qChq3N": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/3_646643ba-9d0c-41f0-a87a-3795cb303f74.png",
+            "overlay_color": "#000000",
+            "overlay_opacity": 0,
+            "caption_position": "middle_center",
+            "mobile_image": "shopify://shop_images/Copy_of_holiday_mens_banner_800_x_1200_px_-2.png",
+            "hide_caption_background": false,
+            "heading": "",
+            "subheading": "",
+            "link": "https://styleunionindia.myshopify.com/collections/kids-holiday-wear",
+            "button_text": "",
+            "second_link": "",
+            "second_button_text": "Button 2 text",
+            "text_color": "#ffffff",
+            "button_color": "#ffffff",
+            "button_background": "#000000",
+            "caption_background": "rgba(0,0,0,0)"
+          }
+        },
+        "image_BmEYHp": {
+          "type": "image",
+          "disabled": true,
+          "settings": {
+            "overlay_color": "#000000",
+            "overlay_opacity": 0,
+            "caption_position": "middle_center",
+            "hide_caption_background": false,
+            "heading": "Slide image title",
+            "subheading": "<p>Slide image subheading</p>",
+            "link": "",
+            "button_text": "Add a button",
+            "second_link": "",
+            "second_button_text": "Button 2 text",
+            "text_color": "#ffffff",
+            "button_color": "#ffffff",
+            "button_background": "#000000",
+            "caption_background": "rgba(0,0,0,0)"
+          }
+        }
+      },
+      "block_order": [
+        "image_qChq3N",
+        "image_BmEYHp"
+      ],
+      "disabled": true,
+      "name": "Slideshow",
+      "settings": {
+        "full_width": true,
+        "slideshow_size": "fixed_height",
+        "desktop_height": 400,
+        "mobile_height": 400,
+        "caption_below": false,
+        "pager": "dots",
+        "show_animation": true,
+        "transition": "fade",
+        "slider_speed": 5,
+        "enable_stop_pause_on_mobile": true,
+        "slide_heading_size": 22,
+        "subheading_size": 14,
+        "section_padding": "both"
+      }
+    },
+    "featured_collection_eN43CB": {
+      "type": "featured-collection",
+      "disabled": true,
+      "name": "Featured collection",
+      "settings": {
+        "heading": "Boys Bestsellers",
+        "collection": "boys-bestsellers",
+        "carousel": true,
+        "show_view_all": true,
+        "reduce_width": false,
+        "grid": 5,
+        "limit": 20,
+        "section_padding": "both"
+      }
+    },
+    "collection_list_mK9AUA": {
+      "type": "collection-list",
+      "blocks": {
+        "featured_collection_DBDTga": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "boys-graphic-t-shirts",
+            "collection_image": "shopify://shop_images/category_su.png"
+          }
+        },
+        "featured_collection_L7JmYk": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "boys-denims",
+            "collection_image": "shopify://shop_images/category_su-2.png"
+          }
+        },
+        "featured_collection_gaggjR": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "boys-casual-shirts",
+            "collection_image": "shopify://shop_images/category_su-3.png"
+          }
+        },
+        "featured_collection_yPBYYk": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": ""
+          }
+        },
+        "featured_collection_XmxPA6": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "boys-night-suits",
+            "collection_image": "shopify://shop_images/category_su-4.png"
+          }
+        }
+      },
+      "block_order": [
+        "featured_collection_DBDTga",
+        "featured_collection_L7JmYk",
+        "featured_collection_gaggjR",
+        "featured_collection_yPBYYk",
+        "featured_collection_XmxPA6"
+      ],
+      "disabled": true,
+      "name": "Collection list",
+      "settings": {
+        "title": "Grab These Now!",
+        "grid": 4,
+        "carousel": true,
+        "collection_count": false,
+        "bold_titles": true,
+        "title_position": "floating",
+        "image_ratio": "square",
+        "section_padding": "none"
+      }
+    },
+    "featured_collection_daCJWA": {
+      "type": "featured-collection",
+      "disabled": true,
+      "name": "Featured collection",
+      "settings": {
+        "heading": "Girls Bestsellers",
+        "collection": "girls-bestsellers",
+        "carousel": true,
+        "show_view_all": true,
+        "reduce_width": false,
+        "grid": 5,
+        "limit": 20,
+        "section_padding": "both"
+      }
+    },
+    "collection_list_8Y3Fn7": {
+      "type": "collection-list",
+      "blocks": {
+        "featured_collection_VGFzrk": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "girls-dress",
+            "collection_image": "shopify://shop_images/category_su-5.png"
+          }
+        },
+        "featured_collection_VeiDxp": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "girls-bottomwear",
+            "collection_image": "shopify://shop_images/category_su-8.png"
+          }
+        },
+        "featured_collection_b7gzhk": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "girls-graphic-t-shirts",
+            "collection_image": "shopify://shop_images/category_su-7.png"
+          }
+        },
+        "featured_collection_xAMG4D": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "girls-night-set",
+            "collection_image": "shopify://shop_images/category_su-9.png"
+          }
+        }
+      },
+      "block_order": [
+        "featured_collection_VGFzrk",
+        "featured_collection_VeiDxp",
+        "featured_collection_b7gzhk",
+        "featured_collection_xAMG4D"
+      ],
+      "disabled": true,
+      "name": "Collection list",
+      "settings": {
+        "title": "Must-Have Favs",
+        "grid": 4,
+        "carousel": false,
+        "collection_count": false,
+        "bold_titles": true,
+        "title_position": "floating",
+        "image_ratio": "square",
+        "section_padding": "none"
+      }
+    },
+    "main": {
+      "type": "main-collection",
+      "blocks": {
+        "bef67807-6de8-4afa-b1fe-bc0a46351382": {
+          "type": "side_sortby",
+          "settings": {}
+        },
+        "cea9f996-51a8-4b3a-8837-6975c0590a9c": {
+          "type": "side_filter",
+          "settings": {
+            "show_color_swatches": true,
+            "show_filter_count": true
+          }
+        }
+      },
+      "block_order": [
+        "bef67807-6de8-4afa-b1fe-bc0a46351382",
+        "cea9f996-51a8-4b3a-8837-6975c0590a9c"
+      ],
+      "settings": {
+        "rows": 10,
+        "grid": 4,
+        "show_image": false,
+        "description_position": "bottom"
+      }
+    }
+  },
+  "order": [
+    "banner",
+    "promo",
+    "slideshow_gHXfiw",
+    "featured_collection_eN43CB",
+    "collection_list_mK9AUA",
+    "featured_collection_daCJWA",
+    "collection_list_8Y3Fn7",
+    "main"
+  ]
+}
