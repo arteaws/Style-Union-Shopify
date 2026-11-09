@@ -115,7 +115,7 @@
   {% include 'pagefly-app-header' %}</head>
 
   <body
-    class="gridlock template-{{ template | handleize }} {% render 'body-classes' | strip %} js-slideout-toggle-wrapper js-modal-toggle-wrapper"
+    class="gridlock template-{{ template | handleize }} {% render 'body-classes' %} js-slideout-toggle-wrapper js-modal-toggle-wrapper"
     data-quick-add-enabled="{{ settings.quickadd | json }}"
   >
     <a class="skip-link button visually-hidden" href="#MainContent">{{ 'accessibility.skip_to_text' | t }}</a>
@@ -320,3 +320,13 @@
     <!-- {% render 'razorpay-magic-checkout' %} -->
   </body>
 </html>
+{% comment %}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: "{% render 'body-classes' | strip %}"
+  to: "{% render 'body-classes' %}"
+  position: 5230..5257
+{% endcomment %}
