@@ -175,7 +175,7 @@ select.restock-alerts-country-select.selectBoxStyle {
   </head>
 
   <body
-    class="gridlock template-{{ template | handleize }} {% render 'body-classes' | strip %} js-slideout-toggle-wrapper js-modal-toggle-wrapper"
+    class="gridlock template-{{ template | handleize }} {% render 'body-classes' %} js-slideout-toggle-wrapper js-modal-toggle-wrapper"
     data-quick-add-enabled="{{ settings.quickadd | json }}"
   >
     <a class="skip-link button visually-hidden" href="#MainContent">{{ 'accessibility.skip_to_text' | t }}</a>
@@ -385,3 +385,13 @@ select.restock-alerts-country-select.selectBoxStyle {
     
   </body>
 </html>
+{% comment %}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: "{% render 'body-classes' | strip %}"
+  to: "{% render 'body-classes' %}"
+  position: 7435..7462
+{% endcomment %}
